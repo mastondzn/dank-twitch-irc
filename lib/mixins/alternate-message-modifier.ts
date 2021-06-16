@@ -44,10 +44,17 @@ export class AlternateMessageModifier implements ClientMixin {
       message: string
     ) => Promise<void>;
 
-    const genericReplament = (action: boolean): GenericReplacementFn => async (
-      oldFn: (channelName: string, message: string) => Promise<void>,
+    const genericReplament = (action: boolean): GenericReplacementFn => async <
+      A extends any[]
+    >(
+      oldFn: (
+        channelName: string,
+        message: string,
+        ...args: A
+      ) => Promise<void>,
       channelName: string,
-      message: string
+      message: string,
+      ...args: A
     ): Promise<void> => {
       const { fastSpam } = canSpamFast(
         channelName,
@@ -56,7 +63,7 @@ export class AlternateMessageModifier implements ClientMixin {
       );
 
       if (fastSpam) {
-        await oldFn(channelName, message);
+        await oldFn(channelName, message, ...args);
         return;
       }
 
@@ -65,7 +72,7 @@ export class AlternateMessageModifier implements ClientMixin {
         message,
         action
       );
-      await oldFn(channelName, newMsg);
+      await oldFn(channelName, newMsg, ...args);
 
       if (!this.client.joinedChannels.has(channelName)) {
         // in this case we won't get our own message back via the

@@ -180,13 +180,18 @@ export class ChatClient extends BaseClient {
     return sendPrivmsg(this.requireConnection(), channelName, message);
   }
 
-  public async say(channelName: string, message: string): Promise<void> {
+  public async say(
+    channelName: string,
+    message: string,
+    replyTo?: string
+  ): Promise<void> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     await say(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      message
+      message,
+      replyTo
     );
   }
 

@@ -67,6 +67,7 @@ export async function say(
   conn: SingleConnection,
   channelName: string,
   messageText: string,
+  replyTo?: string,
   action = false
 ): Promise<UserstateMessage> {
   let command;
@@ -83,7 +84,7 @@ export async function say(
     errorType = (msg, cause) =>
       new SayError(channelName, messageText, false, msg, cause);
   }
-  sendPrivmsg(conn, channelName, command);
+  sendPrivmsg(conn, channelName, command, replyTo);
 
   return awaitResponse(conn, {
     success: (msg) =>
@@ -102,5 +103,5 @@ export async function me(
   channelName: string,
   message: string
 ): Promise<UserstateMessage> {
-  return say(conn, channelName, message, true);
+  return say(conn, channelName, message, undefined, true);
 }
