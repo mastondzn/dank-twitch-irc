@@ -22,8 +22,7 @@ export interface GlobalUserState {
 
 export class GlobaluserstateMessage
   extends IRCMessage
-  implements GlobalUserState
-{
+  implements GlobalUserState {
   public readonly badgeInfo: TwitchBadgesList;
   public readonly badgeInfoRaw: string;
   public readonly badges: TwitchBadgesList;
