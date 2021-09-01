@@ -14,9 +14,10 @@ import { UserState } from "./userstate";
 // eslint-disable-next-line no-control-regex
 const actionRegex = /^\u0001ACTION (.*)\u0001$/;
 
-export function parseActionAndMessage(
-  trailingParameter: string
-): { isAction: boolean; message: string } {
+export function parseActionAndMessage(trailingParameter: string): {
+  isAction: boolean;
+  message: string;
+} {
   const match: RegExpExecArray | null = actionRegex.exec(trailingParameter);
   if (match == null) {
     return {
@@ -44,7 +45,8 @@ export type PrivmsgUserState = Omit<UserState, "emoteSets" | "emoteSetsRaw">;
 
 export class PrivmsgMessage
   extends ChannelIRCMessage
-  implements PrivmsgUserState {
+  implements PrivmsgUserState
+{
   public readonly messageText: string;
   public readonly isAction: boolean;
 

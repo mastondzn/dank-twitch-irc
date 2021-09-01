@@ -1,6 +1,6 @@
 {
-  "name": "dank-twitch-irc",
-  "version": "4.3.0",
+  "name": "@aidenhadisi/dank-twitch-irc",
+  "version": "4.4.0",
   "description": "Twitch IRC library for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -30,7 +30,7 @@
   ],
   "author": "Ruben Anders",
   "license": "MIT",
-  "repository": "https://github.com/robotty/dank-twitch-irc",
+  "repository": "https://github.com/Amazeful/dank-twitch-irc",
   "dependencies": {
     "@types/debug": "^4.1.5",
     "@types/duplexify": "^3.6.0",
@@ -80,5 +80,12 @@
     "tsd": "^0.14.0",
     "typedoc": "^0.20.1",
     "typescript": "^4.1.3"
+  },
+  "bugs": {
+    "url": "https://github.com/Amazeful/dank-twitch-irc/issues"
+  },
+  "homepage": "https://github.com/Amazeful/dank-twitch-irc#readme",
+  "directories": {
+    "lib": "lib"
   }
 }
