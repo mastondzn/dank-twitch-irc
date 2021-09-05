@@ -9,3 +9,4 @@ export * from "./request-capabilities";
 export * from "./say";
 export * from "./timeout";
 export * from "./whisper";
+export * from "./deleteMsg";
