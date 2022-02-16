@@ -1,9 +1,42 @@
 # Changelog
 
-## Unreleased
+## Unversioned
 
+- Minor: Added support for the `submysterygift` message type ID in `UserNoticeMessage`.
+- Bugfix: `ChatClient#connect()` method now properly resolves if `connect()` is called on a client that is already `ready`. (#218)
+
+## v4.3.0
+
+- Minor: Added `ban` method to `ChatClient` API (#186).
+
+## v4.2.0
+
+- Bugfix: Fixed typescript compiling error (#154)
+- Minor: Added new event `rawCommand` emitted when a command is executed by the client.
+- Minor: Made `client.connect()` return a promise which resolves when the client is ready.
+- Minor: Allowed `#` to be a prefix of the channelName passed into functions that require it.
+- Bugfix: Added `setColor` to promise rejections.
+
+## v4.1.0
+
+- Minor: Added `getMods` and `getVips` to Chat client API to easily fetch a list of mods and VIPs for a channel.
+
+## v4.0.2
+
+- Bugfix: Fixed a single server message resolving/rejecting more than one promise (e.g. cases where many messages were sent to the same channel, the first success/error response would resolve/reject all the waiting promises) (#32, #65)
+
+## v4.0.1
+
+- Bugfix: Fixed exception if new unstable "flags" parsing failed because of an out-of-bounds index.
+
+## v4.0.0
+
+- Major: Removed support for chat rooms. Attempting to join a Twitch `chatrooms:` channel will result in a validation error.
 - Minor: Added `flags` and `flagsRaw` properties to `PrivmsgMessage` and `UsernoticeMessage` classes, allowing inspection of AutoMod message rating results. (#38)
+- Minor: Added parsing support for newer usernotice parameters (`msg-param-gift-months`, `msg-param-sender-count`)
+- Bugfix (**Potentially breaking, check your application**): In subgift and similar USERNOTICE messages, `recipientUserName` is now correctly camelcased as `recipientUsername` as was documented.
 - Bugfix: Emotes occurring after emojis are now correctly parsed (#35)
+- Bugfix: Messages with wrong emote indices (sent by Twitch) are now handled gracefully instead of failing the message parser. (#22)
 
 ## v3.3.0
 

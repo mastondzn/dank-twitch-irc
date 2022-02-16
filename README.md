@@ -1,9 +1,6 @@
 # dank-twitch-irc
 
-[![CircleCI](https://circleci.com/gh/robotty/dank-twitch-irc.svg?style=svg)](https://circleci.com/gh/robotty/dank-twitch-irc)
-[![codecov](https://codecov.io/gh/robotty/dank-twitch-irc/branch/master/graph/badge.svg)](https://codecov.io/gh/robotty/dank-twitch-irc)
-[![Maintainability](https://api.codeclimate.com/v1/badges/ec6b5c956de4ed3071ab/maintainability)](https://codeclimate.com/github/robotty/dank-twitch-irc/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ec6b5c956de4ed3071ab/test_coverage)](https://codeclimate.com/github/robotty/dank-twitch-irc/test_coverage)
+![Build](https://github.com/robotty/dank-twitch-irc/workflows/Build/badge.svg)
 
 Node.js-only Twitch IRC lib, written in TypeScript.
 
@@ -70,7 +67,7 @@ client.join("forsen");
   connects for the first time. This is called when the transport layer
   connections (e.g. TCP or WebSocket connection is established), not when login
   to IRC succeeds.
-- **`client.on("ready", ()) => { /* ... */ })`**: Called when the client becomes
+- **`client.on("ready", () => { /* ... */ })`**: Called when the client becomes
   ready for the first time (login to the chat server is successful.)
 - **`client.on("close", (error?: Error) => { /* ... */ })`**: Called when the
   client is terminated as a whole. Not called for individual connections that
@@ -80,6 +77,8 @@ client.join("forsen");
 - **`client.on("error", (error: Error?) => { /* ... */ })`**: Called when any
   error occurs on the client, including non-fatal errors such as a message that
   could not be delivered due to an error.
+- **`client.on("rawCommand", (cmd: string) => { /* ... */ })`**: Called when any
+  command is executed by the client.
 - **`client.on("message", (message: IRCMessage) => { /* ... */ })`**: Called on
   every incoming message. If the message is a message that is further parsed (I
   called these "twitch messages" in this library) then the `message` passed to
@@ -329,11 +328,15 @@ chatClient.on("USERNOTICE", (msg) => {
    * {
    *   "months": 5,
    *   "monthsRaw": "5",
+   *   "giftMonths": 5,
+   *   "giftMonthsRaw": "5",
    *   "recipientDisplayName": "Leppunen",
    *   "recipientID": "42239452",
    *   "recipientUsername": "leppunen",
    *   "subPlan": "1000",
-   *   "subPlanName": "The Ninjas"
+   *   "subPlanName": "The Ninjas",
+   *   "senderCount": 5,
+   *   "senderCountRaw": "5",
    * }
    * Sender user of the USERNOTICE message is the user gifting the subscription.
    */
@@ -602,12 +605,19 @@ You probably will want to use these functions on `ChatClient` most frequently:
 - `client.timeout(channelName: string, username: string, length: number, reason?: string): Promise<void>` -
   Timeout `username` for `length` seconds in `channelName`. Optionally accepts a
   reason to set.
+- `client.ban(channelName: string, username: string, reason?: string): Promise<void>` -
+  Ban `username` in `channelName`. Optionally accepts a reason to set.
 - `client.ping()` - Send a `PING` on a connection from the pool, and awaits the
   `PONG` response. You can use this to measure server latency, for example.
 - `client.whisper(username: string, message: string)` - Send the user a whisper
   from the bot.
 - `client.setColor(color: Color)` - set the username color of your bot account.
   E.g. `client.setColor({ r: 255, g: 0, b: 127 })`.
+- `client.getMods(channelName: string)` and `client.getVips(channelName: string)` -
+  Get a list of moderators/VIPs in a channel. Returns
+  a promise that resolves to an array of strings (login names of the moderators/VIPs).
+  Note that due to Twitch's restrictions, this function cannot be used with anonymous chat clients.
+  (The request will time out if your chat client is logged in as anonymous.)
 
 Extra functionality:
 

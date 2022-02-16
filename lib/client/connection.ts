@@ -64,6 +64,15 @@ export class SingleConnection extends BaseClient {
 
     replyToServerPing(this);
     handleReconnectMessage(this);
+
+    this.on("message", (msg) => {
+      for (const awaiter of this.pendingResponses) {
+        const stop = awaiter.onConnectionMessage(msg);
+        if (stop) {
+          break;
+        }
+      }
+    });
   }
 
   public connect(): void {
@@ -109,6 +118,7 @@ export class SingleConnection extends BaseClient {
 
   public sendRaw(command: string): void {
     validateIRCCommand(command);
+    this.emit("rawCommmand", command);
     this.log.trace(">", command);
     this.transport.stream.write(command + "\r\n");
   }

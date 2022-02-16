@@ -1,4 +1,4 @@
-import * as EventEmitter from "eventemitter3";
+import { EventEmitter } from "eventemitter3";
 import { ChatClient } from "../client/client";
 import {
   GlobalUserState,
@@ -9,15 +9,15 @@ import { UserState, UserstateMessage } from "../message/twitch-types/userstate";
 import { ClientMixin } from "./base-mixin";
 
 export interface UserStateTrackerEvents {
-  newGlobalState: [GlobalUserState];
-  newChannelState: [string, UserState];
-  [idx: string]: any;
+  newGlobalState(newState: GlobalUserState): void;
+  newChannelState(channelLogin: string, newState: UserState): void;
 }
 
 /**
  * Tracks the state of the logged in user (the bot) in all channels the bot operates in
  */
-export class UserStateTracker extends EventEmitter<UserStateTrackerEvents>
+export class UserStateTracker
+  extends EventEmitter<UserStateTrackerEvents>
   implements ClientMixin {
   public globalState?: GlobalUserState;
   public channelStates: Record<string, UserState> = {};

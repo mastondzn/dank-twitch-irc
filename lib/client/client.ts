@@ -1,4 +1,5 @@
 import * as debugLogger from "debug-logger";
+import { getMods, getVips } from "../operations/get-mods-vips";
 import { ClientConfiguration } from "../config/config";
 import { Color } from "../message/color";
 import { ClientMixin, ConnectionMixin } from "../mixins/base-mixin";
@@ -15,12 +16,13 @@ import { sendPrivmsg } from "../operations/privmsg";
 import { me, say } from "../operations/say";
 import { setColor } from "../operations/set-color";
 import { timeout } from "../operations/timeout";
+import { ban } from "../operations/ban";
 import { whisper } from "../operations/whisper";
 import { anyCauseInstanceof } from "../utils/any-cause-instanceof";
 import { findAndPushToEnd } from "../utils/find-and-push-to-end";
 import { removeInPlace } from "../utils/remove-in-place";
 import { unionSets } from "../utils/union-sets";
-import { validateChannelName } from "../validation/channel";
+import { validateChannelName, correctChannelName } from "../validation/channel";
 import { BaseClient } from "./base-client";
 import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
@@ -74,8 +76,11 @@ export class ChatClient extends BaseClient {
     });
   }
 
-  public connect(): void {
+  public async connect(): Promise<void> {
     this.requireConnection();
+    if (!this.ready) {
+      await new Promise<void>((resolve) => this.once("ready", () => resolve()));
+    }
   }
 
   public close(): void {
@@ -105,6 +110,7 @@ export class ChatClient extends BaseClient {
   }
 
   public async join(channelName: string): Promise<void> {
+    channelName = correctChannelName(channelName);
     validateChannelName(channelName);
 
     if (this.connections.some((c) => joinNothingToDo(c, channelName))) {
@@ -119,6 +125,7 @@ export class ChatClient extends BaseClient {
   }
 
   public async part(channelName: string): Promise<void> {
+    channelName = correctChannelName(channelName);
     validateChannelName(channelName);
 
     if (this.connections.every((c) => partNothingToDo(c, channelName))) {
@@ -135,7 +142,11 @@ export class ChatClient extends BaseClient {
   public async joinAll(
     channelNames: string[]
   ): Promise<Record<string, Error | undefined>> {
-    channelNames.forEach(validateChannelName);
+    channelNames = channelNames.map((v) => {
+      v = correctChannelName(v);
+      validateChannelName(v);
+      return v;
+    });
 
     const needToJoin: string[] = channelNames.filter(
       (channelName) =>
@@ -164,11 +175,13 @@ export class ChatClient extends BaseClient {
   }
 
   public async privmsg(channelName: string, message: string): Promise<void> {
+    channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     return sendPrivmsg(this.requireConnection(), channelName, message);
   }
 
   public async say(channelName: string, message: string): Promise<void> {
+    channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     await say(
       this.requireConnection(mustNotBeJoined(channelName)),
@@ -178,6 +191,7 @@ export class ChatClient extends BaseClient {
   }
 
   public async me(channelName: string, message: string): Promise<void> {
+    channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     await me(
       this.requireConnection(mustNotBeJoined(channelName)),
@@ -201,6 +215,14 @@ export class ChatClient extends BaseClient {
     );
   }
 
+  public async ban(
+    channelName: string,
+    username: string,
+    reason?: string
+  ): Promise<void> {
+    await ban(this.requireConnection(), channelName, username, reason);
+  }
+
   public async whisper(username: string, message: string): Promise<void> {
     validateChannelName(username);
     await whisper(this.requireConnection(), username, message);
@@ -208,6 +230,18 @@ export class ChatClient extends BaseClient {
 
   public async setColor(color: Color): Promise<void> {
     await setColor(this.requireConnection(), color);
+  }
+
+  public async getMods(channelName: string): Promise<string[]> {
+    channelName = correctChannelName(channelName);
+    validateChannelName(channelName);
+    return await getMods(this.requireConnection(), channelName);
+  }
+
+  public async getVips(channelName: string): Promise<string[]> {
+    channelName = correctChannelName(channelName);
+    validateChannelName(channelName);
+    return await getVips(this.requireConnection(), channelName);
   }
 
   public async ping(): Promise<void> {
@@ -244,6 +278,9 @@ export class ChatClient extends BaseClient {
         this.reconnectFailedConnection(conn);
       }
     });
+
+    // forward commands issued by this client
+    conn.on("rawCommmand", (cmd) => this.emit("rawCommmand", cmd));
 
     // forward events to this client
     conn.on("message", (message) => {

@@ -16,12 +16,17 @@ import {
 
 const convertersMap: Record<string, (value: string) => any> = {
   "msg-param-cumulative-months": convertToInt,
+  "msg-param-gift-months": convertToInt,
+  "msg-param-sender-count": convertToInt,
   "msg-param-months": convertToInt,
   "msg-param-promo-gift-total": convertToInt,
   "msg-param-should-share-streak": convertToBoolean,
   "msg-param-streak-months": convertToInt,
   "msg-param-viewerCount": convertToInt,
   "msg-param-threshold": convertToInt,
+  "msg-param-mass-gift-count": convertToInt,
+  "msg-param-origin-id": convertToString,
+  "msg-param-sub-plan": convertToString,
 };
 
 export function getCamelCasedName(tagKey: string): string {
@@ -38,7 +43,7 @@ export function getCamelCasedName(tagKey: string): string {
 
   // To be consistent with the rest of the library,
   // don't camelcase username as userName
-  newKey = newKey.replace(/userName/g, "username");
+  newKey = newKey.replace(/([uU])serName/g, "$1sername");
 
   return newKey;
 }
@@ -121,6 +126,12 @@ export interface SubgiftParameters extends EventParams {
 }
 export type AnonSubgiftParameters = SubgiftParameters;
 
+// massgift
+export interface MassSubgiftParameters extends EventParams {
+  massGiftCount: number;
+  subPlan: string;
+}
+
 // anongiftpaidupgrade
 export type AnonGiftPaidUpgradeParameters = EventParams & {
   promoGiftTotal?: number;
@@ -168,6 +179,10 @@ export type RaidUsernoticeMessage = SpecificUsernoticeMessage<
 export type SubgiftUsernoticeMessage = SpecificUsernoticeMessage<
   "subgift",
   SubgiftParameters
+>;
+export type MassSubgiftUsernoticeMessage = SpecificUsernoticeMessage<
+  "submysterygift",
+  MassSubgiftParameters
 >;
 export type AnonSubgiftUsernoticeMessage = SpecificUsernoticeMessage<
   "anonsubgift",
@@ -328,6 +343,10 @@ export class UsernoticeMessage extends ChannelIRCMessage {
 
   public isSubgift(): this is SubgiftUsernoticeMessage {
     return this.messageTypeID === "subgift";
+  }
+
+  public isMassSubgift(): this is MassSubgiftParameters {
+    return this.messageTypeID === "submysterygift";
   }
 
   public isAnonSubgift(): this is AnonSubgiftUsernoticeMessage {
