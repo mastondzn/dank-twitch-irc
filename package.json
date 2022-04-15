@@ -1,5 +1,5 @@
 {
-  "name": "dank-twitch-irc",
+  "name": "@kararty/dank-twitch-irc",
   "version": "4.6.0",
   "description": "Twitch IRC library for Node.js",
   "main": "dist/index.js",
