@@ -1,5 +1,6 @@
 export * from "./any-cause-instanceof";
 export * from "./apply-function-replacements";
+export * from "./base-error";
 export * from "./editable-timeout";
 export * from "./find-and-push-to-end";
 export * from "./ignore-errors";

@@ -6,3 +6,5 @@ export * from "./badges";
 export * from "./color";
 export * from "./emote";
 export * from "./emotes";
+export * from "./flag";
+export * from "./flags";

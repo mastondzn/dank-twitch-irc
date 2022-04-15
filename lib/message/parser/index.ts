@@ -3,6 +3,7 @@ export * from "./color";
 export * from "./common";
 export * from "./emote-sets";
 export * from "./emotes";
+export * from "./flags";
 export * from "./irc-message";
 export * from "./missing-data-error";
 export * from "./missing-tag-error";

@@ -1,5 +1,3 @@
-/// <reference path="../types/debug-logger/index.d.ts" />
-
 export * from "./await";
 export * from "./client";
 export * from "./config";
