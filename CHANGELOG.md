@@ -1,9 +1,12 @@
 # Changelog
 
-## Unversioned
+## v4.6.0
 
-- refactor: Use randombytes instead of randomstring.
-- Minor: Added support for the `submysterygift` message type ID in `UserNoticeMessage`.
+- Minor: Use randombytes instead of randomstring.
+- Minor: Added deleteMsg() function (@Amazeful fork)
+- Minor: Added connection-pool mixin (@Amazeful fork)
+- Minor: say() now has third argument for replying to message-id. (@Amazeful fork)
+- Minor: Added support for the `submysterygift` message type ID in `UserNoticeMessage`. (@fmalk fork)
 - Bugfix: `ChatClient#connect()` method now properly resolves if `connect()` is called on a client that is already `ready`. (#218)
 
 ## v4.3.0
