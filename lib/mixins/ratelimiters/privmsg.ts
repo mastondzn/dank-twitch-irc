@@ -21,14 +21,14 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
   }
 
   public applyToClient(client: ChatClient): void {
-    const genericReplament = async <V>(
-      oldFn: (channelName: string, message: string) => Promise<V>,
+    const genericReplament = async <V, A extends any[]>(
+      oldFn: (channelName: string, ...args: A) => Promise<V>,
       channelName: string,
-      message: string
+      ...args: A
     ): Promise<V> => {
       const releaseFn = await this.acquire(channelName);
       try {
-        return await oldFn(channelName, message);
+        return await oldFn(channelName, ...args);
       } finally {
         setTimeout(releaseFn, 35 * 1000);
       }

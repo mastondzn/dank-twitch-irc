@@ -21,10 +21,10 @@ export class SlowModeRateLimiter implements ClientMixin {
   }
 
   public applyToClient(client: ChatClient): void {
-    const genericReplament = async (
-      oldFn: (channelName: string, message: string) => Promise<void>,
+    const genericReplament = async <A extends any[]>(
+      oldFn: (channelName: string, ...args: A) => Promise<void>,
       channelName: string,
-      message: string
+      ...args: A
     ): Promise<void> => {
       const releaseFn = await this.acquire(channelName);
       if (releaseFn == null) {
@@ -34,7 +34,7 @@ export class SlowModeRateLimiter implements ClientMixin {
       }
 
       try {
-        return await oldFn(channelName, message);
+        return await oldFn(channelName, ...args);
       } finally {
         releaseFn();
       }
@@ -191,9 +191,8 @@ export class SlowModeRateLimiter implements ClientMixin {
 
   private getSlowModeDuration(channelName: string): number {
     if (this.client.roomStateTracker != null) {
-      const roomState = this.client.roomStateTracker.getChannelState(
-        channelName
-      );
+      const roomState =
+        this.client.roomStateTracker.getChannelState(channelName);
       if (roomState != null) {
         return Math.max(
           roomState.slowModeDuration,

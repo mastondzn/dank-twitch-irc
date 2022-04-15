@@ -1,10 +1,12 @@
 # dank-twitch-irc
 
-![Build](https://github.com/robotty/dank-twitch-irc/workflows/Build/badge.svg)
+This package is a fork of robotty/dank-twitch-irc & fmalk/dank-twitch-irc & amazeful/amazeful-twitch-irc.
+
+![Build](https://github.com/kararty/dank-twitch-irc/workflows/Build/badge.svg)
 
 Node.js-only Twitch IRC lib, written in TypeScript.
 
-Requires Node.js 10 (LTS) or above.
+Requires Node.js 14 or above.
 
 - [View on GitHub](https://github.com/robotty/dank-twitch-irc)
 - [View on npm](https://www.npmjs.com/package/dank-twitch-irc)
@@ -39,22 +41,17 @@ Requires Node.js 10 (LTS) or above.
 
 ```javascript
 const { ChatClient } = require("dank-twitch-irc");
-
 let client = new ChatClient();
-
 client.on("ready", () => console.log("Successfully connected to chat"));
 client.on("close", (error) => {
   if (error != null) {
     console.error("Client closed due to error", error);
   }
 });
-
 client.on("PRIVMSG", (msg) => {
   console.log(`[#${msg.channelName}] ${msg.displayName}: ${msg.messageText}`);
 });
-
 // See below for more events
-
 client.connect();
 client.join("forsen");
 ```
@@ -199,7 +196,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isSub() && !msg.isResub()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    *
@@ -218,7 +214,6 @@ chatClient.on("USERNOTICE", (msg) => {
    * }
    * Sender user of the USERNOTICE message is the user subbing/resubbing.
    */
-
   if (msg.isSub()) {
     // Leppunen just subscribed to ninja with a tier 1000 (The Ninjas) sub for the first time!
     console.log(
@@ -237,7 +232,6 @@ chatClient.on("USERNOTICE", (msg) => {
       streakMessage =
         ", currently " + msg.eventParams.streakMonths + " months in a row";
     }
-
     // Leppunen just resubscribed to ninja with a tier 1000 (The Ninjas) sub!
     // They are resubscribing for 10 months, currently 7 months in a row!
     console.log(
@@ -255,7 +249,6 @@ chatClient.on("USERNOTICE", (msg) => {
         "!"
     );
   }
-
   if (msg.messageText != null) {
     // you also have access to lots of other properties also present on PRIVMSG messages,
     // such as msg.badges, msg.senderUsername, msg.badgeInfo, msg.bits/msg.isCheer(),
@@ -284,7 +277,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isRaid()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * {
@@ -299,7 +291,6 @@ chatClient.on("USERNOTICE", (msg) => {
    * which one you use (although I recommend the properties directly on the
    * message object, not in eventParams)
    */
-
   // source user is the channel/streamer raiding
   // Leppunen just raided Supinic with 12 viewers!
   console.log(
@@ -322,7 +313,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isSubgift()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * {
@@ -340,7 +330,6 @@ chatClient.on("USERNOTICE", (msg) => {
    * }
    * Sender user of the USERNOTICE message is the user gifting the subscription.
    */
-
   if (msg.eventParams.months === 1) {
     // Leppunen just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
     console.log(
@@ -372,7 +361,6 @@ chatClient.on("USERNOTICE", (msg) => {
         " in a row!"
     );
   }
-
   // note: if the subgift was from an anonymous user, the sender user for the USERNOTICE message will be
   // AnAnonymousGifter (user ID 274598607)
   if (msg.senderUserID === "274598607") {
@@ -390,7 +378,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isAnonSubgift()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * {
@@ -406,7 +393,6 @@ chatClient.on("USERNOTICE", (msg) => {
    * WARNING! Sender user of the USERNOTICE message is the broadcaster (e.g. Ninja
    * in the example below)
    */
-
   if (msg.eventParams.months === 1) {
     // An anonymous gifter just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
     console.log(
@@ -449,7 +435,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isAnonGiftPaidUpgrade()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * EITHER: (ONLY when a promotion is running!)
@@ -463,7 +448,6 @@ chatClient.on("USERNOTICE", (msg) => {
    *
    * Sender user of the USERNOTICE message is the user continuing their sub.
    */
-
   // Leppunen is continuing their ninja gift sub they got from an anonymous user!
   console.log(
     msg.displayName +
@@ -479,7 +463,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isGiftPaidUpgrade()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * EITHER: (ONLY when a promotion is running!)
@@ -498,7 +481,6 @@ chatClient.on("USERNOTICE", (msg) => {
    *
    * Sender user of the USERNOTICE message is the user continuing their sub.
    */
-
   // Leppunen is continuing their ninja gift sub they got from Krakenbul!
   console.log(
     msg.displayName +
@@ -525,7 +507,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isRitual()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * {
@@ -535,7 +516,6 @@ chatClient.on("USERNOTICE", (msg) => {
    * Sender user of the USERNOTICE message is the user performing the
    * ritual (e.g. the new chatter).
    */
-
   // Leppunen is new to ninja's chat! Say hello!
   if (msg.eventParams.ritualName === "new_chatter") {
     console.log(
@@ -560,7 +540,6 @@ chatClient.on("USERNOTICE", (msg) => {
   if (!msg.isBitsBadgeTier()) {
     return;
   }
-
   /*
    * msg.eventParams are:
    * {
@@ -570,7 +549,6 @@ chatClient.on("USERNOTICE", (msg) => {
    *
    * Sender user of the USERNOTICE message is the user cheering the bits.
    */
-
   // Leppunen just earned themselves the 10000 bits badge in ninja's channel!
   console.log(
     msg.displayName +
@@ -640,7 +618,7 @@ would be `forsen`, not `#forsen`).
 ## API Documentation
 
 Generated API documentation can be found here:
-https://robotty.github.io/dank-twitch-irc
+<https://robotty.github.io/dank-twitch-irc>
 
 ## Client options
 
@@ -664,7 +642,6 @@ Nevertheless, here are examples of all possible config options:
 let client = new ChatClient({
   username: "your-bot-username", // justinfan12345 by default - For anonymous chat connection
   password: "0123456789abcdef1234567", // undefined by default (no password)
-
   // Message rate limits configuration for verified and known bots
   // pick one of the presets or configure custom rates as shown below:
   rateLimits: "default",
@@ -677,7 +654,6 @@ let client = new ChatClient({
     highPrivmsgLimits: 100,
     lowPrivmsgLimits: 20,
   },
-
   // Configuration options for the backing connections:
   // Plain TCP or TLS
   connection: {
@@ -703,32 +679,26 @@ let client = new ChatClient({
     stream: () => aNodeJsDuplexInstance, // read and write to a custom object
     // implementing the Duplex interface from Node.js
     // the function you specify is called for each new connection
-
     preSetup: true, // false by default, makes the lib skip login
     // and capabilities negotiation on connection startup
   },
-
   // how many channels each individual connection should join at max
   maxChannelCountPerConnection: 100, // 90 by default
-
   // custom parameters for connection rate limiting
   connectionRateLimits: {
     parallelConnections: 5, // 1 by default
     // time to wait after each connection before a new connection can begin
     releaseTime: 1000, // in milliseconds, 2 seconds by default
   },
-
   // I recommend you leave this off by default, it makes your bot faster
   // If you need live update of who's joining and leaving chat,
   // poll the tmi.twitch.tv chatters endpoint instead since it
   // is also more reliable
   requestMembershipCapability: false, // false by default
-
   // read more about mixins below
   // this disables the connection rate limiter, message rate limiter
   // and Room- and Userstate trackers (which are important for other mixins)
   installDefaultMixins: false, // true by default
-
   // Silence UnandledPromiseRejectionWarnings on all client methods
   // that return promises.
   // With this option enabled, the returned promises will still be rejected/
@@ -769,9 +739,7 @@ activate mixins by calling:
 
 ```javascript
 const { ChatClient, AlternateMessageModifier } = require("dank-twitch-irc");
-
 let client = new ChatClient();
-
 client.use(new AlternateMessageModifier(client));
 ```
 
@@ -805,7 +773,9 @@ and the mixins installed by default:
 
 ## Tests
 
-    npm run test
+```bash
+npm run test
+```
 
 Test run report is available in `./mochawesome-report/mochawesome.html`.
 Coverage report is produced as `./coverage/index.html`.

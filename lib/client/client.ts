@@ -26,6 +26,8 @@ import { validateChannelName, correctChannelName } from "../validation/channel";
 import { BaseClient } from "./base-client";
 import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
+import { deleteMsg } from "../operations/deleteMsg";
+import { ConnectionPool } from "../mixins/connection-pool";
 
 const log = debugLogger("dank-twitch-irc:client");
 
@@ -43,6 +45,7 @@ export class ChatClient extends BaseClient {
 
   public roomStateTracker?: RoomStateTracker;
   public userStateTracker?: UserStateTracker;
+  public connectionPool?: ConnectionPool;
   public readonly connectionMixins: ConnectionMixin[] = [];
 
   public readonly connections: SingleConnection[] = [];
@@ -180,13 +183,18 @@ export class ChatClient extends BaseClient {
     return sendPrivmsg(this.requireConnection(), channelName, message);
   }
 
-  public async say(channelName: string, message: string): Promise<void> {
+  public async say(
+    channelName: string,
+    message: string,
+    replyTo?: string
+  ): Promise<void> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     await say(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      message
+      message,
+      replyTo
     );
   }
 
@@ -221,6 +229,13 @@ export class ChatClient extends BaseClient {
     reason?: string
   ): Promise<void> {
     await ban(this.requireConnection(), channelName, username, reason);
+  }
+
+  public async deleteMsg(
+    channelName: string,
+    messageID: string
+  ): Promise<void> {
+    await deleteMsg(this.requireConnection(), channelName, messageID);
   }
 
   public async whisper(username: string, message: string): Promise<void> {
@@ -331,7 +346,7 @@ export class ChatClient extends BaseClient {
    *
    * @param predicate The predicate the connection must fulfill.
    */
-  private requireConnection(
+  public requireConnection(
     predicate: ConnectionPredicate = alwaysTrue
   ): SingleConnection {
     return (
