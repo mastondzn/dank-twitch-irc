@@ -1,6 +1,6 @@
 # dank-twitch-irc
 
-This package is a fork of robotty/dank-twitch-irc & fmalk/dank-twitch-irc & amazeful/amazeful-twitch-irc.
+This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc) & [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc).
 
 ![Build](https://github.com/kararty/dank-twitch-irc/workflows/Build/badge.svg)
 
@@ -8,13 +8,12 @@ Node.js-only Twitch IRC lib, written in TypeScript.
 
 Requires Node.js 14 or above.
 
-- [View on GitHub](https://github.com/robotty/dank-twitch-irc)
-- [View on npm](https://www.npmjs.com/package/dank-twitch-irc)
-- [View documentation](https://robotty.github.io/dank-twitch-irc/)
+- [View on GitHub](https://github.com/kararty/dank-twitch-irc)
+- [View on npm](https://www.npmjs.com/package/@kararty/dank-twitch-irc)
+- [View documentation](https://kararty.github.io/dank-twitch-irc/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 ## Table of Contents
 
 - [Usage](#usage)
@@ -40,7 +39,7 @@ Requires Node.js 14 or above.
 ## Usage
 
 ```javascript
-const { ChatClient } = require("dank-twitch-irc");
+const { ChatClient } = require("@kararty/dank-twitch-irc");
 let client = new ChatClient();
 client.on("ready", () => console.log("Successfully connected to chat"));
 client.on("close", (error) => {
@@ -618,7 +617,7 @@ would be `forsen`, not `#forsen`).
 ## API Documentation
 
 Generated API documentation can be found here:
-<https://robotty.github.io/dank-twitch-irc>
+<https://kararty.github.io/dank-twitch-irc>
 
 ## Client options
 
@@ -738,7 +737,7 @@ for general client/bot operations, so they were packaged as **mixins**. You can
 activate mixins by calling:
 
 ```javascript
-const { ChatClient, AlternateMessageModifier } = require("dank-twitch-irc");
+const { ChatClient, AlternateMessageModifier } = require("@kararty/dank-twitch-irc");
 let client = new ChatClient();
 client.use(new AlternateMessageModifier(client));
 ```
@@ -792,20 +791,20 @@ npm run lint
 npm run lintfix
 ```
 
-[clearchat]: https://robotty.github.io/dank-twitch-irc/classes/clearchatmessage.html
-[clearmsg]: https://robotty.github.io/dank-twitch-irc/classes/clearmsgmessage.html
-[hosttarget]: https://robotty.github.io/dank-twitch-irc/classes/hosttargetmessage.html
-[notice]: https://robotty.github.io/dank-twitch-irc/classes/noticemessage.html
-[privmsg]: https://robotty.github.io/dank-twitch-irc/classes/privmsgmessage.html
-[roomstate]: https://robotty.github.io/dank-twitch-irc/classes/roomstatemessage.html
-[usernotice]: https://robotty.github.io/dank-twitch-irc/classes/usernoticemessage.html
-[userstate]: https://robotty.github.io/dank-twitch-irc/classes/userstatemessage.html
-[globaluserstate]: https://robotty.github.io/dank-twitch-irc/classes/globaluserstatemessage.html
-[whisper]: https://robotty.github.io/dank-twitch-irc/classes/whispermessage.html
-[join]: https://robotty.github.io/dank-twitch-irc/classes/joinmessage.html
-[part]: https://robotty.github.io/dank-twitch-irc/classes/partmessage.html
-[reconnect]: https://robotty.github.io/dank-twitch-irc/classes/reconnectmessage.html
-[ping]: https://robotty.github.io/dank-twitch-irc/classes/pingmessage.html
-[pong]: https://robotty.github.io/dank-twitch-irc/classes/pongmessage.html
-[cap]: https://robotty.github.io/dank-twitch-irc/classes/capmessage.html
-[ircmessage]: https://robotty.github.io/dank-twitch-irc/classes/ircmessage.html
+[clearchat]: https://kararty.github.io/dank-twitch-irc/classes/ClearchatMessage.html
+[clearmsg]: https://kararty.github.io/dank-twitch-irc/classes/ClearmsgMessage.html
+[hosttarget]: https://kararty.github.io/dank-twitch-irc/classes/HosttargetMessage.html
+[notice]: https://kararty.github.io/dank-twitch-irc/classes/NoticeMessage.html
+[privmsg]: https://kararty.github.io/dank-twitch-irc/classes/PrivmsgMessage.html
+[roomstate]: https://kararty.github.io/dank-twitch-irc/classes/RoomstateMessage.html
+[usernotice]: https://kararty.github.io/dank-twitch-irc/classes/UsernoticeMessage.html
+[userstate]: https://kararty.github.io/dank-twitch-irc/classes/UserstateMessage.html
+[globaluserstate]: https://kararty.github.io/dank-twitch-irc/classes/GlobaluserstateMessage.html
+[whisper]: https://kararty.github.io/dank-twitch-irc/classes/WhisperMessage.html
+[join]: https://kararty.github.io/dank-twitch-irc/classes/JoinMessage.html
+[part]: https://kararty.github.io/dank-twitch-irc/classes/PartMessage.html
+[reconnect]: https://kararty.github.io/dank-twitch-irc/classes/ReconnectMessage.html
+[ping]: https://kararty.github.io/dank-twitch-irc/classes/PingMessage.html
+[pong]: https://kararty.github.io/dank-twitch-irc/classes/PongMessage.html
+[cap]: https://kararty.github.io/dank-twitch-irc/classes/CapMessage.html
+[ircmessage]: https://kararty.github.io/dank-twitch-irc/classes/IRCMessage.html
