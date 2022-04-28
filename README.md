@@ -14,6 +14,7 @@ Requires Node.js 14 or above.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 ## Table of Contents
 
 - [Usage](#usage)
@@ -737,7 +738,10 @@ for general client/bot operations, so they were packaged as **mixins**. You can
 activate mixins by calling:
 
 ```javascript
-const { ChatClient, AlternateMessageModifier } = require("@kararty/dank-twitch-irc");
+const {
+  ChatClient,
+  AlternateMessageModifier,
+} = require("@kararty/dank-twitch-irc");
 let client = new ChatClient();
 client.use(new AlternateMessageModifier(client));
 ```
