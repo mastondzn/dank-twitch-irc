@@ -1,6 +1,6 @@
 # Changelog
 
-## Unversioned
+## v4.7.0
 
 - Bugfix: Fix predictions parsing for badge-info. (#8)
 - Minor: Added announce() method & AnnouncementMessage Usernotice for eventParams & isAnnouncement() method on messages.
