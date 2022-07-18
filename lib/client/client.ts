@@ -13,7 +13,7 @@ import { joinAll } from "../operations/join-all";
 import { partChannel, partNothingToDo } from "../operations/part";
 import { sendPing } from "../operations/ping";
 import { sendPrivmsg } from "../operations/privmsg";
-import { me, say } from "../operations/say";
+import { me, say, reply } from "../operations/say";
 import { setColor } from "../operations/set-color";
 import { timeout } from "../operations/timeout";
 import { ban } from "../operations/ban";
@@ -28,6 +28,7 @@ import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
 import { deleteMsg } from "../operations/deleteMsg";
 import { ConnectionPool } from "../mixins/connection-pool";
+import { validateMessageID } from "../validation/reply";
 import { announce } from "../operations/announce";
 
 const log = debugLogger("dank-twitch-irc:client");
@@ -184,18 +185,13 @@ export class ChatClient extends BaseClient {
     return sendPrivmsg(this.requireConnection(), channelName, message);
   }
 
-  public async say(
-    channelName: string,
-    message: string,
-    replyTo?: string
-  ): Promise<void> {
+  public async say(channelName: string, message: string): Promise<void> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     await say(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      message,
-      replyTo
+      message
     );
   }
 
@@ -205,6 +201,25 @@ export class ChatClient extends BaseClient {
     await me(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
+      message
+    );
+  }
+
+  /**
+   * @param messageID The message ID you want to reply to.
+   */
+  public async reply(
+    channelName: string,
+    messageID: string,
+    message: string
+  ): Promise<void> {
+    channelName = correctChannelName(channelName);
+    validateChannelName(channelName);
+    validateMessageID(messageID);
+    await reply(
+      this.requireConnection(mustNotBeJoined(channelName)),
+      channelName,
+      messageID,
       message
     );
   }

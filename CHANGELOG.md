@@ -1,5 +1,10 @@
 # Changelog
 
+## Unversioned
+
+- Breaking: Removed replyTo from .say, added separate .reply() method in ChatClient.
+- Minor: Added tests & documentation for .reply() method.
+
 ## v4.7.0
 
 - Bugfix: Fix predictions parsing for badge-info. (#8)
