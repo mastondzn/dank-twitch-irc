@@ -1,6 +1,6 @@
 # Changelog
 
-## Unversioned
+## v5.0.0
 
 - Breaking: Removed replyTo from .say, added separate .reply() method in ChatClient.
 - Minor: Added tests & documentation for .reply() method.
