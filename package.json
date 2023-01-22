@@ -12,15 +12,17 @@
   "scripts": {
     "build": "tsc && sed -i '1,1 s/types=\"debug-logger\"/path=\"\\.\\.\\/types\\/debug-logger\\/index.d.ts\"/' ./dist/index.d.ts",
     "check-format": "prettier --ignore-path .gitignore --check \"**/*.md\" \"**/*.js\" \"**/*.ts\" \"**/*.yml\" \"**/*.json\"",
+    "lint": "eslint \"./lib\"",
     "reformat": "prettier --ignore-path .gitignore --write \"**/*.md\" \"**/*.js\" \"**/*.ts\" \"**/*.yml\" \"**/*.json\"",
+    "lintfix": "eslint \"./lib\" --fix",
     "test": "nyc mocha",
     "clean": "rm -rf ./dist ./docs ./coverage ./.nyc_output ./mochawesome-report",
     "docs": "typedoc --excludePrivate --excludeProtected -out ./docs lib/index.ts",
     "generate-index": "npx create-ts-index@^1.10.2 create ./lib -w -i '.spec' && npm run reformat",
     "precommit": "npm run clean && npm run build && npm run test && npm run reformat && npm run check-format --max-warnings=0",
     "generate-readme-toc": "doctoc README.md --github --title \"## Table of Contents\"",
-    "preversion": "npm run check-format",
-    "version": "npm run reformat && git add -A lib",
+    "preversion": "npm run check-format && npm run lint",
+    "version": "npm run reformat && npm run lintfix && git add -A lib",
     "postversion": "git push && git push --tags"
   },
   "keywords": [

@@ -14,7 +14,6 @@ Requires Node.js 14 or above.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 ## Table of Contents
 
 - [Usage](#usage)
@@ -774,11 +773,13 @@ Coverage report is produced as `./coverage/index.html`.
 ```bash
 # Run eslint and tslint rules and checks code style with prettier
 npm run lint
+npm run check-format
 ```
 
 ```bash
 # Run eslint, tslint and pretter fixers
 npm run lintfix
+npm run reformat
 ```
 
 [clearchat]: https://kararty.github.io/dank-twitch-irc/classes/ClearchatMessage.html

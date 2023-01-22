@@ -15,6 +15,7 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm i
       - run: npm run check-format
+      - run: npm run lint
       - run: npm run build
       - run: npm run test
       - run: npm run docs
