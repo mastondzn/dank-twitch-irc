@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.0.1
+
+- Minor: Added deprecation notices for some client methods.
+
 ## v5.0.0
 
 - Breaking: Removed replyTo from .say, added separate .reply() method in ChatClient.

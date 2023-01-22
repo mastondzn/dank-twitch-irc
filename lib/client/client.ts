@@ -224,6 +224,9 @@ export class ChatClient extends BaseClient {
     );
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async timeout(
     channelName: string,
     username: string,
@@ -239,6 +242,9 @@ export class ChatClient extends BaseClient {
     );
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async ban(
     channelName: string,
     username: string,
@@ -247,6 +253,9 @@ export class ChatClient extends BaseClient {
     await ban(this.requireConnection(), channelName, username, reason);
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async deleteMsg(
     channelName: string,
     messageID: string
@@ -254,6 +263,9 @@ export class ChatClient extends BaseClient {
     await deleteMsg(this.requireConnection(), channelName, messageID);
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async announce(
     channelName: string,
     messageText: string
@@ -261,21 +273,33 @@ export class ChatClient extends BaseClient {
     await announce(this.requireConnection(), channelName, messageText);
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async whisper(username: string, message: string): Promise<void> {
     validateChannelName(username);
     await whisper(this.requireConnection(), username, message);
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async setColor(color: Color): Promise<void> {
     await setColor(this.requireConnection(), color);
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async getMods(channelName: string): Promise<string[]> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
     return await getMods(this.requireConnection(), channelName);
   }
 
+  /**
+   * @deprecated Chat commands via IRC is deprecated and scheduled for removal on Twitch by 2023-02-18. See https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486
+   */
   public async getVips(channelName: string): Promise<string[]> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
