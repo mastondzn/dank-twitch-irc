@@ -1,7 +1,3 @@
-export * from "./announce";
-export * from "./ban";
-export * from "./deleteMsg";
-export * from "./get-mods-vips";
 export * from "./join-all";
 export * from "./join";
 export * from "./login";
@@ -10,6 +6,3 @@ export * from "./ping";
 export * from "./privmsg";
 export * from "./request-capabilities";
 export * from "./say";
-export * from "./set-color";
-export * from "./timeout";
-export * from "./whisper";

@@ -580,22 +580,8 @@ You probably will want to use these functions on `ChatClient` most frequently:
   it will be escaped.
 - `client.me(channelName: string, message: string): Promise<void>` - Post a
   `/me` message in the given channel.
-- `client.timeout(channelName: string, username: string, length: number, reason?: string): Promise<void>` -
-  Timeout `username` for `length` seconds in `channelName`. Optionally accepts a
-  reason to set.
-- `client.ban(channelName: string, username: string, reason?: string): Promise<void>` -
-  Ban `username` in `channelName`. Optionally accepts a reason to set.
 - `client.ping()` - Send a `PING` on a connection from the pool, and awaits the
   `PONG` response. You can use this to measure server latency, for example.
-- `client.whisper(username: string, message: string)` - Send the user a whisper
-  from the bot.
-- `client.setColor(color: Color)` - set the username color of your bot account.
-  E.g. `client.setColor({ r: 255, g: 0, b: 127 })`.
-- `client.getMods(channelName: string)` and `client.getVips(channelName: string)` -
-  Get a list of moderators/VIPs in a channel. Returns
-  a promise that resolves to an array of strings (login names of the moderators/VIPs).
-  Note that due to Twitch's restrictions, this function cannot be used with anonymous chat clients.
-  (The request will time out if your chat client is logged in as anonymous.)
 
 Extra functionality:
 
