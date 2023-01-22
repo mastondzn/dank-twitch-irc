@@ -33,8 +33,6 @@
   "license": "MIT",
   "repository": "https://github.com/kararty/dank-twitch-irc",
   "dependencies": {
-    "@types/debug": "^4.1.7",
-    "@types/duplexify": "^3.6.1",
     "debug-logger": "^0.4.1",
     "duplexify": "^4.1.2",
     "eventemitter3": "^4.0.7",
@@ -48,6 +46,8 @@
     "split2": "^4.1.0"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/duplexify": "^3.6.1",
     "@types/async-lock": "^1.1.5",
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.5",
