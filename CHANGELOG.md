@@ -4,6 +4,7 @@
 
 - Added JoinRateLimiter mixin. (#11)
 - Dev: Added TypeScript IDE type hints for event names. (#12)
+- Minor: Fix support tag values containing `=`. (#15)
 
 ## v6.0.0
 
