@@ -1,6 +1,6 @@
 import { Duplex } from "stream";
 import { ConnectionRateLimits } from "../mixins/ratelimiters/connection";
-import { MessageRateLimits, PresetKeys } from "./message-rate-limits";
+import { RateLimits, PresetKeys } from "./rate-limits";
 
 export interface DuplexTransportConfiguration {
   type: "duplex";
@@ -42,7 +42,7 @@ export type TransportConfiguration =
   | WebSocketTransportConfiguration
   | PresetWebSocketTransportConfiguration;
 
-export type CustomRateLimitsConfig = MessageRateLimits;
+export type CustomRateLimitsConfig = RateLimits;
 
 // "default" | "knownBot" | "verifiedBot" | { ... } (custom config)
 export type RateLimitsConfig = PresetKeys | CustomRateLimitsConfig;
@@ -70,7 +70,7 @@ export interface ClientConfiguration {
   connection?: TransportConfiguration;
 
   /**
-   * Maximum number of channels the client will allow one connection to be joined to. 100 by default.
+   * Maximum number of channels the client will allow one connection to be joined to. 90 by default.
    */
   maxChannelCountPerConnection?: number;
 
