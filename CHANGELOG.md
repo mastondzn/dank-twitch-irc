@@ -1,6 +1,6 @@
 # Changelog
 
-## Unversioned
+## v6.2.0
 
 - Added JoinRateLimiter mixin. (#11)
 - Dev: Added TypeScript IDE type hints for event names. (#12)
