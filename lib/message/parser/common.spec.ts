@@ -1,7 +1,8 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../../helpers.spec";
+import { assertThrowsChain } from "../../utils/testing";
 import { parseIntThrowing } from "./common";
 import { ParseError } from "./parse-error";
+import { describe, it } from "vitest";
 
 describe("./message/parser/common", function () {
   describe("#parseIntThrowing()", function () {

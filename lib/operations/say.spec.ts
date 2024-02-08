@@ -1,8 +1,8 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { me, removeCommands, say, SayError } from "./say";
+import { describe, it, vi } from "vitest";
 
 describe("./operations/say", function () {
   describe("#removeCommands()", function () {
@@ -36,7 +36,7 @@ describe("./operations/say", function () {
 
   describe("#say()", function () {
     it("should send the correct wire command", function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { data, client } = fakeConnection();
 
       say(client, "pajlada", "/test test abc KKona");
@@ -44,6 +44,7 @@ describe("./operations/say", function () {
       assert.deepStrictEqual(data, [
         "PRIVMSG #pajlada :/ /test test abc KKona\r\n",
       ]);
+      vi.useRealTimers();
     });
 
     it("should resolve on USERSTATE", async function () {
@@ -98,7 +99,7 @@ describe("./operations/say", function () {
 
   describe("#me()", function () {
     it("should send the correct wire command", function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { data, client } = fakeConnection();
 
       me(client, "pajlada", "test abc KKona");
@@ -106,6 +107,7 @@ describe("./operations/say", function () {
       assert.deepStrictEqual(data, [
         "PRIVMSG #pajlada :/me test abc KKona\r\n",
       ]);
+      vi.useRealTimers();
     });
 
     it("should resolve on USERSTATE", async function () {

@@ -18,6 +18,7 @@ import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
 import { parseIRCMessage } from "./irc-message";
 import { parseTwitchMessage } from "./twitch-message";
+import { describe, it } from "vitest";
 
 describe("./message/parser/twitch-message", function () {
   describe("#parseTwitchpMessage", function () {

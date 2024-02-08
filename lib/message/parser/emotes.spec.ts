@@ -1,8 +1,9 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../../helpers.spec";
+import { assertThrowsChain } from "../../utils/testing";
 import { TwitchEmote } from "../emote";
 import { parseEmotes } from "./emotes";
 import { ParseError } from "./parse-error";
+import { describe, it } from "vitest";
 
 describe("./message/parser/emotes", function () {
   describe("#parseEmotes()", function () {

@@ -1,6 +1,7 @@
 import { assert } from "chai";
-import { fakeConnection } from "../helpers.spec";
+import { fakeConnection } from "../utils/testing";
 import { sendPrivmsg } from "./privmsg";
+import { describe, it } from "vitest";
 
 describe("./operations/privmsg", function () {
   describe("#sendPrivmsg()", function () {

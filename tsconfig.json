@@ -19,7 +19,8 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./types", "./node_modules/@types"],
-    "types": ["node", "mocha", "eventemitter3"]
+    "esModuleInterop": true,
+    "types": ["node"]
   },
-  "include": ["lib/**/*.ts", "types/**/*.ts", "**.js"]
+  "include": ["lib/**/*.ts", "types/**/*.ts", "**.js", "vitest.config.mjs"]
 }

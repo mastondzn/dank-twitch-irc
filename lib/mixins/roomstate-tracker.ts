@@ -1,4 +1,4 @@
-import * as debugLogger from "debug-logger";
+import debugLogger from "debug-logger";
 import { EventEmitter } from "eventemitter3";
 import { ChatClient } from "../client/client";
 import {

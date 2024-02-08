@@ -1,9 +1,10 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../../helpers.spec";
+import { assertThrowsChain } from "../../utils/testing";
 import { parseIRCMessage } from "../parser/irc-message";
 import { MissingDataError } from "../parser/missing-data-error";
 import { ParseError } from "../parser/parse-error";
 import { ChannelIRCMessage, getIRCChannelName } from "./channel-irc-message";
+import { describe, it } from "vitest";
 
 describe("./message/irc/channel-irc-message", function () {
   describe("#getIRCChannelName()", function () {

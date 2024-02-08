@@ -1,29 +1,31 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { TimeoutError } from "../await/timeout-error";
 import { ClientError, ConnectionError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { PingTimeoutError, sendPing } from "./ping";
+import { describe, it, vi } from "vitest";
 
 describe("./operations/ping", function () {
   describe("#sendPing()", function () {
     it("should send the correct wire command if ping identifier is specified", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
       sendPing(client, "some identifier");
 
       assert.deepStrictEqual(data, ["PING :some identifier\r\n"]);
+      vi.useRealTimers();
     });
 
     it("should send a random ping identifier if no ping identifier is specified", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
       sendPing(client);
 
       assert.strictEqual(data.length, 1);
       assert.match(data[0], /^PING :dank-twitch-irc:manual:[0-9a-f]{32}\r\n$/);
+      vi.useRealTimers();
     });
 
     it("should resolve on matching PONG", async function () {
@@ -40,12 +42,12 @@ describe("./operations/ping", function () {
     });
 
     it("should reject on timeout of 2000 milliseconds by default", async function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
       const promise = sendPing(client, "some identifier");
 
-      sinon.clock.tick(2000);
+      vi.advanceTimersByTime(2000);
 
       await assertErrorChain(
         promise,
@@ -62,6 +64,7 @@ describe("./operations/ping", function () {
         TimeoutError,
         "Timed out after waiting for response for 2000 milliseconds"
       );
+      vi.useRealTimers();
     });
   });
 

@@ -1,28 +1,20 @@
-import * as chai from "chai";
+import chai from "chai";
 import { assert } from "chai";
-import * as chaiAsPromised from "chai-as-promised";
+import chaiAsPromised from "chai-as-promised";
 import { BaseError } from "make-error-cause";
-import * as sinon from "sinon";
+import sinon from "sinon";
 import { Duplex } from "stream";
 import { inspect } from "util";
-import * as util from "util";
-import { ChatClient } from "./client/client";
-import { SingleConnection } from "./client/connection";
+import util from "util";
+import { ChatClient } from "../client/client";
+import { SingleConnection } from "../client/connection";
+import { afterEach } from "vitest";
 
 chai.config.includeStack = true;
 chai.use(chaiAsPromised);
 
-afterEach(function () {
+afterEach(() => {
   sinon.restore();
-});
-
-afterEach(function () {
-  if (this.currentTest != null && this.currentTest.err != null) {
-    // tslint:disable-next-line:no-console
-    console.error(inspect(this.currentTest.err, { colors: true }));
-    // tslint:disable-next-line:no-console
-    console.error("Below is the default mocha output:");
-  }
 });
 
 export function errorOf(p: Promise<any>): Promise<any> {
@@ -132,7 +124,6 @@ export function createMockTransport(): MockTransportData {
       data.push(chunk.toString());
       callback();
     },
-    // tslint:disable-next-line:no-empty
     read(): void {},
   });
 

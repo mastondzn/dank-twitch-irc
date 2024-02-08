@@ -1,4 +1,4 @@
-import * as randombytes from "randombytes";
+import randombytes from "randombytes";
 import { awaitResponse } from "../await/await-response";
 import { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";

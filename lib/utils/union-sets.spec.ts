@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import { unionSets } from "./union-sets";
+import { describe, it } from "vitest";
 
 describe("./utils/union-sets", function () {
   describe("#unionSets()", function () {

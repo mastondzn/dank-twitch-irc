@@ -1,12 +1,13 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
+import sinon from "sinon";
 import { promisify } from "util";
-import { fakeClient } from "../helpers.spec";
+import { fakeClient } from "../utils/testing";
 import { TwitchBadge } from "../message/badge";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { GlobaluserstateMessage } from "../message/twitch-types/globaluserstate";
 import { UserstateMessage } from "../message/twitch-types/userstate";
 import { UserStateTracker } from "./userstate-tracker";
+import { describe, it } from "vitest";
 
 describe("./mixins/userstate-tracker", function () {
   describe("UserstateTracker", function () {
@@ -42,7 +43,7 @@ describe("./mixins/userstate-tracker", function () {
         parseTwitchMessage(msgRaw) as UserstateMessage
       ).extractUserState();
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers"),
@@ -67,7 +68,7 @@ describe("./mixins/userstate-tracker", function () {
           " #randers"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert(
         listenerCallback.calledOnceWithExactly(
@@ -98,7 +99,7 @@ describe("./mixins/userstate-tracker", function () {
         parseTwitchMessage(msgRaw) as GlobaluserstateMessage
       ).extractGlobalUserState();
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(userStateTracker.globalState, expectedState);
       assert.deepStrictEqual(userStateTracker.getGlobalState(), expectedState);
@@ -120,7 +121,7 @@ describe("./mixins/userstate-tracker", function () {
           "0;user-type= :tmi.twitch.tv GLOBALUSERSTATE"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert(
         listenerCallback.calledOnceWithExactly(
@@ -164,7 +165,7 @@ describe("./mixins/userstate-tracker", function () {
 
       emit(secondMessage);
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       const secondMessageState = (
         parseTwitchMessage(secondMessage) as UserstateMessage

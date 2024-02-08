@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { CapMessage } from "./cap";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/cap", function () {
   describe("CapMessage", function () {

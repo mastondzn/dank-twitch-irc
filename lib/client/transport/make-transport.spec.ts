@@ -9,6 +9,7 @@ import { DuplexTransport } from "./duplex-transport";
 import { makeTransport } from "./make-transport";
 import { TcpTransport } from "./tcp-transport";
 import { WebSocketTransport } from "./websocket-transport";
+import { describe, it } from "vitest";
 
 describe("./client/transport/make-transport", function () {
   describe("#makeTransport()", function () {

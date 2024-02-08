@@ -1,11 +1,11 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { TimeoutError } from "../await/timeout-error";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { JoinMessage } from "../message/twitch-types/membership/join";
 import { joinChannel, JoinError, joinNothingToDo } from "./join";
+import { describe, it, vi } from "vitest";
 
 describe("./operations/join", function () {
   describe("#joinNotingToDo()", function () {
@@ -62,27 +62,30 @@ describe("./operations/join", function () {
 
   describe("#joinChannel()", function () {
     it("sends the correct wire command", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
       joinChannel(client, "pajlada");
       assert.deepEqual(data, ["JOIN #pajlada\r\n"]);
+      vi.useRealTimers();
     });
 
     it("does nothing if channel is joined and wanted", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
       client.wantedChannels.add("pajlada");
       client.joinedChannels.add("pajlada");
       joinChannel(client, "pajlada");
       assert.deepEqual(data, []);
+      vi.useRealTimers();
     });
 
     it("sends the command if channel is not in joinedChannels but in wantedChannels", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
       client.wantedChannels.add("pajlada");
       joinChannel(client, "pajlada");
       assert.deepEqual(data, ["JOIN #pajlada\r\n"]);
+      vi.useRealTimers();
     });
 
     it("resolves on incoming JOIN", async function () {
@@ -228,14 +231,14 @@ describe("./operations/join", function () {
 
     it("should fail on timeout of 2000 ms", async function () {
       // given
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
       // when
       const promise = joinChannel(client, "test");
 
       // then
-      sinon.clock.tick(2000);
+      vi.advanceTimersByTime(2000);
       await assertErrorChain(
         promise,
         JoinError,

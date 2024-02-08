@@ -1,4 +1,4 @@
-import * as debugLogger from "debug-logger";
+import debugLogger from "debug-logger";
 import { ClientConfiguration } from "../config/config";
 import { ClientMixin, ConnectionMixin } from "../mixins/base-mixin";
 import { IgnoreUnhandledPromiseRejectionsMixin } from "../mixins/ignore-promise-rejections";

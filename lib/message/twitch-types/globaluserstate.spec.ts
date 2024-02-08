@@ -3,6 +3,7 @@ import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { GlobaluserstateMessage } from "./globaluserstate";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/globaluserstate", function () {
   describe("GlobaluserstateMessage", function () {

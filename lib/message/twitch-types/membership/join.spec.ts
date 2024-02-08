@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { parseTwitchMessage } from "../../parser/twitch-message";
 import { JoinMessage } from "./join";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/membership/join", function () {
   describe("JoinMessage", function () {

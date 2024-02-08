@@ -1,9 +1,9 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { TimeoutError } from "../await/timeout-error";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { JoinError } from "./join";
 import { joinAll } from "./join-all";
+import { describe, it, vi } from "vitest";
 
 function successResponsesForChannelChunk(channels: string[]): string[] {
   return channels.map(
@@ -15,7 +15,7 @@ function successResponsesForChannelChunk(channels: string[]): string[] {
 describe("./operations/join-all", function () {
   describe("#joinAll()", function () {
     it("should send the correct wire command for a single chunk", function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { client, data } = fakeConnection();
 
       joinAll(client, ["pajlada", "randers", "nymn_hs", "forsen"]);
@@ -23,6 +23,7 @@ describe("./operations/join-all", function () {
       assert.deepStrictEqual(data, [
         "JOIN #pajlada,#randers,#nymn_hs,#forsen\r\n",
       ]);
+      vi.useRealTimers();
     });
 
     it("should send the correct wire command for a multiple chunks", async function () {
@@ -406,12 +407,10 @@ describe("./operations/join-all", function () {
       const results = await promise;
 
       // no error for successful channel
-      // tslint:disable-next-line:no-string-literal
       assert.isUndefined(results["pajlada"]);
 
       // error for nymn_hs (no response received)
       assertErrorChain(
-        // tslint:disable-next-line:no-string-literal
         results["nymn_hs"],
         JoinError,
         "Failed to join channel nymn_hs: A response to a command issued later than this command was received",

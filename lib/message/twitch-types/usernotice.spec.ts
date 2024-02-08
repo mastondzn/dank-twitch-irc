@@ -10,6 +10,7 @@ import {
   SubEventParams,
   UsernoticeMessage,
 } from "./usernotice";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/usernotice", function () {
   describe("#extractEventParams()", function () {

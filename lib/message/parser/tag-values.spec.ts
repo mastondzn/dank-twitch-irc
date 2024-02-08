@@ -1,11 +1,12 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../../helpers.spec";
+import { assertThrowsChain } from "../../utils/testing";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";
 import { MissingTagError } from "./missing-tag-error";
 import { ParseError } from "./parse-error";
 import { tagParserFor, TagValueParser } from "./tag-values";
+import { describe, it } from "vitest";
 
 describe("./message/parser/tag-values", function () {
   function checkRequire<V, A extends any[]>(

@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { BaseError } from "make-error-cause";
 import { anyCauseInstanceof, causeOf } from "./any-cause-instanceof";
+import { describe, it } from "vitest";
 
 describe("./utils/any-cause-instanceof", function () {
   describe("#causeOf()", function () {
@@ -35,7 +36,6 @@ describe("./utils/any-cause-instanceof", function () {
   });
 
   describe("#anyCauseInstanceof()", function () {
-    // tslint:disable:max-classes-per-file
     class TestErrorA extends BaseError {}
 
     class TestErrorB extends BaseError {}

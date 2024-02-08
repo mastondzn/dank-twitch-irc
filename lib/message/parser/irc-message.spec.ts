@@ -1,8 +1,9 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../../helpers.spec";
+import { assertThrowsChain } from "../../utils/testing";
 import { IRCMessage } from "../irc/irc-message";
 import { parseIRCMessage } from "./irc-message";
 import { ParseError } from "./parse-error";
+import { describe, it } from "vitest";
 
 describe("./message/parser/irc-message", function () {
   describe("#parseIRCMessage", function () {

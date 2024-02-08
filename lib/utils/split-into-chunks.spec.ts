@@ -1,6 +1,7 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../helpers.spec";
+import { assertThrowsChain } from "./testing";
 import { splitIntoChunks } from "./split-into-chunks";
+import { describe, it } from "vitest";
 
 describe("./utils/split-into-chunks", function () {
   describe("#splitIntoChunks()", function () {

@@ -1,4 +1,5 @@
-import { assertThrowsChain } from "../helpers.spec";
+import { describe, it } from "vitest";
+import { assertThrowsChain } from "../utils/testing";
 import { validateIRCCommand } from "./irc-command";
 import { ValidationError } from "./validation-error";
 

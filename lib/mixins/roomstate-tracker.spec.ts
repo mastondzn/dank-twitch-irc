@@ -1,8 +1,9 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
+import sinon from "sinon";
 import { promisify } from "util";
-import { fakeClient } from "../helpers.spec";
+import { fakeClient } from "../utils/testing";
 import { RoomStateTracker } from "./roomstate-tracker";
+import { describe, it } from "vitest";
 
 describe("./mixins/roomstate-tracker", function () {
   describe("RoomstateTracker", function () {
@@ -29,7 +30,7 @@ describe("./mixins/roomstate-tracker", function () {
         "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(roomStateTracker.getChannelState("randers"), {
         emoteOnly: false,
@@ -53,7 +54,7 @@ describe("./mixins/roomstate-tracker", function () {
         "@emote-only=0;followers-only=-1;r9k=1;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(roomStateTracker.getChannelState("randers"), {
         emoteOnly: false,
@@ -107,7 +108,7 @@ describe("./mixins/roomstate-tracker", function () {
       emitAndEnd(
         "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers"
       );
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.isUndefined(roomStateTracker.getChannelState("randers"));
     });
@@ -125,7 +126,7 @@ describe("./mixins/roomstate-tracker", function () {
       );
       client.destroy();
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert(
         listenerCallback.calledOnceWithExactly(
@@ -144,7 +145,7 @@ describe("./mixins/roomstate-tracker", function () {
         "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       const listenerCallback = sinon.fake();
       roomStateTracker.on("newChannelState", listenerCallback);
@@ -153,7 +154,7 @@ describe("./mixins/roomstate-tracker", function () {
         "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert(
         listenerCallback.calledOnceWithExactly(

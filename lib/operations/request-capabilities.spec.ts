@@ -1,7 +1,6 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import {
   acknowledgesCapabilities,
@@ -9,6 +8,7 @@ import {
   deniedAnyCapability,
   requestCapabilities,
 } from "./request-capabilities";
+import { describe, it, vi } from "vitest";
 
 describe("./operations/request-capabilities", function () {
   describe("#acknowledgesCapabilities()", function () {
@@ -73,7 +73,7 @@ describe("./operations/request-capabilities", function () {
 
   describe("#requestCapabilities()", function () {
     it("should send the correct wire command", function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
 
       const { client, data } = fakeConnection();
 
@@ -84,6 +84,7 @@ describe("./operations/request-capabilities", function () {
         "CAP REQ :twitch.tv/commands twitch.tv/tags\r\n",
         "CAP REQ :twitch.tv/commands twitch.tv/tags twitch.tv/membership\r\n",
       ]);
+      vi.useRealTimers();
     });
 
     it("should resolve on CAP message acknowledging all capabilities", async function () {

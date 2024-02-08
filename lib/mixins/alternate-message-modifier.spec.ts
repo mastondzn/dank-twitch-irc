@@ -1,11 +1,11 @@
 import { assert } from "chai";
-import "mocha";
 import { promisify } from "util";
-import { fakeClient } from "../helpers.spec";
+import { fakeClient } from "../utils/testing";
 import {
   AlternateMessageModifier,
   invisibleSuffix,
 } from "./alternate-message-modifier";
+import { describe, it } from "vitest";
 
 describe("./modules/alternate-message-modifier", function () {
   describe("AlternateMessageModifier", () => {
@@ -74,7 +74,7 @@ describe("./modules/alternate-message-modifier", function () {
           "s@randers.tmi.twitch.tv PRIVMSG #forsen :Kappa Keepo PogChamp"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(

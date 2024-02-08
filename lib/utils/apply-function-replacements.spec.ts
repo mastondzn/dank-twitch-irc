@@ -3,8 +3,7 @@ import {
   applyReplacement,
   applyReplacements,
 } from "./apply-function-replacements";
-
-// tslint:disable:max-classes-per-file
+import { describe, it } from "vitest";
 
 describe("./utils/apply-function-replacements", function () {
   describe("#applyReplacement", function () {
@@ -82,13 +81,13 @@ describe("./utils/apply-function-replacements", function () {
       const target = new Target();
 
       applyReplacements(self, target, {
-        a(originalFn) {
+        a(originalFn: () => string) {
           return originalFn() + "x";
         },
-        b(originalFn) {
+        b(originalFn: () => string) {
           return originalFn() + "y";
         },
-        c(originalFn) {
+        c(originalFn: () => string) {
           return originalFn() + "z";
         },
       });

@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { hasAllStateTags, RoomstateMessage } from "./roomstate";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/roomstate", function () {
   describe("#hasAllStateTags()", function () {

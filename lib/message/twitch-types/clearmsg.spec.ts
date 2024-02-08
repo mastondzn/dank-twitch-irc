@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { ClearmsgMessage } from "./clearmsg";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/clearmsg", function () {
   describe("ClearmsgMessage", function () {

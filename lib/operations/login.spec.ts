@@ -1,33 +1,36 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { LoginError, sendLogin } from "./login";
+import { describe, it, vi } from "vitest";
 
 describe("./operations/login", function () {
   describe("#sendLogin()", function () {
     it("should only send NICK if password == null", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
       sendLogin(client, "justinfan12345", undefined);
       assert.deepEqual(data, ["NICK justinfan12345\r\n"]);
+      vi.useRealTimers();
     });
 
     it("should send NICK and PASS if password is specified", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
       sendLogin(client, "justinfan12345", "SCHMOOPIE");
       assert.deepEqual(data, ["PASS SCHMOOPIE\r\n", "NICK justinfan12345\r\n"]);
+      vi.useRealTimers();
     });
 
     it("should prepend oauth: if missing", function () {
-      sinon.useFakeTimers(); // prevent the promise timing out
+      vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
       sendLogin(client, "pajlada", "12345");
       assert.deepEqual(data, ["PASS oauth:12345\r\n", "NICK pajlada\r\n"]);
+      vi.useRealTimers();
     });
 
     it("should resolve on 001", async function () {

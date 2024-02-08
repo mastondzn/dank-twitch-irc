@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { assertThrowsChain } from "../../helpers.spec";
+import { assertThrowsChain } from "../../utils/testing";
 import { MissingDataError } from "../parser/missing-data-error";
 import { ParseError } from "../parser/parse-error";
 import { parseTwitchMessage } from "../parser/twitch-message";
@@ -9,6 +9,7 @@ import {
   parseHosttargetParameter,
   parseViewerCount,
 } from "./hosttarget";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/hosttarget", function () {
   describe("#parseHostedChannelName()", function () {

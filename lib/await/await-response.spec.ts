@@ -1,12 +1,12 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { BaseError } from "../utils/base-error";
 import { ignoreErrors } from "../utils/ignore-errors";
 import { awaitResponse, ResponseAwaiter } from "./await-response";
 import { TimeoutError } from "./timeout-error";
+import { describe, it, vi } from "vitest";
 
 describe("./await/await-response", function () {
   describe("ResponseAwaiter", function () {
@@ -163,7 +163,7 @@ describe("./await/await-response", function () {
     });
 
     it("should timeout after specified timeout (noResponseAction = failure)", async function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
       // awaiter is going to be the only awaiter in the queue so
@@ -176,7 +176,7 @@ describe("./await/await-response", function () {
         timeout: 3000,
       });
 
-      sinon.clock.tick(3000);
+      vi.advanceTimersByTime(3000);
 
       await assertErrorChain(
         [promise, clientError],
@@ -185,10 +185,11 @@ describe("./await/await-response", function () {
         TimeoutError,
         "Timed out after waiting for response for 3000 milliseconds"
       );
+      vi.useRealTimers();
     });
 
     it("should timeout after specified timeout (noResponseAction = success)", async function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { client, clientError, end } = fakeConnection();
 
       // awaiter is going to be the only awaiter in the queue so
@@ -202,14 +203,15 @@ describe("./await/await-response", function () {
         noResponseAction: "success",
       });
 
-      sinon.clock.tick(3000);
+      vi.advanceTimersByTime(3000);
       end();
 
       await Promise.all([promise, clientError]);
+      vi.useRealTimers();
     });
 
     it("should begin timeout only once awaiter is moved to head of queue", async function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
       const promise1 = awaitResponse(client, {
@@ -224,7 +226,7 @@ describe("./await/await-response", function () {
         timeout: 1000,
       });
 
-      sinon.clock.tick(1000);
+      vi.advanceTimersByTime(1000);
 
       await assertErrorChain(
         [promise1, clientError],
@@ -234,8 +236,7 @@ describe("./await/await-response", function () {
         "Timed out after waiting for response for 1000 milliseconds"
       );
 
-      sinon.clock.tick(1000);
-
+      vi.advanceTimersByTime(1000);
       await assertErrorChain(
         promise2,
         BaseError,
@@ -243,6 +244,7 @@ describe("./await/await-response", function () {
         TimeoutError,
         "Timed out after waiting for response for 1000 milliseconds"
       );
+      vi.useRealTimers();
     });
 
     it("should notify other awaiters that they are outpaced", async function () {

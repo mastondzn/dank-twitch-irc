@@ -3,6 +3,7 @@ import {
   MAX_OUTGOING_COMMAND_LENGTH,
   MAX_OUTGOING_LINE_LENGTH,
 } from "./constants";
+import { describe, it } from "vitest";
 
 describe("./constants", function () {
   describe("MAX_OUTGOING_LINE_LENGTH", function () {

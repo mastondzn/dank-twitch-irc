@@ -1,9 +1,9 @@
 import { assert } from "chai";
-import * as sinon from "sinon";
 import { TimeoutError } from "../await/timeout-error";
-import { assertErrorChain, fakeConnection } from "../helpers.spec";
+import { assertErrorChain, fakeConnection } from "../utils/testing";
 import { joinNothingToDo } from "./join";
 import { partChannel, PartError, partNothingToDo } from "./part";
+import { describe, it, vi } from "vitest";
 
 describe("./operations/part", function () {
   describe("#partNothingToDo()", function () {
@@ -62,7 +62,7 @@ describe("./operations/part", function () {
 
   describe("#partChannel()", function () {
     it("should send the correct wire command", function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
 
       const { client, data } = fakeConnection();
       client.joinedChannels.add("pajlada");
@@ -71,6 +71,7 @@ describe("./operations/part", function () {
       partChannel(client, "pajlada");
 
       assert.deepStrictEqual(data, ["PART #pajlada\r\n"]);
+      vi.useRealTimers();
     });
 
     it("should do nothing if channel is neither wanted nor joined", async function () {
@@ -82,7 +83,7 @@ describe("./operations/part", function () {
     });
 
     it("should remove channel from wanted channels even on timeout error", async function () {
-      sinon.useFakeTimers();
+      vi.useFakeTimers();
 
       const { client, clientError } = fakeConnection();
       client.joinedChannels.add("pajlada");
@@ -90,7 +91,7 @@ describe("./operations/part", function () {
 
       const promise = partChannel(client, "pajlada");
 
-      sinon.clock.tick(2000);
+      vi.advanceTimersByTime(2000);
 
       await assertErrorChain(
         promise,
@@ -110,6 +111,8 @@ describe("./operations/part", function () {
 
       assert.sameMembers([...client.joinedChannels], ["pajlada"]);
       assert.sameMembers([...client.wantedChannels], []);
+
+      vi.useRealTimers();
     });
 
     it("should remove channel from joined and wanted channels on success", async function () {

@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import { findAndPushToEnd } from "./find-and-push-to-end";
+import { describe, it } from "vitest";
 
 describe("./utils/find-and-push-to-end", function () {
   describe("findAndPushToEnd", () => {

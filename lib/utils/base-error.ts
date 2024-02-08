@@ -1,6 +1,6 @@
-import * as makeErrorCause from "make-error-cause";
+import { BaseError as OriginalBaseError } from "make-error-cause";
 
-export class BaseError extends makeErrorCause.BaseError {
+export class BaseError extends OriginalBaseError {
   public constructor(message?: string, cause?: Error | undefined) {
     let newMessage;
     if (

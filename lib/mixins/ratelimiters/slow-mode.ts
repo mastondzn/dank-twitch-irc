@@ -123,7 +123,6 @@ export class SlowModeRateLimiter implements ClientMixin {
 
     // nothing is acquired and nothing has to be released
     if (fastSpam) {
-      // tslint:disable-next-line:no-empty
       return () => {};
     }
 
@@ -182,7 +181,6 @@ export class SlowModeRateLimiter implements ClientMixin {
 
     if (fastSpamAfterAwait) {
       semaphore.release();
-      // tslint:disable-next-line:no-empty
       return () => {};
     }
 

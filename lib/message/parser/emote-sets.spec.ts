@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import { parseEmoteSets } from "./emote-sets";
+import { describe, it } from "vitest";
 
 describe("./message/parser/emote-sets", function () {
   describe("#parseEmoteSets()", function () {

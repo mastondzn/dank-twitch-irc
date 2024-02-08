@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import { parseTwitchMessage } from "../../parser/twitch-message";
 import { ReconnectMessage } from "./reconnect";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/connection/reconnect", function () {
   describe("ReconnectMessage", function () {

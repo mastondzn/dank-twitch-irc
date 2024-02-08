@@ -1,5 +1,4 @@
 import { BaseError } from "../utils/base-error";
-// tslint:disable:max-classes-per-file
 
 /**
  * Indicates an error directly caused by some bad server message being received,

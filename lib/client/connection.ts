@@ -1,5 +1,5 @@
-import * as debugLogger from "debug-logger";
-import * as split2 from "split2";
+import debugLogger from "debug-logger";
+import split2 from "split2";
 import { ResponseAwaiter } from "../await/await-response";
 import { ClientConfiguration } from "../config/config";
 import { handleReconnectMessage } from "../functionalities/handle-reconnect-message";

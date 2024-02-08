@@ -1,6 +1,6 @@
 import { Duplexify } from "duplexify";
-import * as duplexify from "duplexify";
-import * as WebSocketDuplex from "simple-websocket";
+import duplexify from "duplexify";
+import WebSocketDuplex from "simple-websocket";
 import { PassThrough } from "stream";
 import { ExpandedWebSocketTransportConfiguration } from "../../config/expanded";
 import { Transport } from "./transport";

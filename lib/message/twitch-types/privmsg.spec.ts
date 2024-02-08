@@ -3,6 +3,7 @@ import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { parseActionAndMessage, PrivmsgMessage } from "./privmsg";
+import { describe, it } from "vitest";
 
 describe("./message/twitch-types/privmsg", function () {
   describe("#parseActionAndMessage()", function () {
