@@ -1,7 +1,6 @@
 import * as chai from "chai";
 import { assert } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
-import "clarify";
 import { BaseError } from "make-error-cause";
 import * as sinon from "sinon";
 import { Duplex } from "stream";
