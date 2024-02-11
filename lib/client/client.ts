@@ -118,7 +118,7 @@ export class ChatClient extends BaseClient {
     }
 
     const conn = this.requireConnection(
-      maxJoinedChannels(this.configuration.maxChannelCountPerConnection)
+      maxJoinedChannels(this.configuration.maxChannelCountPerConnection),
     );
     await joinChannel(conn, channelName);
   }
@@ -133,13 +133,13 @@ export class ChatClient extends BaseClient {
     }
 
     const conn = this.requireConnection(
-      (c) => !partNothingToDo(c, channelName)
+      (c) => !partNothingToDo(c, channelName),
     );
     await partChannel(conn, channelName);
   }
 
   public async joinAll(
-    channelNames: string[]
+    channelNames: string[],
   ): Promise<Record<string, Error | undefined>> {
     channelNames = channelNames.map((v) => {
       v = correctChannelName(v);
@@ -149,7 +149,7 @@ export class ChatClient extends BaseClient {
 
     const needToJoin: string[] = channelNames.filter(
       (channelName) =>
-        !this.connections.some((c) => joinNothingToDo(c, channelName))
+        !this.connections.some((c) => joinNothingToDo(c, channelName)),
     );
 
     const promises: Promise<Record<string, Error | undefined>>[] = [];
@@ -157,7 +157,7 @@ export class ChatClient extends BaseClient {
     let idx = 0;
     while (idx < needToJoin.length) {
       const conn = this.requireConnection(
-        maxJoinedChannels(this.configuration.maxChannelCountPerConnection)
+        maxJoinedChannels(this.configuration.maxChannelCountPerConnection),
       );
 
       const canJoin =
@@ -185,7 +185,7 @@ export class ChatClient extends BaseClient {
     await say(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      message
+      message,
     );
   }
 
@@ -195,7 +195,7 @@ export class ChatClient extends BaseClient {
     await me(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      message
+      message,
     );
   }
 
@@ -205,7 +205,7 @@ export class ChatClient extends BaseClient {
   public async reply(
     channelName: string,
     messageID: string,
-    message: string
+    message: string,
   ): Promise<void> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
@@ -214,7 +214,7 @@ export class ChatClient extends BaseClient {
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
       messageID,
-      message
+      message,
     );
   }
 
@@ -306,7 +306,7 @@ export class ChatClient extends BaseClient {
    * @param predicate The predicate the connection must fulfill.
    */
   public requireConnection(
-    predicate: ConnectionPredicate = alwaysTrue
+    predicate: ConnectionPredicate = alwaysTrue,
   ): SingleConnection {
     return (
       findAndPushToEnd(this.connections, predicate) || this.newConnection()

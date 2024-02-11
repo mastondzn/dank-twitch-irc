@@ -21,7 +21,7 @@ describe("./message/twitch-types/roomstate", function () {
 
           subscribersOnly: false,
           subscribersOnlyRaw: "0",
-        })
+        }),
       );
     });
 
@@ -39,7 +39,7 @@ describe("./message/twitch-types/roomstate", function () {
 
           subscribersOnly: false,
           subscribersOnlyRaw: "0",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
@@ -54,7 +54,7 @@ describe("./message/twitch-types/roomstate", function () {
 
           subscribersOnly: false,
           subscribersOnlyRaw: "0",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
@@ -69,7 +69,7 @@ describe("./message/twitch-types/roomstate", function () {
 
           subscribersOnly: false,
           subscribersOnlyRaw: "0",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
@@ -84,7 +84,7 @@ describe("./message/twitch-types/roomstate", function () {
 
           subscribersOnly: false,
           subscribersOnlyRaw: "0",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
@@ -99,7 +99,7 @@ describe("./message/twitch-types/roomstate", function () {
 
           slowModeDuration: 0,
           slowModeDurationRaw: "0",
-        })
+        }),
       );
     });
 
@@ -108,31 +108,31 @@ describe("./message/twitch-types/roomstate", function () {
         hasAllStateTags({
           emoteOnly: true,
           emoteOnlyRaw: "1",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
           followersOnlyDuration: -1,
           followersOnlyDurationRaw: "-1",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
           r9k: false,
           r9kRaw: "0",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
           slowModeDuration: 0,
           slowModeDurationRaw: "0",
-        })
+        }),
       );
       assert.isFalse(
         hasAllStateTags({
           subscribersOnly: false,
           subscribersOnlyRaw: "0",
-        })
+        }),
       );
     });
   });

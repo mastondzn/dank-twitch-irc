@@ -11,7 +11,7 @@ export class JoinRateLimiter implements ClientMixin {
     this.client = client;
 
     this.joinLimitsSemaphore = new Sema(
-      this.client.configuration.rateLimits.joinLimits
+      this.client.configuration.rateLimits.joinLimits,
     );
   }
 
@@ -46,13 +46,13 @@ export class JoinRateLimiter implements ClientMixin {
       ) {
         const chunk = channelNames.slice(
           i,
-          i + this.client.configuration.rateLimits.joinLimits
+          i + this.client.configuration.rateLimits.joinLimits,
         );
 
         const releaseFns = await Promise.all(
           Array(chunk.length)
             .fill(this.acquire)
-            .map((fn) => fn.bind(this)())
+            .map((fn) => fn.bind(this)()),
         );
         try {
           const promiseRes = await oldFn(chunk, ...args);

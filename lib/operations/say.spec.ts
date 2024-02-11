@@ -10,7 +10,7 @@ describe("./operations/say", function () {
       assert.strictEqual(removeCommands(".me hi"), "/ .me hi");
       assert.strictEqual(
         removeCommands("/timeout weeb123 5"),
-        "/ /timeout weeb123 5"
+        "/ /timeout weeb123 5",
       );
     });
 
@@ -25,7 +25,7 @@ describe("./operations/say", function () {
     it("should not be instanceof ConnectionError", function () {
       assert.notInstanceOf(
         new SayError("pajlada", "test", true),
-        ConnectionError
+        ConnectionError,
       );
     });
     it("should not be instanceof ClientError", function () {
@@ -69,7 +69,7 @@ describe("./operations/say", function () {
 
       emitAndEnd(
         "@msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE" +
-          " #pajlada :This channel has been suspended."
+          " #pajlada :This channel has been suspended.",
       );
 
       await assertErrorChain(
@@ -80,7 +80,7 @@ describe("./operations/say", function () {
           "a :This channel has been suspended.",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twit" +
-          "ch.tv NOTICE #pajlada :This channel has been suspended."
+          "ch.tv NOTICE #pajlada :This channel has been suspended.",
       );
 
       await assertErrorChain(
@@ -91,7 +91,7 @@ describe("./operations/say", function () {
           "is channel has been suspended.",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitc" +
-          "h.tv NOTICE #pajlada :This channel has been suspended."
+          "h.tv NOTICE #pajlada :This channel has been suspended.",
       );
     });
   });
@@ -132,7 +132,7 @@ describe("./operations/say", function () {
 
       emitAndEnd(
         "@msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE" +
-          " #pajlada :This channel has been suspended."
+          " #pajlada :This channel has been suspended.",
       );
 
       await assertErrorChain(
@@ -143,7 +143,7 @@ describe("./operations/say", function () {
           "a :This channel has been suspended.",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twit" +
-          "ch.tv NOTICE #pajlada :This channel has been suspended."
+          "ch.tv NOTICE #pajlada :This channel has been suspended.",
       );
 
       await assertErrorChain(
@@ -154,7 +154,7 @@ describe("./operations/say", function () {
           "is channel has been suspended.",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitc" +
-          "h.tv NOTICE #pajlada :This channel has been suspended."
+          "h.tv NOTICE #pajlada :This channel has been suspended.",
       );
     });
   });

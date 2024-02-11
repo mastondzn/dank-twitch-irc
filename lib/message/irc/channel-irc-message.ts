@@ -3,16 +3,16 @@ import { IRCMessage, IRCMessageData, requireParameter } from "./irc-message";
 
 export function getIRCChannelName(
   message: Pick<IRCMessage, "ircParameters">,
-  optional?: false
+  optional?: false,
 ): string;
 export function getIRCChannelName(
   message: Pick<IRCMessage, "ircParameters">,
-  optional: true
+  optional: true,
 ): string | undefined;
 
 export function getIRCChannelName(
   message: Pick<IRCMessage, "ircParameters">,
-  optional = false
+  optional = false,
 ): string | undefined {
   const parameter = requireParameter(message, 0);
 

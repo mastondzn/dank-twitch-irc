@@ -29,7 +29,7 @@ export class SingleConnection extends BaseClient {
   public readonly transport: Transport;
 
   protected readonly log = debugLogger(
-    `dank-twitch-irc:connection:${this.connectionID}`
+    `dank-twitch-irc:connection:${this.connectionID}`,
   );
 
   public constructor(configuration?: ClientConfiguration) {
@@ -53,7 +53,7 @@ export class SingleConnection extends BaseClient {
     this.transport.stream.on("error", (e) => {
       const emittedError = new ConnectionError(
         "Error occurred in transport layer",
-        e
+        e,
       );
       this.emitError(emittedError);
       this.emitClosed(emittedError);
@@ -78,7 +78,7 @@ export class SingleConnection extends BaseClient {
   public connect(): void {
     if (!this.unconnected) {
       throw new Error(
-        "connect() may only be called on unconnected connections"
+        "connect() may only be called on unconnected connections",
       );
     }
 
@@ -88,12 +88,12 @@ export class SingleConnection extends BaseClient {
       const promises = [
         requestCapabilities(
           this,
-          this.configuration.requestMembershipCapability
+          this.configuration.requestMembershipCapability,
         ),
         sendLogin(
           this,
           this.configuration.username,
-          this.configuration.password
+          this.configuration.password,
         ),
       ];
 
@@ -146,8 +146,8 @@ export class SingleConnection extends BaseClient {
       this.emitError(
         new ProtocolError(
           `Error while parsing IRC message from line "${line}"`,
-          e as Error
-        )
+          e as Error,
+        ),
       );
       return;
     }

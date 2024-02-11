@@ -7,7 +7,7 @@ export function parseColor(colorSrc: string): Color {
   const match = rgbColorRegex.exec(colorSrc);
   if (match == null) {
     throw new ParseError(
-      `Malformed color value "${colorSrc}", must be in format #AABBCC`
+      `Malformed color value "${colorSrc}", must be in format #AABBCC`,
     );
   }
 

@@ -33,22 +33,22 @@ describe("./message/badge", function () {
     it("should return badgeName/badgeVersion from toString()", function () {
       assert.strictEqual(
         new TwitchBadge("subscriber", "1").toString(),
-        "subscriber/1"
+        "subscriber/1",
       );
       assert.strictEqual(
         new TwitchBadge("subscriber", "10").toString(),
-        "subscriber/10"
+        "subscriber/10",
       );
     });
 
     it("should return badgeName/badgeVersion from implcit toString() conversion", function () {
       assert.strictEqual(
         new TwitchBadge("subscriber", "10") + "",
-        "subscriber/10"
+        "subscriber/10",
       );
       assert.strictEqual(
         `${new TwitchBadge("subscriber", "10")}`,
-        "subscriber/10"
+        "subscriber/10",
       );
     });
   });

@@ -97,14 +97,14 @@ describe("./operations/join", function () {
         "@emote-only=0;followers-only=5;r9k=0;rituals=0;room-id=11148817;slow=0;subs-only=0 " +
           ":tmi.twitch.tv ROOMSTATE #pajlada",
         ":justinfan12345.tmi.twitch.tv 353 justinfan12345 = #pajlada :justinfan12345",
-        ":justinfan12345.tmi.twitch.tv 366 justinfan12345 #pajlada :End of /NAMES list"
+        ":justinfan12345.tmi.twitch.tv 366 justinfan12345 #pajlada :End of /NAMES list",
       );
 
       assert.deepStrictEqual(
         await promise,
         parseTwitchMessage(
-          ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #pajlada"
-        ) as JoinMessage
+          ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #pajlada",
+        ) as JoinMessage,
       );
       await clientError;
     });
@@ -119,7 +119,7 @@ describe("./operations/join", function () {
         "@emote-only=0;followers-only=5;r9k=0;rituals=0;room-id=11148817;slow=0;subs-only=0 " +
           ":tmi.twitch.tv ROOMSTATE #pajlada",
         ":justinfan12345.tmi.twitch.tv 353 justinfan12345 = #pajlada :justinfan12345",
-        ":justinfan12345.tmi.twitch.tv 366 justinfan12345 #pajlada :End of /NAMES list"
+        ":justinfan12345.tmi.twitch.tv 366 justinfan12345 #pajlada :End of /NAMES list",
       );
 
       await Promise.all([promise, clientError]);
@@ -135,7 +135,7 @@ describe("./operations/join", function () {
       const promise = joinChannel(client, "test");
       emitAndEnd(
         "@msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE " +
-          "#test :This channel has been suspended."
+          "#test :This channel has been suspended.",
       );
 
       // then
@@ -147,7 +147,7 @@ describe("./operations/join", function () {
           "n suspended.",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE " +
-          "#test :This channel has been suspended."
+          "#test :This channel has been suspended.",
       );
 
       await assertErrorChain(
@@ -158,7 +158,7 @@ describe("./operations/join", function () {
           "n suspended.",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE " +
-          "#test :This channel has been suspended."
+          "#test :This channel has been suspended.",
       );
 
       assert.deepStrictEqual([...client.wantedChannels], ["test"]);
@@ -179,7 +179,7 @@ describe("./operations/join", function () {
         JoinError,
         "Failed to join channel pajlada: Connection closed with no error",
         ConnectionError,
-        "Connection closed with no error"
+        "Connection closed with no error",
       );
 
       // no error
@@ -211,7 +211,7 @@ describe("./operations/join", function () {
         ConnectionError,
         "Error occurred in transport layer: peer reset connection",
         Error,
-        "peer reset connection"
+        "peer reset connection",
       );
 
       await assertErrorChain(
@@ -219,7 +219,7 @@ describe("./operations/join", function () {
         ConnectionError,
         "Error occurred in transport layer: peer reset connection",
         Error,
-        "peer reset connection"
+        "peer reset connection",
       );
 
       assert(client.closed, "Client should be closed");
@@ -244,7 +244,7 @@ describe("./operations/join", function () {
         "Failed to join channel test: Timed out after waiting for res" +
           "ponse for 2000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 2000 milliseconds"
+        "Timed out after waiting for response for 2000 milliseconds",
       );
 
       await assertErrorChain(
@@ -253,7 +253,7 @@ describe("./operations/join", function () {
         "Failed to join channel test: Timed out after waiting for res" +
           "ponse for 2000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 2000 milliseconds"
+        "Timed out after waiting for response for 2000 milliseconds",
       );
     });
   });

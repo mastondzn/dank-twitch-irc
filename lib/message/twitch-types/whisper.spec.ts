@@ -10,7 +10,7 @@ describe("./message/twitch-types/whisper", function () {
       const msg = parseTwitchMessage(
         "@badges=;color=#2E8B57;display-name=pajbot;emotes=25:7-11;message-id=" +
           "2034;thread-id=40286300_82008718;turbo=0;user-id=82008718;user-type= " +
-          ":pajbot!pajbot@pajbot.tmi.twitch.tv WHISPER randers :Riftey Kappa"
+          ":pajbot!pajbot@pajbot.tmi.twitch.tv WHISPER randers :Riftey Kappa",
       ) as WhisperMessage;
 
       assert.instanceOf(msg, WhisperMessage);
@@ -46,7 +46,7 @@ describe("./message/twitch-types/whisper", function () {
       const msg = parseTwitchMessage(
         "@badges=;color=#2E8B57;display-name=pajbot\\s;emotes=25:7-11;message-id=" +
           "2034;thread-id=40286300_82008718;turbo=0;user-id=82008718;user-type= " +
-          ":pajbot!pajbot@pajbot.tmi.twitch.tv WHISPER randers :Riftey Kappa"
+          ":pajbot!pajbot@pajbot.tmi.twitch.tv WHISPER randers :Riftey Kappa",
       ) as WhisperMessage;
 
       assert.strictEqual(msg.displayName, "pajbot");

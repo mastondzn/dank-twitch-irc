@@ -10,57 +10,57 @@ describe("./message/parser/badges", function () {
     it("should parse correct badge normally", function () {
       assert.deepStrictEqual(
         parseSingleBadge("subscriber/24"),
-        new TwitchBadge("subscriber", "24")
+        new TwitchBadge("subscriber", "24"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("subscriber/12"),
-        new TwitchBadge("subscriber", "12")
+        new TwitchBadge("subscriber", "12"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("vip/1"),
-        new TwitchBadge("vip", "1")
+        new TwitchBadge("vip", "1"),
       );
     });
 
     it("should parse prediction badge & badge-info", function () {
       assert.deepStrictEqual(
         parseSingleBadge("predictions/blue-1"),
-        new TwitchBadge("predictions", "blue-1")
+        new TwitchBadge("predictions", "blue-1"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("predictions/foo bar\\n baz"),
-        new TwitchBadge("predictions", "foo bar\\n baz")
+        new TwitchBadge("predictions", "foo bar\\n baz"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("predictions/<<<<<< HEAD[15A⸝asdf/test"),
-        new TwitchBadge("predictions", "<<<<<< HEAD[15A,asdf/test")
+        new TwitchBadge("predictions", "<<<<<< HEAD[15A,asdf/test"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("predictions/<<<<<< HEAD[15A⸝asdf⸝/test/"),
-        new TwitchBadge("predictions", "<<<<<< HEAD[15A,asdf,/test/")
+        new TwitchBadge("predictions", "<<<<<< HEAD[15A,asdf,/test/"),
       );
     });
 
     it("should preserve non-integer versions as-is", function () {
       assert.deepStrictEqual(
         parseSingleBadge("vip/1.0"),
-        new TwitchBadge("vip", "1.0")
+        new TwitchBadge("vip", "1.0"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("vip/1.0000"),
-        new TwitchBadge("vip", "1.0000")
+        new TwitchBadge("vip", "1.0000"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("vip/01"),
-        new TwitchBadge("vip", "01")
+        new TwitchBadge("vip", "01"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("vip/00001"),
-        new TwitchBadge("vip", "00001")
+        new TwitchBadge("vip", "00001"),
       );
       assert.deepStrictEqual(
         parseSingleBadge("vip/special"),
-        new TwitchBadge("vip", "special")
+        new TwitchBadge("vip", "special"),
       );
     });
 
@@ -68,17 +68,17 @@ describe("./message/parser/badges", function () {
       assertThrowsChain(
         () => parseSingleBadge("subscriber12"),
         ParseError,
-        "Badge source \"subscriber12\" did not contain '/' character"
+        "Badge source \"subscriber12\" did not contain '/' character",
       );
       assertThrowsChain(
         () => parseSingleBadge(""),
         ParseError,
-        "Badge source \"\" did not contain '/' character"
+        "Badge source \"\" did not contain '/' character",
       );
       assertThrowsChain(
         () => parseSingleBadge("test"),
         ParseError,
-        "Badge source \"test\" did not contain '/' character"
+        "Badge source \"test\" did not contain '/' character",
       );
     });
 
@@ -86,12 +86,12 @@ describe("./message/parser/badges", function () {
       assertThrowsChain(
         () => parseSingleBadge("/5"),
         ParseError,
-        'Empty badge name on badge "/5"'
+        'Empty badge name on badge "/5"',
       );
       assertThrowsChain(
         () => parseSingleBadge("/"),
         ParseError,
-        'Empty badge name on badge "/"'
+        'Empty badge name on badge "/"',
       );
     });
 
@@ -99,7 +99,7 @@ describe("./message/parser/badges", function () {
       assertThrowsChain(
         () => parseSingleBadge("subscriber/"),
         ParseError,
-        'Empty badge version on badge "subscriber/"'
+        'Empty badge version on badge "subscriber/"',
       );
     });
   });
@@ -132,7 +132,7 @@ describe("./message/parser/badges", function () {
 
       assert.deepStrictEqual(
         parseBadges("subscriber/12,vip/1,staff/1"),
-        expected
+        expected,
       );
     });
   });

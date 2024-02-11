@@ -14,7 +14,7 @@ function randomPingIdentifier(): string {
 export async function sendPing(
   conn: SingleConnection,
   pingIdentifier: string = randomPingIdentifier(),
-  timeout = 2000
+  timeout = 2000,
 ): Promise<PongMessage> {
   conn.sendRaw(`PING :${pingIdentifier}`);
 

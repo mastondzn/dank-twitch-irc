@@ -28,7 +28,7 @@ describe("./message/twitch-types/privmsg", function () {
         {
           isAction: false,
           message: "\u0001ACTIONHeyGuys\u0001",
-        }
+        },
       );
     });
 
@@ -38,7 +38,7 @@ describe("./message/twitch-types/privmsg", function () {
         {
           isAction: true,
           message: "HeyGuys",
-        }
+        },
       );
 
       // nested
@@ -47,7 +47,7 @@ describe("./message/twitch-types/privmsg", function () {
         {
           isAction: true,
           message: "\u0001ACTION HeyGuys\u0001",
-        }
+        },
       );
     });
   });
@@ -75,7 +75,7 @@ describe("./message/twitch-types/privmsg", function () {
 
       assert.deepStrictEqual(
         msg.badgeInfo,
-        new TwitchBadgesList(new TwitchBadge("subscriber", "5"))
+        new TwitchBadgesList(new TwitchBadge("subscriber", "5")),
       );
       assert.strictEqual(msg.badgeInfoRaw, "subscriber/5");
 
@@ -83,8 +83,8 @@ describe("./message/twitch-types/privmsg", function () {
         msg.badges,
         new TwitchBadgesList(
           new TwitchBadge("broadcaster", "1"),
-          new TwitchBadge("subscriber", "0")
-        )
+          new TwitchBadge("subscriber", "0"),
+        ),
       );
       assert.strictEqual(msg.badgesRaw, "broadcaster/1,subscriber/0");
 
@@ -120,7 +120,7 @@ describe("./message/twitch-types/privmsg", function () {
         badgeInfoRaw: "subscriber/5",
         badges: new TwitchBadgesList(
           new TwitchBadge("broadcaster", "1"),
-          new TwitchBadge("subscriber", "0")
+          new TwitchBadge("subscriber", "0"),
         ),
         badgesRaw: "broadcaster/1,subscriber/0",
         color: { r: 0x19, g: 0xe6, b: 0xe6 },
@@ -187,7 +187,7 @@ describe("./message/twitch-types/privmsg", function () {
       assert.strictEqual(msg.replyParentMessageBody, "foo=bar");
       assert.strictEqual(
         msg.replyParentMessageID,
-        "725d8358-d934-42c7-a606-a0b3ed82a642"
+        "725d8358-d934-42c7-a606-a0b3ed82a642",
       );
       assert.strictEqual(msg.replyParentUserID, "441347665");
       assert.strictEqual(msg.replyParentUserLogin, "someuser");

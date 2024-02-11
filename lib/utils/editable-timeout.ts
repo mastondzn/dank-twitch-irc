@@ -61,7 +61,7 @@ export class EditableTimeout {
 
     this.runningTimeout = setTimeout(
       this.invokeCallback.bind(this),
-      timeRemaining
+      timeRemaining,
     );
   }
 

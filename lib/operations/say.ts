@@ -23,7 +23,7 @@ export class SayError extends MessageError {
     failedMessage: string,
     action: boolean,
     message?: string,
-    cause?: Error
+    cause?: Error,
   ) {
     super(message, cause);
     this.failedChannelName = failedChannelName;
@@ -68,7 +68,7 @@ export async function say(
   channelName: string,
   messageText: string,
   replyToID?: string,
-  action = false
+  action = false,
 ): Promise<UserstateMessage> {
   let command;
   let errorMessage;
@@ -101,7 +101,7 @@ export async function say(
 export async function me(
   conn: SingleConnection,
   channelName: string,
-  message: string
+  message: string,
 ): Promise<UserstateMessage> {
   return say(conn, channelName, message, undefined, true);
 }
@@ -110,7 +110,7 @@ export async function reply(
   conn: SingleConnection,
   channelName: string,
   messageID: string,
-  message: string
+  message: string,
 ): Promise<UserstateMessage> {
   return say(conn, channelName, message, messageID);
 }

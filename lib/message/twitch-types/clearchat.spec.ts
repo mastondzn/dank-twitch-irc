@@ -10,7 +10,7 @@ describe("./message/twitch-types/clearchat", function () {
         "tmi-sent-ts=1563051113633 :tmi.twitch.tv CLEARCHAT #randers :weeb123";
 
       const msg: ClearchatMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as ClearchatMessage;
 
       assert.instanceOf(msg, ClearchatMessage);
@@ -29,7 +29,7 @@ describe("./message/twitch-types/clearchat", function () {
         ":tmi.twitch.tv CLEARCHAT #randers :weeb123";
 
       const msg: ClearchatMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as ClearchatMessage;
 
       assert.instanceOf(msg, ClearchatMessage);
@@ -47,7 +47,7 @@ describe("./message/twitch-types/clearchat", function () {
         "@room-id=40286300;tmi-sent-ts=1563051778390 :tmi.twitch.tv CLEARCHAT #randers";
 
       const msg: ClearchatMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as ClearchatMessage;
 
       assert.instanceOf(msg, ClearchatMessage);

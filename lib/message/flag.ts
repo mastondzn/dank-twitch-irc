@@ -45,7 +45,7 @@ export class TwitchFlag {
     startIndex: number,
     endIndex: number,
     text: string,
-    category: Array<{ category: string; score: number }>
+    category: Array<{ category: string; score: number }>,
   ) {
     this.startIndex = startIndex;
     this.endIndex = endIndex;

@@ -6,7 +6,7 @@ describe("./message/twitch-types/membership/part", function () {
   describe("PartMessage", function () {
     it("should be able to parse a real PART message", function () {
       const msg = parseTwitchMessage(
-        ":justinfan11111!justinfan11111@justinfan11111.tmi.twitch.tv PART #pajlada"
+        ":justinfan11111!justinfan11111@justinfan11111.tmi.twitch.tv PART #pajlada",
       ) as PartMessage;
 
       assert.instanceOf(msg, PartMessage);

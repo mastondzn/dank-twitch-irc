@@ -9,7 +9,7 @@ describe("./message/twitch-types/userstate", function () {
       const msg = parseTwitchMessage(
         "@badge-info=;badges=;color=#FF0000;" +
           "display-name=zwb3_pyramids;emote-sets=0;mod=0;subscriber=0;user-type=" +
-          " :tmi.twitch.tv USERSTATE #randers"
+          " :tmi.twitch.tv USERSTATE #randers",
       ) as UserstateMessage;
 
       assert.instanceOf(msg, UserstateMessage);
@@ -42,7 +42,7 @@ describe("./message/twitch-types/userstate", function () {
       const msg = parseTwitchMessage(
         "@badge-info=;badges=;color=#FF0000;" +
           "display-name=zwb3_pyramids;emote-sets=0;mod=0;subscriber=0;user-type=" +
-          " :tmi.twitch.tv USERSTATE #randers"
+          " :tmi.twitch.tv USERSTATE #randers",
       ) as UserstateMessage;
 
       assert.deepStrictEqual(msg.extractUserState(), {
@@ -64,7 +64,7 @@ describe("./message/twitch-types/userstate", function () {
       const msg = parseTwitchMessage(
         "@badge-info=;badges=;color=#FF0000;" +
           "display-name=zwb3_pyramids\\s;emote-sets=0;mod=0;subscriber=0;user-type=" +
-          " :tmi.twitch.tv USERSTATE #randers"
+          " :tmi.twitch.tv USERSTATE #randers",
       ) as UserstateMessage;
 
       assert.strictEqual(msg.displayName, "zwb3_pyramids");

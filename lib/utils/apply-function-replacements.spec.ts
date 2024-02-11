@@ -30,11 +30,11 @@ describe("./utils/apply-function-replacements", function () {
           originalFn,
           one: string,
           two: string,
-          three: string
+          three: string,
         ): string {
           // test for the "this" reference in the replacement function
           return originalFn(one, two, three) + this.abc;
-        }
+        },
       );
 
       assert.strictEqual(target.a("1", "2", "3"), "KKona123def");

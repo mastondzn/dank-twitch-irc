@@ -16,7 +16,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
     if (spaceIdx < 0) {
       // not found
       throw new ParseError(
-        `No space found after tags declaration (given src: "${messageSrc}")`
+        `No space found after tags declaration (given src: "${messageSrc}")`,
       );
     }
 
@@ -24,7 +24,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
 
     if (tagsSrc.length === 0) {
       throw new ParseError(
-        `Empty tags declaration (nothing after @ sign) (given src: "${messageSrc}")`
+        `Empty tags declaration (nothing after @ sign) (given src: "${messageSrc}")`,
       );
     }
 
@@ -43,7 +43,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
     if (spaceIdx < 0) {
       // not found
       throw new ParseError(
-        `No space found after prefix declaration (given src: "${messageSrc}")`
+        `No space found after prefix declaration (given src: "${messageSrc}")`,
       );
     }
 
@@ -52,7 +52,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
 
     if (ircPrefixRaw.length === 0) {
       throw new ParseError(
-        `Empty prefix declaration (nothing after : sign) (given src: "${messageSrc}")`
+        `Empty prefix declaration (nothing after : sign) (given src: "${messageSrc}")`,
       );
     }
 
@@ -97,7 +97,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
         (user != null && user.length === 0)
       ) {
         throw new ParseError(
-          `Host, nick or user is empty in prefix (given src: "${messageSrc}")`
+          `Host, nick or user is empty in prefix (given src: "${messageSrc}")`,
         );
       }
 
@@ -151,7 +151,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
 
         if (param.length === 0) {
           throw new ParseError(
-            `Too many spaces found while trying to parse middle parameters (given src: "${messageSrc}")`
+            `Too many spaces found while trying to parse middle parameters (given src: "${messageSrc}")`,
           );
         }
         ircParameters.push(param);
@@ -161,7 +161,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
 
   if (!VALID_CMD_REGEX.test(ircCommand)) {
     throw new ParseError(
-      `Invalid format for IRC command (given src: "${messageSrc}")`
+      `Invalid format for IRC command (given src: "${messageSrc}")`,
     );
   }
 

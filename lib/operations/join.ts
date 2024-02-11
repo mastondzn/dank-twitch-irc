@@ -10,7 +10,7 @@ export class JoinError extends MessageError {
   public constructor(
     failedChannelName: string,
     message?: string,
-    cause?: Error
+    cause?: Error,
   ) {
     super(message, cause);
     this.failedChannelName = failedChannelName;
@@ -19,7 +19,7 @@ export class JoinError extends MessageError {
 
 export function awaitJoinResponse(
   conn: SingleConnection,
-  channelName: string
+  channelName: string,
 ): Promise<JoinMessage> {
   return awaitResponse(conn, {
     success: (msg) =>
@@ -37,7 +37,7 @@ export function awaitJoinResponse(
 
 export function joinNothingToDo(
   conn: SingleConnection,
-  channelName: string
+  channelName: string,
 ): boolean {
   return (
     conn.wantedChannels.has(channelName) && conn.joinedChannels.has(channelName)
@@ -46,7 +46,7 @@ export function joinNothingToDo(
 
 export async function joinChannel(
   conn: SingleConnection,
-  channelName: string
+  channelName: string,
 ): Promise<JoinMessage | undefined> {
   if (joinNothingToDo(conn, channelName)) {
     return;

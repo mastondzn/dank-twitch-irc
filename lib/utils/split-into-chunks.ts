@@ -1,7 +1,7 @@
 export function splitIntoChunks(
   bits: string[],
   separator = " ",
-  limit: number
+  limit: number,
 ): string[][] {
   const chunks: string[][] = [];
   let currentChunk: string[] = [];
@@ -25,7 +25,7 @@ export function splitIntoChunks(
 
       if (recursive) {
         throw new Error(
-          "Found a piece that can never fit the target length limit"
+          "Found a piece that can never fit the target length limit",
         );
       }
 

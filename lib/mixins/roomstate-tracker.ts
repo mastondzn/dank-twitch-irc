@@ -34,7 +34,7 @@ export class RoomStateTracker
 
   private onRoomstateMessage(msg: RoomstateMessage): void {
     const currentState: RoomState | undefined = this.getChannelState(
-      msg.channelName
+      msg.channelName,
     );
     const extractedState: Partial<RoomState> = msg.extractRoomState();
 
@@ -42,7 +42,7 @@ export class RoomStateTracker
       if (!hasAllStateTags(extractedState)) {
         log.warn(
           "Got incomplete ROOMSTATE before receiving complete roomstate:",
-          msg.rawSource
+          msg.rawSource,
         );
         return;
       }

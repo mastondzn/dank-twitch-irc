@@ -7,7 +7,7 @@ describe("./message/parser/missing-tag-error", function () {
       const e = new MissingTagError("exampleKey", undefined);
       assert.strictEqual(
         e.message,
-        'Required tag value not present at key "exampleKey" (is undefined)'
+        'Required tag value not present at key "exampleKey" (is undefined)',
       );
     });
 
@@ -15,7 +15,7 @@ describe("./message/parser/missing-tag-error", function () {
       const e = new MissingTagError("exampleKey", null);
       assert.strictEqual(
         e.message,
-        'Required tag value not present at key "exampleKey" (is null)'
+        'Required tag value not present at key "exampleKey" (is null)',
       );
     });
 
@@ -23,7 +23,7 @@ describe("./message/parser/missing-tag-error", function () {
       const e = new MissingTagError("exampleKey", "");
       assert.strictEqual(
         e.message,
-        'Required tag value not present at key "exampleKey" (is empty string)'
+        'Required tag value not present at key "exampleKey" (is empty string)',
       );
     });
 
@@ -31,7 +31,7 @@ describe("./message/parser/missing-tag-error", function () {
       const e = new MissingTagError("exampleKey", "test");
       assert.strictEqual(
         e.message,
-        'Required tag value not present at key "exampleKey" (is "test")'
+        'Required tag value not present at key "exampleKey" (is "test")',
       );
     });
 

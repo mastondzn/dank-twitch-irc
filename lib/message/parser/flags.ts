@@ -3,7 +3,7 @@ import { TwitchFlagList } from "../flags";
 
 export function parseFlags(
   messageText: string,
-  flagsSrc: string
+  flagsSrc: string,
 ): TwitchFlagList {
   const flags: TwitchFlagList = [];
 
@@ -20,7 +20,7 @@ export function parseFlags(
   for (const flagInstancesSrc of flagsSrc.split(",")) {
     const [indexes, instancesSrc] = flagInstancesSrc.split(":", 2) as [
       string,
-      string
+      string,
     ];
 
     let [startIndex, endIndex] = indexes!

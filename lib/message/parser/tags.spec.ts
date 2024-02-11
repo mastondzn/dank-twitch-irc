@@ -38,7 +38,7 @@ describe("./message/parser/tags", function () {
     it("should support a combination of all escape sequences", function () {
       assert.strictEqual(
         "abc; \\\r\ndef",
-        decodeValue("abc\\:\\s\\\\\\r\\ndef\\")
+        decodeValue("abc\\:\\s\\\\\\r\\ndef\\"),
       );
     });
   });

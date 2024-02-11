@@ -11,19 +11,19 @@ interface FastSpamResult {
 export function canSpamFast(
   channelName: string,
   loggedInUsername: string,
-  userStateTracker?: UserStateTracker
+  userStateTracker?: UserStateTracker,
 ): FastSpamResult;
 
 export function canSpamFast(
   channelName: string,
   loggedInUsername: string,
-  userState: UserState
+  userState: UserState,
 ): FastSpamResult;
 
 export function canSpamFast(
   channelName: string,
   loggedInUsername: string,
-  userStateInput: UserStateTracker | UserState | undefined
+  userStateInput: UserStateTracker | UserState | undefined,
 ): FastSpamResult {
   // broadcaster?
   if (channelName === loggedInUsername) {

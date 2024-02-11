@@ -21,7 +21,7 @@ const configDefaults: ClientPingConfig = {
 
 export function sendClientPings(
   conn: SingleConnection,
-  config: Partial<ClientPingConfig> = {}
+  config: Partial<ClientPingConfig> = {},
 ): void {
   const { interval, timeout } = setDefaults(config, configDefaults);
 

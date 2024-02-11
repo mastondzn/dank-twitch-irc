@@ -10,50 +10,50 @@ describe("./message/irc/irc-message", function () {
       assertThrowsChain(
         () => requireParameter({ ircParameters: [] }, 0),
         MissingDataError,
-        "Parameter at index 0 missing"
+        "Parameter at index 0 missing",
       );
       assertThrowsChain(
         () => requireParameter({ ircParameters: [] }, 1),
         MissingDataError,
-        "Parameter at index 1 missing"
+        "Parameter at index 1 missing",
       );
       assertThrowsChain(
         () => requireParameter({ ircParameters: [] }, 2),
         MissingDataError,
-        "Parameter at index 2 missing"
+        "Parameter at index 2 missing",
       );
     });
 
     it("should be able to return parameter 0 if parameters have length 1", function () {
       assert.strictEqual(
         "test parameter",
-        requireParameter({ ircParameters: ["test parameter"] }, 0)
+        requireParameter({ ircParameters: ["test parameter"] }, 0),
       );
       assertThrowsChain(
         () => requireParameter({ ircParameters: ["test parameter"] }, 1),
         MissingDataError,
-        "Parameter at index 1 missing"
+        "Parameter at index 1 missing",
       );
       assertThrowsChain(
         () => requireParameter({ ircParameters: ["test parameter"] }, 2),
         MissingDataError,
-        "Parameter at index 2 missing"
+        "Parameter at index 2 missing",
       );
     });
 
     it("should be able to return parameter 0 and 1 if parameters have length 2", function () {
       assert.strictEqual(
         "test",
-        requireParameter({ ircParameters: ["test", "parameters"] }, 0)
+        requireParameter({ ircParameters: ["test", "parameters"] }, 0),
       );
       assert.strictEqual(
         "parameters",
-        requireParameter({ ircParameters: ["test", "parameters"] }, 1)
+        requireParameter({ ircParameters: ["test", "parameters"] }, 1),
       );
       assertThrowsChain(
         () => requireParameter({ ircParameters: ["test", "parameters"] }, 2),
         MissingDataError,
-        "Parameter at index 2 missing"
+        "Parameter at index 2 missing",
       );
     });
   });
@@ -63,19 +63,19 @@ describe("./message/irc/irc-message", function () {
       assertThrowsChain(
         () => requireNickname(parseIRCMessage("JOIN #pajlada")),
         MissingDataError,
-        "Missing prefix or missing nickname in prefix"
+        "Missing prefix or missing nickname in prefix",
       );
 
       assertThrowsChain(
         () => requireNickname(parseIRCMessage(":tmi.twitch.tv JOIN #pajlada")),
         MissingDataError,
-        "Missing prefix or missing nickname in prefix"
+        "Missing prefix or missing nickname in prefix",
       );
     });
 
     it("should return the nickname otherwise", function () {
       const message = parseIRCMessage(
-        ":leppunen!LEPPUNEN@lePPunen.tmi.twitch.tv JOIN #pajlada"
+        ":leppunen!LEPPUNEN@lePPunen.tmi.twitch.tv JOIN #pajlada",
       );
       assert.strictEqual(requireNickname(message), "leppunen");
     });

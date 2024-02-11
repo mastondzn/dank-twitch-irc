@@ -9,7 +9,7 @@ export class PartError extends MessageError {
   public constructor(
     failedChannelName: string,
     message?: string,
-    cause?: Error | undefined
+    cause?: Error | undefined,
   ) {
     super(message, cause);
     this.failedChannelName = failedChannelName;
@@ -18,7 +18,7 @@ export class PartError extends MessageError {
 
 export async function awaitPartResponse(
   conn: SingleConnection,
-  channelName: string
+  channelName: string,
 ): Promise<PartMessage> {
   return awaitResponse(conn, {
     // :justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv PART #pajlada
@@ -33,7 +33,7 @@ export async function awaitPartResponse(
 
 export function partNothingToDo(
   conn: SingleConnection,
-  channelName: string
+  channelName: string,
 ): boolean {
   return (
     !conn.wantedChannels.has(channelName) &&
@@ -43,7 +43,7 @@ export function partNothingToDo(
 
 export async function partChannel(
   conn: SingleConnection,
-  channelName: string
+  channelName: string,
 ): Promise<PartMessage | undefined> {
   if (partNothingToDo(conn, channelName)) {
     // nothing to do (already parted)

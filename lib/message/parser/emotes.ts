@@ -5,7 +5,7 @@ import { ParseError } from "./parse-error";
 
 export function parseEmotes(
   messageText: string,
-  emotesSrc: string
+  emotesSrc: string,
 ): TwitchEmoteList {
   const emotes: TwitchEmoteList = [];
 
@@ -18,7 +18,7 @@ export function parseEmotes(
   for (const emoteInstancesSrc of emotesSrc.split("/")) {
     const [emoteID, instancesSrc] = emoteInstancesSrc.split(":", 2) as [
       string,
-      string
+      string,
     ];
     for (const instanceSrc of instancesSrc.split(",")) {
       let [startIndex, endIndex] = instanceSrc
@@ -26,7 +26,7 @@ export function parseEmotes(
         .map(parseIntThrowing) as [number, number];
       if (endIndex == null) {
         throw new ParseError(
-          `No - found in emote index range "${instanceSrc}"`
+          `No - found in emote index range "${instanceSrc}"`,
         );
       }
 

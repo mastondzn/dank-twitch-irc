@@ -20,7 +20,7 @@ export function parseSingleBadge(badgeSrc: string): TwitchBadge {
 
   if (badgeName == null || badgeVersion == null) {
     throw new ParseError(
-      `Badge source "${badgeSrc}" did not contain '/' character`
+      `Badge source "${badgeSrc}" did not contain '/' character`,
     );
   }
 

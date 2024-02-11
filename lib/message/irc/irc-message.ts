@@ -41,7 +41,7 @@ export class IRCMessage implements IRCMessageData {
 
 export function getParameter(
   message: Pick<IRCMessage, "ircParameters">,
-  idx: number
+  idx: number,
 ): string {
   // TODO: check where this may result in undefined
   return message.ircParameters[idx]!;
@@ -49,7 +49,7 @@ export function getParameter(
 
 export function requireParameter(
   message: Pick<IRCMessage, "ircParameters">,
-  idx: number
+  idx: number,
 ): string {
   if (message.ircParameters.length <= idx) {
     throw new MissingDataError(`Parameter at index ${idx} missing`);
@@ -59,7 +59,7 @@ export function requireParameter(
 }
 
 export function requireNickname(
-  message: Pick<IRCMessage, "ircPrefix">
+  message: Pick<IRCMessage, "ircPrefix">,
 ): string {
   if (message.ircPrefix == null || message.ircPrefix.nickname == null) {
     throw new MissingDataError("Missing prefix or missing nickname in prefix");

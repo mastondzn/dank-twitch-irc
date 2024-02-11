@@ -9,22 +9,22 @@ describe("./validation/irc-command", function () {
       assertThrowsChain(
         () => validateIRCCommand("JOIN\n"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
       assertThrowsChain(
         () => validateIRCCommand("\n"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
       assertThrowsChain(
         () => validateIRCCommand("\nJOIN"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
       assertThrowsChain(
         () => validateIRCCommand("JOIN\nJOIN"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
     });
 
@@ -32,22 +32,22 @@ describe("./validation/irc-command", function () {
       assertThrowsChain(
         () => validateIRCCommand("JOIN\r"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
       assertThrowsChain(
         () => validateIRCCommand("\r"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
       assertThrowsChain(
         () => validateIRCCommand("\rJOIN"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
       assertThrowsChain(
         () => validateIRCCommand("JOIN\rJOIN"),
         ValidationError,
-        "IRC command may not include \\n or \\r"
+        "IRC command may not include \\n or \\r",
       );
     });
 

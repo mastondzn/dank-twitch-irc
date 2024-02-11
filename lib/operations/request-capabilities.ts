@@ -6,7 +6,7 @@ import { CapMessage } from "../message/twitch-types/cap";
 export class CapabilitiesError extends ConnectionError {}
 
 export function acknowledgesCapabilities(
-  requestedCapabilities: string[]
+  requestedCapabilities: string[],
 ): Condition {
   return (e) =>
     e instanceof CapMessage &&
@@ -15,7 +15,7 @@ export function acknowledgesCapabilities(
 }
 
 export function deniedAnyCapability(
-  requestedCapabilities: string[]
+  requestedCapabilities: string[],
 ): Condition {
   return (e) =>
     e instanceof CapMessage &&
@@ -25,7 +25,7 @@ export function deniedAnyCapability(
 
 export async function requestCapabilities(
   conn: SingleConnection,
-  requestMembershipCapability: boolean
+  requestMembershipCapability: boolean,
 ): Promise<void> {
   const capabilities = ["twitch.tv/commands", "twitch.tv/tags"];
   if (requestMembershipCapability) {
@@ -40,7 +40,7 @@ export async function requestCapabilities(
     failure: deniedAnyCapability(capabilities),
     errorType: (message, cause) => new CapabilitiesError(message, cause),
     errorMessage: `Failed to request server capabilities ${capabilities.join(
-      ", "
+      ", ",
     )}`,
   });
 }

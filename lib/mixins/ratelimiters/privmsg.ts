@@ -13,10 +13,10 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
     this.client = client;
 
     this.highPrivmsgSemaphore = new Sema(
-      this.client.configuration.rateLimits.highPrivmsgLimits
+      this.client.configuration.rateLimits.highPrivmsgLimits,
     );
     this.lowPrivmsgSemaphore = new Sema(
-      this.client.configuration.rateLimits.lowPrivmsgLimits
+      this.client.configuration.rateLimits.lowPrivmsgLimits,
     );
   }
 
@@ -45,7 +45,7 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
     const { fastSpam } = canSpamFast(
       channelName,
       this.client.configuration.username,
-      this.client.userStateTracker
+      this.client.userStateTracker,
     );
 
     const promises: Promise<boolean>[] = [];

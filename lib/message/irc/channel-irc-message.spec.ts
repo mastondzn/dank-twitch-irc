@@ -10,16 +10,16 @@ describe("./message/irc/channel-irc-message", function () {
     it("should return valid channel names, trimmed of the leading # character", function () {
       assert.strictEqual(
         getIRCChannelName({ ircParameters: ["#pajlada"] }),
-        "pajlada"
+        "pajlada",
       );
       assert.strictEqual(getIRCChannelName({ ircParameters: ["#a"] }), "a");
       assert.strictEqual(
         getIRCChannelName({ ircParameters: ["#a", "more arguments"] }),
-        "a"
+        "a",
       );
       assert.strictEqual(
         getIRCChannelName({ ircParameters: ["#a", "more", "arguments"] }),
-        "a"
+        "a",
       );
     });
 
@@ -31,7 +31,7 @@ describe("./message/irc/channel-irc-message", function () {
       ];
       assert.strictEqual(
         getIRCChannelName({ ircParameters }),
-        "chatrooms:11148817:85c31777-b181-46ab-8e08-73e4ecd7a386"
+        "chatrooms:11148817:85c31777-b181-46ab-8e08-73e4ecd7a386",
       );
     });
 
@@ -39,7 +39,7 @@ describe("./message/irc/channel-irc-message", function () {
       assertThrowsChain(
         () => getIRCChannelName({ ircParameters: [] }),
         MissingDataError,
-        "Parameter at index 0 missing"
+        "Parameter at index 0 missing",
       );
     });
 
@@ -47,7 +47,7 @@ describe("./message/irc/channel-irc-message", function () {
       assertThrowsChain(
         () => getIRCChannelName({ ircParameters: [""] }),
         ParseError,
-        'Received malformed IRC channel name ""'
+        'Received malformed IRC channel name ""',
       );
     });
 
@@ -55,12 +55,12 @@ describe("./message/irc/channel-irc-message", function () {
       assertThrowsChain(
         () => getIRCChannelName({ ircParameters: ["abc"] }),
         ParseError,
-        'Received malformed IRC channel name "abc"'
+        'Received malformed IRC channel name "abc"',
       );
       assertThrowsChain(
         () => getIRCChannelName({ ircParameters: ["pajlada"] }),
         ParseError,
-        'Received malformed IRC channel name "pajlada"'
+        'Received malformed IRC channel name "pajlada"',
       );
     });
 
@@ -68,7 +68,7 @@ describe("./message/irc/channel-irc-message", function () {
       assertThrowsChain(
         () => getIRCChannelName({ ircParameters: ["#"] }),
         ParseError,
-        'Received malformed IRC channel name "#"'
+        'Received malformed IRC channel name "#"',
       );
     });
   });
@@ -84,17 +84,17 @@ describe("./message/irc/channel-irc-message", function () {
       assertThrowsChain(
         () => new ChannelIRCMessage(parseIRCMessage("PRIVMSG #")),
         ParseError,
-        'Received malformed IRC channel name "#"'
+        'Received malformed IRC channel name "#"',
       );
       assertThrowsChain(
         () => new ChannelIRCMessage(parseIRCMessage("PRIVMSG :")),
         ParseError,
-        'Received malformed IRC channel name ""'
+        'Received malformed IRC channel name ""',
       );
       assertThrowsChain(
         () => new ChannelIRCMessage(parseIRCMessage("PRIVMSG")),
         MissingDataError,
-        "Parameter at index 0 missing"
+        "Parameter at index 0 missing",
       );
     });
   });

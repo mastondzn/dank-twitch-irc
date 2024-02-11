@@ -4,13 +4,13 @@ import { IRCMessageData, requireParameter } from "../irc/irc-message";
 import { ParseError } from "../parser/parse-error";
 
 export function parseHostedChannelName(
-  rawHostedChannelName: string | undefined
+  rawHostedChannelName: string | undefined,
 ): string | undefined {
   if (rawHostedChannelName == null || rawHostedChannelName.length <= 0) {
     throw new ParseError(
       `Malformed channel part in HOSTTARGET message: ${reasonForValue(
-        rawHostedChannelName
-      )}`
+        rawHostedChannelName,
+      )}`,
     );
   }
 
@@ -22,13 +22,13 @@ export function parseHostedChannelName(
 }
 
 export function parseViewerCount(
-  rawViewerCount: string | undefined
+  rawViewerCount: string | undefined,
 ): number | undefined {
   if (rawViewerCount == null || rawViewerCount.length <= 0) {
     throw new ParseError(
       `Malformed viewer count part in HOSTTARGET message: ${reasonForValue(
-        rawViewerCount
-      )}`
+        rawViewerCount,
+      )}`,
     );
   }
 
@@ -40,8 +40,8 @@ export function parseViewerCount(
   if (isNaN(numberValue)) {
     throw new ParseError(
       `Malformed viewer count part in HOSTTARGET message: ${reasonForValue(
-        rawViewerCount
-      )}`
+        rawViewerCount,
+      )}`,
     );
   }
   return numberValue;
@@ -55,7 +55,7 @@ export function parseHosttargetParameter(rawParameter: string): {
   if (split.length !== 2) {
     throw new ParseError(
       "HOSTTARGET accepts exactly 2 arguments in second parameter, " +
-        `given: ${reasonForValue(rawParameter)}`
+        `given: ${reasonForValue(rawParameter)}`,
     );
   }
 
@@ -86,7 +86,7 @@ export class HosttargetMessage extends ChannelIRCMessage {
     super(message);
 
     const parsedSecondParameter = parseHosttargetParameter(
-      requireParameter(this, 1)
+      requireParameter(this, 1),
     );
     this.hostedChannelName = parsedSecondParameter.hostedChannelName;
     this.viewerCount = parsedSecondParameter.viewerCount;

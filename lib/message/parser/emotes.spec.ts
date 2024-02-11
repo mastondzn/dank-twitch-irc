@@ -37,7 +37,7 @@ describe("./message/parser/emotes", function () {
           new TwitchEmote("25", 0, 5, "Kappa"),
           new TwitchEmote("1902", 6, 11, "Keepo"),
           new TwitchEmote("25", 12, 17, "Kappa"),
-        ]
+        ],
       );
     });
 
@@ -45,7 +45,7 @@ describe("./message/parser/emotes", function () {
       assertThrowsChain(
         () => parseEmotes("", "25:12"),
         ParseError,
-        'No - found in emote index range "12"'
+        'No - found in emote index range "12"',
       );
     });
 
@@ -59,7 +59,7 @@ describe("./message/parser/emotes", function () {
       assertThrowsChain(
         () => parseEmotes("", "25:abc-5"),
         ParseError,
-        'Invalid integer for string "abc"'
+        'Invalid integer for string "abc"',
       );
     });
 
@@ -67,7 +67,7 @@ describe("./message/parser/emotes", function () {
       assertThrowsChain(
         () => parseEmotes("", "25:0-abc"),
         ParseError,
-        'Invalid integer for string "abc"'
+        'Invalid integer for string "abc"',
       );
     });
 
@@ -106,13 +106,13 @@ describe("./message/parser/emotes", function () {
       assert.deepStrictEqual(
         parseEmotes(
           "🌚 Kappa 🌚 🐈 Keepo 🐈 🎨 KappaRoss 🎨",
-          "25:2-6/1902:12-16/70433:22-30"
+          "25:2-6/1902:12-16/70433:22-30",
         ),
         [
           new TwitchEmote("25", 2, 7, "Kappa"),
           new TwitchEmote("1902", 12, 17, "Keepo"),
           new TwitchEmote("70433", 22, 31, "KappaRoss"),
-        ]
+        ],
       );
     });
   });

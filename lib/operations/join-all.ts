@@ -5,7 +5,7 @@ import { awaitJoinResponse } from "./join";
 
 export async function joinAll(
   conn: SingleConnection,
-  channelNames: string[]
+  channelNames: string[],
 ): Promise<Record<string, Error | undefined>> {
   // e.g. "JOIN #firstchannel,#secondchannel,#thirdchannel"
   // joining channels this way is much faster than sending individual JOIN commands
@@ -15,7 +15,7 @@ export async function joinAll(
   const channelChunks = splitIntoChunks(
     channelNames.map((e) => `#${e}`),
     ",",
-    MAX_OUTGOING_COMMAND_LENGTH - "JOIN ".length
+    MAX_OUTGOING_COMMAND_LENGTH - "JOIN ".length,
   );
 
   const resultsMap: Record<string, Error | undefined> = {};
@@ -38,8 +38,8 @@ export async function joinAll(
           (error) => {
             // on failure
             resultsMap[channelName] = error;
-          }
-        )
+          },
+        ),
       );
     }
 

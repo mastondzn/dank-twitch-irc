@@ -5,13 +5,13 @@ export type FunctionPropsOf<T extends object> = {
 export type OverrideFunction<
   S,
   T extends Record<string, (...args: any) => any>,
-  K extends keyof T
+  K extends keyof T,
 > = (this: S, oldFn: T[K], ...args: Parameters<T[K]>) => ReturnType<T[K]>;
 
 export function applyReplacement<
   S,
   T extends Record<string, any>,
-  K extends keyof T
+  K extends keyof T,
 >(self: S, target: T, key: K, newFn: OverrideFunction<S, T, K>): void {
   const oldFn: T[K] = Reflect.get(target, key);
 
@@ -45,7 +45,7 @@ export type OverrideFunctions<S, T extends Record<string, any>> = {
 export function applyReplacements<S, T extends Record<string, any>>(
   self: S,
   target: T,
-  replacements: OverrideFunctions<S, T>
+  replacements: OverrideFunctions<S, T>,
 ): void {
   for (const [key, newFn] of Object.entries(replacements)) {
     applyReplacement(self, target, key as any, newFn as any);

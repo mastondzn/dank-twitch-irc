@@ -9,21 +9,21 @@ describe("./message/parser/common", function () {
       assertThrowsChain(
         () => parseIntThrowing(undefined),
         ParseError,
-        "String source for integer is null/undefined"
+        "String source for integer is null/undefined",
       );
     });
     it("should fail on null", function () {
       assertThrowsChain(
         () => parseIntThrowing(null),
         ParseError,
-        "String source for integer is null/undefined"
+        "String source for integer is null/undefined",
       );
     });
     it("should fail on non-number string input", function () {
       assertThrowsChain(
         () => parseIntThrowing("xd"),
         ParseError,
-        'Invalid integer for string "xd"'
+        'Invalid integer for string "xd"',
       );
     });
     it("should parse integers normally", function () {
@@ -38,12 +38,12 @@ describe("./message/parser/common", function () {
       assert.strictEqual(parseIntThrowing("1.9999999999"), 1);
       assert.strictEqual(
         parseIntThrowing("9007199254740991"),
-        Number.MAX_SAFE_INTEGER
+        Number.MAX_SAFE_INTEGER,
       );
       assert.strictEqual(parseIntThrowing("-1"), -1);
       assert.strictEqual(
         parseIntThrowing("-9007199254740991"),
-        Number.MIN_SAFE_INTEGER
+        Number.MIN_SAFE_INTEGER,
       );
     });
   });

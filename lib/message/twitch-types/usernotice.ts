@@ -168,7 +168,7 @@ export interface AnnouncementParameters extends EventParamsMaybe {
 
 export interface SpecificUsernoticeMessage<
   I extends string,
-  E extends EventParams
+  E extends EventParams,
 > {
   readonly messageTypeID: I;
   readonly eventParams: E;
@@ -176,7 +176,7 @@ export interface SpecificUsernoticeMessage<
 
 export interface AnAnnouncementUsernoticeMessage<
   I extends string,
-  E extends EventParamsMaybe
+  E extends EventParamsMaybe,
 > {
   readonly messageTypeID: I;
   readonly eventParams: E;

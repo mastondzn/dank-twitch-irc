@@ -32,7 +32,7 @@ export class TwitchEmote {
     id: string,
     startIndex: number,
     endIndex: number,
-    text: string
+    text: string,
   ) {
     this.id = id;
     this.startIndex = startIndex;

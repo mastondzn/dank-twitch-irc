@@ -21,7 +21,7 @@ describe("./message/twitch-types/usernotice", function () {
         }),
         {
           username: "pajlada",
-        }
+        },
       );
     });
 
@@ -33,7 +33,7 @@ describe("./message/twitch-types/usernotice", function () {
         {
           months: 12,
           monthsRaw: "12",
-        }
+        },
       );
     });
 
@@ -45,7 +45,7 @@ describe("./message/twitch-types/usernotice", function () {
         {
           shouldShareStreak: true,
           shouldShareStreakRaw: "1",
-        }
+        },
       );
 
       assert.deepStrictEqual(
@@ -55,7 +55,7 @@ describe("./message/twitch-types/usernotice", function () {
         {
           shouldShareStreak: false,
           shouldShareStreakRaw: "0",
-        }
+        },
       );
     });
 
@@ -66,7 +66,7 @@ describe("./message/twitch-types/usernotice", function () {
         }),
         {
           userID: "1234567",
-        }
+        },
       );
     });
   });
@@ -92,7 +92,8 @@ describe("./message/twitch-types/usernotice", function () {
       assert.isUndefined(msg.messageText);
       assert.strictEqual(
         msg.systemMessage,
-        "kakarot127 subscribed at Tier 1. They've subscribed " + "for 5 months!"
+        "kakarot127 subscribed at Tier 1. They've subscribed " +
+          "for 5 months!",
       );
       assert.strictEqual(msg.messageTypeID, "resub");
 
@@ -101,7 +102,7 @@ describe("./message/twitch-types/usernotice", function () {
 
       assert.deepStrictEqual(
         msg.badgeInfo,
-        new TwitchBadgesList(new TwitchBadge("subscriber", "5"))
+        new TwitchBadgesList(new TwitchBadge("subscriber", "5")),
       );
       assert.strictEqual(msg.badgeInfoRaw, "subscriber/5");
 
@@ -143,7 +144,7 @@ describe("./message/twitch-types/usernotice", function () {
         expectTypeOf(msg.eventParams).toMatchTypeOf<SubEventParams>();
         expectTypeOf(msg.eventParams.cumulativeMonths).toMatchTypeOf<number>();
         expectTypeOf(
-          msg.eventParams.cumulativeMonthsRaw
+          msg.eventParams.cumulativeMonthsRaw,
         ).toMatchTypeOf<string>();
       }
     });
@@ -159,7 +160,7 @@ describe("./message/twitch-types/usernotice", function () {
           "criber=1;system-msg=5weatyNuts\\ssubscribed\\swith\\sTwitch\\sPri" +
           "me.\\sThey've\\ssubscribed\\sfor\\s15\\smonths!;tmi-sent-ts=1565" +
           "699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE " +
-          "#dafran :dafranPrime Clap"
+          "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
       assert.strictEqual(msg.messageText, "dafranPrime Clap");
@@ -182,7 +183,7 @@ describe("./message/twitch-types/usernotice", function () {
           "criber=1;system-msg=5weatyNuts\\ssubscribed\\swith\\sTwitch\\sPri" +
           "me.\\sThey've\\ssubscribed\\sfor\\s15\\smonths!;tmi-sent-ts=1565" +
           "699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE " +
-          "#dafran :dafranPrime Clap"
+          "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
       assert.strictEqual(msg.displayName, "5weatyNuts");
@@ -190,7 +191,7 @@ describe("./message/twitch-types/usernotice", function () {
 
     it("parses subgift params correctly (correct camelcasing)", function () {
       const msg = parseTwitchMessage(
-        "@badge-info=;badges=sub-gifter/50;color=;display-name=AdamAtReflectStudios;emotes=;flags=;id=e21409b1-d25d-4a1a-b5cf-ef27d8b7030e;login=adamatreflectstudios;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=2;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=qatarking24xd;msg-param-recipient-id=236653628;msg-param-recipient-user-name=qatarking24xd;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;room-id=71092938;subscriber=0;system-msg=AdamAtReflectStudios\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sqatarking24xd!;tmi-sent-ts=1594583782376;user-id=211711554;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
+        "@badge-info=;badges=sub-gifter/50;color=;display-name=AdamAtReflectStudios;emotes=;flags=;id=e21409b1-d25d-4a1a-b5cf-ef27d8b7030e;login=adamatreflectstudios;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=2;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=qatarking24xd;msg-param-recipient-id=236653628;msg-param-recipient-user-name=qatarking24xd;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;room-id=71092938;subscriber=0;system-msg=AdamAtReflectStudios\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sqatarking24xd!;tmi-sent-ts=1594583782376;user-id=211711554;user-type= :tmi.twitch.tv USERNOTICE #xqcow",
       ) as UsernoticeMessage;
 
       assert.deepStrictEqual(msg.eventParams, {
@@ -214,7 +215,7 @@ describe("./message/twitch-types/usernotice", function () {
 
     it("should be able to parse a masssubgift with message", function () {
       const msg = parseTwitchMessage(
-        "@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=realuser;emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=realuser;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=4e\\sd1\\s19\\sc5\\s33\\s80\\s68\\s8c\\sdc\\sc9\\s4d\\s96\\s73\\sd0\\sad\\s40\\s52\\sf3\\s19\\s02;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38244999;subscriber=1;system-msg=realuser\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sbroadcaster's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1633549401426;user-id=239909999;user-type= :tmi.twitch.tv USERNOTICE #broadcaster"
+        "@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=realuser;emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=realuser;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=4e\\sd1\\s19\\sc5\\s33\\s80\\s68\\s8c\\sdc\\sc9\\s4d\\s96\\s73\\sd0\\sad\\s40\\s52\\sf3\\s19\\s02;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38244999;subscriber=1;system-msg=realuser\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sbroadcaster's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1633549401426;user-id=239909999;user-type= :tmi.twitch.tv USERNOTICE #broadcaster",
       ) as UsernoticeMessage;
 
       assert.strictEqual(msg.ircCommand, "USERNOTICE");
@@ -222,7 +223,7 @@ describe("./message/twitch-types/usernotice", function () {
       assert.strictEqual(msg.ircTags["msg-param-mass-gift-count"], "1");
       assert.strictEqual(
         msg.systemMessage,
-        "realuser is gifting 1 Tier 1 Subs to broadcaster's community! They've gifted a total of 1 in the channel!"
+        "realuser is gifting 1 Tier 1 Subs to broadcaster's community! They've gifted a total of 1 in the channel!",
       );
       assert.strictEqual(msg.messageTypeID, "submysterygift");
 
@@ -244,7 +245,7 @@ describe("./message/twitch-types/usernotice", function () {
     it("should be able to parse an announcement usernotice that was sent via IRC", function () {
       const msg = parseTwitchMessage(
         "@badge-info=;badges=broadcaster/1,glitchcon2020/1;color=#666666;display-name=NotKarar;emotes=;flags=;id=fb6f330a-b47e-4394-bdae-34c545143a1e;login=notkarar;mod=0;" +
-          "msg-id=announcement;room-id=89954186;subscriber=0;system-msg=;tmi-sent-ts=1651337290447;user-id=89954186;user-type= :tmi.twitch.tv USERNOTICE #notkarar :test"
+          "msg-id=announcement;room-id=89954186;subscriber=0;system-msg=;tmi-sent-ts=1651337290447;user-id=89954186;user-type= :tmi.twitch.tv USERNOTICE #notkarar :test",
       ) as UsernoticeMessage;
 
       assert.strictEqual(msg.ircCommand, "USERNOTICE");
@@ -256,7 +257,7 @@ describe("./message/twitch-types/usernotice", function () {
     it("should be able to parse an announcement usernotice that was sent via web chat", function () {
       const msg = parseTwitchMessage(
         "@badge-info=;badges=broadcaster/1,glitchcon2020/1;color=#666666;display-name=NotKarar;emotes=;flags=;id=e409ccaf-c439-4438-9153-77a056eab544;login=notkarar;mod=0;" +
-          "msg-id=announcement;msg-param-color=PRIMARY;room-id=89954186;subscriber=0;system-msg=;tmi-sent-ts=1651337248093;user-id=89954186;user-type= :tmi.twitch.tv USERNOTICE #notkarar :test"
+          "msg-id=announcement;msg-param-color=PRIMARY;room-id=89954186;subscriber=0;system-msg=;tmi-sent-ts=1651337248093;user-id=89954186;user-type= :tmi.twitch.tv USERNOTICE #notkarar :test",
       ) as UsernoticeMessage;
 
       assert.strictEqual(msg.ircCommand, "USERNOTICE");

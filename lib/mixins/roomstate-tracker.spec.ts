@@ -26,7 +26,7 @@ describe("./mixins/roomstate-tracker", function () {
       assert.isUndefined(roomStateTracker.getChannelState("randers"));
 
       emit(
-        "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
+        "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers",
       );
 
       await promisify(setImmediate)();
@@ -50,7 +50,7 @@ describe("./mixins/roomstate-tracker", function () {
 
       // enable r9k (full roomstate)
       emit(
-        "@emote-only=0;followers-only=-1;r9k=1;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
+        "@emote-only=0;followers-only=-1;r9k=1;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers",
       );
 
       await promisify(setImmediate)();
@@ -74,7 +74,7 @@ describe("./mixins/roomstate-tracker", function () {
 
       // enable sub mode (partial roomstate)
       emitAndEnd(
-        "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers"
+        "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers",
       );
       await promisify(setImmediate)();
 
@@ -105,7 +105,7 @@ describe("./mixins/roomstate-tracker", function () {
       assert.isUndefined(roomStateTracker.getChannelState("randers"));
 
       emitAndEnd(
-        "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers"
+        "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers",
       );
       await promisify(setImmediate)();
 
@@ -121,7 +121,7 @@ describe("./mixins/roomstate-tracker", function () {
       roomStateTracker.on("newChannelState", listenerCallback);
 
       emit(
-        "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
+        "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers",
       );
       client.destroy();
 
@@ -130,8 +130,8 @@ describe("./mixins/roomstate-tracker", function () {
       assert(
         listenerCallback.calledOnceWithExactly(
           "randers",
-          roomStateTracker.getChannelState("randers")
-        )
+          roomStateTracker.getChannelState("randers"),
+        ),
       );
     });
 
@@ -141,7 +141,7 @@ describe("./mixins/roomstate-tracker", function () {
       client.use(roomStateTracker);
 
       emit(
-        "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers"
+        "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers",
       );
 
       await promisify(setImmediate)();
@@ -150,7 +150,7 @@ describe("./mixins/roomstate-tracker", function () {
       roomStateTracker.on("newChannelState", listenerCallback);
 
       emitAndEnd(
-        "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers"
+        "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers",
       );
 
       await promisify(setImmediate)();
@@ -158,8 +158,8 @@ describe("./mixins/roomstate-tracker", function () {
       assert(
         listenerCallback.calledOnceWithExactly(
           "randers",
-          roomStateTracker.getChannelState("randers")
-        )
+          roomStateTracker.getChannelState("randers"),
+        ),
       );
     });
   });

@@ -10,7 +10,7 @@ describe("./message/parser/irc-message", function () {
       assertThrowsChain(
         () => parseIRCMessage(""),
         ParseError,
-        'Invalid format for IRC command (given src: "")'
+        'Invalid format for IRC command (given src: "")',
       );
     });
     it("should throw a ParseError on malformed input", function () {
@@ -18,34 +18,34 @@ describe("./message/parser/irc-message", function () {
       assertThrowsChain(
         () => parseIRCMessage(":tmi.twitch.tv  PRIVMSG"),
         ParseError,
-        'Invalid format for IRC command (given src: ":tmi.twitch.tv  PRIVMSG")'
+        'Invalid format for IRC command (given src: ":tmi.twitch.tv  PRIVMSG")',
       );
     });
     it("should error on empty prefix", function () {
       assertThrowsChain(
         () => parseIRCMessage(": PING xD"),
         ParseError,
-        'Empty prefix declaration (nothing after : sign) (given src: ": PING xD")'
+        'Empty prefix declaration (nothing after : sign) (given src: ": PING xD")',
       );
       assertThrowsChain(
         () => parseIRCMessage(":a@ PING xD"),
         ParseError,
-        'Host, nick or user is empty in prefix (given src: ":a@ PING xD")'
+        'Host, nick or user is empty in prefix (given src: ":a@ PING xD")',
       );
       assertThrowsChain(
         () => parseIRCMessage(":a!@b PING xD"),
         ParseError,
-        'Host, nick or user is empty in prefix (given src: ":a!@b PING xD")'
+        'Host, nick or user is empty in prefix (given src: ":a!@b PING xD")',
       );
     });
     it("should parse this one", function () {
       parseIRCMessage(
-        ":justinfan12345.tmi.twitch.tv 353 justinfan12345 = #pajlada :justinfan12345"
+        ":justinfan12345.tmi.twitch.tv 353 justinfan12345 = #pajlada :justinfan12345",
       );
     });
     it("should parse tags optionally", function () {
       const actual = parseIRCMessage(
-        ":tetyys!tetyys@tetyys.tmi.twitch.tv PRIVMSG #pajlada :KKona"
+        ":tetyys!tetyys@tetyys.tmi.twitch.tv PRIVMSG #pajlada :KKona",
       );
       const expected = new IRCMessage({
         rawSource:
@@ -78,7 +78,7 @@ describe("./message/parser/irc-message", function () {
             kkona: "kkona",
             def: null,
           },
-        })
+        }),
       );
     });
     it("should parse prefix optionally", function () {
@@ -92,7 +92,7 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PONG",
           ircParameters: ["tmi.twitch.tv"],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should parse multiple middle parameters", function () {
@@ -106,7 +106,7 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PONG",
           ircParameters: ["a", "b", "cd"],
           ircTags: {},
-        })
+        }),
       );
     });
     it('should allow ":" character in middle parameters', function () {
@@ -120,7 +120,7 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PONG",
           ircParameters: ["a:b", "b:", "cd"],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should uppercase the command", function () {
@@ -134,7 +134,7 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PONG",
           ircParameters: [],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should recognize host-only prefixes", function () {
@@ -152,7 +152,7 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PING",
           ircParameters: [],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should recognize server-only prefixes", function () {
@@ -173,12 +173,12 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PRIVMSG",
           ircParameters: [],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should recognize full prefixes", function () {
       const actual = parseIRCMessage(
-        ":leppunen!crazyusername@local.host PRIVMSG"
+        ":leppunen!crazyusername@local.host PRIVMSG",
       );
       assert.deepStrictEqual(
         actual,
@@ -193,7 +193,7 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "PRIVMSG",
           ircParameters: [],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should allow numeric commands", function () {
@@ -207,19 +207,19 @@ describe("./message/parser/irc-message", function () {
           ircCommand: "001",
           ircParameters: [],
           ircTags: {},
-        })
+        }),
       );
     });
     it("should only allow 3-digit numeric commands", function () {
       assertThrowsChain(
         () => parseIRCMessage("01"),
         ParseError,
-        'Invalid format for IRC command (given src: "01")'
+        'Invalid format for IRC command (given src: "01")',
       );
       assertThrowsChain(
         () => parseIRCMessage("0001"),
         ParseError,
-        'Invalid format for IRC command (given src: "0001")'
+        'Invalid format for IRC command (given src: "0001")',
       );
     });
   });
@@ -231,7 +231,7 @@ describe("./message/parser/irc-message", function () {
         "display-name=Billy_Bones_U;emotes=;flags=;id=d3805a32-df90-4844-a3ab" +
         "-4ea116fcf1c6;mod=0;room-id=11148817;subscriber=1;tmi-sent-ts=15656850" +
         "67248;turbo=0;user-id=411604091;user-type= :billy_bones_u!billy_bones_" +
-        "u@billy_bones_u.tmi.twitch.tv PRIVMSG #pajlada :FeelsDankMan ..."
+        "u@billy_bones_u.tmi.twitch.tv PRIVMSG #pajlada :FeelsDankMan ...",
     );
 
     assert.deepStrictEqual(
@@ -269,7 +269,7 @@ describe("./message/parser/irc-message", function () {
           "user-id": "411604091",
           "user-type": "",
         },
-      })
+      }),
     );
   });
 });

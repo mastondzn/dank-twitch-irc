@@ -38,7 +38,7 @@ describe("./message/parser/flags", function () {
         [
           new TwitchFlag(0, 4, "shit", [{ category: "P", score: 6 }]),
           new TwitchFlag(11, 18, "asshole", [{ category: "P", score: 6 }]),
-        ]
+        ],
       );
     });
 
@@ -46,14 +46,14 @@ describe("./message/parser/flags", function () {
       assert.deepStrictEqual(
         parseFlags(
           "shit in my asshole fucking shit mechanics",
-          "0-3:P.7,11-17:P.7,19-25:P.7,27-30:P.7"
+          "0-3:P.7,11-17:P.7,19-25:P.7,27-30:P.7",
         ),
         [
           new TwitchFlag(0, 4, "shit", [{ category: "P", score: 7 }]),
           new TwitchFlag(11, 18, "asshole", [{ category: "P", score: 7 }]),
           new TwitchFlag(19, 26, "fucking", [{ category: "P", score: 7 }]),
           new TwitchFlag(27, 31, "shit", [{ category: "P", score: 7 }]),
-        ]
+        ],
       );
     });
 
@@ -61,7 +61,7 @@ describe("./message/parser/flags", function () {
       assert.deepStrictEqual(
         parseFlags(
           "shut the fuck up retard streamer you kill a phallic object",
-          "0-15:A.7/I.6/P.6,17-22:A.7/I.6,37-40:A.7,44-50:S.7"
+          "0-15:A.7/I.6/P.6,17-22:A.7/I.6,37-40:A.7,44-50:S.7",
         ),
         [
           new TwitchFlag(0, 16, "shut the fuck up", [
@@ -75,7 +75,7 @@ describe("./message/parser/flags", function () {
           ]),
           new TwitchFlag(37, 41, "kill", [{ category: "A", score: 7 }]),
           new TwitchFlag(44, 51, "phallic", [{ category: "S", score: 7 }]),
-        ]
+        ],
       );
     });
 
@@ -130,7 +130,7 @@ describe("./message/parser/flags", function () {
             { category: "I", score: 6 },
             { category: "P", score: 6 },
           ]),
-        ]
+        ],
       );
     });
 
@@ -140,7 +140,7 @@ describe("./message/parser/flags", function () {
         [
           new TwitchFlag(6, 11, "xanax", []),
           new TwitchFlag(16, 21, "xanax", []),
-        ]
+        ],
       );
     });
 
@@ -148,7 +148,7 @@ describe("./message/parser/flags", function () {
       assert.deepStrictEqual(
         parseFlags(
           "shut the fuck up retard streamer you kill a phallic object and xanax and xanax",
-          "0-15:A.7/I.6/P.6,17-22:A.7/I.6,37-40:A.7,44-50:S.7,63-67:,73-77:"
+          "0-15:A.7/I.6/P.6,17-22:A.7/I.6,37-40:A.7,44-50:S.7,63-67:,73-77:",
         ),
         [
           new TwitchFlag(0, 16, "shut the fuck up", [
@@ -164,7 +164,7 @@ describe("./message/parser/flags", function () {
           new TwitchFlag(44, 51, "phallic", [{ category: "S", score: 7 }]),
           new TwitchFlag(63, 68, "xanax", []),
           new TwitchFlag(73, 78, "xanax", []),
-        ]
+        ],
       );
     });
   });

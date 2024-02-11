@@ -82,7 +82,7 @@ export function convertToBadges(value: string): TwitchBadgesList {
 
 export function convertToEmotes(
   value: string,
-  messageText: string
+  messageText: string,
 ): TwitchEmoteList {
   return parseEmotes(messageText, value);
 }
@@ -93,7 +93,7 @@ export function convertToEmoteSets(value: string): TwitchEmoteSets {
 
 export function convertToFlags(
   value: string,
-  messageText: string
+  messageText: string,
 ): TwitchFlagList {
   return parseFlags(messageText, value);
 }

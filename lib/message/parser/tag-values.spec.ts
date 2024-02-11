@@ -10,7 +10,7 @@ import { describe, it, assert } from "vitest";
 describe("./message/parser/tag-values", function () {
   function checkRequire<V, A extends unknown[]>(
     subject: (
-      tagParser: TagValueParser
+      tagParser: TagValueParser,
     ) => (key: string, ...converterArgs: A) => V,
     ...converterArgs: A
   ): void {
@@ -19,7 +19,7 @@ describe("./message/parser/tag-values", function () {
         assertThrowsChain(
           () => subject(tagParserFor({}))("key", ...converterArgs),
           MissingTagError,
-          'Required tag value not present at key "key" (is undefined)'
+          'Required tag value not present at key "key" (is undefined)',
         );
       });
 
@@ -27,7 +27,7 @@ describe("./message/parser/tag-values", function () {
         assertThrowsChain(
           () => subject(tagParserFor({ key: null }))("key", ...converterArgs),
           MissingTagError,
-          'Required tag value not present at key "key" (is null)'
+          'Required tag value not present at key "key" (is null)',
         );
       });
     });
@@ -35,7 +35,7 @@ describe("./message/parser/tag-values", function () {
 
   function checkGet<V, A extends any[]>(
     subject: (
-      tagParser: TagValueParser
+      tagParser: TagValueParser,
     ) => (key: string, ...converterArgs: A) => V | undefined,
     ...converterArgs: A
   ): void {
@@ -46,7 +46,7 @@ describe("./message/parser/tag-values", function () {
 
       it("should return undefined on null value", function () {
         assert.isUndefined(
-          subject(tagParserFor({ key: null }))("key", ...converterArgs)
+          subject(tagParserFor({ key: null }))("key", ...converterArgs),
         );
       });
     });
@@ -59,11 +59,11 @@ describe("./message/parser/tag-values", function () {
     it("should return the value if value exists (also on empty string)", function () {
       assert.strictEqual(
         tagParserFor({ key: "value" }).getString("key"),
-        "value"
+        "value",
       );
       assert.strictEqual(
         tagParserFor({ key: "value" }).requireString("key"),
-        "value"
+        "value",
       );
       assert.strictEqual(tagParserFor({ key: "" }).getString("key"), "");
       assert.strictEqual(tagParserFor({ key: "" }).requireString("key"), "");
@@ -72,7 +72,7 @@ describe("./message/parser/tag-values", function () {
 
   function checkThrowsUnparseableInt<V, A extends any[]>(
     subject: (
-      tagParser: TagValueParser
+      tagParser: TagValueParser,
     ) => (key: string, ...converterArgs: A) => V | undefined,
     ...converterArgs: A
   ): void {
@@ -80,14 +80,14 @@ describe("./message/parser/tag-values", function () {
       assertThrowsChain(
         () => subject(tagParserFor({ key: "" }))("key", ...converterArgs),
         ParseError,
-        'Failed to parse integer from tag value ""'
+        'Failed to parse integer from tag value ""',
       );
     });
     it("should throw ParseError on invalid integer input", function () {
       assertThrowsChain(
         () => subject(tagParserFor({ key: "abc" }))("key", ...converterArgs),
         ParseError,
-        'Failed to parse integer from tag value "abc"'
+        'Failed to parse integer from tag value "abc"',
       );
     });
   }
@@ -155,7 +155,7 @@ describe("./message/parser/tag-values", function () {
       assertThrowsChain(
         () => tagParserFor({ key: "" }).requireColor("key"),
         MissingTagError,
-        'Required tag value not present at key "key" (is empty string)'
+        'Required tag value not present at key "key" (is empty string)',
       );
     });
   });
@@ -169,7 +169,7 @@ describe("./message/parser/tag-values", function () {
     it("should interpret given integer values as milliseconds since UTC epoch", function () {
       assert.strictEqual(
         tagParserFor({ key: "1234567" }).requireTimestamp("key").getTime(),
-        1234567
+        1234567,
       );
     });
   });
@@ -181,14 +181,14 @@ describe("./message/parser/tag-values", function () {
     it("should return an empty list on empty string input", function () {
       assert.deepStrictEqual(
         tagParserFor({ key: "" }).getBadges("key"),
-        new TwitchBadgesList()
+        new TwitchBadgesList(),
       );
     });
 
     it("should return single-element array on single badge", function () {
       assert.deepStrictEqual(
         tagParserFor({ key: "admin/1" }).getBadges("key"),
-        new TwitchBadgesList(new TwitchBadge("admin", "1"))
+        new TwitchBadgesList(new TwitchBadge("admin", "1")),
       );
     });
 
@@ -197,21 +197,21 @@ describe("./message/parser/tag-values", function () {
         tagParserFor({ key: "admin/1,subscriber/32" }).getBadges("key"),
         new TwitchBadgesList(
           new TwitchBadge("admin", "1"),
-          new TwitchBadge("subscriber", "32")
-        )
+          new TwitchBadge("subscriber", "32"),
+        ),
       );
     });
 
     it("should accept three badges in the tag source", function () {
       assert.deepStrictEqual(
         tagParserFor({ key: "admin/1,subscriber/32,bits/1000" }).getBadges(
-          "key"
+          "key",
         ),
         new TwitchBadgesList(
           new TwitchBadge("admin", "1"),
           new TwitchBadge("subscriber", "32"),
-          new TwitchBadge("bits", "1000")
-        )
+          new TwitchBadge("bits", "1000"),
+        ),
       );
     });
   });
@@ -229,7 +229,7 @@ describe("./message/parser/tag-values", function () {
     it("should return single-element array on single emote", function () {
       const actual = tagParserFor({ key: "25:4-8" }).getEmotes(
         "key",
-        "asd Kappa def"
+        "asd Kappa def",
       );
       assert.deepStrictEqual(actual, [new TwitchEmote("25", 4, 9, "Kappa")]);
     });
@@ -237,7 +237,7 @@ describe("./message/parser/tag-values", function () {
     it("should return 2-element array on 2 identical emotes", function () {
       const actual = tagParserFor({ key: "25:4-8,14-18" }).getEmotes(
         "key",
-        "asd Kappa def Kappa def"
+        "asd Kappa def Kappa def",
       );
       assert.deepStrictEqual(actual, [
         new TwitchEmote("25", 4, 9, "Kappa"),
@@ -248,7 +248,7 @@ describe("./message/parser/tag-values", function () {
     it("should return 2-element array on 2 different emotes", function () {
       const actual = tagParserFor({ key: "25:4-8/1902:14-18" }).getEmotes(
         "key",
-        "asd Kappa def Keepo def"
+        "asd Kappa def Keepo def",
       );
       assert.deepStrictEqual(actual, [
         new TwitchEmote("25", 4, 9, "Kappa"),
@@ -259,7 +259,7 @@ describe("./message/parser/tag-values", function () {
     it("should return a correctly sorted 3-element array on interleaved emotes", function () {
       const actual = tagParserFor({ key: "25:5-9,27-31/1902:16-20" }).getEmotes(
         "key",
-        "test Kappa test Keepo test Kappa"
+        "test Kappa test Keepo test Kappa",
       );
       assert.deepStrictEqual(actual, [
         new TwitchEmote("25", 5, 10, "Kappa"),

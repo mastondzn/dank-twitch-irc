@@ -97,7 +97,7 @@ describe("./operations/part", function () {
         PartError,
         "Failed to part channel pajlada: Timed out after waiting for response for 2000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 2000 milliseconds"
+        "Timed out after waiting for response for 2000 milliseconds",
       );
 
       await assertErrorChain(
@@ -105,7 +105,7 @@ describe("./operations/part", function () {
         PartError,
         "Failed to part channel pajlada: Timed out after waiting for response for 2000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 2000 milliseconds"
+        "Timed out after waiting for response for 2000 milliseconds",
       );
 
       assert.sameMembers([...client.joinedChannels], ["pajlada"]);
@@ -122,7 +122,7 @@ describe("./operations/part", function () {
       const promise = partChannel(client, "pajlada");
 
       emitAndEnd(
-        ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv PART #pajlada"
+        ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv PART #pajlada",
       );
 
       await promise;

@@ -20,7 +20,7 @@ export class ConnectionPool implements ClientMixin {
     client.connectionPool = this;
     const replacement = (
       oldFn: (predicate?: ConnectionPredicate) => SingleConnection,
-      predicate?: ConnectionPredicate
+      predicate?: ConnectionPredicate,
     ): SingleConnection => {
       this.ensureEnoughConnections();
       return oldFn(predicate);

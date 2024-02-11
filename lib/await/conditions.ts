@@ -3,7 +3,7 @@ import { NoticeMessage } from "../message/twitch-types/notice";
 
 export function matchingNotice(
   channelName: string,
-  noticeIDs: string[]
+  noticeIDs: string[],
 ): (msg: IRCMessage) => boolean {
   return (msg: IRCMessage) => {
     return (

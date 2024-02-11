@@ -9,7 +9,7 @@ describe("./validation/channel", function () {
       assertThrowsChain(
         () => validateChannelName(undefined),
         ValidationError,
-        "Channel name undefined is invalid/malformed"
+        "Channel name undefined is invalid/malformed",
       );
     });
 
@@ -17,7 +17,7 @@ describe("./validation/channel", function () {
       assertThrowsChain(
         () => validateChannelName(null),
         ValidationError,
-        "Channel name null is invalid/malformed"
+        "Channel name null is invalid/malformed",
       );
     });
 
@@ -25,7 +25,7 @@ describe("./validation/channel", function () {
       assertThrowsChain(
         () => validateChannelName(""),
         ValidationError,
-        "Channel name empty string is invalid/malformed"
+        "Channel name empty string is invalid/malformed",
       );
     });
 
@@ -47,7 +47,7 @@ describe("./validation/channel", function () {
       assertThrowsChain(
         () => validateChannelName("Pajlada"),
         ValidationError,
-        'Channel name "Pajlada" is invalid/malformed'
+        'Channel name "Pajlada" is invalid/malformed',
       );
     });
   });

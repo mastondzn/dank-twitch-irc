@@ -16,7 +16,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseHostedChannelName(undefined),
         ParseError,
-        "Malformed channel part in HOSTTARGET message: undefined"
+        "Malformed channel part in HOSTTARGET message: undefined",
       );
     });
 
@@ -24,7 +24,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseHostedChannelName(""),
         ParseError,
-        "Malformed channel part in HOSTTARGET message: empty string"
+        "Malformed channel part in HOSTTARGET message: empty string",
       );
     });
 
@@ -44,7 +44,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseViewerCount(undefined),
         ParseError,
-        "Malformed viewer count part in HOSTTARGET message: undefined"
+        "Malformed viewer count part in HOSTTARGET message: undefined",
       );
     });
 
@@ -52,7 +52,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseViewerCount(""),
         ParseError,
-        "Malformed viewer count part in HOSTTARGET message: empty string"
+        "Malformed viewer count part in HOSTTARGET message: empty string",
       );
     });
 
@@ -60,7 +60,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseViewerCount("abc"),
         ParseError,
-        'Malformed viewer count part in HOSTTARGET message: "abc"'
+        'Malformed viewer count part in HOSTTARGET message: "abc"',
       );
     });
 
@@ -79,7 +79,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseHosttargetParameter(""),
         ParseError,
-        "HOSTTARGET accepts exactly 2 arguments in second parameter, given: empty string"
+        "HOSTTARGET accepts exactly 2 arguments in second parameter, given: empty string",
       );
     });
 
@@ -87,7 +87,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseHosttargetParameter("a b c"),
         ParseError,
-        'HOSTTARGET accepts exactly 2 arguments in second parameter, given: "a b c"'
+        'HOSTTARGET accepts exactly 2 arguments in second parameter, given: "a b c"',
       );
     });
 
@@ -120,7 +120,7 @@ describe("./message/twitch-types/hosttarget", function () {
       const msgText = ":tmi.twitch.tv HOSTTARGET #randers :leebaxd 0";
 
       const msg: HosttargetMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as HosttargetMessage;
 
       assert.instanceOf(msg, HosttargetMessage);
@@ -137,7 +137,7 @@ describe("./message/twitch-types/hosttarget", function () {
       const msgText = ":tmi.twitch.tv HOSTTARGET #randers :leebaxd -";
 
       const msg: HosttargetMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as HosttargetMessage;
 
       assert.instanceOf(msg, HosttargetMessage);
@@ -154,7 +154,7 @@ describe("./message/twitch-types/hosttarget", function () {
       const msgText = ":tmi.twitch.tv HOSTTARGET #randers :- 0";
 
       const msg: HosttargetMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as HosttargetMessage;
 
       assert.instanceOf(msg, HosttargetMessage);
@@ -173,7 +173,7 @@ describe("./message/twitch-types/hosttarget", function () {
       assertThrowsChain(
         () => parseTwitchMessage(msgText),
         MissingDataError,
-        "Parameter at index 1 missing"
+        "Parameter at index 1 missing",
       );
     });
   });

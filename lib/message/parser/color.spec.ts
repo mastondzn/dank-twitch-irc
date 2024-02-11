@@ -79,7 +79,7 @@ describe("./message/parser/color", function () {
       assertThrowsChain(
         () => parseColor("aabbcc"),
         ParseError,
-        'Malformed color value "aabbcc", must be in format #AABBCC'
+        'Malformed color value "aabbcc", must be in format #AABBCC',
       );
     });
 
@@ -87,7 +87,7 @@ describe("./message/parser/color", function () {
       assertThrowsChain(
         () => parseColor("aabbccFF"),
         ParseError,
-        'Malformed color value "aabbccFF", must be in format #AABBCC'
+        'Malformed color value "aabbccFF", must be in format #AABBCC',
       );
     });
 
@@ -95,7 +95,7 @@ describe("./message/parser/color", function () {
       assertThrowsChain(
         () => parseColor("aabbc"),
         ParseError,
-        'Malformed color value "aabbc", must be in format #AABBCC'
+        'Malformed color value "aabbc", must be in format #AABBCC',
       );
     });
 
@@ -103,7 +103,7 @@ describe("./message/parser/color", function () {
       assertThrowsChain(
         () => parseColor("AAAEAA"),
         ParseError,
-        'Malformed color value "AAAEAA", must be in format #AABBCC'
+        'Malformed color value "AAAEAA", must be in format #AABBCC',
       );
     });
   });

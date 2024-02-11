@@ -57,7 +57,7 @@ describe("./operations/login", function () {
         "Failed to login: Bad response message: :tmi.twitch" +
           ".tv NOTICE * :Improperly formatted auth",
         MessageError,
-        "Bad response message: :tmi.twitch.tv NOTICE * :Improperly formatted auth"
+        "Bad response message: :tmi.twitch.tv NOTICE * :Improperly formatted auth",
       );
 
       await assertErrorChain(
@@ -66,7 +66,7 @@ describe("./operations/login", function () {
         "Failed to login: Bad response message: :tmi.twitch." +
           "tv NOTICE * :Improperly formatted auth",
         MessageError,
-        "Bad response message: :tmi.twitch.tv NOTICE * :Improperly formatted auth"
+        "Bad response message: :tmi.twitch.tv NOTICE * :Improperly formatted auth",
       );
     });
   });

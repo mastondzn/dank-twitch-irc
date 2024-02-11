@@ -63,7 +63,7 @@ const defaults: Omit<
 };
 
 export function expandTransportConfig(
-  config: TransportConfiguration | undefined
+  config: TransportConfiguration | undefined,
 ): ExpandedTransportConfiguration {
   if (config == null) {
     return expandTransportConfig({
@@ -116,7 +116,7 @@ export function expandTransportConfig(
 }
 
 export function expandRateLimitsConfig(
-  config: RateLimitsConfig | undefined
+  config: RateLimitsConfig | undefined,
 ): RateLimits {
   if (config == null) {
     return rateLimitPresets.default;
@@ -130,11 +130,11 @@ export function expandRateLimitsConfig(
 }
 
 export function expandConfig(
-  config?: ClientConfiguration
+  config?: ClientConfiguration,
 ): ExpandedClientConfiguration {
   const newConfig = setDefaults(
     config,
-    defaults
+    defaults,
   ) as ExpandedClientConfiguration;
 
   newConfig.username = newConfig.username.toLowerCase();

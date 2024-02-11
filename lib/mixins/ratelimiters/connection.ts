@@ -17,7 +17,7 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
     this.client = client;
 
     this.semaphore = new Sema(
-      this.client.configuration.connectionRateLimits.parallelConnections
+      this.client.configuration.connectionRateLimits.parallelConnections,
     );
   }
 
@@ -36,7 +36,7 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
       unsubscribe();
       setTimeout(
         () => this.semaphore.release(),
-        this.client.configuration.connectionRateLimits.releaseTime
+        this.client.configuration.connectionRateLimits.releaseTime,
       );
     };
 
@@ -56,7 +56,7 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
     applyReplacements(this, connection.transport, {
       connect(
         originalFn: (callback?: () => void) => void,
-        connectionListener?: () => void
+        connectionListener?: () => void,
       ): void {
         this.acquire().then(() => {
           originalFn(connectionListener);

@@ -23,7 +23,7 @@ describe("./utils/split-into-chunks", function () {
         // test123KKona
         assert.deepStrictEqual(
           splitIntoChunks(["test", "KKona", "abc"], "123", 13),
-          [["test", "KKona"], ["abc"]]
+          [["test", "KKona"], ["abc"]],
         );
       });
 
@@ -36,10 +36,10 @@ describe("./utils/split-into-chunks", function () {
 
         assert.deepStrictEqual(splitIntoChunks(s.split(" "), " ", 72), [
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy".split(
-            " "
+            " ",
           ),
           "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam".split(
-            " "
+            " ",
           ),
           "voluptua. At vero eos et accusam et justo duo dolores".split(" "),
         ]);
@@ -49,7 +49,7 @@ describe("./utils/split-into-chunks", function () {
         assertThrowsChain(
           () => splitIntoChunks(["superlongmessage", "NaM"], " ", 15),
           Error,
-          "Found a piece that can never fit the target length limit"
+          "Found a piece that can never fit the target length limit",
         );
       });
     });

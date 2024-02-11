@@ -123,14 +123,14 @@ export type Logger = {
     expression: boolean,
     message: string,
     formatArg1: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
     formatArg1: any,
     formatArg2: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -138,7 +138,7 @@ export type Logger = {
     formatArg1: any,
     formatArg2: any,
     formatArg3: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -147,7 +147,7 @@ export type Logger = {
     formatArg2: any,
     formatArg3: any,
     formatArg4: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -157,7 +157,7 @@ export type Logger = {
     formatArg3: any,
     formatArg4: any,
     formatArg5: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -168,7 +168,7 @@ export type Logger = {
     formatArg4: any,
     formatArg5: any,
     formatArg6: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -180,7 +180,7 @@ export type Logger = {
     formatArg5: any,
     formatArg6: any,
     formatArg7: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -193,7 +193,7 @@ export type Logger = {
     formatArg6: any,
     formatArg7: any,
     formatArg8: any,
-    level: string
+    level: string,
   ): void;
   assert(
     expression: boolean,
@@ -207,7 +207,7 @@ export type Logger = {
     formatArg7: any,
     formatArg8: any,
     formatArg9: any,
-    level: string
+    level: string,
   ): void;
 } & {
   trace: LogFn;

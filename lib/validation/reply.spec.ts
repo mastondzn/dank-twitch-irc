@@ -9,7 +9,7 @@ describe("./validation/reply", function () {
       assertThrowsChain(
         () => validateMessageID(undefined),
         ValidationError,
-        "Message ID undefined is invalid/malformed"
+        "Message ID undefined is invalid/malformed",
       );
     });
 
@@ -17,7 +17,7 @@ describe("./validation/reply", function () {
       assertThrowsChain(
         () => validateMessageID(null),
         ValidationError,
-        "Message ID null is invalid/malformed"
+        "Message ID null is invalid/malformed",
       );
     });
 
@@ -25,7 +25,7 @@ describe("./validation/reply", function () {
       assertThrowsChain(
         () => validateMessageID(""),
         ValidationError,
-        "Message ID empty string is invalid/malformed"
+        "Message ID empty string is invalid/malformed",
       );
     });
 

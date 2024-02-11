@@ -33,7 +33,7 @@ describe("./utils/base-error", function () {
         const error = new BaseError("error msg", cause);
 
         assert.strictEqual(error.message, "error msg");
-      }
+      },
     );
 
     it(
@@ -43,7 +43,7 @@ describe("./utils/base-error", function () {
         const error = new BaseError("error msg");
 
         assert.strictEqual(error.message, "error msg");
-      }
+      },
     );
 
     it(
@@ -54,7 +54,7 @@ describe("./utils/base-error", function () {
         const error = new BaseError(undefined, cause);
 
         assert.strictEqual(error.message, "");
-      }
+      },
     );
 
     it("should set resulting message to empty string if there is no cause and no message", function () {

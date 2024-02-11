@@ -49,14 +49,14 @@ export class SlowModeRateLimiter implements ClientMixin {
     if (client.roomStateTracker != null) {
       client.roomStateTracker.on(
         "newChannelState",
-        this.onRoomStateChange.bind(this)
+        this.onRoomStateChange.bind(this),
       );
     }
 
     if (client.userStateTracker != null) {
       client.userStateTracker.on(
         "newChannelState",
-        this.onUserStateChange.bind(this)
+        this.onUserStateChange.bind(this),
       );
     }
   }
@@ -75,7 +75,7 @@ export class SlowModeRateLimiter implements ClientMixin {
     const { fastSpam, certain } = canSpamFast(
       channelName,
       this.client.configuration.username,
-      newState
+      newState,
     );
 
     const runningTimer = this.runningTimers[channelName];
@@ -103,7 +103,7 @@ export class SlowModeRateLimiter implements ClientMixin {
 
     const newSlowModeDuration = Math.max(
       newState.slowModeDuration,
-      SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN
+      SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN,
     );
 
     const runningTimer = this.runningTimers[channelName];
@@ -113,12 +113,12 @@ export class SlowModeRateLimiter implements ClientMixin {
   }
 
   private async acquire(
-    channelName: string
+    channelName: string,
   ): Promise<(() => void) | undefined> {
     const { fastSpam, certain } = canSpamFast(
       channelName,
       this.client.configuration.username,
-      this.client.userStateTracker
+      this.client.userStateTracker,
     );
 
     // nothing is acquired and nothing has to be released
@@ -142,7 +142,7 @@ export class SlowModeRateLimiter implements ClientMixin {
       const { fastSpam: fastSpamAfterRelease } = canSpamFast(
         channelName,
         this.client.configuration.username,
-        this.client.userStateTracker
+        this.client.userStateTracker,
       );
 
       if (fastSpamAfterRelease) {
@@ -176,7 +176,7 @@ export class SlowModeRateLimiter implements ClientMixin {
     const { fastSpam: fastSpamAfterAwait } = canSpamFast(
       channelName,
       this.client.configuration.username,
-      this.client.userStateTracker
+      this.client.userStateTracker,
     );
 
     if (fastSpamAfterAwait) {
@@ -194,7 +194,7 @@ export class SlowModeRateLimiter implements ClientMixin {
       if (roomState != null) {
         return Math.max(
           roomState.slowModeDuration,
-          SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN
+          SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN,
         );
       }
     }

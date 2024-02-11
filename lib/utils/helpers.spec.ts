@@ -33,13 +33,13 @@ function assertLink(e: Error, chain: any[], depth = 0): void {
     expectedPrototype,
     `Error at depth ${depth} should be directly instanceof ` +
       `${util.inspect(expectedPrototype)}, ` +
-      `is instance of: ${util.inspect(actualPrototype)}`
+      `is instance of: ${util.inspect(actualPrototype)}`,
   );
 
   assert.strictEqual(
     e.message,
     message,
-    `Error at depth ${depth} should have error message "${message}"`
+    `Error at depth ${depth} should have error message "${message}"`,
   );
 
   // @ts-ignore e.cause is unknown to the compiler
@@ -53,7 +53,7 @@ function assertLink(e: Error, chain: any[], depth = 0): void {
     assert(
       cause == null,
       `Error at depth ${depth} should not have a cause, ` +
-        `but has the following cause: ${inspect(cause)}`
+        `but has the following cause: ${inspect(cause)}`,
     );
   }
 }
@@ -117,7 +117,7 @@ export function createMockTransport(): MockTransportData {
     write(
       chunk: any,
       encoding: string,
-      callback: (error?: Error | null) => void
+      callback: (error?: Error | null) => void,
     ): void {
       data.push(chunk.toString());
       callback();

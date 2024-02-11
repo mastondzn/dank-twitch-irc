@@ -7,7 +7,7 @@ import { describe, it, vi, assert } from "vitest";
 function successResponsesForChannelChunk(channels: string[]): string[] {
   return channels.map(
     (ch) =>
-      `:justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #${ch}`
+      `:justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #${ch}`,
   );
 }
 
@@ -400,7 +400,7 @@ describe("./operations/join-all", function () {
       // leave out nymn_hs so nymn_hs should have an error (outpaced)
       emitAndEnd(
         ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #pajlada",
-        ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #forsen"
+        ":justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv JOIN #forsen",
       );
 
       const results = await promise;
@@ -414,7 +414,7 @@ describe("./operations/join-all", function () {
         JoinError,
         "Failed to join channel nymn_hs: A response to a command issued later than this command was received",
         TimeoutError,
-        "A response to a command issued later than this command was received"
+        "A response to a command issued later than this command was received",
       );
 
       assert.isTrue(client.wantedChannels.has("nymn_hs"));
@@ -428,7 +428,7 @@ describe("./operations/join-all", function () {
         JoinError,
         "Failed to join channel nymn_hs: A response to a command issued later than this command was received",
         TimeoutError,
-        "A response to a command issued later than this command was received"
+        "A response to a command issued later than this command was received",
       );
     });
   });

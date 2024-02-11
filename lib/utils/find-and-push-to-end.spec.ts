@@ -15,7 +15,7 @@ describe("./utils/find-and-push-to-end", function () {
       const inArr = [1, 2, 3];
       assert.strictEqual(
         findAndPushToEnd(inArr, (e) => e === 1),
-        1
+        1,
       );
 
       assert.deepStrictEqual(inArr, [2, 3, 1]);
@@ -25,7 +25,7 @@ describe("./utils/find-and-push-to-end", function () {
       const inArr = [1, 2, 3];
       assert.strictEqual(
         findAndPushToEnd(inArr, (e) => e === 2),
-        2
+        2,
       );
 
       assert.deepStrictEqual(inArr, [1, 3, 2]);

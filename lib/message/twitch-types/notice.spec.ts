@@ -16,7 +16,7 @@ describe("./message/twitch-types/notice", function () {
       assert.strictEqual(msg.channelName, "forsen");
       assert.strictEqual(
         msg.messageText,
-        "You are permanently banned from talking in forsen."
+        "You are permanently banned from talking in forsen.",
       );
       assert.strictEqual(msg.messageID, "msg_banned");
     });

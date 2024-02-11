@@ -53,7 +53,7 @@ describe("./operations/ping", function () {
         PingTimeoutError,
         "Server did not PONG back: Timed out after waiting for response for 2000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 2000 milliseconds"
+        "Timed out after waiting for response for 2000 milliseconds",
       );
 
       await assertErrorChain(
@@ -61,7 +61,7 @@ describe("./operations/ping", function () {
         PingTimeoutError,
         "Server did not PONG back: Timed out after waiting for response for 2000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 2000 milliseconds"
+        "Timed out after waiting for response for 2000 milliseconds",
       );
       vi.useRealTimers();
     });

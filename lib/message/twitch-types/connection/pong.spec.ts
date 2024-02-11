@@ -13,7 +13,7 @@ describe("./message/twitch-types/connection/pong", function () {
     });
     it("should be able to parse a real PONG message with argument", function () {
       const msg = parseTwitchMessage(
-        ":tmi.twitch.tv PONG tmi.twitch.tv :argument test"
+        ":tmi.twitch.tv PONG tmi.twitch.tv :argument test",
       ) as PongMessage;
 
       assert.instanceOf(msg, PongMessage);

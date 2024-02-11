@@ -22,7 +22,7 @@ export class AlternateMessageModifier implements ClientMixin {
   public appendInvisibleCharacter(
     channelName: string,
     messageText: string,
-    action: boolean
+    action: boolean,
   ): string {
     const lastMessage: LastMessage | undefined = this.lastMessages[channelName];
 
@@ -41,7 +41,7 @@ export class AlternateMessageModifier implements ClientMixin {
     type GenericReplacementFn = (
       oldFn: (channelName: string, message: string) => Promise<void>,
       channelName: string,
-      message: string
+      message: string,
     ) => Promise<void>;
 
     const genericReplament =
@@ -59,7 +59,7 @@ export class AlternateMessageModifier implements ClientMixin {
         const { fastSpam } = canSpamFast(
           channelName,
           client.configuration.username,
-          client.userStateTracker
+          client.userStateTracker,
         );
 
         if (fastSpam) {
@@ -70,7 +70,7 @@ export class AlternateMessageModifier implements ClientMixin {
         const newMsg = this.appendInvisibleCharacter(
           channelName,
           message,
-          action
+          action,
         );
         await oldFn(channelName, newMsg, ...args);
 

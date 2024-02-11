@@ -11,7 +11,7 @@ describe("./message/twitch-types/clearmsg", function () {
         "15m; Temperature: 54.8°C; Latency to TMI: 183ms; Commands used: 795";
 
       const msg: ClearmsgMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as ClearmsgMessage;
 
       assert.strictEqual(Object.getPrototypeOf(msg), ClearmsgMessage.prototype);
@@ -19,12 +19,12 @@ describe("./message/twitch-types/clearmsg", function () {
       assert.strictEqual(msg.targetUsername, "supibot");
       assert.strictEqual(
         msg.targetMessageID,
-        "25fd76d9-4731-4907-978e-a391134ebd67"
+        "25fd76d9-4731-4907-978e-a391134ebd67",
       );
       assert.strictEqual(
         msg.targetMessageContent,
         "Pong! Uptime: 6h, 15m; Temperature: 54.8°C; " +
-          "Latency to TMI: 183ms; Commands used: 795"
+          "Latency to TMI: 183ms; Commands used: 795",
       );
     });
   });

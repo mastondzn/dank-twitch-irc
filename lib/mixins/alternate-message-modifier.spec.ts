@@ -24,17 +24,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       // from a different user should be ignored
@@ -44,24 +44,24 @@ describe("./modules/alternate-message-modifier", function () {
           "25:0-4/1902:6-10/88:12-19;flags=;id=4556c83f-4dd6-4c6d-bb87-7a" +
           "b2472188e3;mod=0;room-id=22484632;subscriber=1;tmi-sent-ts=156" +
           "6127471330;turbo=0;user-id=40286300;user-type= :randers00!rander" +
-          "s00@randers00.tmi.twitch.tv PRIVMSG #forsen :Kappa Keepo PogChamp"
+          "s00@randers00.tmi.twitch.tv PRIVMSG #forsen :Kappa Keepo PogChamp",
       );
 
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       emitAndEnd(
@@ -70,7 +70,7 @@ describe("./modules/alternate-message-modifier", function () {
           "25:0-4/1902:6-10/88:12-19;flags=;id=4556c83f-4dd6-4c6d-bb87-7a" +
           "b2472188e3;mod=0;room-id=22484632;subscriber=1;tmi-sent-ts=156" +
           "6127471330;turbo=0;user-id=40286300;user-type= :randers!rander" +
-          "s@randers.tmi.twitch.tv PRIVMSG #forsen :Kappa Keepo PogChamp"
+          "s@randers.tmi.twitch.tv PRIVMSG #forsen :Kappa Keepo PogChamp",
       );
 
       await promisify(setImmediate)();
@@ -79,9 +79,9 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}"
+        "Kappa Keepo PogChamp \u{000e0000}",
       );
 
       // /me makes it different
@@ -89,9 +89,9 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
     });
 
@@ -105,17 +105,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "pajlada",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "pajlada",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       // userstate tracker will register that we are moderator
@@ -133,7 +133,7 @@ describe("./modules/alternate-message-modifier", function () {
           "-d392f1ec1811;mod=1;room-id=11148817;subscriber=1;tmi-sent" +
           "-ts=1566137969595;turbo=0;user-id=40286300;user-type=mod :" +
           "randers!randers@randers.tmi.twitch.tv PRIVMSG #pajlada :Ka" +
-          "ppa Keepo PogChamp"
+          "ppa Keepo PogChamp",
       );
 
       await promisify(setImmediate)();
@@ -145,17 +145,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
     });
 
@@ -182,7 +182,7 @@ describe("./modules/alternate-message-modifier", function () {
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
           "476,588170,669914,771845,1537481,1641460,1641461,1641462,300" +
           "206310;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTAT" +
-          "E #forsen"
+          "E #forsen",
       );
 
       await sayPromise;
@@ -194,9 +194,9 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       transports[1]!.emit(
@@ -206,7 +206,7 @@ describe("./modules/alternate-message-modifier", function () {
           "8-2226-4e2a-8b18-90b05edfb01e;mod=0;room-id=22484632;subs" +
           "criber=1;tmi-sent-ts=1566133801254;turbo=0;user-id=40286" +
           "300;user-type= :randers!randers@randers.tmi.twitch.tv PR" +
-          "IVMSG #forsen :Kappa Keepo PogChamp"
+          "IVMSG #forsen :Kappa Keepo PogChamp",
       );
       end();
 
@@ -218,17 +218,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}"
+        "Kappa Keepo PogChamp \u{000e0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
     });
 
@@ -253,7 +253,7 @@ describe("./modules/alternate-message-modifier", function () {
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
           "476,588170,669914,771845,1537481,1641460,1641461,1641462,300" +
           "206310;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTAT" +
-          "E #forsen"
+          "E #forsen",
       );
 
       await sayPromise;
@@ -265,17 +265,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}"
+        "Kappa Keepo PogChamp \u{000e0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       end();
@@ -304,7 +304,7 @@ describe("./modules/alternate-message-modifier", function () {
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
           "476,588170,669914,771845,1537481,1641460,1641461,1641462,300" +
           "206310;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTAT" +
-          "E #forsen"
+          "E #forsen",
       );
 
       await mePromise;
@@ -316,9 +316,9 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       transports[1]!.emit(
@@ -328,7 +328,7 @@ describe("./modules/alternate-message-modifier", function () {
           "8-2226-4e2a-8b18-90b05edfb01e;mod=0;room-id=22484632;subs" +
           "criber=1;tmi-sent-ts=1566133801254;turbo=0;user-id=40286" +
           "300;user-type= :randers!randers@randers.tmi.twitch.tv PR" +
-          "IVMSG #forsen :\u0001ACTION Kappa Keepo PogChamp\u0001"
+          "IVMSG #forsen :\u0001ACTION Kappa Keepo PogChamp\u0001",
       );
       end();
 
@@ -340,17 +340,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}"
+        "Kappa Keepo PogChamp \u{000e0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
     });
 
@@ -375,7 +375,7 @@ describe("./modules/alternate-message-modifier", function () {
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
           "476,588170,669914,771845,1537481,1641460,1641461,1641462,300" +
           "206310;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTAT" +
-          "E #forsen"
+          "E #forsen",
       );
 
       await mePromise;
@@ -387,17 +387,17 @@ describe("./modules/alternate-message-modifier", function () {
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          true
+          true,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}"
+        "Kappa Keepo PogChamp \u{000e0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
           "forsen",
           "Kappa Keepo PogChamp",
-          false
+          false,
         ),
-        "Kappa Keepo PogChamp"
+        "Kappa Keepo PogChamp",
       );
 
       end();

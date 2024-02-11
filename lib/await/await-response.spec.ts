@@ -66,7 +66,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter failure: Bad response message: PONG :tmi.twitch.tv",
         MessageError,
-        "Bad response message: PONG :tmi.twitch.tv"
+        "Bad response message: PONG :tmi.twitch.tv",
       );
       assert.deepStrictEqual(client.pendingResponses, []);
 
@@ -75,7 +75,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter failure: Bad response message: PONG :tmi.twitch.tv",
         MessageError,
-        "Bad response message: PONG :tmi.twitch.tv"
+        "Bad response message: PONG :tmi.twitch.tv",
       );
     });
 
@@ -98,7 +98,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter failure: Connection closed with no error",
         ConnectionError,
-        "Connection closed with no error"
+        "Connection closed with no error",
       );
 
       // the client is closed so the error occurring after close is not
@@ -137,7 +137,7 @@ describe("./await/await-response", function () {
         ConnectionError,
         "Error occurred in transport layer: peer reset connection",
         Error,
-        "peer reset connection"
+        "peer reset connection",
       );
 
       await assertErrorChain(
@@ -145,7 +145,7 @@ describe("./await/await-response", function () {
         ConnectionError,
         "Error occurred in transport layer: peer reset connection",
         Error,
-        "peer reset connection"
+        "peer reset connection",
       );
 
       await assertErrorChain(
@@ -157,7 +157,7 @@ describe("./await/await-response", function () {
         ConnectionError,
         "Error occurred in transport layer: peer reset connection",
         Error,
-        "peer reset connection"
+        "peer reset connection",
       );
     });
 
@@ -182,7 +182,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter failure: Timed out after waiting for response for 3000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 3000 milliseconds"
+        "Timed out after waiting for response for 3000 milliseconds",
       );
       vi.useRealTimers();
     });
@@ -232,7 +232,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter1 failure: Timed out after waiting for response for 1000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 1000 milliseconds"
+        "Timed out after waiting for response for 1000 milliseconds",
       );
 
       vi.advanceTimersByTime(1000);
@@ -241,7 +241,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter2 failure: Timed out after waiting for response for 1000 milliseconds",
         TimeoutError,
-        "Timed out after waiting for response for 1000 milliseconds"
+        "Timed out after waiting for response for 1000 milliseconds",
       );
       vi.useRealTimers();
     });
@@ -271,7 +271,7 @@ describe("./await/await-response", function () {
         BaseError,
         "test awaiter1 failure: A response to a command issued later than this command was received",
         TimeoutError,
-        "A response to a command issued later than this command was received"
+        "A response to a command issued later than this command was received",
       );
 
       const matchedMsg = await promise2;

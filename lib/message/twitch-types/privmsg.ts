@@ -122,7 +122,7 @@ export class PrivmsgMessage
     super(ircMessage);
 
     const { isAction, message } = parseActionAndMessage(
-      requireParameter(this, 1)
+      requireParameter(this, 1),
     );
     this.messageText = message;
     this.isAction = isAction;
@@ -156,7 +156,7 @@ export class PrivmsgMessage
     this.flagsRaw = tagParser.getString("flags");
 
     this.replyParentDisplayName = tagParser.getTrimmedString(
-      "reply-parent-display-name"
+      "reply-parent-display-name",
     );
     this.replyParentMessageBody = tagParser.getString("reply-parent-msg-body");
     this.replyParentMessageID = tagParser.getString("reply-parent-msg-id");

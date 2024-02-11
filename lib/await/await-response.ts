@@ -100,7 +100,7 @@ export class ResponseAwaiter {
       const listener = this.beginTimeout.bind(this);
       this.conn.once("connect", listener);
       this.unsubscribers.push(() =>
-        this.conn.removeListener("connect", listener)
+        this.conn.removeListener("connect", listener),
       );
     }
   }
@@ -111,7 +111,7 @@ export class ResponseAwaiter {
    */
   public outpaced(): void {
     this.onNoResponse(
-      "A response to a command issued later than this command was received"
+      "A response to a command issued later than this command was received",
     );
   }
 
@@ -128,7 +128,7 @@ export class ResponseAwaiter {
     this.unsubscribe();
     const errorWithCause = this.config.errorType(
       this.config.errorMessage,
-      cause
+      cause,
     );
     process.nextTick(() => this.conn.emitError(errorWithCause, true));
     this.rejectPromise(errorWithCause);
@@ -173,7 +173,7 @@ export class ResponseAwaiter {
       // remove all awaiters, leading up to ourself
       const removedAwaiters = this.conn.pendingResponses.splice(
         0,
-        selfPosition + 1
+        selfPosition + 1,
       );
 
       // remove ourself
@@ -213,7 +213,7 @@ export class ResponseAwaiter {
 
   private subscribeTo(
     eventName: string,
-    handler: (...args: any[]) => any
+    handler: (...args: any[]) => any,
   ): void {
     handler = handler.bind(this);
     this.conn.on(eventName, handler);
@@ -225,19 +225,19 @@ export function awaitResponse(
   conn: SingleConnection,
   config: Omit<AwaitConfig, "noResponseAction"> & {
     noResponseAction: "success";
-  }
+  },
 ): Promise<IRCMessage | undefined>;
 
 export function awaitResponse(
   conn: SingleConnection,
   config: Omit<AwaitConfig, "noResponseAction"> & {
     noResponseAction?: "failure";
-  }
+  },
 ): Promise<IRCMessage>;
 
 export function awaitResponse(
   conn: SingleConnection,
-  config: AwaitConfig
+  config: AwaitConfig,
 ): Promise<IRCMessage | undefined> {
   return new ResponseAwaiter(conn, config).promise;
 }

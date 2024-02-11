@@ -5,7 +5,7 @@ import { Transport } from "./transport";
 import { WebSocketTransport } from "./websocket-transport";
 
 export function makeTransport(
-  config: ExpandedTransportConfiguration
+  config: ExpandedTransportConfiguration,
 ): Transport {
   switch (config.type) {
     case "tcp":

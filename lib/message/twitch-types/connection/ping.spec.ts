@@ -13,7 +13,7 @@ describe("./message/twitch-types/connection/ping", function () {
     });
     it("should be able to parse a real PING message with argument", function () {
       const msg = parseTwitchMessage(
-        ":tmi.twitch.tv PING tmi.twitch.tv :argument test"
+        ":tmi.twitch.tv PING tmi.twitch.tv :argument test",
       ) as PingMessage;
 
       assert.instanceOf(msg, PingMessage);

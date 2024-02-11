@@ -93,7 +93,7 @@ client.join("forsen");
     if (msg.isTimeout()) {
       console.log(
         `${msg.targetUsername} just got timed out for ` +
-          `${msg.banDuration} seconds in channel ${msg.channelName}`
+          `${msg.banDuration} seconds in channel ${msg.channelName}`,
       );
     }
   });
@@ -153,7 +153,7 @@ listed above) will still be emitted under their command name as an
 // :tmi.twitch.tv 372 botfactory :You are in a maze of twisty passages, all alike.
 // msg will be an instance of IRCMessage
 client.on("372", (msg) =>
-  console.log(`Server MOTD is: ${msg.ircParameters[1]}`)
+  console.log(`Server MOTD is: ${msg.ircParameters[1]}`),
 );
 ```
 
@@ -224,7 +224,7 @@ chatClient.on("USERNOTICE", (msg) => {
         msg.eventParams.subPlan +
         " (" +
         msg.eventParams.subPlanName +
-        ") sub for the first time!"
+        ") sub for the first time!",
     );
   } else if (msg.isResub()) {
     let streakMessage = "";
@@ -246,7 +246,7 @@ chatClient.on("USERNOTICE", (msg) => {
         msg.eventParams.cumulativeMonths +
         " months" +
         streakMessage +
-        "!"
+        "!",
     );
   }
   if (msg.messageText != null) {
@@ -256,7 +256,7 @@ chatClient.on("USERNOTICE", (msg) => {
     console.log(
       msg.displayName +
         " shared the following message with the streamer: " +
-        msg.messageText
+        msg.messageText,
     );
   } else {
     console.log("They did not share a message with the streamer.");
@@ -299,7 +299,7 @@ chatClient.on("USERNOTICE", (msg) => {
       msg.channelName +
       " with " +
       msg.eventParams.viewerCount +
-      " viewers!"
+      " viewers!",
   );
 });
 ```
@@ -342,7 +342,7 @@ chatClient.on("USERNOTICE", (msg) => {
         msg.eventParams +
         ") sub to " +
         msg.channelName +
-        "!"
+        "!",
     );
   } else {
     // Leppunen just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
@@ -358,7 +358,7 @@ chatClient.on("USERNOTICE", (msg) => {
         msg.channelName +
         ", that's " +
         msg.eventParams.months +
-        " in a row!"
+        " in a row!",
     );
   }
   // note: if the subgift was from an anonymous user, the sender user for the USERNOTICE message will be
@@ -404,7 +404,7 @@ chatClient.on("USERNOTICE", (msg) => {
         msg.eventParams +
         ") sub to " +
         msg.channelName +
-        "!"
+        "!",
     );
   } else {
     // An anonymous gifter just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
@@ -419,7 +419,7 @@ chatClient.on("USERNOTICE", (msg) => {
         msg.channelName +
         ", that's " +
         msg.eventParams.months +
-        " in a row!"
+        " in a row!",
     );
   }
 });
@@ -453,7 +453,7 @@ chatClient.on("USERNOTICE", (msg) => {
     msg.displayName +
       " is continuing their " +
       msg.channelName +
-      " gift sub they got from an anonymous user!"
+      " gift sub they got from an anonymous user!",
   );
 });
 ```
@@ -488,7 +488,7 @@ chatClient.on("USERNOTICE", (msg) => {
       msg.channelName +
       " gift sub they got from " +
       msg.msgParam.senderName +
-      "!"
+      "!",
   );
 });
 ```
@@ -519,11 +519,11 @@ chatClient.on("USERNOTICE", (msg) => {
   // Leppunen is new to ninja's chat! Say hello!
   if (msg.eventParams.ritualName === "new_chatter") {
     console.log(
-      msg.displayName + " is new to " + msg.channelName + "'s chat! Say hello!"
+      msg.displayName + " is new to " + msg.channelName + "'s chat! Say hello!",
     );
   } else {
     console.warn(
-      "Unknown (unhandled) ritual type: " + msg.eventParams.ritualName
+      "Unknown (unhandled) ritual type: " + msg.eventParams.ritualName,
     );
   }
 });
@@ -556,7 +556,7 @@ chatClient.on("USERNOTICE", (msg) => {
       msg.threshold +
       " bits badge in " +
       msg.channelName +
-      "'s channel!"
+      "'s channel!",
   );
 });
 ```

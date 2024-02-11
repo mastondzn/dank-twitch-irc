@@ -46,7 +46,7 @@ describe("./mixins/userstate-tracker", function () {
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers"),
-        expectedState
+        expectedState,
       );
     });
 
@@ -64,7 +64,7 @@ describe("./mixins/userstate-tracker", function () {
           "1349,3188,4236,13653,15961,19194,22197,103040,164050,540476" +
           ",588170,669914,771847,1537468,1641460,1641461,1641462,30020" +
           "6307;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE" +
-          " #randers"
+          " #randers",
       );
 
       await promisify(setImmediate)();
@@ -72,8 +72,8 @@ describe("./mixins/userstate-tracker", function () {
       assert(
         listenerCallback.calledOnceWithExactly(
           "randers",
-          userStateTracker.getChannelState("randers")
-        )
+          userStateTracker.getChannelState("randers"),
+        ),
       );
     });
 
@@ -117,15 +117,15 @@ describe("./mixins/userstate-tracker", function () {
           "emote-sets=0,42,237,954,1349,3188,4236,13653,15961,191" +
           "94,22197,103040,164050,540476,588170,669914,771849,151" +
           "1983,1641460,1641461,1641462,300206298;user-id=4028630" +
-          "0;user-type= :tmi.twitch.tv GLOBALUSERSTATE"
+          "0;user-type= :tmi.twitch.tv GLOBALUSERSTATE",
       );
 
       await promisify(setImmediate)();
 
       assert(
         listenerCallback.calledOnceWithExactly(
-          userStateTracker.getGlobalState()
-        )
+          userStateTracker.getGlobalState(),
+        ),
       );
     });
 
@@ -172,7 +172,7 @@ describe("./mixins/userstate-tracker", function () {
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers"),
-        secondMessageState
+        secondMessageState,
       );
 
       // message from another user
@@ -189,7 +189,7 @@ describe("./mixins/userstate-tracker", function () {
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers"),
-        secondMessageState
+        secondMessageState,
       );
 
       // a new badge
@@ -210,12 +210,12 @@ describe("./mixins/userstate-tracker", function () {
           new TwitchBadge("broadcaster", "1"),
           new TwitchBadge("subscriber", "0"),
           new TwitchBadge("glhf-pledge", "1"),
-        ]
+        ],
       );
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers")!.badgesRaw,
-        "broadcaster/1,subscriber/0,glhf-pledge/1"
+        "broadcaster/1,subscriber/0,glhf-pledge/1",
       );
 
       client.close();

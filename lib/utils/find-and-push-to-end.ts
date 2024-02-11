@@ -1,6 +1,6 @@
 function findByPredicate<T>(
   arr: T[],
-  filter: (t: T) => boolean
+  filter: (t: T) => boolean,
 ): { index: number; value: T } | undefined {
   for (const [index, value] of arr.entries()) {
     if (filter(value)) {
@@ -13,7 +13,7 @@ function findByPredicate<T>(
 
 export function findAndPushToEnd<T>(
   arr: T[],
-  filter: (t: T) => boolean
+  filter: (t: T) => boolean,
 ): T | undefined {
   const result = findByPredicate(arr, filter);
   if (result == null) {

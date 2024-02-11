@@ -14,7 +14,7 @@ describe("./message/twitch-types/globaluserstate", function () {
         "user-id=40286300;user-type= :tmi.twitch.tv GLOBALUSERSTATE";
 
       const msg: GlobaluserstateMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as GlobaluserstateMessage;
 
       assert.instanceOf(msg, GlobaluserstateMessage);
@@ -24,7 +24,7 @@ describe("./message/twitch-types/globaluserstate", function () {
 
       assert.deepStrictEqual(
         msg.badges,
-        new TwitchBadgesList(new TwitchBadge("bits-charity", "1"))
+        new TwitchBadgesList(new TwitchBadge("bits-charity", "1")),
       );
       assert.strictEqual(msg.badgesRaw, "bits-charity/1");
 
@@ -63,7 +63,7 @@ describe("./message/twitch-types/globaluserstate", function () {
       assert.strictEqual(
         msg.emoteSetsRaw,
         "0,42,237,1564,1627,1937,2344,2470,4236,14417,15961,19194,198648," +
-          "241281,445556,520063,771848,905510,1056965,1537462,1598955,1641460,1641461,1641462,300206295"
+          "241281,445556,520063,771848,905510,1056965,1537462,1598955,1641460,1641461,1641462,300206295",
       );
 
       assert.strictEqual("40286300", msg.userID);
@@ -121,7 +121,7 @@ describe("./message/twitch-types/globaluserstate", function () {
         "user-type= :tmi.twitch.tv GLOBALUSERSTATE";
 
       const msg: GlobaluserstateMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as GlobaluserstateMessage;
 
       assert.instanceOf(msg, GlobaluserstateMessage);
@@ -167,13 +167,13 @@ describe("./message/twitch-types/globaluserstate", function () {
         "user-type= :tmi.twitch.tv GLOBALUSERSTATE";
 
       const msg: GlobaluserstateMessage = parseTwitchMessage(
-        msgText
+        msgText,
       ) as GlobaluserstateMessage;
 
       assert.strictEqual(msg.displayName, "receivertest3");
       assert.strictEqual(
         msg.extractGlobalUserState().displayName,
-        "receivertest3"
+        "receivertest3",
       );
     });
   });

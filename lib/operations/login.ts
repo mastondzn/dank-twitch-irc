@@ -9,7 +9,7 @@ export class LoginError extends ConnectionError {}
 export async function sendLogin(
   conn: SingleConnection,
   username: string,
-  password?: string
+  password?: string,
 ): Promise<void> {
   if (password != null) {
     if (!isAnonymousUsername(username) && !password.startsWith("oauth:")) {

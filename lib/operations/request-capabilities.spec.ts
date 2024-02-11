@@ -14,28 +14,28 @@ describe("./operations/request-capabilities", function () {
     it("should only return true if given capabilities are a subset of requested capabilities", function () {
       assert.isTrue(
         acknowledgesCapabilities(["a", "b", "c"])(
-          parseTwitchMessage("CAP * ACK :a b c d")
-        )
+          parseTwitchMessage("CAP * ACK :a b c d"),
+        ),
       );
 
       assert.isTrue(
         acknowledgesCapabilities(["a", "b", "c"])(
-          parseTwitchMessage("CAP * ACK :c b a")
-        )
+          parseTwitchMessage("CAP * ACK :c b a"),
+        ),
       );
 
       assert.isFalse(
         acknowledgesCapabilities(["a", "b", "c"])(
-          parseTwitchMessage("CAP * ACK :a b")
-        )
+          parseTwitchMessage("CAP * ACK :a b"),
+        ),
       );
     });
 
     it("should only consider the ACK subcommand", function () {
       assert.isFalse(
         acknowledgesCapabilities(["a", "b", "c"])(
-          parseTwitchMessage("CAP * DEF :a b c")
-        )
+          parseTwitchMessage("CAP * DEF :a b c"),
+        ),
       );
     });
   });
@@ -44,28 +44,34 @@ describe("./operations/request-capabilities", function () {
     it("should return true if any given capability is rejected", function () {
       assert.isTrue(
         deniedAnyCapability(["a", "b", "c"])(
-          parseTwitchMessage("CAP * NAK :a b c")
-        )
+          parseTwitchMessage("CAP * NAK :a b c"),
+        ),
       );
 
       assert.isTrue(
-        deniedAnyCapability(["a", "b", "c"])(parseTwitchMessage("CAP * NAK :a"))
+        deniedAnyCapability(["a", "b", "c"])(
+          parseTwitchMessage("CAP * NAK :a"),
+        ),
       );
 
       assert.isTrue(
-        deniedAnyCapability(["a", "b", "c"])(parseTwitchMessage("CAP * NAK :c"))
+        deniedAnyCapability(["a", "b", "c"])(
+          parseTwitchMessage("CAP * NAK :c"),
+        ),
       );
 
       assert.isFalse(
-        deniedAnyCapability(["a", "b", "c"])(parseTwitchMessage("CAP * NAK :d"))
+        deniedAnyCapability(["a", "b", "c"])(
+          parseTwitchMessage("CAP * NAK :d"),
+        ),
       );
     });
 
     it("should only consider the NAK subcommand", function () {
       assert.isFalse(
         acknowledgesCapabilities(["a", "b", "c"])(
-          parseTwitchMessage("CAP * DEF :a")
-        )
+          parseTwitchMessage("CAP * DEF :a"),
+        ),
       );
     });
   });
@@ -104,7 +110,7 @@ describe("./operations/request-capabilities", function () {
 
       emitAndEnd(
         ":tmi.twitch.tv CAP * ACK :twitch.tv/commands",
-        ":tmi.twitch.tv CAP * NAK :twitch.tv/tags"
+        ":tmi.twitch.tv CAP * NAK :twitch.tv/tags",
       );
 
       await assertErrorChain(
@@ -114,7 +120,7 @@ describe("./operations/request-capabilities", function () {
           "twitch.tv/tags: Bad response message: :tmi.twitch.tv CAP " +
           "* NAK :twitch.tv/tags",
         MessageError,
-        "Bad response message: :tmi.twitch.tv CAP * NAK :twitch.tv/tags"
+        "Bad response message: :tmi.twitch.tv CAP * NAK :twitch.tv/tags",
       );
 
       await assertErrorChain(
@@ -124,7 +130,7 @@ describe("./operations/request-capabilities", function () {
           "twitch.tv/tags: Bad response message: :tmi.twitch.tv CAP * " +
           "NAK :twitch.tv/tags",
         MessageError,
-        "Bad response message: :tmi.twitch.tv CAP * NAK :twitch.tv/tags"
+        "Bad response message: :tmi.twitch.tv CAP * NAK :twitch.tv/tags",
       );
     });
   });

@@ -24,7 +24,7 @@ export interface RoomState {
 }
 
 export function hasAllStateTags(
-  partialRoomState: Partial<RoomState>
+  partialRoomState: Partial<RoomState>,
 ): partialRoomState is RoomState {
   return (
     partialRoomState.emoteOnly != null &&

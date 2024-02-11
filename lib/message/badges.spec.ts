@@ -35,7 +35,7 @@ describe("./message/badges", function () {
       list.push(
         new TwitchBadge("admin", "1"),
         new TwitchBadge("vip", "1"),
-        new TwitchBadge("subscriber", "12")
+        new TwitchBadge("subscriber", "12"),
       );
 
       assert.strictEqual("admin/1,vip/1,subscriber/12", list.toString());
@@ -46,7 +46,7 @@ describe("./message/badges", function () {
       list.push(
         new TwitchBadge("admin", "1"),
         new TwitchBadge("vip", "1"),
-        new TwitchBadge("subscriber", "12")
+        new TwitchBadge("subscriber", "12"),
       );
 
       assert.strictEqual("admin/1,vip/1,subscriber/12", `${list.toString()}`);

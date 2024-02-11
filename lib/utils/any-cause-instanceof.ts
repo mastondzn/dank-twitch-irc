@@ -9,7 +9,7 @@ export function causeOf(error: Error): Error | undefined {
 
 export function anyCauseInstanceof(
   error: Error | undefined,
-  constructor: any
+  constructor: any,
 ): boolean {
   let currentError: Error | undefined = error;
 
