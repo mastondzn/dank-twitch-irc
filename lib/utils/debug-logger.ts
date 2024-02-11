@@ -210,10 +210,9 @@ export type Logger = {
     level: string
   ): void;
 } & {
-  /**
-   * Provides access to all the specific level loggers, e.g. at <code>trace</code>, <code>warn</code>, etc..
-   */
-  [level: string]: LogFn;
+  trace: LogFn;
+  warn: LogFn;
+  debug: LogFn;
 };
 
 /**

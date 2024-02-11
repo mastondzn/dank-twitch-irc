@@ -39,7 +39,7 @@ export class WhisperMessage extends IRCMessage {
     const tagParser = tagParserFor(this.ircTags);
     this.senderUserID = tagParser.requireString("user-id");
 
-    this.recipientUsername = this.ircParameters[0];
+    this.recipientUsername = this.ircParameters[0]!;
 
     this.badges = tagParser.requireBadges("badges");
     this.badgesRaw = tagParser.requireString("badges");

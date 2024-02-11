@@ -11,9 +11,9 @@ export function parseColor(colorSrc: string): Color {
     );
   }
 
-  const r = parseInt(match[1], 16);
-  const g = parseInt(match[2], 16);
-  const b = parseInt(match[3], 16);
+  const r = parseInt(match[1]!, 16);
+  const g = parseInt(match[2]!, 16);
+  const b = parseInt(match[3]!, 16);
 
   return { r, g, b };
 }

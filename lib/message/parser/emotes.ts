@@ -16,9 +16,14 @@ export function parseEmotes(
   const messageCharacters = [...messageText];
 
   for (const emoteInstancesSrc of emotesSrc.split("/")) {
-    const [emoteID, instancesSrc] = emoteInstancesSrc.split(":", 2);
+    const [emoteID, instancesSrc] = emoteInstancesSrc.split(":", 2) as [
+      string,
+      string
+    ];
     for (const instanceSrc of instancesSrc.split(",")) {
-      let [startIndex, endIndex] = instanceSrc.split("-").map(parseIntThrowing);
+      let [startIndex, endIndex] = instanceSrc
+        .split("-", 2)
+        .map(parseIntThrowing) as [number, number];
       if (endIndex == null) {
         throw new ParseError(
           `No - found in emote index range "${instanceSrc}"`

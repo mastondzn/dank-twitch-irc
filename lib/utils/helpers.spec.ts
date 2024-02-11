@@ -210,9 +210,9 @@ export function fakeClient(connect = true): FakeClientData {
   }
 
   return {
-    emit: (...lines) => transports[0].emit(...lines),
+    emit: (...lines) => transports[0]!.emit(...lines),
     emitAndEnd: (...lines) => {
-      transports[0].emit(...lines);
+      transports[0]!.emit(...lines);
       setImmediate(() => client.destroy());
     },
     end: () => {

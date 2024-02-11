@@ -18,9 +18,14 @@ export function parseFlags(
   const messageCharacters = [...messageText];
 
   for (const flagInstancesSrc of flagsSrc.split(",")) {
-    const [indexes, instancesSrc] = flagInstancesSrc.split(":", 2);
+    const [indexes, instancesSrc] = flagInstancesSrc.split(":", 2) as [
+      string,
+      string
+    ];
 
-    let [startIndex, endIndex] = indexes.split("-").map((s) => Number(s));
+    let [startIndex, endIndex] = indexes!
+      .split("-", 2)
+      .map((s) => Number(s)) as [number, number];
 
     // to make endIndex exclusive
     endIndex = endIndex + 1;
@@ -40,7 +45,7 @@ export function parseFlags(
       if (instanceSrc.length > 0) {
         const [category, score] = instanceSrc.split(".");
         categories.push({
-          category,
+          category: category!,
           score: Number(score),
         });
       }

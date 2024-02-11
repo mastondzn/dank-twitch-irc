@@ -27,7 +27,7 @@ export function parseActionAndMessage(trailingParameter: string): {
   } else {
     return {
       isAction: true,
-      message: match[1],
+      message: match[1]!,
     };
   }
 }

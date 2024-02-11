@@ -11,8 +11,8 @@
     "lib": ["ES2022"],
     "target": "ES2022",
 
-    "strict": true
-    // "noUncheckedIndexedAccess": true // TODO: we will want this at some point
+    "strict": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["lib/**/*.ts"]
 }

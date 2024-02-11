@@ -162,8 +162,8 @@ describe("./modules/alternate-message-modifier", function () {
     it("should append invisible character through the say() function (case where we are joined to channel)", async function () {
       const { client, end, transports } = fakeClient();
       client.configuration.username = "randers";
-      client.connections[0].joinedChannels.add("forsen");
-      client.connections[0].wantedChannels.add("forsen");
+      client.connections[0]!.joinedChannels.add("forsen");
+      client.connections[0]!.wantedChannels.add("forsen");
 
       const messageModifier = new AlternateMessageModifier(client);
       client.use(messageModifier);
@@ -172,11 +172,11 @@ describe("./modules/alternate-message-modifier", function () {
 
       await promisify(setImmediate)();
 
-      assert.deepStrictEqual(transports[1].data, [
+      assert.deepStrictEqual(transports[1]!.data, [
         "PRIVMSG #forsen :Kappa Keepo PogChamp\r\n",
       ]);
 
-      transports[1].emit(
+      transports[1]!.emit(
         "@badge-info=subscriber/13;badges=subscriber/12,glhf-ple" +
           "dge/1;color=#19E6E6;display-name=randers;emote-sets=0,42,237" +
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
@@ -199,7 +199,7 @@ describe("./modules/alternate-message-modifier", function () {
         "Kappa Keepo PogChamp"
       );
 
-      transports[1].emit(
+      transports[1]!.emit(
         "@badge-info=subscriber/13;badges=subscriber/12," +
           "glhf-pledge/1;color=#19E6E6;display-name=randers;emote-o" +
           "nly=1;emotes=25:0-4/1902:6-10/88:12-19;flags=;id=bc4e1af" +
@@ -243,11 +243,11 @@ describe("./modules/alternate-message-modifier", function () {
 
       await promisify(setImmediate)();
 
-      assert.deepStrictEqual(transports[0].data, [
+      assert.deepStrictEqual(transports[0]!.data, [
         "PRIVMSG #forsen :Kappa Keepo PogChamp\r\n",
       ]);
 
-      transports[0].emit(
+      transports[0]!.emit(
         "@badge-info=subscriber/13;badges=subscriber/12,glhf-ple" +
           "dge/1;color=#19E6E6;display-name=randers;emote-sets=0,42,237" +
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
@@ -284,8 +284,8 @@ describe("./modules/alternate-message-modifier", function () {
     it("should append invisible character through the me() function (case where we are joined to channel)", async function () {
       const { client, end, transports } = fakeClient();
       client.configuration.username = "randers";
-      client.connections[0].joinedChannels.add("forsen");
-      client.connections[0].wantedChannels.add("forsen");
+      client.connections[0]!.joinedChannels.add("forsen");
+      client.connections[0]!.wantedChannels.add("forsen");
 
       const messageModifier = new AlternateMessageModifier(client);
       client.use(messageModifier);
@@ -294,11 +294,11 @@ describe("./modules/alternate-message-modifier", function () {
 
       await promisify(setImmediate)();
 
-      assert.deepStrictEqual(transports[1].data, [
+      assert.deepStrictEqual(transports[1]!.data, [
         "PRIVMSG #forsen :/me Kappa Keepo PogChamp\r\n",
       ]);
 
-      transports[1].emit(
+      transports[1]!.emit(
         "@badge-info=subscriber/13;badges=subscriber/12,glhf-ple" +
           "dge/1;color=#19E6E6;display-name=randers;emote-sets=0,42,237" +
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +
@@ -321,7 +321,7 @@ describe("./modules/alternate-message-modifier", function () {
         "Kappa Keepo PogChamp"
       );
 
-      transports[1].emit(
+      transports[1]!.emit(
         "@badge-info=subscriber/13;badges=subscriber/12," +
           "glhf-pledge/1;color=#19E6E6;display-name=randers;emote-o" +
           "nly=1;emotes=25:0-4/1902:6-10/88:12-19;flags=;id=bc4e1af" +
@@ -365,11 +365,11 @@ describe("./modules/alternate-message-modifier", function () {
 
       await promisify(setImmediate)();
 
-      assert.deepStrictEqual(transports[0].data, [
+      assert.deepStrictEqual(transports[0]!.data, [
         "PRIVMSG #forsen :/me Kappa Keepo PogChamp\r\n",
       ]);
 
-      transports[0].emit(
+      transports[0]!.emit(
         "@badge-info=subscriber/13;badges=subscriber/12,glhf-ple" +
           "dge/1;color=#19E6E6;display-name=randers;emote-sets=0,42,237" +
           ",954,1349,3188,4236,13653,15961,19194,22197,103040,164050,540" +

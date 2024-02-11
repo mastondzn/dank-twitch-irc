@@ -43,7 +43,8 @@ export function getParameter(
   message: Pick<IRCMessage, "ircParameters">,
   idx: number
 ): string {
-  return message.ircParameters[idx];
+  // TODO: check where this may result in undefined
+  return message.ircParameters[idx]!;
 }
 
 export function requireParameter(
@@ -54,7 +55,7 @@ export function requireParameter(
     throw new MissingDataError(`Parameter at index ${idx} missing`);
   }
 
-  return message.ircParameters[idx];
+  return message.ircParameters[idx]!;
 }
 
 export function requireNickname(
