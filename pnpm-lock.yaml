@@ -26,9 +26,6 @@ dependencies:
   make-error-cause:
     specifier: ^2.3.0
     version: 2.3.0
-  randombytes:
-    specifier: ^2.1.0
-    version: 2.1.0
   simple-websocket:
     specifier: ^9.1.0
     version: 9.1.0
@@ -37,15 +34,9 @@ dependencies:
     version: 4.2.0
 
 devDependencies:
-  '@types/chai':
-    specifier: ^4.3.1
-    version: 4.3.11
   '@types/chai-as-promised':
     specifier: ^7.1.5
     version: 7.1.8
-  '@types/debug':
-    specifier: ^4.1.7
-    version: 4.1.12
   '@types/duplexify':
     specifier: ^3.6.1
     version: 3.6.4
@@ -58,9 +49,6 @@ devDependencies:
   '@types/node':
     specifier: ^20.11.16
     version: 20.11.16
-  '@types/randombytes':
-    specifier: ^2.0.0
-    version: 2.0.3
   '@types/simple-websocket':
     specifier: ^7.0.3
     version: 7.0.6
@@ -70,9 +58,6 @@ devDependencies:
   '@types/split2':
     specifier: ^3.2.1
     version: 3.2.1
-  '@types/ws':
-    specifier: ^8.5.3
-    version: 8.5.10
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.19.0
     version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -95,8 +80,8 @@ devDependencies:
     specifier: ^8.13.0
     version: 8.56.0
   prettier:
-    specifier: ^2.6.2
-    version: 2.8.8
+    specifier: ^3.2.5
+    version: 3.2.5
   rimraf:
     specifier: ^5.0.5
     version: 5.0.5
@@ -712,12 +697,6 @@ packages:
     resolution: {integrity: sha512-qQR1dr2rGIHYlJulmr8Ioq3De0Le9E4MJ5AiaeAETJJpndT1uUNHsGFK3L/UIu+rbkQSdj8J/w2bCsBZc/Y5fQ==}
     dev: true
 
-  /@types/debug@4.1.12:
-    resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
-    dependencies:
-      '@types/ms': 0.7.34
-    dev: true
-
   /@types/duplexify@3.6.4:
     resolution: {integrity: sha512-2eahVPsd+dy3CL6FugAzJcxoraWhUghZGEQJns1kTKfCXWKJ5iG/VkaB05wRVrDKHfOFKqb0X0kXh91eE99RZg==}
     dependencies:
@@ -758,10 +737,6 @@ packages:
       '@types/unist': 2.0.10
     dev: true
 
-  /@types/ms@0.7.34:
-    resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
-    dev: true
-
   /@types/node@17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
     dev: true
@@ -770,12 +745,6 @@ packages:
     resolution: {integrity: sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
-
-  /@types/randombytes@2.0.3:
-    resolution: {integrity: sha512-+NRgihTfuURllWCiIAhm1wsJqzsocnqXM77V/CalsdJIYSRGEHMnritxh+6EsBklshC+clo1KgnN14qgSGeQdw==}
-    dependencies:
-      '@types/node': 17.0.45
     dev: true
 
   /@types/semver@7.5.6:
@@ -2549,9 +2518,9 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier@2.8.8:
-    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
-    engines: {node: '>=10.13.0'}
+  /prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+    engines: {node: '>=14'}
     hasBin: true
     dev: true
 
