@@ -1,0 +1,38 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.experimental.useFlatConfig": true,
+
+  "prettier.enable": true,
+  "prettier.prettierPath": "./node_modules/prettier",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+
+  "eslint.rules.customizations": [
+    { "rule": "style/*", "severity": "downgrade" },
+    { "rule": "format/*", "severity": "downgrade" },
+    { "rule": "*-indent", "severity": "downgrade" },
+    { "rule": "*-spacing", "severity": "downgrade" },
+    { "rule": "*-spaces", "severity": "downgrade" },
+    { "rule": "*-order", "severity": "downgrade" },
+    { "rule": "*-dangle", "severity": "downgrade" },
+    { "rule": "*-newline", "severity": "downgrade" },
+    { "rule": "*quotes", "severity": "downgrade" },
+    { "rule": "*semi", "severity": "downgrade" }
+  ],
+
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "toml"
+  ]
+}

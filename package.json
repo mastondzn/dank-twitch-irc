@@ -17,8 +17,8 @@
   ],
   "scripts": {
     "build": "tsup lib/index.ts --clean --dts --format cjs --format esm --external semaphore-async-await",
-    "lint": "eslint \"./lib\"",
-    "lint:fix": "eslint \"./lib\" --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier . --write !pnpm-lock.yaml",
     "format:check": "prettier --check . !pnpm-lock.yaml",
     "test": "vitest --exclude ./lib/utils/helpers.spec.ts",
@@ -46,6 +46,7 @@
     "split2": "^4.1.0"
   },
   "devDependencies": {
+    "@mastondzn/eslint": "^0.6.13",
     "@types/chai-as-promised": "^7.1.5",
     "@types/duplexify": "^3.6.1",
     "@types/lodash.camelcase": "^4.3.6",

@@ -164,4 +164,3 @@ fabric.properties
 /mocha-report/
 /test-results.xml
 .idea/
-.vscode/
