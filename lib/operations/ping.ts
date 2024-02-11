@@ -1,4 +1,4 @@
-import randombytes from "randombytes";
+import { randomBytes } from "crypto";
 import { awaitResponse } from "../await/await-response";
 import { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";
@@ -7,7 +7,7 @@ import { PongMessage } from "../message/twitch-types/connection/pong";
 export class PingTimeoutError extends ConnectionError {}
 
 function randomPingIdentifier(): string {
-  const randomHexString = randombytes(16).toString("hex").toLowerCase();
+  const randomHexString = randomBytes(16).toString("hex").toLowerCase();
   return `dank-twitch-irc:manual:${randomHexString}`;
 }
 
