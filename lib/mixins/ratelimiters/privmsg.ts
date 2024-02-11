@@ -1,4 +1,4 @@
-import Semaphore from "semaphore-async-await";
+import { Sema } from "async-sema";
 import { ChatClient } from "../../client/client";
 import { applyReplacements } from "../../utils/apply-function-replacements";
 import { ClientMixin } from "../base-mixin";
@@ -6,16 +6,16 @@ import { canSpamFast } from "./utils";
 
 export class PrivmsgMessageRateLimiter implements ClientMixin {
   private readonly client: ChatClient;
-  private readonly highPrivmsgSemaphore: Semaphore;
-  private readonly lowPrivmsgSemaphore: Semaphore;
+  private readonly highPrivmsgSemaphore: Sema;
+  private readonly lowPrivmsgSemaphore: Sema;
 
   public constructor(client: ChatClient) {
     this.client = client;
 
-    this.highPrivmsgSemaphore = new Semaphore(
+    this.highPrivmsgSemaphore = new Sema(
       this.client.configuration.rateLimits.highPrivmsgLimits
     );
-    this.lowPrivmsgSemaphore = new Semaphore(
+    this.lowPrivmsgSemaphore = new Sema(
       this.client.configuration.rateLimits.lowPrivmsgLimits
     );
   }

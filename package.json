@@ -35,6 +35,7 @@
   "license": "MIT",
   "repository": "https://github.com/kararty/dank-twitch-irc",
   "dependencies": {
+    "async-sema": "^3.1.1",
     "debug-logger": "^0.4.1",
     "duplexify": "^4.1.2",
     "eventemitter3": "^4.0.7",
@@ -42,7 +43,6 @@
     "lodash.pickby": "^4.6.0",
     "make-error-cause": "^2.3.0",
     "randombytes": "^2.1.0",
-    "semaphore-async-await": "^1.5.1",
     "simple-websocket": "^9.1.0",
     "split2": "^4.1.0"
   },

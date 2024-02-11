@@ -1,4 +1,4 @@
-import Semaphore from "semaphore-async-await";
+import { Sema } from "async-sema";
 import { ChatClient } from "../../client/client";
 import { SingleConnection } from "../../client/connection";
 import { applyReplacements } from "../../utils/apply-function-replacements";
@@ -9,16 +9,14 @@ export interface ConnectionRateLimits {
   releaseTime: number;
 }
 
-// TODO: replace semaphore-async-await with a async-sema/p-queue/p-limit
-
 export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
   private readonly client: ChatClient;
-  private readonly semaphore: Semaphore;
+  private readonly semaphore: Sema;
 
   public constructor(client: ChatClient) {
     this.client = client;
 
-    this.semaphore = new Semaphore(
+    this.semaphore = new Sema(
       this.client.configuration.connectionRateLimits.parallelConnections
     );
   }

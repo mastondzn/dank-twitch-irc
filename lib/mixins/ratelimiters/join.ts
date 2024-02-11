@@ -1,16 +1,16 @@
-import Semaphore from "semaphore-async-await";
+import { Sema } from "async-sema";
 import { ChatClient } from "../../client/client";
 import { applyReplacements } from "../../utils/apply-function-replacements";
 import { ClientMixin } from "../base-mixin";
 
 export class JoinRateLimiter implements ClientMixin {
   private readonly client: ChatClient;
-  private readonly joinLimitsSemaphore: Semaphore;
+  private readonly joinLimitsSemaphore: Sema;
 
   public constructor(client: ChatClient) {
     this.client = client;
 
-    this.joinLimitsSemaphore = new Semaphore(
+    this.joinLimitsSemaphore = new Sema(
       this.client.configuration.rateLimits.joinLimits
     );
   }
