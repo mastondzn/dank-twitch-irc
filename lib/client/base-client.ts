@@ -1,4 +1,4 @@
-import { EventEmitter } from "eventemitter3";
+import EventEmitter from "eventemitter3";
 import { ClientConfiguration } from "../config/config";
 import { expandConfig, ExpandedClientConfiguration } from "../config/expanded";
 import { IRCMessage } from "../message/irc/irc-message";

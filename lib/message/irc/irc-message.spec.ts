@@ -1,9 +1,8 @@
-import { assert } from "chai";
-import { assertThrowsChain } from "../../utils/testing";
+import { assertThrowsChain } from "../../utils/helpers.spec";
 import { parseIRCMessage } from "../parser/irc-message";
 import { MissingDataError } from "../parser/missing-data-error";
 import { requireNickname, requireParameter } from "./irc-message";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/irc/irc-message", function () {
   describe("#requireParameter()", function () {

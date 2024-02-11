@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { MissingTagError } from "./missing-tag-error";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/parser/missing-tag-error", function () {
   describe("MissingTagError", function () {

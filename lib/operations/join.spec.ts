@@ -1,11 +1,10 @@
-import { assert } from "chai";
 import { TimeoutError } from "../await/timeout-error";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { JoinMessage } from "../message/twitch-types/membership/join";
 import { joinChannel, JoinError, joinNothingToDo } from "./join";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 describe("./operations/join", function () {
   describe("#joinNotingToDo()", function () {

@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { decodeValue, parseTags } from "./tags";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/parser/tags", function () {
   describe("#decodeValue()", function () {

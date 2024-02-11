@@ -1,7 +1,6 @@
-import { assert } from "chai";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { matchingNotice } from "./conditions";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./await/conditions", function () {
   describe("#matchingNotice()", function () {

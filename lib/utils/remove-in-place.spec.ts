@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { removeInPlace } from "./remove-in-place";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/remove-in-place", function () {
   describe("#removeInPlace()", function () {

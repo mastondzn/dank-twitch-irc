@@ -1,5 +1,3 @@
-import { assert } from "chai";
-import { expectType } from "tsd";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";
@@ -10,7 +8,7 @@ import {
   SubEventParams,
   UsernoticeMessage,
 } from "./usernotice";
-import { describe, it } from "vitest";
+import { describe, expectTypeOf, it, assert } from "vitest";
 
 describe("./message/twitch-types/usernotice", function () {
   describe("#extractEventParams()", function () {
@@ -140,10 +138,13 @@ describe("./message/twitch-types/usernotice", function () {
 
       // typescript test:
       if (msg.isResub()) {
-        expectType<ResubUsernoticeMessage>(msg);
-        expectType<SubEventParams>(msg.eventParams);
-        expectType<number>(msg.eventParams.cumulativeMonths);
-        expectType<string>(msg.eventParams.cumulativeMonthsRaw);
+        expectTypeOf(msg).toMatchTypeOf<ResubUsernoticeMessage>();
+
+        expectTypeOf(msg.eventParams).toMatchTypeOf<SubEventParams>();
+        expectTypeOf(msg.eventParams.cumulativeMonths).toMatchTypeOf<number>();
+        expectTypeOf(
+          msg.eventParams.cumulativeMonthsRaw
+        ).toMatchTypeOf<string>();
       }
     });
 

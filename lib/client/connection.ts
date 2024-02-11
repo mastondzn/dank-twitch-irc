@@ -1,4 +1,4 @@
-import debugLogger from "debug-logger";
+import { debugLogger } from "../utils/debug-logger";
 import split2 from "split2";
 import { ResponseAwaiter } from "../await/await-response";
 import { ClientConfiguration } from "../config/config";
@@ -146,7 +146,7 @@ export class SingleConnection extends BaseClient {
       this.emitError(
         new ProtocolError(
           `Error while parsing IRC message from line "${line}"`,
-          e
+          e as Error
         )
       );
       return;

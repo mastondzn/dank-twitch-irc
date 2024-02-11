@@ -1,13 +1,12 @@
-import { assert } from "chai";
 import sinon from "sinon";
 import { promisify } from "util";
-import { fakeClient } from "../utils/testing";
+import { fakeClient } from "../utils/helpers.spec";
 import { TwitchBadge } from "../message/badge";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { GlobaluserstateMessage } from "../message/twitch-types/globaluserstate";
 import { UserstateMessage } from "../message/twitch-types/userstate";
 import { UserStateTracker } from "./userstate-tracker";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./mixins/userstate-tracker", function () {
   describe("UserstateTracker", function () {
@@ -150,7 +149,7 @@ describe("./mixins/userstate-tracker", function () {
 
       emit(firstMsg);
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       // PRIVMSG without a USERSTATE first does nothing
       assert.isUndefined(userStateTracker.getChannelState("randers"));
@@ -186,7 +185,7 @@ describe("./mixins/userstate-tracker", function () {
         "00.tmi.twitch.tv PRIVMSG #randers :asd2";
       emit(thirdMsg);
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers"),
@@ -203,7 +202,7 @@ describe("./mixins/userstate-tracker", function () {
         ".twitch.tv PRIVMSG #randers :asd2";
       emitAndEnd(fourthMsg);
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(
         userStateTracker.getChannelState("randers")!.badges,

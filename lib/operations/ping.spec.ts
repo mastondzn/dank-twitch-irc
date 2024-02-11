@@ -1,9 +1,8 @@
-import { assert } from "chai";
 import { TimeoutError } from "../await/timeout-error";
 import { ClientError, ConnectionError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { PingTimeoutError, sendPing } from "./ping";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 describe("./operations/ping", function () {
   describe("#sendPing()", function () {

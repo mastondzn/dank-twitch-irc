@@ -1,9 +1,8 @@
-import { assert } from "chai";
 import { TimeoutError } from "../await/timeout-error";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { joinNothingToDo } from "./join";
 import { partChannel, PartError, partNothingToDo } from "./part";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 describe("./operations/part", function () {
   describe("#partNothingToDo()", function () {

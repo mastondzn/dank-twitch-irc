@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { BaseError } from "./base-error";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/base-error", function () {
   describe("BaseError", function () {

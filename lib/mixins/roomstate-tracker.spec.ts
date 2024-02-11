@@ -1,9 +1,8 @@
-import { assert } from "chai";
 import sinon from "sinon";
 import { promisify } from "util";
-import { fakeClient } from "../utils/testing";
+import { fakeClient } from "../utils/helpers.spec";
 import { RoomStateTracker } from "./roomstate-tracker";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./mixins/roomstate-tracker", function () {
   describe("RoomstateTracker", function () {
@@ -77,7 +76,7 @@ describe("./mixins/roomstate-tracker", function () {
       emitAndEnd(
         "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers"
       );
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(roomStateTracker.getChannelState("randers"), {
         emoteOnly: false,

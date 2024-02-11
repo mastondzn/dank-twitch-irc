@@ -1,10 +1,9 @@
-import { assert } from "chai";
-import { assertThrowsChain } from "../../utils/testing";
+import { assertThrowsChain } from "../../utils/helpers.spec";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { parseBadges, parseSingleBadge } from "./badges";
 import { ParseError } from "./parse-error";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/parser/badges", function () {
   describe("#parseSingleBadge()", function () {

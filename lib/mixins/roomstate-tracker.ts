@@ -1,5 +1,5 @@
-import debugLogger from "debug-logger";
-import { EventEmitter } from "eventemitter3";
+import EventEmitter from "eventemitter3";
+import { debugLogger } from "../utils/debug-logger";
 import { ChatClient } from "../client/client";
 import {
   hasAllStateTags,

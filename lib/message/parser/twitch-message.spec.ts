@@ -1,4 +1,3 @@
-import { assert } from "chai";
 import { IRCMessage } from "../irc/irc-message";
 import { CapMessage } from "../twitch-types/cap";
 import { ClearchatMessage } from "../twitch-types/clearchat";
@@ -18,7 +17,7 @@ import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
 import { parseIRCMessage } from "./irc-message";
 import { parseTwitchMessage } from "./twitch-message";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/parser/twitch-message", function () {
   describe("#parseTwitchpMessage", function () {

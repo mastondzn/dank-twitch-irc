@@ -1,4 +1,4 @@
-import camelCase = require("lodash.camelcase");
+import camelCase from "lodash.camelcase";
 import { TwitchBadgesList } from "../badges";
 import { Color } from "../color";
 import { TwitchEmoteList } from "../emotes";

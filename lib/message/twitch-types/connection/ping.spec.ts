@@ -1,7 +1,6 @@
-import { assert } from "chai";
 import { parseTwitchMessage } from "../../parser/twitch-message";
 import { PingMessage } from "./ping";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/twitch-types/connection/ping", function () {
   describe("PingMessage", function () {

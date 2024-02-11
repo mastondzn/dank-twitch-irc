@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { assertThrowsChain } from "../utils/testing";
+import { assertThrowsChain } from "../utils/helpers.spec";
 import { validateChannelName } from "./channel";
 import { ValidationError } from "./validation-error";
 

@@ -1,8 +1,7 @@
-import { assert } from "chai";
 import { TwitchBadgesList } from "../badges";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { UserstateMessage } from "./userstate";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/twitch-types/userstate", function () {
   describe("UserstateMessage", function () {

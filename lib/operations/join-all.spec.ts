@@ -1,9 +1,8 @@
-import { assert } from "chai";
 import { TimeoutError } from "../await/timeout-error";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { JoinError } from "./join";
 import { joinAll } from "./join-all";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 function successResponsesForChannelChunk(channels: string[]): string[] {
   return channels.map(

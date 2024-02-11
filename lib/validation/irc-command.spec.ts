@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { assertThrowsChain } from "../utils/testing";
+import { assertThrowsChain } from "../utils/helpers.spec";
 import { validateIRCCommand } from "./irc-command";
 import { ValidationError } from "./validation-error";
 

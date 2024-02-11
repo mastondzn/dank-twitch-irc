@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { ignoreErrors } from "./ignore-errors";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/ignore-errors", function () {
   describe("#ignoreErrors()", function () {

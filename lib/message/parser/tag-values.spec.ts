@@ -1,15 +1,14 @@
-import { assert } from "chai";
-import { assertThrowsChain } from "../../utils/testing";
+import { assertThrowsChain } from "../../utils/helpers.spec";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";
 import { MissingTagError } from "./missing-tag-error";
 import { ParseError } from "./parse-error";
 import { tagParserFor, TagValueParser } from "./tag-values";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/parser/tag-values", function () {
-  function checkRequire<V, A extends any[]>(
+  function checkRequire<V, A extends unknown[]>(
     subject: (
       tagParser: TagValueParser
     ) => (key: string, ...converterArgs: A) => V,
@@ -219,6 +218,7 @@ describe("./message/parser/tag-values", function () {
 
   describe("#getTagEmotes()", function () {
     checkGet((p) => p.getEmotes, "lul");
+    // @ts-expect-error ???
     checkRequire((p) => p.requireEmoteSets, "lul");
 
     it("should return an empty list on empty string input", function () {

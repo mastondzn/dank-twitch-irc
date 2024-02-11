@@ -1,12 +1,11 @@
-import { assert } from "chai";
 import { ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { BaseError } from "../utils/base-error";
 import { ignoreErrors } from "../utils/ignore-errors";
 import { awaitResponse, ResponseAwaiter } from "./await-response";
 import { TimeoutError } from "./timeout-error";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 describe("./await/await-response", function () {
   describe("ResponseAwaiter", function () {

@@ -1,9 +1,8 @@
-import { assert } from "chai";
 import {
   applyReplacement,
   applyReplacements,
 } from "./apply-function-replacements";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/apply-function-replacements", function () {
   describe("#applyReplacement", function () {

@@ -1,4 +1,3 @@
-import debugLogger from "debug-logger";
 import { ClientConfiguration } from "../config/config";
 import { ClientMixin, ConnectionMixin } from "../mixins/base-mixin";
 import { IgnoreUnhandledPromiseRejectionsMixin } from "../mixins/ignore-promise-rejections";
@@ -23,6 +22,7 @@ import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
 import { ConnectionPool } from "../mixins/connection-pool";
 import { validateMessageID } from "../validation/reply";
+import { debugLogger } from "../utils/debug-logger";
 
 const log = debugLogger("dank-twitch-irc:client");
 

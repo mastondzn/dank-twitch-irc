@@ -1,8 +1,7 @@
-import { assert } from "chai";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { me, removeCommands, say, SayError } from "./say";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 describe("./operations/say", function () {
   describe("#removeCommands()", function () {

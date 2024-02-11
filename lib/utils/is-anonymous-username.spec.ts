@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { isAnonymousUsername } from "./is-anonymous-username";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/is-anonymous-username", function () {
   describe("#isAnonymousUsername()", function () {

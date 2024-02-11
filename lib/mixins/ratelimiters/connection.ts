@@ -9,6 +9,8 @@ export interface ConnectionRateLimits {
   releaseTime: number;
 }
 
+// TODO: replace semaphore-async-await with a async-sema/p-queue/p-limit
+
 export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
   private readonly client: ChatClient;
   private readonly semaphore: Semaphore;
@@ -55,8 +57,8 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
     // override transport.connect
     applyReplacements(this, connection.transport, {
       connect(
-        originalFn: (callback: () => void) => void,
-        connectionListener: () => void
+        originalFn: (callback?: () => void) => void,
+        connectionListener?: () => void
       ): void {
         this.acquire().then(() => {
           originalFn(connectionListener);

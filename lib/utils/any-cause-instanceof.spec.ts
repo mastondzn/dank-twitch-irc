@@ -1,7 +1,6 @@
-import { assert } from "chai";
 import { BaseError } from "make-error-cause";
 import { anyCauseInstanceof, causeOf } from "./any-cause-instanceof";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/any-cause-instanceof", function () {
   describe("#causeOf()", function () {

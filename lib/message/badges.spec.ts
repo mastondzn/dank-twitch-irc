@@ -1,7 +1,6 @@
-import { assert } from "chai";
 import { TwitchBadge } from "./badge";
 import { TwitchBadgesList } from "./badges";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/badges", function () {
   describe("TwitchBadgesList", function () {

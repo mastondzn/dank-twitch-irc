@@ -19,8 +19,8 @@ export class ConnectionPool implements ClientMixin {
   public applyToClient(client: ChatClient): void {
     client.connectionPool = this;
     const replacement = (
-      oldFn: (predicate: ConnectionPredicate) => SingleConnection,
-      predicate: ConnectionPredicate
+      oldFn: (predicate?: ConnectionPredicate) => SingleConnection,
+      predicate?: ConnectionPredicate
     ): SingleConnection => {
       this.ensureEnoughConnections();
       return oldFn(predicate);

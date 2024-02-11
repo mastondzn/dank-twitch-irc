@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/testing";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import {
   acknowledgesCapabilities,
@@ -8,7 +7,7 @@ import {
   deniedAnyCapability,
   requestCapabilities,
 } from "./request-capabilities";
-import { describe, it, vi } from "vitest";
+import { describe, it, vi, assert } from "vitest";
 
 describe("./operations/request-capabilities", function () {
   describe("#acknowledgesCapabilities()", function () {

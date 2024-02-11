@@ -1,7 +1,6 @@
-import { assert } from "chai";
 import { TwitchFlag } from "../flag";
 import { parseFlags } from "./flags";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/parser/flags", function () {
   describe("#parseFlags()", function () {

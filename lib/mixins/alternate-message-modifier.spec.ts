@@ -1,11 +1,10 @@
-import { assert } from "chai";
 import { promisify } from "util";
-import { fakeClient } from "../utils/testing";
+import { fakeClient } from "../utils/helpers.spec";
 import {
   AlternateMessageModifier,
   invisibleSuffix,
 } from "./alternate-message-modifier";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./modules/alternate-message-modifier", function () {
   describe("AlternateMessageModifier", () => {
@@ -137,7 +136,7 @@ describe("./modules/alternate-message-modifier", function () {
           "ppa Keepo PogChamp"
       );
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       // even though our last message was equal,
       // this should not append anything since fast spam
@@ -171,7 +170,7 @@ describe("./modules/alternate-message-modifier", function () {
 
       const sayPromise = client.say("forsen", "Kappa Keepo PogChamp");
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(transports[1].data, [
         "PRIVMSG #forsen :Kappa Keepo PogChamp\r\n",
@@ -211,7 +210,7 @@ describe("./modules/alternate-message-modifier", function () {
       );
       end();
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       // now our own message was received so it should have been set
       // as the last message.
@@ -242,7 +241,7 @@ describe("./modules/alternate-message-modifier", function () {
 
       const sayPromise = client.say("forsen", "Kappa Keepo PogChamp");
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(transports[0].data, [
         "PRIVMSG #forsen :Kappa Keepo PogChamp\r\n",
@@ -293,7 +292,7 @@ describe("./modules/alternate-message-modifier", function () {
 
       const mePromise = client.me("forsen", "Kappa Keepo PogChamp");
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(transports[1].data, [
         "PRIVMSG #forsen :/me Kappa Keepo PogChamp\r\n",
@@ -333,7 +332,7 @@ describe("./modules/alternate-message-modifier", function () {
       );
       end();
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       // now our own message was received so it should have been set
       // as the last message.
@@ -364,7 +363,7 @@ describe("./modules/alternate-message-modifier", function () {
 
       const mePromise = client.me("forsen", "Kappa Keepo PogChamp");
 
-      await promisify(setImmediate);
+      await promisify(setImmediate)();
 
       assert.deepStrictEqual(transports[0].data, [
         "PRIVMSG #forsen :/me Kappa Keepo PogChamp\r\n",

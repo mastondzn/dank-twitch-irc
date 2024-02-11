@@ -1,9 +1,8 @@
-import { assert } from "chai";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";
 import { parseTwitchMessage } from "../parser/twitch-message";
 import { WhisperMessage } from "./whisper";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./message/twitch-types/whisper", function () {
   describe("WhisperMessage", function () {

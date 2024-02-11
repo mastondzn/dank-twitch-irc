@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { setDefaults } from "./set-defaults";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/set-defaults", function () {
   describe("#setDefaults()", function () {

@@ -1,4 +1,4 @@
-import pickBy = require("lodash.pickby");
+import pickBy from "lodash.pickby";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
 import { IRCMessageData } from "../irc/irc-message";
 import { tagParserFor } from "../parser/tag-values";

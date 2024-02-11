@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { reasonForValue } from "./reason-for-value";
-import { describe, it } from "vitest";
+import { describe, it, assert } from "vitest";
 
 describe("./utils/reason-for-value", function () {
   describe("#reasonForValue()", function () {

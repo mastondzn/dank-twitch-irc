@@ -1,6 +1,3 @@
-import chai from "chai";
-import { assert } from "chai";
-import chaiAsPromised from "chai-as-promised";
 import { BaseError } from "make-error-cause";
 import sinon from "sinon";
 import { Duplex } from "stream";
@@ -8,7 +5,8 @@ import { inspect } from "util";
 import util from "util";
 import { ChatClient } from "../client/client";
 import { SingleConnection } from "../client/connection";
-import { afterEach } from "vitest";
+import { afterEach, assert, chai } from "vitest";
+import chaiAsPromised from "chai-as-promised";
 
 chai.config.includeStack = true;
 chai.use(chaiAsPromised);

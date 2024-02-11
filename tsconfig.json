@@ -2,10 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": { "*": ["types/*"] },
-    "moduleResolution": "node",
-    "lib": ["esnext"],
-    "target": "esnext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022"],
+    "target": "ES2022",
     "outDir": "./dist",
+    "strict": true,
     "declaration": true,
     "sourceMap": true,
     "declarationMap": true,
@@ -13,14 +14,15 @@
     "noImplicitAny": true,
     "strictPropertyInitialization": true,
     "experimentalDecorators": true,
-    "module": "commonjs",
+    "module": "ESNext",
+    "noEmit": true,
     "alwaysStrict": true,
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["./types", "./node_modules/@types"],
     "esModuleInterop": true,
-    "types": ["node"]
+    "types": []
   },
-  "include": ["lib/**/*.ts", "types/**/*.ts", "**.js", "vitest.config.mjs"]
+  "include": ["lib/**/*.ts"],
+  "exclude": ["lib/**/*.spec.ts"]
 }

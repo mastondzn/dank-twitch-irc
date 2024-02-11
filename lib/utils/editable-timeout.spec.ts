@@ -1,6 +1,5 @@
-import { assert } from "chai";
 import { EditableTimeout } from "./editable-timeout";
-import { afterEach, beforeEach, describe, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, it, vi, assert } from "vitest";
 
 beforeEach(() => {
   vi.useFakeTimers({ now: 5000 });
