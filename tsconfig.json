@@ -1,28 +1,18 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": { "*": ["types/*"] },
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+
+    "module": "ESNext",
     "moduleResolution": "Bundler",
+    "noEmit": true,
+
     "lib": ["ES2022"],
     "target": "ES2022",
-    "outDir": "./dist",
-    "strict": true,
-    "declaration": true,
-    "sourceMap": true,
-    "declarationMap": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictPropertyInitialization": true,
-    "experimentalDecorators": true,
-    "module": "ESNext",
-    "noEmit": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "types": []
+
+    "strict": true
+    // "noUncheckedIndexedAccess": true // TODO: we will want this at some point
   },
-  "include": ["lib/**/*.ts"],
-  "exclude": ["lib/**/*.spec.ts"]
+  "include": ["lib/**/*.ts"]
 }

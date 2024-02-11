@@ -4,26 +4,26 @@
   "description": "Twitch IRC library for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "type": "module",
   "files": [
-    "dist",
-    "types",
-    "lib"
+    "dist"
   ],
   "scripts": {
     "build": "tsup lib/index.ts --clean --dts --format cjs --format esm --external semaphore-async-await",
-    "check-format": "prettier --ignore-path .gitignore --check \"**/*.md\" \"**/*.js\" \"**/*.ts\" \"**/*.yml\" \"**/*.json\"",
     "lint": "eslint \"./lib\"",
-    "reformat": "prettier --ignore-path .gitignore --write \"**/*.md\" \"**/*.js\" \"**/*.ts\" \"**/*.yml\" \"**/*.json\"",
-    "lintfix": "eslint \"./lib\" --fix",
+    "lint:fix": "eslint \"./lib\" --fix",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.md\" \"**/*.js\" \"**/*.ts\" \"**/*.yml\" \"**/*.json\"",
+    "format:check": "prettier --ignore-path .gitignore --check \"**/*.md\" \"**/*.js\" \"**/*.ts\" \"**/*.yml\" \"**/*.json\"",
     "test": "vitest --exclude ./lib/utils/helpers.spec.ts",
     "clean": "rimraf ./dist ./coverage",
-    "generate-index": "npx create-ts-index@^1.10.2 create ./lib -w -i '.spec' && npm run reformat",
-    "precommit": "npm run clean && npm run build && npm run test && npm run reformat && npm run check-format --max-warnings=0",
-    "generate-readme-toc": "doctoc README.md --github --title \"## Table of Contents\" && prettier --write \"./README.md\"",
-    "preversion": "npm run check-format && npm run lint",
-    "version": "npm run reformat && npm run lintfix && git add -A lib",
-    "postversion": "git push && git push --tags"
+    "generate-readme-toc": "doctoc README.md --github --title \"## Table of Contents\" && prettier --write \"./README.md\""
   },
   "keywords": [
     "twitch",
@@ -77,8 +77,5 @@
   "bugs": {
     "url": "https://github.com/kararty/dank-twitch-irc/issues"
   },
-  "homepage": "https://github.com/kararty/dank-twitch-irc#readme",
-  "directories": {
-    "lib": "lib"
-  }
+  "homepage": "https://github.com/kararty/dank-twitch-irc#readme"
 }
