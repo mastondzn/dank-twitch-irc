@@ -1,8 +1,9 @@
 import { Sema } from "async-sema";
-import { ChatClient } from "../../client/client";
-import { applyReplacements } from "../../utils/apply-function-replacements";
-import { ClientMixin } from "../base-mixin";
+
 import { canSpamFast } from "./utils";
+import type { ChatClient } from "../../client/client";
+import { applyReplacements } from "../../utils/apply-function-replacements";
+import type { ClientMixin } from "../base-mixin";
 
 export class PrivmsgMessageRateLimiter implements ClientMixin {
   private readonly client: ChatClient;
@@ -21,16 +22,20 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
   }
 
   public applyToClient(client: ChatClient): void {
-    const genericReplacement = async <V, A extends any[]>(
-      oldFn: (channelName: string, ...args: A) => Promise<V>,
+    const genericReplacement = async <V, A extends unknown[]>(
+      oldFunction: (channelName: string, ...arguments_: A) => Promise<V>,
       channelName: string,
-      ...args: A
+      ...arguments_: A
+      // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<V> => {
-      const releaseFn = await this.acquire(channelName);
+      const releaseFunction = await this.acquire(channelName);
       try {
-        return await oldFn(channelName, ...args);
+        return await oldFunction(channelName, ...arguments_);
       } finally {
-        setTimeout(releaseFn, this.client.configuration.rateLimits.privmsgInMs);
+        setTimeout(
+          releaseFunction,
+          this.client.configuration.rateLimits.privmsgInMs,
+        );
       }
     };
 
@@ -48,13 +53,13 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
       this.client.userStateTracker,
     );
 
-    const promises: Promise<boolean>[] = [];
+    const promises: Promise<unknown>[] = [];
     promises.push(this.highPrivmsgSemaphore.acquire());
     if (!fastSpam) {
       promises.push(this.lowPrivmsgSemaphore.acquire());
     }
 
-    const releaseFn = (): void => {
+    const releaseFunction = (): void => {
       if (!fastSpam) {
         this.lowPrivmsgSemaphore.release();
       }
@@ -63,6 +68,6 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
     };
 
     await Promise.all(promises);
-    return releaseFn;
+    return releaseFunction;
   }
 }

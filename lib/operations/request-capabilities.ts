@@ -1,5 +1,6 @@
-import { awaitResponse, Condition } from "../await/await-response";
-import { SingleConnection } from "../client/connection";
+import type { Condition } from "../await/await-response";
+import { awaitResponse } from "../await/await-response";
+import type { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";
 import { CapMessage } from "../message/twitch-types/cap";
 
@@ -8,19 +9,19 @@ export class CapabilitiesError extends ConnectionError {}
 export function acknowledgesCapabilities(
   requestedCapabilities: string[],
 ): Condition {
-  return (e) =>
-    e instanceof CapMessage &&
-    e.subCommand === "ACK" &&
-    requestedCapabilities.every((cap) => e.capabilities.includes(cap));
+  return (event) =>
+    event instanceof CapMessage &&
+    event.subCommand === "ACK" &&
+    requestedCapabilities.every((cap) => event.capabilities.includes(cap));
 }
 
 export function deniedAnyCapability(
   requestedCapabilities: string[],
 ): Condition {
-  return (e) =>
-    e instanceof CapMessage &&
-    e.subCommand === "NAK" &&
-    requestedCapabilities.some((cap) => e.capabilities.includes(cap));
+  return (event) =>
+    event instanceof CapMessage &&
+    event.subCommand === "NAK" &&
+    requestedCapabilities.some((cap) => event.capabilities.includes(cap));
 }
 
 export async function requestCapabilities(

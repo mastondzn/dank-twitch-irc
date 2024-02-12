@@ -1,9 +1,11 @@
-import { Duplexify } from "duplexify";
+import { PassThrough } from "node:stream";
+
+import type { Duplexify } from "duplexify";
 import duplexify from "duplexify";
 import WebSocketDuplex from "simple-websocket";
-import { PassThrough } from "stream";
-import { ExpandedWebSocketTransportConfiguration } from "../../config/expanded";
-import { Transport } from "./transport";
+
+import type { Transport } from "./transport";
+import type { ExpandedWebSocketTransportConfiguration } from "../../config/expanded";
 
 export class WebSocketTransport implements Transport {
   public readonly stream: Duplexify;

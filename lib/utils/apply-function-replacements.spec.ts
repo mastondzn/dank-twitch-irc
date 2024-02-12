@@ -1,12 +1,13 @@
+import { assert, describe, it } from "vitest";
+
 import {
   applyReplacement,
   applyReplacements,
 } from "./apply-function-replacements";
-import { describe, it, assert } from "vitest";
 
-describe("./utils/apply-function-replacements", function () {
-  describe("#applyReplacement", function () {
-    it("should delegate execution properly", function () {
+describe("./utils/apply-function-replacements", () => {
+  describe("#applyReplacement", () => {
+    it("should delegate execution properly", () => {
       const self = {
         abc: "def",
       };
@@ -27,20 +28,20 @@ describe("./utils/apply-function-replacements", function () {
         target,
         "a",
         function a(
-          originalFn,
+          originalFunction,
           one: string,
           two: string,
           three: string,
         ): string {
           // test for the "this" reference in the replacement function
-          return originalFn(one, two, three) + this.abc;
+          return originalFunction(one, two, three) + this.abc;
         },
       );
 
       assert.strictEqual(target.a("1", "2", "3"), "KKona123def");
     });
 
-    it("should not create a enumerable property on the target object", function () {
+    it("should not create a enumerable property on the target object", () => {
       const self = {};
       class Target {
         public a(): string {
@@ -51,16 +52,16 @@ describe("./utils/apply-function-replacements", function () {
       const target = new Target();
       assert.deepStrictEqual(Object.keys(target), []);
 
-      applyReplacement(self, target, "a", function a(originalFn): string {
-        return originalFn();
+      applyReplacement(self, target, "a", (originalFunction): string => {
+        return originalFunction();
       });
 
       assert.deepStrictEqual(Object.keys(target), []);
     });
   });
 
-  describe("#applyReplacements()", function () {
-    it("should apply all replacements given in functions map", function () {
+  describe("#applyReplacements()", () => {
+    it("should apply all replacements given in functions map", () => {
       const self = {
         abc: "def",
       };
@@ -80,14 +81,14 @@ describe("./utils/apply-function-replacements", function () {
       const target = new Target();
 
       applyReplacements(self, target, {
-        a(originalFn: () => string) {
-          return originalFn() + "x";
+        a(originalFunction: () => string) {
+          return `${originalFunction()  }x`;
         },
-        b(originalFn: () => string) {
-          return originalFn() + "y";
+        b(originalFunction: () => string) {
+          return `${originalFunction()  }y`;
         },
-        c(originalFn: () => string) {
-          return originalFn() + "z";
+        c(originalFunction: () => string) {
+          return `${originalFunction()  }z`;
         },
       });
 

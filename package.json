@@ -1,17 +1,30 @@
 {
   "name": "@kararty/dank-twitch-irc",
+  "type": "module",
   "version": "6.2.0",
   "description": "Twitch IRC library for Node.js",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "author": "Ruben Anders",
+  "license": "MIT",
+  "homepage": "https://github.com/kararty/dank-twitch-irc#readme",
+  "repository": "https://github.com/kararty/dank-twitch-irc",
+  "bugs": {
+    "url": "https://github.com/kararty/dank-twitch-irc/issues"
+  },
+  "keywords": [
+    "twitch",
+    "irc",
+    "chat",
+    "tmi"
+  ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
-  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -25,15 +38,6 @@
     "clean": "rimraf ./dist ./coverage",
     "generate-readme-toc": "doctoc README.md --github --title \"## Table of Contents\" && prettier --write \"./README.md\""
   },
-  "keywords": [
-    "twitch",
-    "irc",
-    "chat",
-    "tmi"
-  ],
-  "author": "Ruben Anders",
-  "license": "MIT",
-  "repository": "https://github.com/kararty/dank-twitch-irc",
   "dependencies": {
     "async-sema": "^3.1.1",
     "debug-logger": "^0.4.1",
@@ -58,7 +62,6 @@
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "@vitest/coverage-v8": "^1.2.2",
-    "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "doctoc": "^2.1.0",
     "eslint": "^8.13.0",
@@ -69,9 +72,5 @@
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"
-  },
-  "bugs": {
-    "url": "https://github.com/kararty/dank-twitch-irc/issues"
-  },
-  "homepage": "https://github.com/kararty/dank-twitch-irc#readme"
+  }
 }

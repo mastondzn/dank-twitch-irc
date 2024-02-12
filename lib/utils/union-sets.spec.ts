@@ -1,9 +1,10 @@
-import { unionSets } from "./union-sets";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./utils/union-sets", function () {
-  describe("#unionSets()", function () {
-    it("should clone the set if 1 set is given", function () {
+import { unionSets } from "./union-sets";
+
+describe("./utils/union-sets", () => {
+  describe("#unionSets()", () => {
+    it("should clone the set if 1 set is given", () => {
       const original = new Set(["a", "c", "b"]);
 
       const result = unionSets([original]);
@@ -16,7 +17,7 @@ describe("./utils/union-sets", function () {
       assert.strictEqual(result.size, 3);
     });
 
-    it("should union 2 sets", function () {
+    it("should union 2 sets", () => {
       const originals = [
         new Set(["a", "b", "c"]),
         new Set(["c", "d", "e", "f"]),
@@ -27,7 +28,7 @@ describe("./utils/union-sets", function () {
       assert.sameMembers(["a", "b", "c", "d", "e", "f"], [...result]);
     });
 
-    it("should union 3 sets", function () {
+    it("should union 3 sets", () => {
       const originals = [
         new Set(["a", "b", "c"]),
         new Set(["c", "d", "e", "f"]),

@@ -1,31 +1,31 @@
 import { TwitchFlag } from "../flag";
-import { TwitchFlagList } from "../flags";
+import type { TwitchFlagList } from "../flags";
 
 export function parseFlags(
   messageText: string,
-  flagsSrc: string,
+  flagsSource: string,
 ): TwitchFlagList {
   const flags: TwitchFlagList = [];
 
-  const regex = /^(,?(?:[0-9]+-[0-9]+:)(?:(?:[ISAP]\.[0-9]+\/?)+)?)+$/g;
+  const regex = /^(,?\d+-\d+:(?:(?:[AIPS]\.\d+\/?)+)?)+$/g;
 
-  const matchFlagsSrc = flagsSrc.match(regex);
+  const matchFlagsSource = flagsSource.match(regex);
 
-  if (flagsSrc.length <= 0 || matchFlagsSrc === null) {
+  if (flagsSource.length <= 0 || matchFlagsSource === null) {
     return flags;
   }
 
   const messageCharacters = [...messageText];
 
-  for (const flagInstancesSrc of flagsSrc.split(",")) {
-    const [indexes, instancesSrc] = flagInstancesSrc.split(":", 2) as [
+  for (const flagInstancesSource of flagsSource.split(",")) {
+    const [indexes, instancesSource] = flagInstancesSource.split(":", 2) as [
       string,
       string,
     ];
 
-    let [startIndex, endIndex] = indexes!
+    let [startIndex, endIndex] = indexes
       .split("-", 2)
-      .map((s) => Number(s)) as [number, number];
+      .map(Number) as [number, number];
 
     // to make endIndex exclusive
     endIndex = endIndex + 1;
@@ -41,9 +41,9 @@ export function parseFlags(
     const flagText = messageCharacters.slice(startIndex, endIndex).join("");
 
     const categories: TwitchFlag["categories"] = [];
-    for (const instanceSrc of instancesSrc.split("/")) {
-      if (instanceSrc.length > 0) {
-        const [category, score] = instanceSrc.split(".");
+    for (const instanceSource of instancesSource.split("/")) {
+      if (instanceSource.length > 0) {
+        const [category, score] = instanceSource.split(".");
         categories.push({
           category: category!,
           score: Number(score),

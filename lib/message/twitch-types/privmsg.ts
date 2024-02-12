@@ -1,15 +1,16 @@
-import { TwitchBadgesList } from "../badges";
-import { Color } from "../color";
-import { TwitchEmoteList } from "../emotes";
-import { TwitchFlagList } from "../flags";
+import type { UserState } from "./userstate";
+import type { TwitchBadgesList } from "../badges";
+import type { Color } from "../color";
+import type { TwitchEmoteList } from "../emotes";
+import type { TwitchFlagList } from "../flags";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
+import type {
+  IRCMessage} from "../irc/irc-message";
 import {
-  IRCMessage,
   requireNickname,
   requireParameter,
 } from "../irc/irc-message";
 import { tagParserFor } from "../parser/tag-values";
-import { UserState } from "./userstate";
 
 // eslint-disable-next-line no-control-regex
 const actionRegex = /^\u0001ACTION (.*)\u0001$/;
@@ -19,17 +20,13 @@ export function parseActionAndMessage(trailingParameter: string): {
   message: string;
 } {
   const match: RegExpExecArray | null = actionRegex.exec(trailingParameter);
-  if (match == null) {
-    return {
+  return match == null ? {
       isAction: false,
       message: trailingParameter,
-    };
-  } else {
-    return {
+    } : {
       isAction: true,
       message: match[1]!,
     };
-  }
 }
 
 interface CheerPrivmsgMessage extends PrivmsgMessage {

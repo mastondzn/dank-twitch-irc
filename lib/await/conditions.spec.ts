@@ -1,51 +1,52 @@
-import { parseTwitchMessage } from "../message/parser/twitch-message";
-import { matchingNotice } from "./conditions";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./await/conditions", function () {
-  describe("#matchingNotice()", function () {
-    it("should not match anything that's not a NOTICE", function () {
-      const msg = parseTwitchMessage(
+import { matchingNotice } from "./conditions";
+import { parseTwitchMessage } from "../message/parser/twitch-message";
+
+describe("./await/conditions", () => {
+  describe("#matchingNotice()", () => {
+    it("should not match anything that's not a NOTICE", () => {
+      const message = parseTwitchMessage(
         "@msg-id=timeout_success :tmi.twitch.tv TEST #pajlada :WEEB123 has been timed out for 1 second.",
       );
-      assert.isFalse(matchingNotice("pajlada", ["timeout_success"])(msg));
+      assert.isFalse(matchingNotice("pajlada", ["timeout_success"])(message));
     });
 
-    it("should not match anything from the wrong channel", function () {
-      const msg = parseTwitchMessage(
+    it("should not match anything from the wrong channel", () => {
+      const message = parseTwitchMessage(
         "@msg-id=timeout_success :tmi.twitch.tv NOTICE #forsen :WEEB123 has been timed out for 1 second.",
       );
-      assert.isFalse(matchingNotice("pajlada", ["timeout_success"])(msg));
+      assert.isFalse(matchingNotice("pajlada", ["timeout_success"])(message));
     });
 
-    it("should not match any non-matching notice IDs", function () {
-      const msg = parseTwitchMessage(
+    it("should not match any non-matching notice IDs", () => {
+      const message = parseTwitchMessage(
         "@msg-id=timeout_success :tmi.twitch.tv NOTICE #pajlada :WEEB123 has been timed out for 1 second.",
       );
-      assert.isFalse(matchingNotice("pajlada", ["timeout_success_lol"])(msg));
-      assert.isTrue(matchingNotice("pajlada", ["timeout_success"])(msg));
+      assert.isFalse(matchingNotice("pajlada", ["timeout_success_lol"])(message));
+      assert.isTrue(matchingNotice("pajlada", ["timeout_success"])(message));
     });
 
-    it("should return false if msg-id is not present on the NOTICE message", function () {
-      const msg = parseTwitchMessage(
+    it("should return false if msg-id is not present on the NOTICE message", () => {
+      const message = parseTwitchMessage(
         ":tmi.twitch.tv NOTICE #pajlada :WEEB123 has been timed out for 1 second.",
       );
-      assert.isFalse(matchingNotice("pajlada", ["timeout_success"])(msg));
+      assert.isFalse(matchingNotice("pajlada", ["timeout_success"])(message));
     });
 
-    it("should return true for matching message", function () {
-      const msg1 = parseTwitchMessage(
+    it("should return true for matching message", () => {
+      const message1 = parseTwitchMessage(
         "@msg-id=timeout_success :tmi.twitch.tv NOTICE #pajlada :WEEB123 has been timed out for 1 second.",
       );
       assert.isTrue(
-        matchingNotice("pajlada", ["timeout_success", "lol"])(msg1),
+        matchingNotice("pajlada", ["timeout_success", "lol"])(message1),
       );
 
-      const msg2 = parseTwitchMessage(
+      const message2 = parseTwitchMessage(
         "@msg-id=lol :tmi.twitch.tv NOTICE #pajlada :WEEB123 has been timed out for 1 second.",
       );
       assert.isTrue(
-        matchingNotice("pajlada", ["timeout_success", "lol"])(msg2),
+        matchingNotice("pajlada", ["timeout_success", "lol"])(message2),
       );
     });
   });

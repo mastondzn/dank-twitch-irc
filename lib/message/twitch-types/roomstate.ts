@@ -1,6 +1,7 @@
 import pickBy from "lodash.pickby";
+
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
-import { IRCMessageData } from "../irc/irc-message";
+import type { IRCMessageData } from "../irc/irc-message";
 import { tagParserFor } from "../parser/tag-values";
 
 export interface RoomState {
@@ -79,7 +80,7 @@ export class RoomstateMessage extends ChannelIRCMessage {
     // this object has "undefined" mapped for missing properties,
     // but we want to return an object where those keys are not
     // even present.
-    const fullObj = {
+    const fullObject = {
       emoteOnly: this.emoteOnly,
       emoteOnlyRaw: this.emoteOnlyRaw,
 
@@ -96,6 +97,6 @@ export class RoomstateMessage extends ChannelIRCMessage {
       subscribersOnlyRaw: this.subscribersOnlyRaw,
     };
 
-    return pickBy(fullObj, (v) => v != null);
+    return pickBy(fullObject, (v) => v != null);
   }
 }

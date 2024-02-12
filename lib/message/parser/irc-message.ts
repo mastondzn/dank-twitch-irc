@@ -1,35 +1,35 @@
-import { IRCMessage } from "../irc/irc-message";
-import { IRCMessageTags } from "../irc/tags";
 import { ParseError } from "./parse-error";
 import { parseTags } from "./tags";
+import { IRCMessage } from "../irc/irc-message";
+import type { IRCMessageTags } from "../irc/tags";
 
-const VALID_CMD_REGEX = /^(?:[a-zA-Z]+|[0-9]{3})$/;
+const VALID_CMD_REGEX = /^(?:[A-Za-z]+|\d{3})$/;
 
-export function parseIRCMessage(messageSrc: string): IRCMessage {
-  let remainder = messageSrc;
+export function parseIRCMessage(messageSource: string): IRCMessage {
+  let remainder = messageSource;
 
   let ircTags: IRCMessageTags;
-  if (messageSrc.startsWith("@")) {
+  if (messageSource.startsWith("@")) {
     remainder = remainder.slice(1); // remove @ sign
 
-    const spaceIdx = remainder.indexOf(" ");
-    if (spaceIdx < 0) {
+    const spaceIndex = remainder.indexOf(" ");
+    if (spaceIndex < 0) {
       // not found
       throw new ParseError(
-        `No space found after tags declaration (given src: "${messageSrc}")`,
+        `No space found after tags declaration (given src: "${messageSource}")`,
       );
     }
 
-    const tagsSrc = remainder.slice(0, spaceIdx);
+    const tagsSource = remainder.slice(0, spaceIndex);
 
-    if (tagsSrc.length === 0) {
+    if (tagsSource.length === 0) {
       throw new ParseError(
-        `Empty tags declaration (nothing after @ sign) (given src: "${messageSrc}")`,
+        `Empty tags declaration (nothing after @ sign) (given src: "${messageSource}")`,
       );
     }
 
-    ircTags = parseTags(tagsSrc);
-    remainder = remainder.slice(spaceIdx + 1);
+    ircTags = parseTags(tagsSource);
+    remainder = remainder.slice(spaceIndex + 1);
   } else {
     ircTags = {};
   }
@@ -39,31 +39,24 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
   if (remainder.startsWith(":")) {
     remainder = remainder.slice(1); // remove : sign
 
-    const spaceIdx = remainder.indexOf(" ");
-    if (spaceIdx < 0) {
+    const spaceIndex = remainder.indexOf(" ");
+    if (spaceIndex < 0) {
       // not found
       throw new ParseError(
-        `No space found after prefix declaration (given src: "${messageSrc}")`,
+        `No space found after prefix declaration (given src: "${messageSource}")`,
       );
     }
 
-    ircPrefixRaw = remainder.slice(0, spaceIdx);
-    remainder = remainder.slice(spaceIdx + 1);
+    ircPrefixRaw = remainder.slice(0, spaceIndex);
+    remainder = remainder.slice(spaceIndex + 1);
 
     if (ircPrefixRaw.length === 0) {
       throw new ParseError(
-        `Empty prefix declaration (nothing after : sign) (given src: "${messageSrc}")`,
+        `Empty prefix declaration (nothing after : sign) (given src: "${messageSource}")`,
       );
     }
 
-    if (!ircPrefixRaw.includes("@")) {
-      // just a hostname or just a nickname
-      ircPrefix = {
-        nickname: undefined,
-        username: undefined,
-        hostname: ircPrefixRaw,
-      };
-    } else {
+    if (ircPrefixRaw.includes("@")) {
       // full prefix (nick[[!user]@host])
       // valid forms:
       // nick (but this is not really possible to differentiate
@@ -97,7 +90,7 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
         (user != null && user.length === 0)
       ) {
         throw new ParseError(
-          `Host, nick or user is empty in prefix (given src: "${messageSrc}")`,
+          `Host, nick or user is empty in prefix (given src: "${messageSource}")`,
         );
       }
 
@@ -106,69 +99,76 @@ export function parseIRCMessage(messageSrc: string): IRCMessage {
         username: user,
         hostname: host,
       };
+    } else {
+      // just a hostname or just a nickname
+      ircPrefix = {
+        nickname: undefined,
+        username: undefined,
+        hostname: ircPrefixRaw,
+      };
     }
   } else {
     ircPrefix = undefined;
     ircPrefixRaw = undefined;
   }
 
-  const spaceAfterCommandIdx = remainder.indexOf(" ");
+  const spaceAfterCommandIndex = remainder.indexOf(" ");
 
   let ircCommand;
   let ircParameters;
 
-  if (spaceAfterCommandIdx < 0) {
+  if (spaceAfterCommandIndex < 0) {
     // no space after commands, i.e. no params.
     ircCommand = remainder;
     ircParameters = [];
   } else {
     // split command off
-    ircCommand = remainder.slice(0, spaceAfterCommandIdx);
-    remainder = remainder.slice(spaceAfterCommandIdx + 1);
+    ircCommand = remainder.slice(0, spaceAfterCommandIndex);
+    remainder = remainder.slice(spaceAfterCommandIndex + 1);
 
     ircParameters = [];
 
     // introduce a new variable so it can be null (typescript shenanigans)
-    let paramsRemainder: string | null = remainder;
-    while (paramsRemainder !== null) {
-      if (paramsRemainder.startsWith(":")) {
+    let parametersRemainder: string | null = remainder;
+    while (parametersRemainder !== null) {
+      if (parametersRemainder.startsWith(":")) {
         // trailing param, remove : and consume the rest of the input
-        ircParameters.push(paramsRemainder.slice(1));
-        paramsRemainder = null;
+        ircParameters.push(parametersRemainder.slice(1));
+        parametersRemainder = null;
       } else {
         // middle param
-        const spaceIdx = paramsRemainder.indexOf(" ");
+        const spaceIndex = parametersRemainder.indexOf(" ");
 
-        let param;
-        if (spaceIdx < 0) {
+        let parameter;
+        if (spaceIndex < 0) {
           // no space found
-          param = paramsRemainder;
-          paramsRemainder = null;
+          parameter = parametersRemainder;
+          parametersRemainder = null;
         } else {
-          param = paramsRemainder.slice(0, spaceIdx);
-          paramsRemainder = paramsRemainder.slice(spaceIdx + 1);
+          parameter = parametersRemainder.slice(0, spaceIndex);
+          parametersRemainder = parametersRemainder.slice(spaceIndex + 1);
         }
 
-        if (param.length === 0) {
+        if (parameter.length === 0) {
           throw new ParseError(
-            `Too many spaces found while trying to parse middle parameters (given src: "${messageSrc}")`,
+            `Too many spaces found while trying to parse middle parameters (given src: "${messageSource}")`,
           );
         }
-        ircParameters.push(param);
+        ircParameters.push(parameter);
       }
     }
   }
 
   if (!VALID_CMD_REGEX.test(ircCommand)) {
     throw new ParseError(
-      `Invalid format for IRC command (given src: "${messageSrc}")`,
+      `Invalid format for IRC command (given src: "${messageSource}")`,
     );
   }
 
   ircCommand = ircCommand.toUpperCase();
 
   return new IRCMessage({
-    rawSource: messageSrc,
+    rawSource: messageSource,
     ircPrefixRaw,
     ircPrefix,
     ircCommand,

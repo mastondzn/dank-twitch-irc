@@ -1,12 +1,14 @@
-import { BaseError } from "make-error-cause";
+/* eslint-disable ts/no-explicit-any, ts/no-empty-function */
+import { Duplex } from "node:stream";
+import util, { inspect } from "node:util";
+
+import chaiAsPromised from "chai-as-promised";
+import type { BaseError } from "make-error-cause";
 import sinon from "sinon";
-import { Duplex } from "stream";
-import { inspect } from "util";
-import util from "util";
+import { afterEach, assert, chai } from "vitest";
+
 import { ChatClient } from "../client/client";
 import { SingleConnection } from "../client/connection";
-import { afterEach, assert, chai } from "vitest";
-import chaiAsPromised from "chai-as-promised";
 
 chai.config.includeStack = true;
 chai.use(chaiAsPromised);
@@ -16,18 +18,22 @@ afterEach(() => {
 });
 
 export function errorOf(p: Promise<any>): Promise<any> {
-  return p.catch((e) => e);
+  // eslint-disable-next-line ts/no-unsafe-return
+  return p.catch((error) => error);
 }
 
 export async function causeOf(p: Promise<any>): Promise<any> {
+  // eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-member-access
   return (await errorOf(p)).cause;
 }
 
-function assertLink(e: Error, chain: any[], depth = 0): void {
+function assertLink(error: Error, chain: unknown[], depth = 0): void {
   const [errorType, message, ...newChain] = chain;
 
-  const actualPrototype = Object.getPrototypeOf(e);
-  const expectedPrototype = errorType.prototype;
+  const actualPrototype = Object.getPrototypeOf(
+    error,
+  ) as (typeof Error)["prototype"];
+  const expectedPrototype = (errorType as typeof Error).prototype;
   assert.strictEqual(
     actualPrototype,
     expectedPrototype,
@@ -37,18 +43,18 @@ function assertLink(e: Error, chain: any[], depth = 0): void {
   );
 
   assert.strictEqual(
-    e.message,
+    error.message,
     message,
-    `Error at depth ${depth} should have error message "${message}"`,
+    `Error at depth ${depth} should have error message "${message as string}"`,
   );
 
-  // @ts-ignore e.cause is unknown to the compiler
-  const cause: Error | undefined = e.cause;
+  // @ts-expect-error e.cause is unknown to the compiler
+  const cause: Error | undefined = error.cause;
   if (newChain.length > 0) {
-    assert("cause" in e, `Error at depth ${depth} should have a cause`);
+    assert("cause" in error, `Error at depth ${depth} should have a cause`);
     assert(cause != null, `Error at depth ${depth} should have a cause`);
 
-    assertLink(cause!, newChain, depth + 1);
+    assertLink(cause, newChain, depth + 1);
   } else {
     assert(
       cause == null,
@@ -59,27 +65,33 @@ function assertLink(e: Error, chain: any[], depth = 0): void {
 }
 
 export function assertErrorChain(
-  p: Promise<any> | Promise<any>[],
+  promises: Promise<any> | Promise<any>[],
+
   ...chain: any[]
 ): Promise<void>;
-export function assertErrorChain(e: Error | undefined, ...chain: any[]): void;
-
 export function assertErrorChain(
-  e: Promise<any> | Promise<any>[] | Error | undefined,
+  error: Error | undefined,
+
+  ...chain: any[]
+): void;
+export function assertErrorChain(
+  errors: Promise<any> | Promise<any>[] | Error | undefined,
+
   ...chain: any[]
 ): Promise<void> | void {
-  if (e instanceof Error || e == null) {
-    assert(e != null, "Error must be non-null");
-    assertLink(e!, chain);
+  if (errors instanceof Error || errors == null) {
+    assert(errors != null, "Error must be non-null");
+    assertLink(errors, chain);
   } else {
     return (async () => {
-      if (!Array.isArray(e)) {
-        e = [e];
+      if (!Array.isArray(errors)) {
+        // eslint-disable-next-line ts/no-floating-promises
+        errors = [errors];
       }
 
-      for (const eElement of e) {
-        await assert.isRejected(eElement);
-        const error: BaseError = await errorOf(eElement);
+      for (const errorElement of errors) {
+        await assert.isRejected(errorElement);
+        const error = (await errorOf(errorElement)) as BaseError;
         assertLink(error, chain);
       }
     })();
@@ -89,21 +101,23 @@ export function assertErrorChain(
 export function assertThrowsChain(f: () => void, ...chain: any[]): void {
   try {
     f();
-  } catch (e) {
-    assertErrorChain(e as Error, ...chain);
+  } catch (error) {
+    // eslint-disable-next-line ts/no-unsafe-argument
+    assertErrorChain(error as Error, ...chain);
     return;
   }
 
   assert.fail("Function did not throw an exception");
 }
 
-export type MockTransportData = {
+export interface MockTransportData {
   transport: Duplex;
+
   data: any[];
   emit: (...lines: string[]) => void;
   end: (error?: Error) => void;
   emitAndEnd: (...lines: string[]) => void;
-};
+}
 
 export function createMockTransport(): MockTransportData {
   const data: any[] = [];
@@ -112,13 +126,14 @@ export function createMockTransport(): MockTransportData {
     autoDestroy: true,
     emitClose: true,
     decodeStrings: false, // for write operations
-    defaultEncoding: "utf-8", // for write operations
-    encoding: "utf-8", // for read operations
+    defaultEncoding: "utf8", // for write operations
+    encoding: "utf8", // for read operations
     write(
       chunk: any,
       encoding: string,
       callback: (error?: Error | null) => void,
     ): void {
+      // eslint-disable-next-line ts/no-unsafe-call, ts/no-unsafe-member-access
       data.push(chunk.toString());
       callback();
     },
@@ -126,7 +141,7 @@ export function createMockTransport(): MockTransportData {
   });
 
   const emit = (...lines: string[]): void => {
-    transport.push(lines.map((line) => line + "\r\n").join(""));
+    transport.push(lines.map((line) => `${line}\r\n`).join(""));
   };
 
   const end = (error?: Error): void => {
@@ -172,20 +187,20 @@ export function fakeConnection(): FakeConnectionData {
     ...transport,
     client: fakeConn,
     clientError: new Promise<void>((resolve, reject) => {
-      fakeConn.once("error", (e) => reject(e));
+      fakeConn.once("error", (error) => reject(error));
       fakeConn.once("close", () => resolve());
     }),
   };
 }
 
-export type FakeClientData = {
+export interface FakeClientData {
   client: ChatClient;
   clientError: Promise<void>;
   transports: MockTransportData[];
   emit: (...lines: string[]) => void;
   end: () => void;
   emitAndEnd: (...lines: string[]) => void;
-};
+}
 
 export function fakeClient(connect = true): FakeClientData {
   const transports: MockTransportData[] = [];
@@ -206,7 +221,7 @@ export function fakeClient(connect = true): FakeClientData {
   });
 
   if (connect) {
-    client.connect();
+    void client.connect();
   }
 
   return {
@@ -220,7 +235,7 @@ export function fakeClient(connect = true): FakeClientData {
     },
     client,
     clientError: new Promise<void>((resolve, reject) => {
-      client.once("error", (e) => reject(e));
+      client.once("error", (error) => reject(error));
       client.once("close", () => resolve());
     }),
     transports,

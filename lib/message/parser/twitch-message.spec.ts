@@ -1,3 +1,7 @@
+import { assert, describe, it } from "vitest";
+
+import { parseIRCMessage } from "./irc-message";
+import { parseTwitchMessage } from "./twitch-message";
 import { IRCMessage } from "../irc/irc-message";
 import { CapMessage } from "../twitch-types/cap";
 import { ClearchatMessage } from "../twitch-types/clearchat";
@@ -15,12 +19,10 @@ import { RoomstateMessage } from "../twitch-types/roomstate";
 import { UsernoticeMessage } from "../twitch-types/usernotice";
 import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
-import { parseIRCMessage } from "./irc-message";
-import { parseTwitchMessage } from "./twitch-message";
-import { describe, it, assert } from "vitest";
 
-describe("./message/parser/twitch-message", function () {
-  describe("#parseTwitchpMessage", function () {
+
+describe("./message/parser/twitch-message", () => {
+  describe("#parseTwitchpMessage", () => {
     const testCases = [
       {
         irc:
@@ -143,19 +145,19 @@ describe("./message/parser/twitch-message", function () {
       const ircMessage = parseIRCMessage(irc);
       const command = ircMessage.ircCommand;
 
-      it(`should map ${command} to ${instanceOf.name}`, function () {
+      it(`should map ${command} to ${instanceOf.name}`, () => {
         const twitchMessage = parseTwitchMessage(irc);
 
         assert.instanceOf(twitchMessage, instanceOf);
       });
     }
 
-    it("should leave unknown commands as bare IRCMessages", function () {
+    it("should leave unknown commands as bare IRCMessages", () => {
       const parsed = parseTwitchMessage(":tmi.twitch.tv UNKNOWN");
       assert.strictEqual(Object.getPrototypeOf(parsed), IRCMessage.prototype);
     });
 
-    it("should leave numeric commands as bare IRCMessages", function () {
+    it("should leave numeric commands as bare IRCMessages", () => {
       const parsed = parseTwitchMessage(":tmi.twitch.tv 001");
       assert.strictEqual(Object.getPrototypeOf(parsed), IRCMessage.prototype);
     });

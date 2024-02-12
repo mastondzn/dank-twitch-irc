@@ -1,19 +1,20 @@
 import { describe, it } from "vitest";
-import { assertThrowsChain } from "../utils/helpers.spec";
+
 import { validateChannelName } from "./channel";
 import { ValidationError } from "./validation-error";
+import { assertThrowsChain } from "../utils/helpers.spec";
 
-describe("./validation/channel", function () {
-  describe("#validateChannelName()", function () {
-    it("rejects undefined", function () {
+describe("./validation/channel", () => {
+  describe("#validateChannelName()", () => {
+    it("rejects undefined", () => {
       assertThrowsChain(
-        () => validateChannelName(undefined),
+        () => validateChannelName(),
         ValidationError,
         "Channel name undefined is invalid/malformed",
       );
     });
 
-    it("rejects null", function () {
+    it("rejects null", () => {
       assertThrowsChain(
         () => validateChannelName(null),
         ValidationError,
@@ -21,7 +22,7 @@ describe("./validation/channel", function () {
       );
     });
 
-    it("rejects empty strings", function () {
+    it("rejects empty strings", () => {
       assertThrowsChain(
         () => validateChannelName(""),
         ValidationError,
@@ -29,21 +30,21 @@ describe("./validation/channel", function () {
       );
     });
 
-    it("allows single letters", function () {
+    it("allows single letters", () => {
       validateChannelName("a");
       validateChannelName("b");
       validateChannelName("x");
       validateChannelName("z");
     });
 
-    it("allows underscores", function () {
+    it("allows underscores", () => {
       validateChannelName("a_b");
       validateChannelName("b___c");
       validateChannelName("lack_of_sanity");
       validateChannelName("just__get__a__house");
     });
 
-    it("rejects uppercase letters", function () {
+    it("rejects uppercase letters", () => {
       assertThrowsChain(
         () => validateChannelName("Pajlada"),
         ValidationError,

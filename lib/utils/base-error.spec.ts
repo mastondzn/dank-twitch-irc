@@ -1,9 +1,10 @@
-import { BaseError } from "./base-error";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./utils/base-error", function () {
-  describe("BaseError", function () {
-    it("should preserve the passed cause", function () {
+import { BaseError } from "./base-error";
+
+describe("./utils/base-error", () => {
+  describe("baseError", () => {
+    it("should preserve the passed cause", () => {
       const cause = new Error("cause msg");
       const error = new BaseError("error msg", cause);
 
@@ -11,14 +12,14 @@ describe("./utils/base-error", function () {
       assert.isUndefined(new BaseError("error msg").cause);
     });
 
-    it("should set resulting message to ownMessage: causeMessage if both are non-undefined", function () {
+    it("should set resulting message to ownMessage: causeMessage if both are non-undefined", () => {
       const cause = new Error("cause msg");
       const error = new BaseError("error msg", cause);
 
       assert.strictEqual(error.message, "error msg: cause msg");
     });
 
-    it("should set resulting message to causeMessage if only causeMessage is present", function () {
+    it("should set resulting message to causeMessage if only causeMessage is present", () => {
       const cause = new Error("cause msg");
       const error = new BaseError(undefined, cause);
 
@@ -28,7 +29,8 @@ describe("./utils/base-error", function () {
     it(
       "should set resulting message to ownMessage if only ownMessage is " +
         "present (case 1 where cause is present but cause has no message)",
-      function () {
+      () => {
+        // eslint-disable-next-line unicorn/error-message
         const cause = new Error();
         const error = new BaseError("error msg", cause);
 
@@ -39,7 +41,7 @@ describe("./utils/base-error", function () {
     it(
       "should set resulting message to ownMessage if only ownMessage is " +
         "present (case 2 where cause is not present)",
-      function () {
+      () => {
         const error = new BaseError("error msg");
 
         assert.strictEqual(error.message, "error msg");
@@ -49,7 +51,8 @@ describe("./utils/base-error", function () {
     it(
       "should set resulting message to empty string if " +
         "cause has no message",
-      function () {
+      () => {
+        // eslint-disable-next-line unicorn/error-message
         const cause = new Error();
         const error = new BaseError(undefined, cause);
 
@@ -57,7 +60,7 @@ describe("./utils/base-error", function () {
       },
     );
 
-    it("should set resulting message to empty string if there is no cause and no message", function () {
+    it("should set resulting message to empty string if there is no cause and no message", () => {
       const error = new BaseError();
 
       assert.strictEqual(error.message, "");

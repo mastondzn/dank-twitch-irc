@@ -1,19 +1,20 @@
 import { describe, it } from "vitest";
-import { assertThrowsChain } from "../utils/helpers.spec";
+
 import { validateMessageID } from "./reply";
 import { ValidationError } from "./validation-error";
+import { assertThrowsChain } from "../utils/helpers.spec";
 
-describe("./validation/reply", function () {
-  describe("#validateMessageID()", function () {
-    it("rejects undefined", function () {
+describe("./validation/reply", () => {
+  describe("#validateMessageID()", () => {
+    it("rejects undefined", () => {
       assertThrowsChain(
-        () => validateMessageID(undefined),
+        () => validateMessageID(),
         ValidationError,
         "Message ID undefined is invalid/malformed",
       );
     });
 
-    it("rejects null", function () {
+    it("rejects null", () => {
       assertThrowsChain(
         () => validateMessageID(null),
         ValidationError,
@@ -21,7 +22,7 @@ describe("./validation/reply", function () {
       );
     });
 
-    it("rejects empty strings", function () {
+    it("rejects empty strings", () => {
       assertThrowsChain(
         () => validateMessageID(""),
         ValidationError,
@@ -29,7 +30,7 @@ describe("./validation/reply", function () {
       );
     });
 
-    it("allows dashes", function () {
+    it("allows dashes", () => {
       validateMessageID("885196de-cb67-427a-baa8-82f9b0fcd05f");
       validateMessageID("8dfe2f75-a6c6-445a-927d-bfe7ad023c9f");
     });

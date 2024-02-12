@@ -1,6 +1,6 @@
+import type { IRCMessagePrefix } from "./prefix";
+import type { IRCMessageTags } from "./tags";
 import { MissingDataError } from "../parser/missing-data-error";
-import { IRCMessagePrefix } from "./prefix";
-import { IRCMessageTags } from "./tags";
 
 export interface IRCMessageData {
   readonly rawSource: string;
@@ -41,27 +41,27 @@ export class IRCMessage implements IRCMessageData {
 
 export function getParameter(
   message: Pick<IRCMessage, "ircParameters">,
-  idx: number,
+  index: number,
 ): string {
   // TODO: check where this may result in undefined
-  return message.ircParameters[idx]!;
+  return message.ircParameters[index]!;
 }
 
 export function requireParameter(
   message: Pick<IRCMessage, "ircParameters">,
-  idx: number,
+  index: number,
 ): string {
-  if (message.ircParameters.length <= idx) {
-    throw new MissingDataError(`Parameter at index ${idx} missing`);
+  if (message.ircParameters.length <= index) {
+    throw new MissingDataError(`Parameter at index ${index} missing`);
   }
 
-  return message.ircParameters[idx]!;
+  return message.ircParameters[index]!;
 }
 
 export function requireNickname(
   message: Pick<IRCMessage, "ircPrefix">,
 ): string {
-  if (message.ircPrefix == null || message.ircPrefix.nickname == null) {
+  if (message.ircPrefix?.nickname == null) {
     throw new MissingDataError("Missing prefix or missing nickname in prefix");
   }
 

@@ -1,4 +1,4 @@
-import { IRCMessageTags } from "../irc/tags";
+import type { IRCMessageTags } from "../irc/tags";
 
 const decodeMap: Record<string, string> = {
   "\\\\": "\\",
@@ -16,28 +16,28 @@ export function decodeValue(value: string | undefined): string | null {
   if (value == null) {
     return null;
   }
-  return value.replace(decodeLookupRegex, (m) => decodeMap[m] || "");
+  return value.replaceAll(decodeLookupRegex, (m) => decodeMap[m] ?? "");
 }
 
-export function parseTags(tagsSrc: string | undefined): IRCMessageTags {
+export function parseTags(tagsSource: string | undefined): IRCMessageTags {
   const tags: IRCMessageTags = {};
 
-  if (tagsSrc == null) {
+  if (tagsSource == null) {
     return tags;
   }
 
-  for (const tagSrc of tagsSrc.split(";")) {
-    const keyValueDelimiter: number = tagSrc.indexOf("=");
+  for (const tagSource of tagsSource.split(";")) {
+    const keyValueDelimiter: number = tagSource.indexOf("=");
 
     // ">>>" turns any negative `keyValueDelimiter` into the max uint32, so we get the entire tagSrc for the key.
-    const key = tagSrc.slice(0, keyValueDelimiter >>> 0);
+    const key = tagSource.slice(0, keyValueDelimiter >>> 0);
 
-    let valueSrc: string | null = null;
+    let valueSource: string | null = null;
     if (keyValueDelimiter !== -1) {
-      valueSrc = decodeValue(tagSrc.slice(keyValueDelimiter + 1));
+      valueSource = decodeValue(tagSource.slice(keyValueDelimiter + 1));
     }
 
-    tags[key] = valueSrc;
+    tags[key] = valueSource;
   }
 
   return tags;

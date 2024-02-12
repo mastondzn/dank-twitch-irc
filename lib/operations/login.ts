@@ -1,5 +1,5 @@
 import { awaitResponse } from "../await/await-response";
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";
 import { NoticeMessage } from "../message/twitch-types/notice";
 import { isAnonymousUsername } from "../utils/is-anonymous-username";
@@ -15,7 +15,7 @@ export async function sendLogin(
     if (!isAnonymousUsername(username) && !password.startsWith("oauth:")) {
       // don't append oauth: for the fake passwords that can be sent for
       // anonymous usernames, such as `PASS SCHMOOPIE`
-      password = "oauth:" + password;
+      password = `oauth:${  password}`;
     }
 
     conn.sendRaw(`PASS ${password}`);
@@ -28,8 +28,8 @@ export async function sendLogin(
   // e.g. :tmi.twitch.tv NOTICE * :Improperly formatted auth
   // or :tmi.twitch.tv NOTICE * :Login authentication failed
   await awaitResponse(conn, {
-    success: (msg) => msg.ircCommand === "001",
-    failure: (msg) => msg instanceof NoticeMessage,
+    success: (message) => message.ircCommand === "001",
+    failure: (message) => message instanceof NoticeMessage,
     errorType: (message, cause) => new LoginError(message, cause),
     errorMessage: "Failed to login",
   });

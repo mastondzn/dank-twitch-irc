@@ -1,6 +1,7 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
+
 import { awaitResponse } from "../await/await-response";
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";
 import { PongMessage } from "../message/twitch-types/connection/pong";
 
@@ -19,8 +20,8 @@ export async function sendPing(
   conn.sendRaw(`PING :${pingIdentifier}`);
 
   return (await awaitResponse(conn, {
-    success: (msg) =>
-      msg instanceof PongMessage && msg.argument === pingIdentifier,
+    success: (message) =>
+      message instanceof PongMessage && message.argument === pingIdentifier,
     timeout,
     errorType: (message, cause) => new PingTimeoutError(message, cause),
     errorMessage: "Server did not PONG back",

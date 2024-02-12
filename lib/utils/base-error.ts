@@ -5,17 +5,16 @@ export class BaseError extends OriginalBaseError {
     let newMessage;
     if (
       message != null &&
-      cause != null &&
-      cause.message != null &&
+      cause?.message != null &&
       cause.message.length > 0
     ) {
       newMessage = `${message}: ${cause.message}`;
     } else if (message != null) {
       newMessage = message;
-    } else if (cause != null && cause.message != null) {
-      newMessage = cause.message;
-    } else {
+    } else if (cause?.message == null) {
       newMessage = "";
+    } else {
+      newMessage = cause.message;
     }
 
     super(newMessage, cause);

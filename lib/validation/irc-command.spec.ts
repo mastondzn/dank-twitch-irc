@@ -1,11 +1,12 @@
 import { describe, it } from "vitest";
-import { assertThrowsChain } from "../utils/helpers.spec";
+
 import { validateIRCCommand } from "./irc-command";
 import { ValidationError } from "./validation-error";
+import { assertThrowsChain } from "../utils/helpers.spec";
 
-describe("./validation/irc-command", function () {
-  describe("#validateIRCCommand", function () {
-    it("should reject newlines", function () {
+describe("./validation/irc-command", () => {
+  describe("#validateIRCCommand", () => {
+    it("should reject newlines", () => {
       assertThrowsChain(
         () => validateIRCCommand("JOIN\n"),
         ValidationError,
@@ -28,7 +29,7 @@ describe("./validation/irc-command", function () {
       );
     });
 
-    it("should reject carriage returns", function () {
+    it("should reject carriage returns", () => {
       assertThrowsChain(
         () => validateIRCCommand("JOIN\r"),
         ValidationError,
@@ -51,7 +52,7 @@ describe("./validation/irc-command", function () {
       );
     });
 
-    it("should pass normal IRC commands", function () {
+    it("should pass normal IRC commands", () => {
       validateIRCCommand("JOIN");
       validateIRCCommand("");
       validateIRCCommand("PRIVMSG #forsen :asd");

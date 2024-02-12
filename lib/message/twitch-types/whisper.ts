@@ -1,6 +1,6 @@
-import { TwitchBadgesList } from "../badges";
-import { Color } from "../color";
-import { TwitchEmoteList } from "../emotes";
+import type { TwitchBadgesList } from "../badges";
+import type { Color } from "../color";
+import type { TwitchEmoteList } from "../emotes";
 import {
   IRCMessage,
   requireNickname,

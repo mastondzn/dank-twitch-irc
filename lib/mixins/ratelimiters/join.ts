@@ -1,7 +1,8 @@
 import { Sema } from "async-sema";
-import { ChatClient } from "../../client/client";
+
+import type { ChatClient } from "../../client/client";
 import { applyReplacements } from "../../utils/apply-function-replacements";
-import { ClientMixin } from "../base-mixin";
+import type { ClientMixin } from "../base-mixin";
 
 export class JoinRateLimiter implements ClientMixin {
   private readonly client: ChatClient;
@@ -16,53 +17,63 @@ export class JoinRateLimiter implements ClientMixin {
   }
 
   public applyToClient(client: ChatClient): void {
-    const joinReplacement = async <V, A extends any[]>(
-      oldFn: (channelName: string, ...args: A) => Promise<V>,
+    const joinReplacement = async <V, A extends unknown[]>(
+      oldFunction: (channelName: string, ...arguments_: A) => Promise<V>,
       channelName: string,
-      ...args: A
+      ...arguments_: A
+      // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<V> => {
-      const releaseFn = await this.acquire();
+      const releaseFunction = await this.acquire();
       try {
-        return await oldFn(channelName, ...args);
+        return await oldFunction(channelName, ...arguments_);
       } finally {
-        setTimeout(releaseFn, 10 * 1000); // 10 seconds per 20 joined channels.
+        setTimeout(releaseFunction, 10 * 1000); // 10 seconds per 20 joined channels.
       }
     };
 
-    const joinAllReplacement = async <A extends any[]>(
-      oldFn: (
+    const joinAllReplacement = async <A extends unknown[]>(
+      oldFunction: (
         channelNames: string[],
-        ...args: A
+        ...arguments_: A
       ) => Promise<Record<string, Error | undefined>>,
       channelNames: string[],
-      ...args: A
+      ...arguments_: A
+      // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<Record<string, Error | undefined>> => {
       const promiseResults = [];
 
       for (
-        let i = 0;
-        i < channelNames.length;
-        i += this.client.configuration.rateLimits.joinLimits
+        let index = 0;
+        index < channelNames.length;
+        index += this.client.configuration.rateLimits.joinLimits
       ) {
         const chunk = channelNames.slice(
-          i,
-          i + this.client.configuration.rateLimits.joinLimits,
+          index,
+          index + this.client.configuration.rateLimits.joinLimits,
         );
 
-        const releaseFns = await Promise.all(
-          Array(chunk.length)
-            .fill(this.acquire)
-            .map((fn) => fn.bind(this)()),
+        const acquireFunctions = Array.from({ length: chunk.length }).fill(
+          this.acquire.bind(this),
+        ) as (() => Promise<() => void>)[];
+
+        const releaseFunctions = await Promise.all(
+          acquireFunctions.map((acquire) => acquire()),
         );
+
         try {
-          const promiseRes = await oldFn(chunk, ...args);
-          promiseResults.push(promiseRes);
+          const result = await oldFunction(chunk, ...arguments_);
+          promiseResults.push(result);
         } finally {
-          releaseFns.forEach((releaseFn) => setTimeout(releaseFn, 10 * 1000)); // 10 seconds per 20 joined channels.
+          for (const releaseFunction of releaseFunctions) {
+            setTimeout(releaseFunction, 10 * 1000); // 10 seconds per 20 joined channels.
+          }
         }
       }
 
-      return promiseResults.reduce((acc, obj) => ({ ...acc, ...obj }), {});
+      return promiseResults.reduce(
+        (accumulator, object) => ({ ...accumulator, ...object }),
+        {},
+      );
     };
 
     applyReplacements(this, client, {
@@ -72,11 +83,7 @@ export class JoinRateLimiter implements ClientMixin {
   }
 
   private async acquire(): Promise<() => void> {
-    const releaseFn = (): void => {
-      this.joinLimitsSemaphore.release();
-    };
-
     await this.joinLimitsSemaphore.acquire();
-    return releaseFn;
+    return () => this.joinLimitsSemaphore.release();
   }
 }

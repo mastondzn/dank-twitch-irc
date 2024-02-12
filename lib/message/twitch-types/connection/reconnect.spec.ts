@@ -1,15 +1,16 @@
-import { parseTwitchMessage } from "../../parser/twitch-message";
-import { ReconnectMessage } from "./reconnect";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./message/twitch-types/connection/reconnect", function () {
-  describe("ReconnectMessage", function () {
-    it("should be able to parse a real RECONNECT message", function () {
-      const msg = parseTwitchMessage(
+import { ReconnectMessage } from "./reconnect";
+import { parseTwitchMessage } from "../../parser/twitch-message";
+
+describe("./message/twitch-types/connection/reconnect", () => {
+  describe("reconnectMessage", () => {
+    it("should be able to parse a real RECONNECT message", () => {
+      const message = parseTwitchMessage(
         ":tmi.twitch.tv RECONNECT",
       ) as ReconnectMessage;
 
-      assert.instanceOf(msg, ReconnectMessage);
+      assert.instanceOf(message, ReconnectMessage);
     });
   });
 });

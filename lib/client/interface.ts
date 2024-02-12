@@ -1,6 +1,6 @@
-import { IRCMessage } from "../message/irc/irc-message";
-import { TwitchCommands } from "../message/parser/twitch-message";
-import { SingleConnection } from "./connection";
+import type { SingleConnection } from "./connection";
+import type { IRCMessage } from "../message/irc/irc-message";
+import type { TwitchCommands } from "../message/parser/twitch-message";
 
 export enum ClientState {
   UNCONNECTED,
@@ -45,9 +45,7 @@ export type TwitchMessageEvents = {
 };
 
 // these are all other messages that are not mapped to twitch messages specifically, e.g. 001
-export interface IRCMessageEvents {
-  [command: string & Record<never, never>]: [IRCMessage];
-}
+export type IRCMessageEvents = Record<string & Record<never, never>, [IRCMessage]>;
 
 export type ClientEvents = SpecificClientEvents &
   TwitchMessageEvents &

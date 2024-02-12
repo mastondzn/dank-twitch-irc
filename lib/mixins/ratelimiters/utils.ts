@@ -1,4 +1,4 @@
-import { UserState } from "../../message/twitch-types/userstate";
+import type { UserState } from "../../message/twitch-types/userstate";
 import { UserStateTracker } from "../userstate-tracker";
 
 interface FastSpamResult {
@@ -30,12 +30,10 @@ export function canSpamFast(
     return { fastSpam: true, certain: true };
   }
 
-  let userState: UserState | undefined;
-  if (userStateInput instanceof UserStateTracker) {
-    userState = userStateInput.getChannelState(channelName);
-  } else {
-    userState = userStateInput;
-  }
+  const userState =
+    userStateInput instanceof UserStateTracker
+      ? userStateInput.getChannelState(channelName)
+      : userStateInput;
 
   // no data
   if (userState == null) {

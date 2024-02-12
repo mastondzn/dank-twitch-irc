@@ -1,11 +1,13 @@
 import camelCase from "lodash.camelcase";
-import { TwitchBadgesList } from "../badges";
-import { Color } from "../color";
-import { TwitchEmoteList } from "../emotes";
-import { TwitchFlagList } from "../flags";
+
+import type { TwitchBadgesList } from "../badges";
+import type { Color } from "../color";
+import type { TwitchEmoteList } from "../emotes";
+import type { TwitchFlagList } from "../flags";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
-import { getParameter, IRCMessageData } from "../irc/irc-message";
-import { IRCMessageTags } from "../irc/tags";
+import type { IRCMessageData } from "../irc/irc-message";
+import { getParameter } from "../irc/irc-message";
+import type { IRCMessageTags } from "../irc/tags";
 import {
   convertToBoolean,
   convertToInt,
@@ -14,7 +16,10 @@ import {
   tagParserFor,
 } from "../parser/tag-values";
 
-const convertersMap: Record<string, (value: string) => any> = {
+const convertersMap: Record<
+  string,
+  (value: string) => string | boolean | number
+> = {
   "msg-param-cumulative-months": convertToInt,
   "msg-param-gift-months": convertToInt,
   "msg-param-sender-count": convertToInt,
@@ -34,31 +39,26 @@ export function getCamelCasedName(tagKey: string): string {
   let newKey = tagKey;
 
   // remove the leading msg-param-
-  newKey = newKey.substring(10);
+  newKey = newKey.slice(10);
 
   // camel case
   newKey = camelCase(newKey);
 
   // convert somethingId to somethingID
-  newKey = newKey.replace(/Id$/g, "ID");
+  newKey = newKey.replaceAll(/Id$/g, "ID");
 
   // To be consistent with the rest of the library,
   // don't camelcase username as userName
-  newKey = newKey.replace(/([uU])serName/g, "$1sername");
+  newKey = newKey.replaceAll(/([Uu])serName/g, "$1sername");
 
   return newKey;
 }
 
-export interface EventParams {
-  [key: string]: string | number | boolean;
-}
+export type EventParameters = Record<string, string | number | boolean>;
+export type EventParametersMaybe = Record<string, string | undefined>;
 
-export interface EventParamsMaybe {
-  [key: string]: string | undefined;
-}
-
-export function extractEventParams(tags: IRCMessageTags): EventParams {
-  const params: EventParams = {};
+export function extractEventParameters(tags: IRCMessageTags): EventParameters {
+  const parameters: EventParameters = {};
 
   // converts all msg-param-* tags into a new "params" object where keys are camelCased
   // and boolean/integer tags are parsed (including a identically named "Raw" property).
@@ -71,36 +71,37 @@ export function extractEventParams(tags: IRCMessageTags): EventParams {
     }
 
     const newKey = getCamelCasedName(tagKey);
-
     const converter = convertersMap[tagKey];
-    if (converter != null) {
-      params[newKey] = requireData(tags, tagKey, converter);
-      params[newKey + "Raw"] = requireData(tags, tagKey, convertToString);
+    if (converter) {
+      parameters[newKey] = requireData(tags, tagKey, converter);
+      parameters[`${newKey}Raw`] = requireData(tags, tagKey, convertToString);
     } else {
-      params[newKey] = requireData(tags, tagKey, convertToString);
+      parameters[newKey] = requireData(tags, tagKey, convertToString);
     }
   }
 
-  return params;
+  return parameters;
 }
 
-export interface SharesStreakSubParams extends EventParams {
+export interface SharesStreakSubParameters extends EventParameters {
   shouldShareStreak: true;
   streakMonths: number;
   streakMonthsRaw: string;
 }
 
-export interface HiddenStreakSubParams extends EventParams {
+export interface HiddenStreakSubParameters extends EventParameters {
   shouldShareStreak: false;
   streakMonths: 0;
   streakMonthsRaw: "0";
 }
 
-export type StreakSubParams = SharesStreakSubParams | HiddenStreakSubParams;
+export type StreakSubParameters =
+  | SharesStreakSubParameters
+  | HiddenStreakSubParameters;
 
 // sub, resub
-export type SubEventParams = EventParams &
-  StreakSubParams & {
+export type SubEventParameters = EventParameters &
+  StreakSubParameters & {
     cumulativeMonths: number;
     cumulativeMonthsRaw: string;
 
@@ -109,7 +110,7 @@ export type SubEventParams = EventParams &
   };
 
 // raid
-export interface RaidParams extends EventParams {
+export interface RaidParameters extends EventParameters {
   displayName: string;
   login: string;
   viewerCount: number;
@@ -117,7 +118,7 @@ export interface RaidParams extends EventParams {
 }
 
 // subgift, anonsubgift
-export interface SubgiftParameters extends EventParams {
+export interface SubgiftParameters extends EventParameters {
   months: number;
   monthsRaw: string;
 
@@ -132,13 +133,13 @@ export interface SubgiftParameters extends EventParams {
 export type AnonSubgiftParameters = SubgiftParameters;
 
 // massgift
-export interface MassSubgiftParameters extends EventParams {
+export interface MassSubgiftParameters extends EventParameters {
   massGiftCount: number;
   subPlan: string;
 }
 
 // anongiftpaidupgrade
-export type AnonGiftPaidUpgradeParameters = EventParams & {
+export type AnonGiftPaidUpgradeParameters = EventParameters & {
   promoGiftTotal?: number;
   promoGiftTotalRaw?: string;
   promoName?: string;
@@ -151,24 +152,24 @@ export type GiftPaidUpgradeParameters = AnonGiftPaidUpgradeParameters & {
 };
 
 // ritual
-export interface RitualParameters extends EventParams {
+export interface RitualParameters extends EventParameters {
   ritualName: string;
 }
 
 // bitsbadgetier
-export interface BitsBadgeTierParameters extends EventParams {
+export interface BitsBadgeTierParameters extends EventParameters {
   threshold: number;
   thresholdRaw: string;
 }
 
 // announcement
-export interface AnnouncementParameters extends EventParamsMaybe {
+export interface AnnouncementParameters extends EventParametersMaybe {
   color?: string;
 }
 
 export interface SpecificUsernoticeMessage<
   I extends string,
-  E extends EventParams,
+  E extends EventParameters,
 > {
   readonly messageTypeID: I;
   readonly eventParams: E;
@@ -176,7 +177,7 @@ export interface SpecificUsernoticeMessage<
 
 export interface AnAnnouncementUsernoticeMessage<
   I extends string,
-  E extends EventParamsMaybe,
+  E extends EventParametersMaybe,
 > {
   readonly messageTypeID: I;
   readonly eventParams: E;
@@ -184,15 +185,15 @@ export interface AnAnnouncementUsernoticeMessage<
 
 export type SubUsernoticeMessage = SpecificUsernoticeMessage<
   "sub",
-  SubEventParams
+  SubEventParameters
 >;
 export type ResubUsernoticeMessage = SpecificUsernoticeMessage<
   "resub",
-  SubEventParams
+  SubEventParameters
 >;
 export type RaidUsernoticeMessage = SpecificUsernoticeMessage<
   "raid",
-  RaidParams
+  RaidParameters
 >;
 export type SubgiftUsernoticeMessage = SpecificUsernoticeMessage<
   "subgift",
@@ -293,7 +294,7 @@ export class UsernoticeMessage extends ChannelIRCMessage {
   public readonly serverTimestamp: Date;
   public readonly serverTimestampRaw: string;
 
-  public readonly eventParams: EventParams;
+  public readonly eventParams: EventParameters;
 
   public constructor(message: IRCMessageData) {
     super(message);
@@ -326,7 +327,7 @@ export class UsernoticeMessage extends ChannelIRCMessage {
     // trim: Twitch workaround for unsanitized data, see https://github.com/robotty/dank-twitch-irc/issues/33
     this.displayName = tagParser.requireString("display-name").trim();
 
-    if (this.messageText != null) {
+    if (this.messageText) {
       this.emotes = tagParser.requireEmotes("emotes", this.messageText);
       this.flags = tagParser.getFlags("flags", this.messageText);
     } else {
@@ -344,7 +345,7 @@ export class UsernoticeMessage extends ChannelIRCMessage {
     this.serverTimestamp = tagParser.requireTimestamp("tmi-sent-ts");
     this.serverTimestampRaw = tagParser.requireString("tmi-sent-ts");
 
-    this.eventParams = extractEventParams(this.ircTags);
+    this.eventParams = extractEventParameters(this.ircTags);
   }
 
   public isCheer(): this is CheerUsernoticeMessage {

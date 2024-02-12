@@ -1,5 +1,6 @@
+import { afterEach, assert, beforeEach, describe, it, vi } from "vitest";
+
 import { EditableTimeout } from "./editable-timeout";
-import { afterEach, beforeEach, describe, it, vi, assert } from "vitest";
 
 beforeEach(() => {
   vi.useFakeTimers({ now: 5000 });
@@ -9,15 +10,16 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe("./utils/editable-timeout", function () {
-  describe("EditableTimeout", function () {
-    it("should capture run time and current time at creation", function () {
+describe("./utils/editable-timeout", () => {
+  describe("editableTimeout", () => {
+    it("should capture run time and current time at creation", () => {
+      // eslint-disable-next-line ts/no-empty-function
       const timeout = new EditableTimeout(() => {}, 1234);
       assert.strictEqual(timeout.startTime, 5000);
       assert.strictEqual(timeout.runTime, 1234);
     });
 
-    it("should run the callback after `runTime` if not edited", function () {
+    it("should run the callback after `runTime` if not edited", () => {
       let wasHit = false;
       const timeout = new EditableTimeout(() => {
         wasHit = true;
@@ -32,7 +34,7 @@ describe("./utils/editable-timeout", function () {
       assert.isTrue(timeout.completed);
     });
 
-    it("should be stoppable", function () {
+    it("should be stoppable", () => {
       let wasHit = false;
       const timeout = new EditableTimeout(() => {
         wasHit = true;
@@ -47,12 +49,12 @@ describe("./utils/editable-timeout", function () {
       assert.isFalse(wasHit);
       assert.isFalse(timeout.completed);
 
-      vi.advanceTimersByTime(1000000);
+      vi.advanceTimersByTime(1_000_000);
       assert.isFalse(wasHit);
       assert.isFalse(timeout.completed);
     });
 
-    it("should do nothing if stop is called after timeout is completed", function () {
+    it("should do nothing if stop is called after timeout is completed", () => {
       let wasHit = false;
       const timeout = new EditableTimeout(() => {
         wasHit = true;
@@ -67,7 +69,7 @@ describe("./utils/editable-timeout", function () {
       assert.isTrue(timeout.completed);
     });
 
-    it("should be possible to update the remaining run time", function () {
+    it("should be possible to update the remaining run time", () => {
       let wasHit = false;
       const timeout = new EditableTimeout(() => {
         wasHit = true;
@@ -90,7 +92,7 @@ describe("./utils/editable-timeout", function () {
       assert.isTrue(timeout.completed);
     });
 
-    it("should do nothing if update is called after timeout is completed", function () {
+    it("should do nothing if update is called after timeout is completed", () => {
       let hitCount = 0;
       const timeout = new EditableTimeout(() => {
         hitCount += 1;

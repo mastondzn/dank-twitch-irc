@@ -1,36 +1,37 @@
-import { parseTwitchMessage } from "../parser/twitch-message";
-import { NoticeMessage } from "./notice";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./message/twitch-types/notice", function () {
-  describe("NoticeMessage", function () {
-    it("should parse a normal NOTICE sent by the twitch server", function () {
-      const msgText =
+import { NoticeMessage } from "./notice";
+import { parseTwitchMessage } from "../parser/twitch-message";
+
+describe("./message/twitch-types/notice", () => {
+  describe("noticeMessage", () => {
+    it("should parse a normal NOTICE sent by the twitch server", () => {
+      const messageText =
         "@msg-id=msg_banned :tmi.twitch.tv NOTICE #forsen " +
         ":You are permanently banned from talking in forsen.";
 
-      const msg: NoticeMessage = parseTwitchMessage(msgText) as NoticeMessage;
+      const message: NoticeMessage = parseTwitchMessage(messageText) as NoticeMessage;
 
-      assert.instanceOf(msg, NoticeMessage);
+      assert.instanceOf(message, NoticeMessage);
 
-      assert.strictEqual(msg.channelName, "forsen");
+      assert.strictEqual(message.channelName, "forsen");
       assert.strictEqual(
-        msg.messageText,
+        message.messageText,
         "You are permanently banned from talking in forsen.",
       );
-      assert.strictEqual(msg.messageID, "msg_banned");
+      assert.strictEqual(message.messageID, "msg_banned");
     });
 
-    it("should parse a NOTICE message received before successfuly login", function () {
-      const msgText = ":tmi.twitch.tv NOTICE * :Improperly formatted auth";
+    it("should parse a NOTICE message received before successfuly login", () => {
+      const messageText = ":tmi.twitch.tv NOTICE * :Improperly formatted auth";
 
-      const msg: NoticeMessage = parseTwitchMessage(msgText) as NoticeMessage;
+      const message: NoticeMessage = parseTwitchMessage(messageText) as NoticeMessage;
 
-      assert.instanceOf(msg, NoticeMessage);
+      assert.instanceOf(message, NoticeMessage);
 
-      assert.isUndefined(msg.channelName);
-      assert.strictEqual(msg.messageText, "Improperly formatted auth");
-      assert.isUndefined(msg.messageID);
+      assert.isUndefined(message.channelName);
+      assert.strictEqual(message.messageText, "Improperly formatted auth");
+      assert.isUndefined(message.messageID);
     });
   });
 });

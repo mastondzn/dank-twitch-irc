@@ -1,12 +1,13 @@
+import { assert, describe, it } from "vitest";
+
+import { requireNickname, requireParameter } from "./irc-message";
 import { assertThrowsChain } from "../../utils/helpers.spec";
 import { parseIRCMessage } from "../parser/irc-message";
 import { MissingDataError } from "../parser/missing-data-error";
-import { requireNickname, requireParameter } from "./irc-message";
-import { describe, it, assert } from "vitest";
 
-describe("./message/irc/irc-message", function () {
-  describe("#requireParameter()", function () {
-    it("should throw MissingDataError if parameters have length 0", function () {
+describe("./message/irc/irc-message", () => {
+  describe("#requireParameter()", () => {
+    it("should throw MissingDataError if parameters have length 0", () => {
       assertThrowsChain(
         () => requireParameter({ ircParameters: [] }, 0),
         MissingDataError,
@@ -24,7 +25,7 @@ describe("./message/irc/irc-message", function () {
       );
     });
 
-    it("should be able to return parameter 0 if parameters have length 1", function () {
+    it("should be able to return parameter 0 if parameters have length 1", () => {
       assert.strictEqual(
         "test parameter",
         requireParameter({ ircParameters: ["test parameter"] }, 0),
@@ -41,7 +42,7 @@ describe("./message/irc/irc-message", function () {
       );
     });
 
-    it("should be able to return parameter 0 and 1 if parameters have length 2", function () {
+    it("should be able to return parameter 0 and 1 if parameters have length 2", () => {
       assert.strictEqual(
         "test",
         requireParameter({ ircParameters: ["test", "parameters"] }, 0),
@@ -58,8 +59,8 @@ describe("./message/irc/irc-message", function () {
     });
   });
 
-  describe("#getNickname()", function () {
-    it("should throw MissingDataError if nickname or prefix is missing", function () {
+  describe("#getNickname()", () => {
+    it("should throw MissingDataError if nickname or prefix is missing", () => {
       assertThrowsChain(
         () => requireNickname(parseIRCMessage("JOIN #pajlada")),
         MissingDataError,
@@ -73,7 +74,7 @@ describe("./message/irc/irc-message", function () {
       );
     });
 
-    it("should return the nickname otherwise", function () {
+    it("should return the nickname otherwise", () => {
       const message = parseIRCMessage(
         ":leppunen!LEPPUNEN@lePPunen.tmi.twitch.tv JOIN #pajlada",
       );

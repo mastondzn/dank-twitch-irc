@@ -8,12 +8,8 @@ export function splitIntoChunks(
   let currentChunkJoinedLength = 0;
 
   const tryAppend = (bit: string, recursive = false): void => {
-    let addedLength;
-    if (currentChunk.length <= 0) {
-      addedLength = bit.length;
-    } else {
-      addedLength = separator.length + bit.length;
-    }
+    const addedLength =
+      currentChunk.length <= 0 ? bit.length : separator.length + bit.length;
 
     if (currentChunkJoinedLength + addedLength <= limit) {
       currentChunk.push(bit);

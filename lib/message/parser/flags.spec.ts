@@ -1,38 +1,39 @@
-import { TwitchFlag } from "../flag";
-import { parseFlags } from "./flags";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./message/parser/flags", function () {
-  describe("#parseFlags()", function () {
-    it("should parse empty string as no flags", function () {
+import { parseFlags } from "./flags";
+import { TwitchFlag } from "../flag";
+
+describe("./message/parser/flags", () => {
+  describe("#parseFlags()", () => {
+    it("should parse empty string as no flags", () => {
       assert.deepStrictEqual(parseFlags("", ""), []);
     });
 
-    it("should parse single flag, with one I category", function () {
+    it("should parse single flag, with one I category", () => {
       assert.deepStrictEqual(parseFlags("retard streamer", "0-5:I.3"), [
         new TwitchFlag(0, 6, "retard", [{ category: "I", score: 3 }]),
       ]);
     });
 
-    it("should parse single flag, with one S category", function () {
+    it("should parse single flag, with one S category", () => {
       assert.deepStrictEqual(parseFlags("a phallic object", "2-8:S.7"), [
         new TwitchFlag(2, 9, "phallic", [{ category: "S", score: 7 }]),
       ]);
     });
 
-    it("should parse single flag, with one A category", function () {
+    it("should parse single flag, with one A category", () => {
       assert.deepStrictEqual(parseFlags("you kill", "4-7:A.7"), [
         new TwitchFlag(4, 8, "kill", [{ category: "A", score: 7 }]),
       ]);
     });
 
-    it("should parse single flag, with one P category", function () {
+    it("should parse single flag, with one P category", () => {
       assert.deepStrictEqual(parseFlags("stfu", "0-3:P.6"), [
         new TwitchFlag(0, 4, "stfu", [{ category: "P", score: 6 }]),
       ]);
     });
 
-    it("should parse multiple instances of the same flag, with one P category", function () {
+    it("should parse multiple instances of the same flag, with one P category", () => {
       assert.deepStrictEqual(
         parseFlags("shit in my asshole", "0-3:P.6,11-17:P.6"),
         [
@@ -42,7 +43,7 @@ describe("./message/parser/flags", function () {
       );
     });
 
-    it("should sort results by start index", function () {
+    it("should sort results by start index", () => {
       assert.deepStrictEqual(
         parseFlags(
           "shit in my asshole fucking shit mechanics",
@@ -57,7 +58,7 @@ describe("./message/parser/flags", function () {
       );
     });
 
-    it("should parse four flags, with multiple categories", function () {
+    it("should parse four flags, with multiple categories", () => {
       assert.deepStrictEqual(
         parseFlags(
           "shut the fuck up retard streamer you kill a phallic object",
@@ -79,13 +80,13 @@ describe("./message/parser/flags", function () {
       );
     });
 
-    it("should parse single flag, but with empty categories", function () {
+    it("should parse single flag, but with empty categories", () => {
       assert.deepStrictEqual(parseFlags("$test xanax", "6-10:"), [
         new TwitchFlag(6, 11, "xanax", []),
       ]);
     });
 
-    it("should gracefully handle if an end index is out of range", function () {
+    it("should gracefully handle if an end index is out of range", () => {
       assert.deepStrictEqual(parseFlags("stfu", "0-4:P.6"), [
         // if index wasnt out of range, this would be (0, 5)
         new TwitchFlag(0, 4, "stfu", [{ category: "P", score: 6 }]),
@@ -97,31 +98,31 @@ describe("./message/parser/flags", function () {
       ]);
     });
 
-    it("should parse normal string with no flags, as no flags", function () {
+    it("should parse normal string with no flags, as no flags", () => {
       assert.deepStrictEqual(parseFlags("Kappa Keepo KappaRoss", ""), []);
     });
 
-    it("should parse no flag if the category's score is a string", function () {
+    it("should parse no flag if the category's score is a string", () => {
       assert.deepStrictEqual(parseFlags("stfu", "0-3:P.abc"), []);
     });
 
-    it("should parse no flag if the flag index range has no dash", function () {
+    it("should parse no flag if the flag index range has no dash", () => {
       assert.deepStrictEqual(parseFlags("", "3:P.7"), []);
     });
 
-    it("should parse no flag if the from index is not a valid integer", function () {
+    it("should parse no flag if the from index is not a valid integer", () => {
       assert.deepStrictEqual(parseFlags("", "abc-3:P.7"), []);
     });
 
-    it("should parse no flag if the to index is not a valid integer", function () {
+    it("should parse no flag if the to index is not a valid integer", () => {
       assert.deepStrictEqual(parseFlags("", "0-abc:P.7"), []);
     });
 
-    it("should parse no flag, in case Twitch changes the functionality", function () {
+    it("should parse no flag, in case Twitch changes the functionality", () => {
       assert.deepStrictEqual(parseFlags("stfu", "0-3=PRO.100%"), []);
     });
 
-    it("should parse single flag, with three categories", function () {
+    it("should parse single flag, with three categories", () => {
       assert.deepStrictEqual(
         parseFlags("shut the fuck up", "0-15:A.7/I.6/P.6"),
         [
@@ -134,7 +135,7 @@ describe("./message/parser/flags", function () {
       );
     });
 
-    it("should parse two flags, but both with empty categories", function () {
+    it("should parse two flags, but both with empty categories", () => {
       assert.deepStrictEqual(
         parseFlags("$test xanax and xanax", "6-10:,16-20:"),
         [
@@ -144,7 +145,7 @@ describe("./message/parser/flags", function () {
       );
     });
 
-    it("should parse six flags, four with multiple categories and two with empty categories", function () {
+    it("should parse six flags, four with multiple categories and two with empty categories", () => {
       assert.deepStrictEqual(
         parseFlags(
           "shut the fuck up retard streamer you kill a phallic object and xanax and xanax",

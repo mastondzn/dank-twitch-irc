@@ -1,10 +1,11 @@
+import { assert, describe, it } from "vitest";
+
 import { TwitchBadge } from "./badge";
 import { TwitchBadgesList } from "./badges";
-import { describe, it, assert } from "vitest";
 
-describe("./message/badges", function () {
-  describe("TwitchBadgesList", function () {
-    describe("hasKnownBadge style getters", function () {
+describe("./message/badges", () => {
+  describe("twitchBadgesList", () => {
+    describe("hasKnownBadge style getters", () => {
       const testCases: [string, string, (b: TwitchBadgesList) => boolean][] = [
         ["admin", "1", (b) => b.hasAdmin],
         ["bits", "1", (b) => b.hasBits],
@@ -22,7 +23,7 @@ describe("./message/badges", function () {
       ];
 
       for (const [badgeName, badgeVersion, getter] of testCases) {
-        it(`should recognize ${badgeName}/${badgeVersion}`, function () {
+        it(`should recognize ${badgeName}/${badgeVersion}`, () => {
           const badgeList = new TwitchBadgesList();
           badgeList.push(new TwitchBadge(badgeName, badgeVersion));
           assert(getter(badgeList));
@@ -30,7 +31,7 @@ describe("./message/badges", function () {
       }
     });
 
-    it("should return badge1,badge2,badge3 from toString()", function () {
+    it("should return badge1,badge2,badge3 from toString()", () => {
       const list = new TwitchBadgesList();
       list.push(
         new TwitchBadge("admin", "1"),
@@ -41,7 +42,7 @@ describe("./message/badges", function () {
       assert.strictEqual("admin/1,vip/1,subscriber/12", list.toString());
     });
 
-    it("should return badge1,badge2,badge3 from implicit toString()", function () {
+    it("should return badge1,badge2,badge3 from implicit toString()", () => {
       const list = new TwitchBadgesList();
       list.push(
         new TwitchBadge("admin", "1"),
@@ -49,8 +50,7 @@ describe("./message/badges", function () {
         new TwitchBadge("subscriber", "12"),
       );
 
-      assert.strictEqual("admin/1,vip/1,subscriber/12", `${list.toString()}`);
-      assert.strictEqual("admin/1,vip/1,subscriber/12", list + "");
+      assert.strictEqual("admin/1,vip/1,subscriber/12", list.toString());
     });
   });
 });

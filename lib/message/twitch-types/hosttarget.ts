@@ -1,6 +1,7 @@
 import { reasonForValue } from "../../utils/reason-for-value";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
-import { IRCMessageData, requireParameter } from "../irc/irc-message";
+import type { IRCMessageData } from "../irc/irc-message";
+import { requireParameter } from "../irc/irc-message";
 import { ParseError } from "../parser/parse-error";
 
 export function parseHostedChannelName(
@@ -14,11 +15,7 @@ export function parseHostedChannelName(
     );
   }
 
-  if (rawHostedChannelName === "-") {
-    return undefined;
-  } else {
-    return rawHostedChannelName;
-  }
+  return rawHostedChannelName === "-" ? undefined : rawHostedChannelName;
 }
 
 export function parseViewerCount(
@@ -36,8 +33,8 @@ export function parseViewerCount(
     return undefined;
   }
 
-  const numberValue = parseInt(rawViewerCount);
-  if (isNaN(numberValue)) {
+  const numberValue = Number.parseInt(rawViewerCount);
+  if (Number.isNaN(numberValue)) {
     throw new ParseError(
       `Malformed viewer count part in HOSTTARGET message: ${reasonForValue(
         rawViewerCount,

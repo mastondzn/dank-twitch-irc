@@ -1,44 +1,44 @@
-import { TwitchBadge } from "./badge";
+import type { TwitchBadge } from "./badge";
 
 export class TwitchBadgesList extends Array<TwitchBadge> {
   public get hasAdmin(): boolean {
-    return this.find((e) => e.isAdmin) != null;
+    return this.some((badge) => badge.isAdmin);
   }
 
   public get hasBits(): boolean {
-    return this.find((e) => e.isBits) != null;
+    return this.some((badge) => badge.isBits);
   }
 
   public get hasBroadcaster(): boolean {
-    return this.find((e) => e.isBroadcaster) != null;
+    return this.some((badge) => badge.isBroadcaster);
   }
 
   public get hasGlobalMod(): boolean {
-    return this.find((e) => e.isGlobalMod) != null;
+    return this.some((badge) => badge.isGlobalMod);
   }
 
   public get hasModerator(): boolean {
-    return this.find((e) => e.isModerator) != null;
+    return this.some((badge) => badge.isModerator);
   }
 
   public get hasSubscriber(): boolean {
-    return this.find((e) => e.isSubscriber) != null;
+    return this.some((badge) => badge.isSubscriber);
   }
 
   public get hasStaff(): boolean {
-    return this.find((e) => e.isStaff) != null;
+    return this.some((badge) => badge.isStaff);
   }
 
   public get hasTurbo(): boolean {
-    return this.find((e) => e.isTurbo) != null;
+    return this.some((badge) => badge.isTurbo);
   }
 
   public get hasVIP(): boolean {
-    return this.find((e) => e.isVIP) != null;
+    return this.some((badge) => badge.isVIP);
   }
 
   public get hasPrediction(): boolean {
-    return this.find((e) => e.isPrediction) != null;
+    return this.some((badge) => badge.isPrediction);
   }
 
   public toString(): string {

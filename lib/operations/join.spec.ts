@@ -1,14 +1,15 @@
+import { assert, describe, it, vi } from "vitest";
+
+import { JoinError, joinChannel, joinNothingToDo } from "./join";
 import { TimeoutError } from "../await/timeout-error";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
-import { JoinMessage } from "../message/twitch-types/membership/join";
-import { joinChannel, JoinError, joinNothingToDo } from "./join";
-import { describe, it, vi, assert } from "vitest";
+import type { JoinMessage } from "../message/twitch-types/membership/join";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 
-describe("./operations/join", function () {
-  describe("#joinNotingToDo()", function () {
-    it("should be false if channel is not joined or wanted", function () {
+describe("./operations/join", () => {
+  describe("#joinNotingToDo()", () => {
+    it("should be false if channel is not joined or wanted", () => {
       // typical situation where channel is not joined and is now being
       // joined.
       const { client } = fakeConnection();
@@ -20,7 +21,7 @@ describe("./operations/join", function () {
       assert.isFalse(joinNothingToDo(client, "pajlada"));
     });
 
-    it("should be false if channel is joined but not wanted", function () {
+    it("should be false if channel is joined but not wanted", () => {
       // situation where we are still joined but don't want to be, e.g.
       // a part is in progress, but we can already begin re-joining
       const { client } = fakeConnection();
@@ -33,7 +34,7 @@ describe("./operations/join", function () {
       assert.isFalse(joinNothingToDo(client, "pajlada"));
     });
 
-    it("should be false if channel is not joined but wanted", function () {
+    it("should be false if channel is not joined but wanted", () => {
       // e.g. previously failed JOIN, allow the join to be retried
       const { client } = fakeConnection();
 
@@ -45,7 +46,7 @@ describe("./operations/join", function () {
       assert.isFalse(joinNothingToDo(client, "pajlada"));
     });
 
-    it("should be true if channel is joined and wanted", function () {
+    it("should be true if channel is joined and wanted", () => {
       // channel is both joined and supposed to be joined, only in
       // this case is nothing to do.
       const { client } = fakeConnection();
@@ -59,35 +60,35 @@ describe("./operations/join", function () {
     });
   });
 
-  describe("#joinChannel()", function () {
-    it("sends the correct wire command", function () {
+  describe("#joinChannel()", () => {
+    it("sends the correct wire command", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
-      joinChannel(client, "pajlada");
+      void joinChannel(client, "pajlada");
       assert.deepEqual(data, ["JOIN #pajlada\r\n"]);
       vi.useRealTimers();
     });
 
-    it("does nothing if channel is joined and wanted", function () {
+    it("does nothing if channel is joined and wanted", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
       client.wantedChannels.add("pajlada");
       client.joinedChannels.add("pajlada");
-      joinChannel(client, "pajlada");
+      void joinChannel(client, "pajlada");
       assert.deepEqual(data, []);
       vi.useRealTimers();
     });
 
-    it("sends the command if channel is not in joinedChannels but in wantedChannels", function () {
+    it("sends the command if channel is not in joinedChannels but in wantedChannels", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
       client.wantedChannels.add("pajlada");
-      joinChannel(client, "pajlada");
+      void joinChannel(client, "pajlada");
       assert.deepEqual(data, ["JOIN #pajlada\r\n"]);
       vi.useRealTimers();
     });
 
-    it("resolves on incoming JOIN", async function () {
+    it("resolves on incoming JOIN", async () => {
       const { emitAndEnd, client, clientError } = fakeConnection();
 
       const promise = joinChannel(client, "pajlada");
@@ -109,7 +110,7 @@ describe("./operations/join", function () {
       await clientError;
     });
 
-    it("adds channel to channel list on success", async function () {
+    it("adds channel to channel list on success", async () => {
       const { emitAndEnd, client, clientError } = fakeConnection();
 
       const promise = joinChannel(client, "pajlada");
@@ -127,7 +128,7 @@ describe("./operations/join", function () {
       assert.deepStrictEqual([...client.joinedChannels], ["pajlada"]);
     });
 
-    it("only adds to wantedChannels on msg_channel_suspended failure", async function () {
+    it("only adds to wantedChannels on msg_channel_suspended failure", async () => {
       // given
       const { client, emitAndEnd, clientError } = fakeConnection();
 
@@ -165,7 +166,7 @@ describe("./operations/join", function () {
       assert.deepStrictEqual([...client.joinedChannels], []);
     });
 
-    it("only adds to wantedChannels on connection close (no error)", async function () {
+    it("only adds to wantedChannels on connection close (no error)", async () => {
       // given
       const { end, client, clientError } = fakeConnection();
 
@@ -190,7 +191,7 @@ describe("./operations/join", function () {
       assert.deepStrictEqual([...client.joinedChannels], []);
     });
 
-    it("only adds to wantedChannels on connection close (with error)", async function () {
+    it("only adds to wantedChannels on connection close (with error)", async () => {
       // given
       const { end, client, clientError } = fakeConnection();
 
@@ -228,7 +229,7 @@ describe("./operations/join", function () {
       assert.deepStrictEqual([...client.joinedChannels], []);
     });
 
-    it("should fail on timeout of 2000 ms", async function () {
+    it("should fail on timeout of 2000 ms", async () => {
       // given
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
@@ -258,11 +259,11 @@ describe("./operations/join", function () {
     });
   });
 
-  describe("JoinError", function () {
-    it("should not be instanceof ConnectionError", function () {
+  describe("joinError", () => {
+    it("should not be instanceof ConnectionError", () => {
       assert.notInstanceOf(new JoinError("test"), ConnectionError);
     });
-    it("should not be instanceof ClientError", function () {
+    it("should not be instanceof ClientError", () => {
       assert.notInstanceOf(new JoinError("test"), ClientError);
     });
   });

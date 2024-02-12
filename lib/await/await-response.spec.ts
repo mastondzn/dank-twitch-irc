@@ -1,15 +1,16 @@
+import { assert, describe, it, vi } from "vitest";
+
+import { ResponseAwaiter, awaitResponse } from "./await-response";
+import { TimeoutError } from "./timeout-error";
 import { ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
 import { BaseError } from "../utils/base-error";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 import { ignoreErrors } from "../utils/ignore-errors";
-import { awaitResponse, ResponseAwaiter } from "./await-response";
-import { TimeoutError } from "./timeout-error";
-import { describe, it, vi, assert } from "vitest";
 
-describe("./await/await-response", function () {
-  describe("ResponseAwaiter", function () {
-    it("should add itself to list of waiters", function () {
+describe("./await/await-response", () => {
+  describe("responseAwaiter", () => {
+    it("should add itself to list of waiters", () => {
       const { client, end } = fakeConnection();
 
       const awaiter1 = new ResponseAwaiter(client, {
@@ -29,37 +30,37 @@ describe("./await/await-response", function () {
       end();
     });
 
-    it("should resolve on matching incoming message", async function () {
+    it("should resolve on matching incoming message", async () => {
       const { client, end } = fakeConnection();
 
-      const wantedMsg = parseTwitchMessage("PONG :tmi.twitch.tv");
+      const wantedMessage = parseTwitchMessage("PONG :tmi.twitch.tv");
 
       const promise = awaitResponse(client, {
-        success: (msg) => msg === wantedMsg,
+        success: (message) => message === wantedMessage,
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter failure",
       });
 
-      client.emitMessage(wantedMsg);
+      client.emitMessage(wantedMessage);
 
       end();
 
-      assert.strictEqual(await promise, wantedMsg);
+      assert.strictEqual(await promise, wantedMessage);
       assert.deepStrictEqual(client.pendingResponses, []);
     });
 
-    it("should reject on matching incoming message", async function () {
+    it("should reject on matching incoming message", async () => {
       const { client, clientError, emitAndEnd } = fakeConnection();
 
-      const wantedMsg = "PONG :tmi.twitch.tv";
+      const wantedMessage = "PONG :tmi.twitch.tv";
 
       const promise = awaitResponse(client, {
-        failure: (msg) => msg.rawSource === wantedMsg,
+        failure: (message) => message.rawSource === wantedMessage,
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter failure",
       });
 
-      emitAndEnd(wantedMsg);
+      emitAndEnd(wantedMessage);
 
       await assertErrorChain(
         promise,
@@ -79,7 +80,7 @@ describe("./await/await-response", function () {
       );
     });
 
-    it("should reject on connection close (no error)", async function () {
+    it("should reject on connection close (no error)", async () => {
       const { client, end, clientError } = fakeConnection();
 
       const promise = awaitResponse(client, {
@@ -107,7 +108,7 @@ describe("./await/await-response", function () {
       await clientError;
     });
 
-    it("should reject on connection close (with error)", async function () {
+    it("should reject on connection close (with error)", async () => {
       const { client, end, clientError } = fakeConnection();
 
       const promise = awaitResponse(client, {
@@ -121,9 +122,9 @@ describe("./await/await-response", function () {
       const clientErrorAfterClose = new Promise((resolve, reject) => {
         let counter = 0;
         const target = 1;
-        client.on("error", (e) => {
+        client.on("error", (error) => {
           if (counter++ === target) {
-            reject(e);
+            reject(error);
           }
         });
       });
@@ -161,7 +162,7 @@ describe("./await/await-response", function () {
       );
     });
 
-    it("should timeout after specified timeout (noResponseAction = failure)", async function () {
+    it("should timeout after specified timeout (noResponseAction = failure)", async () => {
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
@@ -187,7 +188,7 @@ describe("./await/await-response", function () {
       vi.useRealTimers();
     });
 
-    it("should timeout after specified timeout (noResponseAction = success)", async function () {
+    it("should timeout after specified timeout (noResponseAction = success)", async () => {
       vi.useFakeTimers();
       const { client, clientError, end } = fakeConnection();
 
@@ -209,7 +210,7 @@ describe("./await/await-response", function () {
       vi.useRealTimers();
     });
 
-    it("should begin timeout only once awaiter is moved to head of queue", async function () {
+    it("should begin timeout only once awaiter is moved to head of queue", async () => {
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
@@ -246,17 +247,17 @@ describe("./await/await-response", function () {
       vi.useRealTimers();
     });
 
-    it("should notify other awaiters that they are outpaced", async function () {
+    it("should notify other awaiters that they are outpaced", async () => {
       const { client, emitAndEnd, clientError } = fakeConnection();
 
       const promise1 = awaitResponse(client, {
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter1 failure",
       });
-      const expectedMsg = "PONG :tmi.twitch.tv";
+      const expectedMessage = "PONG :tmi.twitch.tv";
 
       const promise2 = awaitResponse(client, {
-        success: (msg) => msg.rawSource === expectedMsg,
+        success: (message) => message.rawSource === expectedMessage,
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter2 failure",
       });
@@ -264,7 +265,7 @@ describe("./await/await-response", function () {
       // awaiter2 will resolve -> awaiter1 will be rejected because it was
       // outpaced
 
-      emitAndEnd(expectedMsg);
+      emitAndEnd(expectedMessage);
 
       await assertErrorChain(
         [promise1, clientError],
@@ -274,8 +275,8 @@ describe("./await/await-response", function () {
         "A response to a command issued later than this command was received",
       );
 
-      const matchedMsg = await promise2;
-      assert.strictEqual(matchedMsg.rawSource, expectedMsg);
+      const matchedMessage = await promise2;
+      assert.strictEqual(matchedMessage.rawSource, expectedMessage);
     });
   });
 });

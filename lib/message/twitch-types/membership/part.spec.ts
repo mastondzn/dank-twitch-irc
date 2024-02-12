@@ -1,18 +1,19 @@
-import { parseTwitchMessage } from "../../parser/twitch-message";
-import { PartMessage } from "./part";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./message/twitch-types/membership/part", function () {
-  describe("PartMessage", function () {
-    it("should be able to parse a real PART message", function () {
-      const msg = parseTwitchMessage(
+import { PartMessage } from "./part";
+import { parseTwitchMessage } from "../../parser/twitch-message";
+
+describe("./message/twitch-types/membership/part", () => {
+  describe("partMessage", () => {
+    it("should be able to parse a real PART message", () => {
+      const message = parseTwitchMessage(
         ":justinfan11111!justinfan11111@justinfan11111.tmi.twitch.tv PART #pajlada",
       ) as PartMessage;
 
-      assert.instanceOf(msg, PartMessage);
+      assert.instanceOf(message, PartMessage);
 
-      assert.strictEqual(msg.channelName, "pajlada");
-      assert.strictEqual(msg.partedUsername, "justinfan11111");
+      assert.strictEqual(message.channelName, "pajlada");
+      assert.strictEqual(message.partedUsername, "justinfan11111");
     });
   });
 });

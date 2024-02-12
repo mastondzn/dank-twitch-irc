@@ -1,38 +1,39 @@
+import { assert, describe, it, vi } from "vitest";
+
+import { LoginError, sendLogin } from "./login";
 import { ClientError, ConnectionError, MessageError } from "../client/errors";
 import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
-import { LoginError, sendLogin } from "./login";
-import { describe, it, vi, assert } from "vitest";
 
-describe("./operations/login", function () {
-  describe("#sendLogin()", function () {
-    it("should only send NICK if password == null", function () {
+describe("./operations/login", () => {
+  describe("#sendLogin()", () => {
+    it("should only send NICK if password == null", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
-      sendLogin(client, "justinfan12345", undefined);
+      void sendLogin(client, "justinfan12345");
       assert.deepEqual(data, ["NICK justinfan12345\r\n"]);
       vi.useRealTimers();
     });
 
-    it("should send NICK and PASS if password is specified", function () {
+    it("should send NICK and PASS if password is specified", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
-      sendLogin(client, "justinfan12345", "SCHMOOPIE");
+      void sendLogin(client, "justinfan12345", "SCHMOOPIE");
       assert.deepEqual(data, ["PASS SCHMOOPIE\r\n", "NICK justinfan12345\r\n"]);
       vi.useRealTimers();
     });
 
-    it("should prepend oauth: if missing", function () {
+    it("should prepend oauth: if missing", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
-      sendLogin(client, "pajlada", "12345");
+      void sendLogin(client, "pajlada", "12345");
       assert.deepEqual(data, ["PASS oauth:12345\r\n", "NICK pajlada\r\n"]);
       vi.useRealTimers();
     });
 
-    it("should resolve on 001", async function () {
+    it("should resolve on 001", async () => {
       const { client, clientError, emitAndEnd } = fakeConnection();
 
       const promise = sendLogin(client, "justinfan12345", "SCHMOOPIE");
@@ -44,7 +45,7 @@ describe("./operations/login", function () {
       await clientError;
     });
 
-    it("should reject with LoginError on NOTICE", async function () {
+    it("should reject with LoginError on NOTICE", async () => {
       const { client, clientError, emitAndEnd } = fakeConnection();
 
       const promise = sendLogin(client, "justinfan12345", "SCHMOOPIE");
@@ -71,11 +72,11 @@ describe("./operations/login", function () {
     });
   });
 
-  describe("LoginError", function () {
-    it("should be instanceof ConnectionError", function () {
+  describe("loginError", () => {
+    it("should be instanceof ConnectionError", () => {
       assert.instanceOf(new LoginError(), ConnectionError);
     });
-    it("should not be instanceof ClientError", function () {
+    it("should not be instanceof ClientError", () => {
       assert.notInstanceOf(new LoginError(), ClientError);
     });
   });

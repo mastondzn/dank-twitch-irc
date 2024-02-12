@@ -1,24 +1,25 @@
-import { parseTwitchMessage } from "../../parser/twitch-message";
+import { assert, describe, it } from "vitest";
+
 import { PongMessage } from "./pong";
-import { describe, it, assert } from "vitest";
+import { parseTwitchMessage } from "../../parser/twitch-message";
 
-describe("./message/twitch-types/connection/pong", function () {
-  describe("PongMessage", function () {
-    it("should be able to parse a real PONG message with no argument", function () {
-      const msg = parseTwitchMessage(":tmi.twitch.tv PONG") as PongMessage;
+describe("./message/twitch-types/connection/pong", () => {
+  describe("pongMessage", () => {
+    it("should be able to parse a real PONG message with no argument", () => {
+      const message = parseTwitchMessage(":tmi.twitch.tv PONG") as PongMessage;
 
-      assert.instanceOf(msg, PongMessage);
+      assert.instanceOf(message, PongMessage);
 
-      assert.strictEqual(msg.argument, undefined);
+      assert.strictEqual(message.argument, undefined);
     });
-    it("should be able to parse a real PONG message with argument", function () {
-      const msg = parseTwitchMessage(
+    it("should be able to parse a real PONG message with argument", () => {
+      const message = parseTwitchMessage(
         ":tmi.twitch.tv PONG tmi.twitch.tv :argument test",
       ) as PongMessage;
 
-      assert.instanceOf(msg, PongMessage);
+      assert.instanceOf(message, PongMessage);
 
-      assert.strictEqual(msg.argument, "argument test");
+      assert.strictEqual(message.argument, "argument test");
     });
   });
 });

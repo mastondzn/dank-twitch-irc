@@ -1,19 +1,19 @@
-import type { InspectOptions } from "util";
-import type { Debugger } from "debug";
-// @ts-expect-error
-import { default as unTypedLogger } from "debug-logger";
+import type { InspectOptions } from "node:util";
+
+// @ts-expect-error debug-logger is not typed
+import unTypedLogger from "debug-logger";
 
 export const debugLogger = unTypedLogger as (namespace: string) => Logger;
 
 /**
  * A single log function at a determined log namespace and level, e.g. <code>my-app:info</code>.
  */
-export interface LogFn {
+export interface LogFunction {
   /**
    * Outputs the message using the root/default debug instance, without the level suffix.
    * @param args Arguments to format
    */
-  (...args: any[]): void;
+  (...arguments_: unknown[]): void;
 
   /**
    * Numerical level value, e.g. <code>0</code> for <code>trace</code>,
@@ -39,11 +39,6 @@ export interface LogFn {
   inspectionHighlight: string;
 
   /**
-   * Returns the default debug instance used by this level.
-   */
-  logger(): Debugger;
-
-  /**
    * Boolean indicating if level's logger is enabled.
    */
   enabled(): boolean;
@@ -64,10 +59,7 @@ export type Logger = {
   /**
    * Storage for start times recorded by {@link Logger#time time()} invocations.
    */
-  timeLabels: {
-    // hrtime as returned by process.hrtime()
-    [label: string]: [number, number];
-  };
+  timeLabels: Record<string, [number, number]>;
 
   /**
    * Mark the beginning of a time difference measurement.
@@ -89,7 +81,7 @@ export type Logger = {
    * @param obj The object to inspect.
    * @param level Optional log level, e.g. "warn".
    */
-  dir(obj: any, level?: string): void;
+  dir(object: unknown, level?: string): void;
 
   /**
    * Inspect <code>obj</code>.
@@ -98,7 +90,7 @@ export type Logger = {
    * @param options Options passed to <code>util.inspect()</code>
    * @param level Optional log level, e.g. "warn".
    */
-  dir(obj: any, options?: InspectOptions, level?: string): void;
+  dir(object: unknown, options?: InspectOptions, level?: string): void;
 
   /**
    * Similar to <code>console.assert()</code>.
@@ -108,7 +100,11 @@ export type Logger = {
    * @param formatArgs arguments passed to <code>util.format</code> to format the given
    * <code>message</code>.
    */
-  assert(expression: boolean, message?: string, ...formatArgs: any[]): void;
+  assert(
+    expression: boolean,
+    message?: string,
+    ...formatArguments: unknown[]
+  ): void;
 
   /**
    * Similar to <code>console.assert()</code>.
@@ -122,104 +118,105 @@ export type Logger = {
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
+    formatArgument1: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
-    formatArg4: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
+    formatArgument4: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
-    formatArg4: any,
-    formatArg5: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
+    formatArgument4: unknown,
+    formatArgument5: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
-    formatArg4: any,
-    formatArg5: any,
-    formatArg6: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
+    formatArgument4: unknown,
+    formatArgument5: unknown,
+    formatArgument6: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
-    formatArg4: any,
-    formatArg5: any,
-    formatArg6: any,
-    formatArg7: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
+    formatArgument4: unknown,
+    formatArgument5: unknown,
+    formatArgument6: unknown,
+    formatArgument7: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
-    formatArg4: any,
-    formatArg5: any,
-    formatArg6: any,
-    formatArg7: any,
-    formatArg8: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
+    formatArgument4: unknown,
+    formatArgument5: unknown,
+    formatArgument6: unknown,
+    formatArgument7: unknown,
+    formatArgument8: unknown,
     level: string,
   ): void;
   assert(
     expression: boolean,
     message: string,
-    formatArg1: any,
-    formatArg2: any,
-    formatArg3: any,
-    formatArg4: any,
-    formatArg5: any,
-    formatArg6: any,
-    formatArg7: any,
-    formatArg8: any,
-    formatArg9: any,
+    formatArgument1: unknown,
+    formatArgument2: unknown,
+    formatArgument3: unknown,
+    formatArgument4: unknown,
+    formatArgument5: unknown,
+    formatArgument6: unknown,
+    formatArgument7: unknown,
+    formatArgument8: unknown,
+    formatArgument9: unknown,
     level: string,
   ): void;
 } & {
-  trace: LogFn;
-  warn: LogFn;
-  debug: LogFn;
+  trace: LogFunction;
+  warn: LogFunction;
+  debug: LogFunction;
 };
 
 /**
  * Configures what logging levels are available and their properties
  */
-export interface Levels {
-  [levelName: string]: {
+export type Levels = Record<
+  string,
+  {
     /**
      * A string of shell escape codes to activate this level's color.
      */
@@ -246,8 +243,8 @@ export interface Levels {
      * stderr (2) by default. Use 1 to specify stdout.
      */
     fd?: number;
-  };
-}
+  }
+>;
 
 /**
  * Configures the <code>debug-logger</code> instance.

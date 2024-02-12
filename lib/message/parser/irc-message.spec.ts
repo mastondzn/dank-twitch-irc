@@ -1,19 +1,21 @@
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { IRCMessage } from "../irc/irc-message";
+import { assert, describe, it } from "vitest";
+
 import { parseIRCMessage } from "./irc-message";
 import { ParseError } from "./parse-error";
-import { describe, it, assert } from "vitest";
+import { assertThrowsChain } from "../../utils/helpers.spec";
+import { IRCMessage } from "../irc/irc-message";
 
-describe("./message/parser/irc-message", function () {
-  describe("#parseIRCMessage", function () {
-    it("should throw a ParseError on empty string input", function () {
+
+describe("./message/parser/irc-message", () => {
+  describe("#parseIRCMessage", () => {
+    it("should throw a ParseError on empty string input", () => {
       assertThrowsChain(
         () => parseIRCMessage(""),
         ParseError,
         'Invalid format for IRC command (given src: "")',
       );
     });
-    it("should throw a ParseError on malformed input", function () {
+    it("should throw a ParseError on malformed input", () => {
       // double space
       assertThrowsChain(
         () => parseIRCMessage(":tmi.twitch.tv  PRIVMSG"),
@@ -21,7 +23,7 @@ describe("./message/parser/irc-message", function () {
         'Invalid format for IRC command (given src: ":tmi.twitch.tv  PRIVMSG")',
       );
     });
-    it("should error on empty prefix", function () {
+    it("should error on empty prefix", () => {
       assertThrowsChain(
         () => parseIRCMessage(": PING xD"),
         ParseError,
@@ -38,12 +40,12 @@ describe("./message/parser/irc-message", function () {
         'Host, nick or user is empty in prefix (given src: ":a!@b PING xD")',
       );
     });
-    it("should parse this one", function () {
+    it("should parse this one", () => {
       parseIRCMessage(
         ":justinfan12345.tmi.twitch.tv 353 justinfan12345 = #pajlada :justinfan12345",
       );
     });
-    it("should parse tags optionally", function () {
+    it("should parse tags optionally", () => {
       const actual = parseIRCMessage(
         ":tetyys!tetyys@tetyys.tmi.twitch.tv PRIVMSG #pajlada :KKona",
       );
@@ -63,7 +65,7 @@ describe("./message/parser/irc-message", function () {
 
       assert.deepStrictEqual(actual, expected);
     });
-    it("should parse tags", function () {
+    it("should parse tags", () => {
       const actual = parseIRCMessage("@abc=def;kkona=kkona;def;def PONG");
       assert.deepStrictEqual(
         actual,
@@ -81,7 +83,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should parse prefix optionally", function () {
+    it("should parse prefix optionally", () => {
       const actual = parseIRCMessage("PONG :tmi.twitch.tv");
       assert.deepStrictEqual(
         actual,
@@ -95,7 +97,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should parse multiple middle parameters", function () {
+    it("should parse multiple middle parameters", () => {
       const actual = parseIRCMessage("PONG a b cd");
       assert.deepStrictEqual(
         actual,
@@ -109,7 +111,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it('should allow ":" character in middle parameters', function () {
+    it('should allow ":" character in middle parameters', () => {
       const actual = parseIRCMessage("PONG a:b b: :cd");
       assert.deepStrictEqual(
         actual,
@@ -123,7 +125,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should uppercase the command", function () {
+    it("should uppercase the command", () => {
       const actual = parseIRCMessage("pong");
       assert.deepStrictEqual(
         actual,
@@ -137,7 +139,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should recognize host-only prefixes", function () {
+    it("should recognize host-only prefixes", () => {
       const actual = parseIRCMessage(":tmi.twitch.tv PING");
       assert.deepStrictEqual(
         actual,
@@ -155,7 +157,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should recognize server-only prefixes", function () {
+    it("should recognize server-only prefixes", () => {
       const actual = parseIRCMessage(":leppunen PRIVMSG");
       // note: this could also be a nickname-only prefix but those
       // don't really exist on Twitch so we assume a :<single thing>
@@ -176,7 +178,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should recognize full prefixes", function () {
+    it("should recognize full prefixes", () => {
       const actual = parseIRCMessage(
         ":leppunen!crazyusername@local.host PRIVMSG",
       );
@@ -196,7 +198,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should allow numeric commands", function () {
+    it("should allow numeric commands", () => {
       const actual = parseIRCMessage("001");
       assert.deepStrictEqual(
         actual,
@@ -210,7 +212,7 @@ describe("./message/parser/irc-message", function () {
         }),
       );
     });
-    it("should only allow 3-digit numeric commands", function () {
+    it("should only allow 3-digit numeric commands", () => {
       assertThrowsChain(
         () => parseIRCMessage("01"),
         ParseError,
@@ -224,7 +226,7 @@ describe("./message/parser/irc-message", function () {
     });
   });
 
-  it("should allow underscores in usernames", function () {
+  it("should allow underscores in usernames", () => {
     const actual = parseIRCMessage(
       "@historical=1;badge-info=subscriber/4;" +
         "badges=subscriber/3,sub-gifter/1;color=#492F2F;" +

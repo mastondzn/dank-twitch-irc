@@ -1,12 +1,13 @@
 import EventEmitter from "eventemitter3";
-import { ChatClient } from "../client/client";
-import {
+
+import type { ClientMixin } from "./base-mixin";
+import type { ChatClient } from "../client/client";
+import type {
   GlobalUserState,
   GlobaluserstateMessage,
 } from "../message/twitch-types/globaluserstate";
-import { PrivmsgMessage } from "../message/twitch-types/privmsg";
-import { UserState, UserstateMessage } from "../message/twitch-types/userstate";
-import { ClientMixin } from "./base-mixin";
+import type { PrivmsgMessage } from "../message/twitch-types/privmsg";
+import type { UserState, UserstateMessage } from "../message/twitch-types/userstate";
 
 export interface UserStateTrackerEvents {
   newGlobalState(newState: GlobalUserState): void;
@@ -44,27 +45,27 @@ export class UserStateTracker
     client.on("PRIVMSG", this.onPrivmsgMessage.bind(this));
   }
 
-  private onUserstateMessage(msg: UserstateMessage): void {
-    const newState = msg.extractUserState();
-    this.channelStates[msg.channelName] = newState;
-    this.emit("newChannelState", msg.channelName, newState);
+  private onUserstateMessage(message: UserstateMessage): void {
+    const newState = message.extractUserState();
+    this.channelStates[message.channelName] = newState;
+    this.emit("newChannelState", message.channelName, newState);
   }
 
-  private onGlobaluserstateMessage(msg: GlobaluserstateMessage): void {
-    this.globalState = msg.extractGlobalUserState();
+  private onGlobaluserstateMessage(message: GlobaluserstateMessage): void {
+    this.globalState = message.extractGlobalUserState();
     this.emit("newGlobalState", this.globalState);
   }
 
-  private onPrivmsgMessage(msg: PrivmsgMessage): void {
-    if (msg.senderUsername !== this.client.configuration.username) {
+  private onPrivmsgMessage(message: PrivmsgMessage): void {
+    if (message.senderUsername !== this.client.configuration.username) {
       return;
     }
 
-    const channelState = this.channelStates[msg.channelName];
+    const channelState = this.channelStates[message.channelName];
     if (channelState != null) {
-      const newState = Object.assign({}, channelState, msg.extractUserState());
-      this.channelStates[msg.channelName] = newState;
-      this.emit("newChannelState", msg.channelName, newState);
+      const newState = Object.assign({}, channelState, message.extractUserState());
+      this.channelStates[message.channelName] = newState;
+      this.emit("newChannelState", message.channelName, newState);
     }
   }
 }

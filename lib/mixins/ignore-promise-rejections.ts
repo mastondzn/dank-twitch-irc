@@ -1,26 +1,26 @@
-import { ChatClient } from "../client/client";
+import type { ClientMixin } from "./base-mixin";
+import type { ChatClient } from "../client/client";
 import { applyReplacements } from "../utils/apply-function-replacements";
 import { ignoreErrors } from "../utils/ignore-errors";
-import { ClientMixin } from "./base-mixin";
+
+function genericCatcher<V, A extends unknown[]>(
+  originalFunction: (...arguments_: A) => Promise<V>,
+  ...arguments_: A
+): Promise<V | undefined> {
+  const originalPromise = originalFunction(...arguments_);
+  originalPromise.catch(ignoreErrors);
+  return originalPromise;
+}
 
 export class IgnoreUnhandledPromiseRejectionsMixin implements ClientMixin {
   public applyToClient(client: ChatClient): void {
-    const genericReplacement = <V, A extends any[]>(
-      originalFn: (...args: A) => Promise<V>,
-      ...args: A
-    ): Promise<V | undefined> => {
-      const originalPromise = originalFn(...args);
-      originalPromise.catch(ignoreErrors);
-      return originalPromise;
-    };
-
     applyReplacements(this, client, {
-      join: genericReplacement,
-      part: genericReplacement,
-      privmsg: genericReplacement,
-      say: genericReplacement,
-      me: genericReplacement,
-      ping: genericReplacement,
+      join: genericCatcher,
+      part: genericCatcher,
+      privmsg: genericCatcher,
+      say: genericCatcher,
+      me: genericCatcher,
+      ping: genericCatcher,
     });
   }
 }

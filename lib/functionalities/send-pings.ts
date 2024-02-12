@@ -1,4 +1,4 @@
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { sendPing } from "../operations/ping";
 import { setDefaults } from "../utils/set-defaults";
 
@@ -30,11 +30,14 @@ export function sendClientPings(
     const pingIdentifier = `dank-twitch-irc:automatic:${pingIDCounter++}`;
     try {
       await sendPing(conn, pingIdentifier, timeout);
-    } catch (e) {
+    } catch {
       // ignored
     }
   };
 
-  const registeredInterval = setInterval(runAutomaticPing, interval);
+  const registeredInterval = setInterval(
+    () => void runAutomaticPing(),
+    interval,
+  );
   conn.once("close", () => clearInterval(registeredInterval));
 }

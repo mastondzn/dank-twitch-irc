@@ -1,11 +1,13 @@
-import { Duplex } from "stream";
-import { ExpandedDuplexTransportConfiguration } from "../../config/expanded";
-import { DuplexTransport } from "./duplex-transport";
+import { Duplex } from "node:stream";
+
 import { assert, describe, expect, it, vi } from "vitest";
 
-describe("./client/transport/duplex-transport", function () {
-  describe("DuplexTransport", function () {
-    it("should call the stream-getter function from the config once", function () {
+import { DuplexTransport } from "./duplex-transport";
+import type { ExpandedDuplexTransportConfiguration } from "../../config/expanded";
+
+describe("./client/transport/duplex-transport", () => {
+  describe("duplexTransport", () => {
+    it("should call the stream-getter function from the config once", () => {
       const stream = new Duplex();
 
       const streamGetter = vi.fn(() => stream);

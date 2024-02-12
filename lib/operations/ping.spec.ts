@@ -1,33 +1,37 @@
+import { assert, describe, it, vi } from "vitest";
+
+import { PingTimeoutError, sendPing } from "./ping";
 import { TimeoutError } from "../await/timeout-error";
 import { ClientError, ConnectionError } from "../client/errors";
 import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
-import { PingTimeoutError, sendPing } from "./ping";
-import { describe, it, vi, assert } from "vitest";
 
-describe("./operations/ping", function () {
-  describe("#sendPing()", function () {
-    it("should send the correct wire command if ping identifier is specified", function () {
+describe("./operations/ping", () => {
+  describe("#sendPing()", () => {
+    it("should send the correct wire command if ping identifier is specified", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
-      sendPing(client, "some identifier");
+      void sendPing(client, "some identifier");
 
       assert.deepStrictEqual(data, ["PING :some identifier\r\n"]);
       vi.useRealTimers();
     });
 
-    it("should send a random ping identifier if no ping identifier is specified", function () {
+    it("should send a random ping identifier if no ping identifier is specified", () => {
       vi.useFakeTimers(); // prevent the promise timing out
       const { data, client } = fakeConnection();
 
-      sendPing(client);
+      void sendPing(client);
 
       assert.strictEqual(data.length, 1);
-      assert.match(data[0], /^PING :dank-twitch-irc:manual:[0-9a-f]{32}\r\n$/);
+      assert.match(
+        data[0] as string,
+        /^PING :dank-twitch-irc:manual:[\da-f]{32}\r\n$/,
+      );
       vi.useRealTimers();
     });
 
-    it("should resolve on matching PONG", async function () {
+    it("should resolve on matching PONG", async () => {
       const { client, emitAndEnd, clientError } = fakeConnection();
 
       const promise = sendPing(client, "some identifier");
@@ -40,7 +44,7 @@ describe("./operations/ping", function () {
       await clientError;
     });
 
-    it("should reject on timeout of 2000 milliseconds by default", async function () {
+    it("should reject on timeout of 2000 milliseconds by default", async () => {
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
 
@@ -67,11 +71,11 @@ describe("./operations/ping", function () {
     });
   });
 
-  describe("PingTimeoutError", function () {
-    it("should be instanceof ConnectionError", function () {
+  describe("pingTimeoutError", () => {
+    it("should be instanceof ConnectionError", () => {
       assert.instanceOf(new PingTimeoutError(), ConnectionError);
     });
-    it("should not be instanceof ClientError", function () {
+    it("should not be instanceof ClientError", () => {
       assert.notInstanceOf(new PingTimeoutError(), ClientError);
     });
   });

@@ -27,25 +27,25 @@ export class TwitchFlag {
 
   /**
    * Flag category, as per the AutoMod moderation categories:
-   * * **I:** Identity language - Words referring to race, religion, gender,
+   * **I:** Identity language - Words referring to race, religion, gender,
    * orientation, disability, or similar. Hate speech falls under this category.
-   * * **S:** Sexually explicit language - Words or phrases referring to
+   * **S:** Sexually explicit language - Words or phrases referring to
    * sexual acts, sexual content, and body parts.
-   * * **A:** Aggressive language - Hostility towards other people, often
+   * **A:** Aggressive language - Hostility towards other people, often
    * associated with bullying.
-   * * **P:** Profanity - Expletives, curse words, and vulgarity. This
+   * **P:** Profanity - Expletives, curse words, and vulgarity. This
    * filter especially helps those who wish to keep their community family-friendly.
    *
    * If this array is empty, this means that Twitch flagged it for a
    * non-specified reason.
    */
-  public categories: Array<{ category: string; score: number }>;
+  public categories: { category: string; score: number }[];
 
   public constructor(
     startIndex: number,
     endIndex: number,
     text: string,
-    category: Array<{ category: string; score: number }>,
+    category: { category: string; score: number }[],
   ) {
     this.startIndex = startIndex;
     this.endIndex = endIndex;

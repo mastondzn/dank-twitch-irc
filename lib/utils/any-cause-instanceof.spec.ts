@@ -1,14 +1,16 @@
 import { BaseError } from "make-error-cause";
-import { anyCauseInstanceof, causeOf } from "./any-cause-instanceof";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./utils/any-cause-instanceof", function () {
-  describe("#causeOf()", function () {
-    it("returns undefined on Error", function () {
+import { anyCauseInstanceof, causeOf } from "./any-cause-instanceof";
+
+describe("./utils/any-cause-instanceof", () => {
+  describe("#causeOf()", () => {
+    it("returns undefined on Error", () => {
+      // eslint-disable-next-line unicorn/error-message
       assert.isUndefined(causeOf(new Error()));
     });
 
-    it("returns the cause on BaseErrors", function () {
+    it("returns the cause on BaseErrors", () => {
       // given
       const cause = new Error("cause");
       const error = new BaseError("error", cause);
@@ -20,10 +22,9 @@ describe("./utils/any-cause-instanceof", function () {
       assert.strictEqual(gottenCause, cause);
     });
 
-    it("ignores #cause property on non-BaseErrors", function () {
+    it("ignores #cause property on non-BaseErrors", () => {
       // given
       const error = new Error("error");
-      // @ts-ignore
       error.cause = "cause string";
 
       // when
@@ -34,20 +35,20 @@ describe("./utils/any-cause-instanceof", function () {
     });
   });
 
-  describe("#anyCauseInstanceof()", function () {
+  describe("#anyCauseInstanceof()", () => {
     class TestErrorA extends BaseError {}
 
     class TestErrorB extends BaseError {}
 
     class TestErrorC extends BaseError {}
 
-    it("returns false on undefined input", function () {
+    it("returns false on undefined input", () => {
       assert.isFalse(anyCauseInstanceof(undefined, Error));
       assert.isFalse(anyCauseInstanceof(undefined, TestErrorA));
     });
 
-    it("works on errors without a cause field", function () {
-      const error = Error("E");
+    it("works on errors without a cause field", () => {
+      const error = new Error("E");
 
       assert.isTrue(anyCauseInstanceof(error, Error));
       assert.isFalse(anyCauseInstanceof(error, TestErrorA));
@@ -55,7 +56,7 @@ describe("./utils/any-cause-instanceof", function () {
       assert.isFalse(anyCauseInstanceof(error, TestErrorC));
     });
 
-    it("level 0", function () {
+    it("level 0", () => {
       const errorA = new TestErrorA("A");
 
       // validate that the function finds the error at level 0 (top-level/the error that was passed)
@@ -65,7 +66,7 @@ describe("./utils/any-cause-instanceof", function () {
       assert.isFalse(anyCauseInstanceof(errorA, TestErrorC));
     });
 
-    it("level 1", function () {
+    it("level 1", () => {
       const errorA = new TestErrorA("A");
       const errorB = new TestErrorB("B", errorA);
 
@@ -76,7 +77,7 @@ describe("./utils/any-cause-instanceof", function () {
       assert.isFalse(anyCauseInstanceof(errorB, TestErrorC));
     });
 
-    it("level 2", function () {
+    it("level 2", () => {
       const errorA = new TestErrorA("A");
       const errorB = new TestErrorB("B", errorA);
       const errorC = new TestErrorC("C", errorB);

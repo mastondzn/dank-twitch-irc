@@ -1,39 +1,40 @@
+import { assert, describe, it } from "vitest";
+
+import { GlobaluserstateMessage } from "./globaluserstate";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { parseTwitchMessage } from "../parser/twitch-message";
-import { GlobaluserstateMessage } from "./globaluserstate";
-import { describe, it, assert } from "vitest";
 
-describe("./message/twitch-types/globaluserstate", function () {
-  describe("GlobaluserstateMessage", function () {
-    it("should be able to parse a real extensive GLOBALUSERSTATE message from twitch", function () {
-      const msgText =
+describe("./message/twitch-types/globaluserstate", () => {
+  describe("globaluserstateMessage", () => {
+    it("should be able to parse a real extensive GLOBALUSERSTATE message from twitch", () => {
+      const messageText =
         "@badge-info=;badges=bits-charity/1;color=#19E6E6;display-name=RANDERS;" +
         "emote-sets=0,42,237,1564,1627,1937,2344,2470,4236,14417,15961,19194,198648,241281," +
         "445556,520063,771848,905510,1056965,1537462,1598955,1641460,1641461,1641462,300206295;" +
         "user-id=40286300;user-type= :tmi.twitch.tv GLOBALUSERSTATE";
 
-      const msg: GlobaluserstateMessage = parseTwitchMessage(
-        msgText,
+      const message: GlobaluserstateMessage = parseTwitchMessage(
+        messageText,
       ) as GlobaluserstateMessage;
 
-      assert.instanceOf(msg, GlobaluserstateMessage);
+      assert.instanceOf(message, GlobaluserstateMessage);
 
-      assert.deepStrictEqual(msg.badgeInfo, new TwitchBadgesList());
-      assert.strictEqual(msg.badgeInfoRaw, "");
+      assert.deepStrictEqual(message.badgeInfo, new TwitchBadgesList());
+      assert.strictEqual(message.badgeInfoRaw, "");
 
       assert.deepStrictEqual(
-        msg.badges,
+        message.badges,
         new TwitchBadgesList(new TwitchBadge("bits-charity", "1")),
       );
-      assert.strictEqual(msg.badgesRaw, "bits-charity/1");
+      assert.strictEqual(message.badgesRaw, "bits-charity/1");
 
-      assert.deepStrictEqual(msg.color, { r: 0x19, g: 0xe6, b: 0xe6 });
-      assert.strictEqual(msg.colorRaw, "#19E6E6");
+      assert.deepStrictEqual(message.color, { r: 0x19, g: 0xE6, b: 0xE6 });
+      assert.strictEqual(message.colorRaw, "#19E6E6");
 
-      assert.strictEqual(msg.displayName, "RANDERS");
+      assert.strictEqual(message.displayName, "RANDERS");
 
-      assert.deepStrictEqual(msg.emoteSets, [
+      assert.deepStrictEqual(message.emoteSets, [
         "0",
         "42",
         "237",
@@ -61,21 +62,21 @@ describe("./message/twitch-types/globaluserstate", function () {
         "300206295",
       ]);
       assert.strictEqual(
-        msg.emoteSetsRaw,
+        message.emoteSetsRaw,
         "0,42,237,1564,1627,1937,2344,2470,4236,14417,15961,19194,198648," +
           "241281,445556,520063,771848,905510,1056965,1537462,1598955,1641460,1641461,1641462,300206295",
       );
 
-      assert.strictEqual("40286300", msg.userID);
+      assert.strictEqual("40286300", message.userID);
 
-      assert.deepStrictEqual(msg.extractGlobalUserState(), {
+      assert.deepStrictEqual(message.extractGlobalUserState(), {
         badgeInfo: new TwitchBadgesList(),
         badgeInfoRaw: "",
 
         badges: new TwitchBadgesList(new TwitchBadge("bits-charity", "1")),
         badgesRaw: "bits-charity/1",
 
-        color: { r: 0x19, g: 0xe6, b: 0xe6 },
+        color: { r: 0x19, g: 0xE6, b: 0xE6 },
         colorRaw: "#19E6E6",
 
         displayName: "RANDERS",
@@ -115,34 +116,34 @@ describe("./message/twitch-types/globaluserstate", function () {
       });
     });
 
-    it("should be able to parse a real minimal GLOBALUSERSTATE message from twitch", function () {
-      const msgText =
+    it("should be able to parse a real minimal GLOBALUSERSTATE message from twitch", () => {
+      const messageText =
         "@badge-info=;badges=;color=;display-name=receivertest3;emote-sets=0;user-id=422021310;" +
         "user-type= :tmi.twitch.tv GLOBALUSERSTATE";
 
-      const msg: GlobaluserstateMessage = parseTwitchMessage(
-        msgText,
+      const message: GlobaluserstateMessage = parseTwitchMessage(
+        messageText,
       ) as GlobaluserstateMessage;
 
-      assert.instanceOf(msg, GlobaluserstateMessage);
+      assert.instanceOf(message, GlobaluserstateMessage);
 
-      assert.deepStrictEqual(msg.badgeInfo, new TwitchBadgesList());
-      assert.strictEqual(msg.badgeInfoRaw, "");
+      assert.deepStrictEqual(message.badgeInfo, new TwitchBadgesList());
+      assert.strictEqual(message.badgeInfoRaw, "");
 
-      assert.deepStrictEqual(msg.badges, new TwitchBadgesList());
-      assert.strictEqual(msg.badgesRaw, "");
+      assert.deepStrictEqual(message.badges, new TwitchBadgesList());
+      assert.strictEqual(message.badgesRaw, "");
 
-      assert.isUndefined(msg.color);
-      assert.strictEqual(msg.colorRaw, "");
+      assert.isUndefined(message.color);
+      assert.strictEqual(message.colorRaw, "");
 
-      assert.strictEqual(msg.displayName, "receivertest3");
+      assert.strictEqual(message.displayName, "receivertest3");
 
-      assert.deepStrictEqual(msg.emoteSets, ["0"]);
-      assert.strictEqual(msg.emoteSetsRaw, "0");
+      assert.deepStrictEqual(message.emoteSets, ["0"]);
+      assert.strictEqual(message.emoteSetsRaw, "0");
 
-      assert.strictEqual("422021310", msg.userID);
+      assert.strictEqual("422021310", message.userID);
 
-      assert.deepStrictEqual(msg.extractGlobalUserState(), {
+      assert.deepStrictEqual(message.extractGlobalUserState(), {
         badgeInfo: new TwitchBadgesList(),
         badgeInfoRaw: "",
 
@@ -161,18 +162,18 @@ describe("./message/twitch-types/globaluserstate", function () {
       });
     });
 
-    it("trims spaces at the end of display names", function () {
-      const msgText =
+    it("trims spaces at the end of display names", () => {
+      const messageText =
         "@badge-info=;badges=;color=;display-name=receivertest3\\s;emote-sets=0;user-id=422021310;" +
         "user-type= :tmi.twitch.tv GLOBALUSERSTATE";
 
-      const msg: GlobaluserstateMessage = parseTwitchMessage(
-        msgText,
+      const message: GlobaluserstateMessage = parseTwitchMessage(
+        messageText,
       ) as GlobaluserstateMessage;
 
-      assert.strictEqual(msg.displayName, "receivertest3");
+      assert.strictEqual(message.displayName, "receivertest3");
       assert.strictEqual(
-        msg.extractGlobalUserState().displayName,
+        message.extractGlobalUserState().displayName,
         "receivertest3",
       );
     });

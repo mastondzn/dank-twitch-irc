@@ -1,56 +1,57 @@
+import { assert, describe, it } from "vitest";
+
+import { UserstateMessage } from "./userstate";
 import { TwitchBadgesList } from "../badges";
 import { parseTwitchMessage } from "../parser/twitch-message";
-import { UserstateMessage } from "./userstate";
-import { describe, it, assert } from "vitest";
 
-describe("./message/twitch-types/userstate", function () {
-  describe("UserstateMessage", function () {
-    it("should be able to parse a real userstate message", function () {
-      const msg = parseTwitchMessage(
+describe("./message/twitch-types/userstate", () => {
+  describe("userstateMessage", () => {
+    it("should be able to parse a real userstate message", () => {
+      const message = parseTwitchMessage(
         "@badge-info=;badges=;color=#FF0000;" +
           "display-name=zwb3_pyramids;emote-sets=0;mod=0;subscriber=0;user-type=" +
           " :tmi.twitch.tv USERSTATE #randers",
       ) as UserstateMessage;
 
-      assert.instanceOf(msg, UserstateMessage);
+      assert.instanceOf(message, UserstateMessage);
 
-      assert.strictEqual(msg.channelName, "randers");
+      assert.strictEqual(message.channelName, "randers");
 
-      assert.deepStrictEqual(msg.badgeInfo, new TwitchBadgesList());
-      assert.strictEqual(msg.badgeInfoRaw, "");
+      assert.deepStrictEqual(message.badgeInfo, new TwitchBadgesList());
+      assert.strictEqual(message.badgeInfoRaw, "");
 
-      assert.deepStrictEqual(msg.badges, new TwitchBadgesList());
-      assert.strictEqual(msg.badgesRaw, "");
+      assert.deepStrictEqual(message.badges, new TwitchBadgesList());
+      assert.strictEqual(message.badgesRaw, "");
 
-      assert.deepStrictEqual(msg.color, {
-        r: 0xff,
+      assert.deepStrictEqual(message.color, {
+        r: 0xFF,
         g: 0x00,
         b: 0x00,
       });
-      assert.strictEqual(msg.colorRaw, "#FF0000");
+      assert.strictEqual(message.colorRaw, "#FF0000");
 
-      assert.strictEqual(msg.displayName, "zwb3_pyramids");
+      assert.strictEqual(message.displayName, "zwb3_pyramids");
 
-      assert.deepStrictEqual(msg.emoteSets, ["0"]);
-      assert.strictEqual(msg.emoteSetsRaw, "0");
+      assert.deepStrictEqual(message.emoteSets, ["0"]);
+      assert.strictEqual(message.emoteSetsRaw, "0");
 
-      assert.strictEqual(msg.isMod, false);
-      assert.strictEqual(msg.isModRaw, "0");
+      assert.strictEqual(message.isMod, false);
+      assert.strictEqual(message.isModRaw, "0");
     });
 
-    it("should extract the correct values with extractUserState()", function () {
-      const msg = parseTwitchMessage(
+    it("should extract the correct values with extractUserState()", () => {
+      const message = parseTwitchMessage(
         "@badge-info=;badges=;color=#FF0000;" +
           "display-name=zwb3_pyramids;emote-sets=0;mod=0;subscriber=0;user-type=" +
           " :tmi.twitch.tv USERSTATE #randers",
       ) as UserstateMessage;
 
-      assert.deepStrictEqual(msg.extractUserState(), {
+      assert.deepStrictEqual(message.extractUserState(), {
         badgeInfo: new TwitchBadgesList(),
         badgeInfoRaw: "",
         badges: new TwitchBadgesList(),
         badgesRaw: "",
-        color: { r: 0xff, g: 0x00, b: 0x00 },
+        color: { r: 0xFF, g: 0x00, b: 0x00 },
         colorRaw: "#FF0000",
         displayName: "zwb3_pyramids",
         emoteSets: ["0"],
@@ -60,14 +61,14 @@ describe("./message/twitch-types/userstate", function () {
       });
     });
 
-    it("trims spaces at the end of display names", function () {
-      const msg = parseTwitchMessage(
+    it("trims spaces at the end of display names", () => {
+      const message = parseTwitchMessage(
         "@badge-info=;badges=;color=#FF0000;" +
           "display-name=zwb3_pyramids\\s;emote-sets=0;mod=0;subscriber=0;user-type=" +
           " :tmi.twitch.tv USERSTATE #randers",
       ) as UserstateMessage;
 
-      assert.strictEqual(msg.displayName, "zwb3_pyramids");
+      assert.strictEqual(message.displayName, "zwb3_pyramids");
     });
   });
 });

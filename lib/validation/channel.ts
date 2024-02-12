@@ -1,7 +1,7 @@
-import { reasonForValue } from "../utils/reason-for-value";
 import { ValidationError } from "./validation-error";
+import { reasonForValue } from "../utils/reason-for-value";
 
-const channelNameRegex = /^[a-z0-9_]{1,25}$/;
+const channelNameRegex = /^[\d_a-z]{1,25}$/;
 
 export function validateChannelName(input?: string | null): void {
   if (input == null || !channelNameRegex.test(input)) {

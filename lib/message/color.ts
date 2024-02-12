@@ -4,8 +4,8 @@ export interface Color {
   b: number;
 }
 
-function toPaddedHex(i: number, shouldBeLength: number): string {
-  const s = i.toString(16);
+function toPaddedHex(index: number, shouldBeLength: number): string {
+  const s = index.toString(16);
   return "0".repeat(shouldBeLength - s.length) + s;
 }
 
@@ -14,9 +14,9 @@ function toPaddedHex(i: number, shouldBeLength: number): string {
  */
 export function colorToHexString(color: Color): string {
   return (
-    "#" +
-    toPaddedHex(color.r, 2) +
-    toPaddedHex(color.g, 2) +
-    toPaddedHex(color.b, 2)
+    `#${ 
+    toPaddedHex(color.r, 2) 
+    }${toPaddedHex(color.g, 2) 
+    }${toPaddedHex(color.b, 2)}`
   );
 }

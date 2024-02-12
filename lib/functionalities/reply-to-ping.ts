@@ -1,11 +1,11 @@
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 
 export function replyToServerPing(conn: SingleConnection): void {
-  conn.on("PING", (msg) => {
-    if (msg.argument == null) {
+  conn.on("PING", (message) => {
+    if (message.argument == null) {
       conn.sendRaw("PONG");
     } else {
-      conn.sendRaw(`PONG :${msg.argument}`);
+      conn.sendRaw(`PONG :${message.argument}`);
     }
   });
 }

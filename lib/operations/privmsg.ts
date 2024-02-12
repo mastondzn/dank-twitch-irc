@@ -1,5 +1,6 @@
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 
+// eslint-disable-next-line ts/require-await
 export async function sendPrivmsg(
   conn: SingleConnection,
   channelName: string,

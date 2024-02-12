@@ -1,8 +1,9 @@
-import { SingleConnection } from "../client/connection";
-import { ConnectionError, MessageError } from "../client/errors";
-import { IRCMessage } from "../message/irc/irc-message";
-import { setDefaults } from "../utils/set-defaults";
 import { TimeoutError } from "./timeout-error";
+import type { SingleConnection } from "../client/connection";
+import { ConnectionError, MessageError } from "../client/errors";
+import type { ClientEvents } from "../client/interface";
+import type { IRCMessage } from "../message/irc/irc-message";
+import { setDefaults } from "../utils/set-defaults";
 
 export type Condition = (message: IRCMessage) => boolean;
 export const alwaysFalse: Condition = (): false => false;
@@ -72,7 +73,7 @@ export class ResponseAwaiter {
   private readonly unsubscribers: (() => void)[] = [];
   private readonly conn: SingleConnection;
   private readonly config: Required<AwaitConfig>;
-  private resolvePromise!: (msg: IRCMessage | undefined) => void;
+  private resolvePromise!: (message: IRCMessage | undefined) => void;
   private rejectPromise!: (reason: Error) => void;
 
   public constructor(conn: SingleConnection, config: AwaitConfig) {
@@ -84,7 +85,7 @@ export class ResponseAwaiter {
       this.rejectPromise = reject;
     });
 
-    this.subscribeTo("close", this.onConnectionClosed);
+    this.subscribeTo("close", this.onConnectionClosed.bind(this));
     this.joinPendingResponsesQueue();
   }
 
@@ -116,12 +117,12 @@ export class ResponseAwaiter {
   }
 
   private unsubscribe(): void {
-    this.unsubscribers.forEach((fn) => fn());
+    for (const function_ of this.unsubscribers) function_();
   }
 
-  private resolve(msg: IRCMessage | undefined): void {
+  private resolve(message?: IRCMessage): void {
     this.unsubscribe();
-    this.resolvePromise(msg);
+    this.resolvePromise(message);
   }
 
   private reject(cause: Error): void {
@@ -137,8 +138,8 @@ export class ResponseAwaiter {
   private onNoResponse(reason: string): void {
     if (this.config.noResponseAction === "failure") {
       this.reject(new TimeoutError(reason));
-    } else if (this.config.noResponseAction === "success") {
-      this.resolve(undefined);
+    } else {
+      this.resolve();
     }
   }
 
@@ -180,7 +181,7 @@ export class ResponseAwaiter {
       removedAwaiters.pop();
 
       // notify the other awaiters they were outpaced
-      removedAwaiters.forEach((awaiter) => awaiter.outpaced());
+      for (const awaiter of removedAwaiters) awaiter.outpaced();
 
       // notify the new queue head to begin its timeout
       const newQueueHead = this.conn.pendingResponses[0];
@@ -191,29 +192,31 @@ export class ResponseAwaiter {
   }
 
   private onConnectionClosed(cause?: Error): void {
-    if (cause != null) {
-      this.reject(new ConnectionError("Connection closed due to error", cause));
-    } else {
+    if (cause == null) {
       this.reject(new ConnectionError("Connection closed with no error"));
+    } else {
+      this.reject(new ConnectionError("Connection closed due to error", cause));
     }
   }
 
   // returns true if something matched, preventing "later" matchers from
   // running against that message
-  public onConnectionMessage(msg: IRCMessage): boolean {
-    if (this.config.failure(msg)) {
-      this.reject(new MessageError(`Bad response message: ${msg.rawSource}`));
+  public onConnectionMessage(message: IRCMessage): boolean {
+    if (this.config.failure(message)) {
+      this.reject(
+        new MessageError(`Bad response message: ${message.rawSource}`),
+      );
       return true;
-    } else if (this.config.success(msg)) {
-      this.resolve(msg);
+    } else if (this.config.success(message)) {
+      this.resolve(message);
       return true;
     }
     return false;
   }
 
-  private subscribeTo(
-    eventName: string,
-    handler: (...args: any[]) => any,
+  private subscribeTo<T extends keyof ClientEvents>(
+    eventName: T,
+    handler: (...arguments_: ClientEvents[T]) => unknown,
   ): void {
     handler = handler.bind(this);
     this.conn.on(eventName, handler);

@@ -1,31 +1,35 @@
+/* eslint-disable unicorn/number-literal-case */
+import { assert, describe, it } from "vitest";
+
+import { MissingTagError } from "./missing-tag-error";
+import { ParseError } from "./parse-error";
+import type { TagValueParser } from "./tag-values";
+import { tagParserFor } from "./tag-values";
 import { assertThrowsChain } from "../../utils/helpers.spec";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";
-import { MissingTagError } from "./missing-tag-error";
-import { ParseError } from "./parse-error";
-import { tagParserFor, TagValueParser } from "./tag-values";
-import { describe, it, assert } from "vitest";
 
-describe("./message/parser/tag-values", function () {
+describe("./message/parser/tag-values", () => {
   function checkRequire<V, A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,
-    ) => (key: string, ...converterArgs: A) => V,
-    ...converterArgs: A
+    ) => (key: string, ...converterArguments: A) => V,
+    ...converterArguments: A
   ): void {
-    describe("#requireData", function () {
-      it("should throw MissingTagError on missing key", function () {
+    describe("#requireData", () => {
+      it("should throw MissingTagError on missing key", () => {
         assertThrowsChain(
-          () => subject(tagParserFor({}))("key", ...converterArgs),
+          () => subject(tagParserFor({}))("key", ...converterArguments),
           MissingTagError,
           'Required tag value not present at key "key" (is undefined)',
         );
       });
 
-      it("should throw MissingTagError on null value", function () {
+      it("should throw MissingTagError on null value", () => {
         assertThrowsChain(
-          () => subject(tagParserFor({ key: null }))("key", ...converterArgs),
+          () =>
+            subject(tagParserFor({ key: null }))("key", ...converterArguments),
           MissingTagError,
           'Required tag value not present at key "key" (is null)',
         );
@@ -33,30 +37,32 @@ describe("./message/parser/tag-values", function () {
     });
   }
 
-  function checkGet<V, A extends any[]>(
+  function checkGet<V, A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,
-    ) => (key: string, ...converterArgs: A) => V | undefined,
-    ...converterArgs: A
+    ) => (key: string, ...converterArguments: A) => V | undefined,
+    ...converterArguments: A
   ): void {
-    describe("#getData", function () {
-      it("should return undefined on missing key", function () {
-        assert.isUndefined(subject(tagParserFor({}))("key", ...converterArgs));
+    describe("#getData", () => {
+      it("should return undefined on missing key", () => {
+        assert.isUndefined(
+          subject(tagParserFor({}))("key", ...converterArguments),
+        );
       });
 
-      it("should return undefined on null value", function () {
+      it("should return undefined on null value", () => {
         assert.isUndefined(
-          subject(tagParserFor({ key: null }))("key", ...converterArgs),
+          subject(tagParserFor({ key: null }))("key", ...converterArguments),
         );
       });
     });
   }
 
-  describe("#getString(), #requireString()", function () {
-    checkGet((p) => p.getString);
-    checkRequire((p) => p.requireString);
+  describe("#getString(), #requireString()", () => {
+    checkGet((p) => p.getString.bind(p));
+    checkRequire((p) => p.requireString.bind(p));
 
-    it("should return the value if value exists (also on empty string)", function () {
+    it("should return the value if value exists (also on empty string)", () => {
       assert.strictEqual(
         tagParserFor({ key: "value" }).getString("key"),
         "value",
@@ -70,54 +76,56 @@ describe("./message/parser/tag-values", function () {
     });
   });
 
-  function checkThrowsUnparseableInt<V, A extends any[]>(
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  function checkThrowsUnparseableInt<V, A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,
-    ) => (key: string, ...converterArgs: A) => V | undefined,
-    ...converterArgs: A
+    ) => (key: string, ...converterArguments: A) => V | undefined,
+    ...converterArguments: A
   ): void {
-    it("should throw ParseError on empty string input", function () {
+    it("should throw ParseError on empty string input", () => {
       assertThrowsChain(
-        () => subject(tagParserFor({ key: "" }))("key", ...converterArgs),
+        () => subject(tagParserFor({ key: "" }))("key", ...converterArguments),
         ParseError,
         'Failed to parse integer from tag value ""',
       );
     });
-    it("should throw ParseError on invalid integer input", function () {
+    it("should throw ParseError on invalid integer input", () => {
       assertThrowsChain(
-        () => subject(tagParserFor({ key: "abc" }))("key", ...converterArgs),
+        () =>
+          subject(tagParserFor({ key: "abc" }))("key", ...converterArguments),
         ParseError,
         'Failed to parse integer from tag value "abc"',
       );
     });
   }
 
-  describe("#getInt(), #requireInt()", function () {
-    checkGet((p) => p.getInt);
-    checkRequire((p) => p.requireInt);
+  describe("#getInt(), #requireInt()", () => {
+    checkGet((p) => p.getInt.bind(p));
+    checkRequire((p) => p.requireInt.bind(p));
 
-    checkThrowsUnparseableInt((p) => p.getInt);
-    checkThrowsUnparseableInt((p) => p.requireInt);
+    checkThrowsUnparseableInt((p) => p.getInt.bind(p));
+    checkThrowsUnparseableInt((p) => p.requireInt.bind(p));
 
-    it("should return a number if value exists and was parseable", function () {
+    it("should return a number if value exists and was parseable", () => {
       assert.strictEqual(15, tagParserFor({ key: "15" }).getInt("key"));
       assert.strictEqual(15, tagParserFor({ key: "15" }).requireInt("key"));
     });
   });
 
-  describe("#getBoolean(), #requireBoolean()", function () {
-    checkGet((p) => p.getBoolean);
-    checkRequire((p) => p.requireBoolean);
+  describe("#getBoolean(), #requireBoolean()", () => {
+    checkGet((p) => p.getBoolean.bind(p));
+    checkRequire((p) => p.requireBoolean.bind(p));
 
-    checkThrowsUnparseableInt((p) => p.getInt);
-    checkThrowsUnparseableInt((p) => p.requireInt);
+    checkThrowsUnparseableInt((p) => p.getInt.bind(p));
+    checkThrowsUnparseableInt((p) => p.requireInt.bind(p));
 
-    it("should return false if the parsed integer is 0", function () {
+    it("should return false if the parsed integer is 0", () => {
       assert.isFalse(tagParserFor({ key: "0" }).getBoolean("key"));
       assert.isFalse(tagParserFor({ key: "0.0" }).getBoolean("key"));
     });
 
-    it("should return false if the parsed integer is non-0", function () {
+    it("should return false if the parsed integer is non-0", () => {
       assert.isTrue(tagParserFor({ key: "1" }).getBoolean("key"));
       assert.isTrue(tagParserFor({ key: "-1" }).getBoolean("key"));
       assert.isTrue(tagParserFor({ key: "15" }).getBoolean("key"));
@@ -125,11 +133,11 @@ describe("./message/parser/tag-values", function () {
     });
   });
 
-  describe("#getColor(), #requireColor()", function () {
-    checkGet((p) => p.getColor);
-    checkRequire((p) => p.requireColor);
+  describe("#getColor(), #requireColor()", () => {
+    checkGet((p) => p.getColor.bind(p));
+    checkRequire((p) => p.requireColor.bind(p));
 
-    it("should parse #RRGGBB color input correctly", function () {
+    it("should parse #RRGGBB color input correctly", () => {
       assert.deepStrictEqual(tagParserFor({ key: "#aabbcc" }).getColor("key"), {
         r: 0xaa,
         g: 0xbb,
@@ -147,11 +155,11 @@ describe("./message/parser/tag-values", function () {
       });
     });
 
-    it("#getColor() should return undefined on empty string input", function () {
+    it("#getColor() should return undefined on empty string input", () => {
       assert.isUndefined(tagParserFor({ key: "" }).getColor("key"));
     });
 
-    it("#requireColor() should throw MissingDataError on empty string input", function () {
+    it("#requireColor() should throw MissingDataError on empty string input", () => {
       assertThrowsChain(
         () => tagParserFor({ key: "" }).requireColor("key"),
         MissingTagError,
@@ -160,39 +168,39 @@ describe("./message/parser/tag-values", function () {
     });
   });
 
-  describe("#getTimestamp(), #requireTimestamp()", function () {
-    checkGet((p) => p.getTimestamp);
-    checkRequire((p) => p.requireTimestamp);
-    checkThrowsUnparseableInt((p) => p.getTimestamp);
-    checkThrowsUnparseableInt((p) => p.requireTimestamp);
+  describe("#getTimestamp(), #requireTimestamp()", () => {
+    checkGet((p) => p.getTimestamp.bind(p));
+    checkRequire((p) => p.requireTimestamp.bind(p));
+    checkThrowsUnparseableInt((p) => p.getTimestamp.bind(p));
+    checkThrowsUnparseableInt((p) => p.requireTimestamp.bind(p));
 
-    it("should interpret given integer values as milliseconds since UTC epoch", function () {
+    it("should interpret given integer values as milliseconds since UTC epoch", () => {
       assert.strictEqual(
         tagParserFor({ key: "1234567" }).requireTimestamp("key").getTime(),
-        1234567,
+        1_234_567,
       );
     });
   });
 
-  describe("#getBadges(), #requireBadges()", function () {
-    checkGet((p) => p.getBadges);
-    checkRequire((p) => p.requireBadges);
+  describe("#getBadges(), #requireBadges()", () => {
+    checkGet((p) => p.getBadges.bind(p));
+    checkRequire((p) => p.requireBadges.bind(p));
 
-    it("should return an empty list on empty string input", function () {
+    it("should return an empty list on empty string input", () => {
       assert.deepStrictEqual(
         tagParserFor({ key: "" }).getBadges("key"),
         new TwitchBadgesList(),
       );
     });
 
-    it("should return single-element array on single badge", function () {
+    it("should return single-element array on single badge", () => {
       assert.deepStrictEqual(
         tagParserFor({ key: "admin/1" }).getBadges("key"),
         new TwitchBadgesList(new TwitchBadge("admin", "1")),
       );
     });
 
-    it("should accept two badges in the tag source", function () {
+    it("should accept two badges in the tag source", () => {
       assert.deepStrictEqual(
         tagParserFor({ key: "admin/1,subscriber/32" }).getBadges("key"),
         new TwitchBadgesList(
@@ -202,7 +210,7 @@ describe("./message/parser/tag-values", function () {
       );
     });
 
-    it("should accept three badges in the tag source", function () {
+    it("should accept three badges in the tag source", () => {
       assert.deepStrictEqual(
         tagParserFor({ key: "admin/1,subscriber/32,bits/1000" }).getBadges(
           "key",
@@ -216,17 +224,17 @@ describe("./message/parser/tag-values", function () {
     });
   });
 
-  describe("#getTagEmotes()", function () {
-    checkGet((p) => p.getEmotes, "lul");
+  describe("#getTagEmotes()", () => {
+    checkGet((p) => p.getEmotes.bind(p), "lul");
     // @ts-expect-error ???
-    checkRequire((p) => p.requireEmoteSets, "lul");
+    checkRequire((p) => p.requireEmoteSets.bind(p), "lul");
 
-    it("should return an empty list on empty string input", function () {
+    it("should return an empty list on empty string input", () => {
       const actual = tagParserFor({ key: "" }).getEmotes("key", "test");
       assert.deepStrictEqual(actual, []);
     });
 
-    it("should return single-element array on single emote", function () {
+    it("should return single-element array on single emote", () => {
       const actual = tagParserFor({ key: "25:4-8" }).getEmotes(
         "key",
         "asd Kappa def",
@@ -234,7 +242,7 @@ describe("./message/parser/tag-values", function () {
       assert.deepStrictEqual(actual, [new TwitchEmote("25", 4, 9, "Kappa")]);
     });
 
-    it("should return 2-element array on 2 identical emotes", function () {
+    it("should return 2-element array on 2 identical emotes", () => {
       const actual = tagParserFor({ key: "25:4-8,14-18" }).getEmotes(
         "key",
         "asd Kappa def Kappa def",
@@ -245,7 +253,7 @@ describe("./message/parser/tag-values", function () {
       ]);
     });
 
-    it("should return 2-element array on 2 different emotes", function () {
+    it("should return 2-element array on 2 different emotes", () => {
       const actual = tagParserFor({ key: "25:4-8/1902:14-18" }).getEmotes(
         "key",
         "asd Kappa def Keepo def",
@@ -256,7 +264,7 @@ describe("./message/parser/tag-values", function () {
       ]);
     });
 
-    it("should return a correctly sorted 3-element array on interleaved emotes", function () {
+    it("should return a correctly sorted 3-element array on interleaved emotes", () => {
       const actual = tagParserFor({ key: "25:5-9,27-31/1902:16-20" }).getEmotes(
         "key",
         "test Kappa test Keepo test Kappa",
@@ -269,26 +277,26 @@ describe("./message/parser/tag-values", function () {
     });
   });
 
-  describe("#getEmoteSets(), #requireEmoteSets()", function () {
-    checkGet((p) => p.getEmoteSets);
-    checkRequire((p) => p.requireEmoteSets);
+  describe("#getEmoteSets(), #requireEmoteSets()", () => {
+    checkGet((p) => p.getEmoteSets.bind(p));
+    checkRequire((p) => p.requireEmoteSets.bind(p));
 
-    it("should return an empty list on empty string input", function () {
+    it("should return an empty list on empty string input", () => {
       const actual = tagParserFor({ key: "" }).getEmoteSets("key");
       assert.deepStrictEqual(actual, []);
     });
 
-    it("should parse one emote set correctly", function () {
+    it("should parse one emote set correctly", () => {
       const actual = tagParserFor({ key: "0" }).getEmoteSets("key");
       assert.deepStrictEqual(actual, ["0"]);
     });
 
-    it("should parse two emote set correctly", function () {
+    it("should parse two emote set correctly", () => {
       const actual = tagParserFor({ key: "0,3343" }).getEmoteSets("key");
       assert.deepStrictEqual(actual, ["0", "3343"]);
     });
 
-    it("should parse three emote set correctly", function () {
+    it("should parse three emote set correctly", () => {
       // also tests that function preserves order (no sorting)
       const actual = tagParserFor({ key: "0,7897,3343" }).getEmoteSets("key");
       assert.deepStrictEqual(actual, ["0", "7897", "3343"]);

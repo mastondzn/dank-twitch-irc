@@ -1,7 +1,7 @@
-import { SingleConnection } from "../client/connection";
+import { awaitJoinResponse } from "./join";
+import type { SingleConnection } from "../client/connection";
 import { MAX_OUTGOING_COMMAND_LENGTH } from "../constants";
 import { splitIntoChunks } from "../utils/split-into-chunks";
-import { awaitJoinResponse } from "./join";
 
 export async function joinAll(
   conn: SingleConnection,
@@ -10,10 +10,10 @@ export async function joinAll(
   // e.g. "JOIN #firstchannel,#secondchannel,#thirdchannel"
   // joining channels this way is much faster than sending individual JOIN commands
   // the twitch server cuts off messages at 4096 characters so we produce chunks of that size
-  channelNames.forEach((channelName) => conn.wantedChannels.add(channelName));
+  for (const channelName of channelNames) conn.wantedChannels.add(channelName);
 
   const channelChunks = splitIntoChunks(
-    channelNames.map((e) => `#${e}`),
+    channelNames.map((element) => `#${element}`),
     ",",
     MAX_OUTGOING_COMMAND_LENGTH - "JOIN ".length,
   );
@@ -24,7 +24,7 @@ export async function joinAll(
     conn.sendRaw(`JOIN ${chunk.join(",")}`);
 
     const chunkNames = chunk.map((s) => s.slice(1));
-    const chunkPromises: Promise<any>[] = [];
+    const chunkPromises: Promise<unknown>[] = [];
 
     // we await the joining of all channels of this chunk in parallel
     for (const channelName of chunkNames) {
@@ -37,7 +37,7 @@ export async function joinAll(
           },
           (error) => {
             // on failure
-            resultsMap[channelName] = error;
+            resultsMap[channelName] = error as Error;
           },
         ),
       );

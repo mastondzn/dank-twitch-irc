@@ -9,6 +9,7 @@ export function causeOf(error: Error): Error | undefined {
 
 export function anyCauseInstanceof(
   error: Error | undefined,
+  // eslint-disable-next-line ts/no-explicit-any
   constructor: any,
 ): boolean {
   let currentError: Error | undefined = error;

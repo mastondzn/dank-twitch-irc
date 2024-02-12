@@ -1,9 +1,13 @@
-import { ClientConfiguration } from "../config/config";
-import { ClientMixin, ConnectionMixin } from "../mixins/base-mixin";
+import { BaseClient } from "./base-client";
+import { SingleConnection } from "./connection";
+import { ClientError } from "./errors";
+import type { ClientConfiguration } from "../config/config";
+import type { ClientMixin, ConnectionMixin } from "../mixins/base-mixin";
+import type { ConnectionPool } from "../mixins/connection-pool";
 import { IgnoreUnhandledPromiseRejectionsMixin } from "../mixins/ignore-promise-rejections";
 import { ConnectionRateLimiter } from "../mixins/ratelimiters/connection";
-import { PrivmsgMessageRateLimiter } from "../mixins/ratelimiters/privmsg";
 import { JoinRateLimiter } from "../mixins/ratelimiters/join";
+import { PrivmsgMessageRateLimiter } from "../mixins/ratelimiters/privmsg";
 import { RoomStateTracker } from "../mixins/roomstate-tracker";
 import { UserStateTracker } from "../mixins/userstate-tracker";
 import { joinChannel, joinNothingToDo } from "../operations/join";
@@ -11,18 +15,14 @@ import { joinAll } from "../operations/join-all";
 import { partChannel, partNothingToDo } from "../operations/part";
 import { sendPing } from "../operations/ping";
 import { sendPrivmsg } from "../operations/privmsg";
-import { me, say, reply } from "../operations/say";
+import { me, reply, say } from "../operations/say";
 import { anyCauseInstanceof } from "../utils/any-cause-instanceof";
+import { debugLogger } from "../utils/debug-logger";
 import { findAndPushToEnd } from "../utils/find-and-push-to-end";
 import { removeInPlace } from "../utils/remove-in-place";
 import { unionSets } from "../utils/union-sets";
-import { validateChannelName, correctChannelName } from "../validation/channel";
-import { BaseClient } from "./base-client";
-import { SingleConnection } from "./connection";
-import { ClientError } from "./errors";
-import { ConnectionPool } from "../mixins/connection-pool";
+import { correctChannelName, validateChannelName } from "../validation/channel";
 import { validateMessageID } from "../validation/reply";
-import { debugLogger } from "../utils/debug-logger";
 
 const log = debugLogger("dank-twitch-irc:client");
 
@@ -65,13 +65,13 @@ export class ChatClient extends BaseClient {
       if (anyCauseInstanceof(error, ClientError)) {
         process.nextTick(() => {
           this.emitClosed(error);
-          this.connections.forEach((conn) => conn.destroy(error));
+          for (const conn of this.connections) conn.destroy(error);
         });
       }
     });
 
     this.on("close", () => {
-      this.connections.forEach((conn) => conn.close());
+      for (const conn of this.connections) conn.close();
     });
   }
 
@@ -89,11 +89,11 @@ export class ChatClient extends BaseClient {
 
   public destroy(error?: Error): void {
     // we emit onError before onClose just like the standard node.js core modules do
-    if (error != null) {
+    if (error == null) {
+      this.emitClosed();
+    } else {
       this.emitError(error);
       this.emitClosed(error);
-    } else {
-      this.emitClosed();
     }
   }
 
@@ -154,8 +154,8 @@ export class ChatClient extends BaseClient {
 
     const promises: Promise<Record<string, Error | undefined>>[] = [];
 
-    let idx = 0;
-    while (idx < needToJoin.length) {
+    let index = 0;
+    while (index < needToJoin.length) {
       const conn = this.requireConnection(
         maxJoinedChannels(this.configuration.maxChannelCountPerConnection),
       );
@@ -164,13 +164,16 @@ export class ChatClient extends BaseClient {
         this.configuration.maxChannelCountPerConnection -
         conn.wantedChannels.size;
 
-      const channelsSlice = needToJoin.slice(idx, (idx += canJoin));
+      const channelsSlice = needToJoin.slice(index, (index += canJoin));
 
       promises.push(joinAll(conn, channelsSlice));
     }
 
     const errorChunks = await Promise.all(promises);
-    return Object.assign({}, ...errorChunks);
+    return errorChunks.reduce(
+      (accumulator, chunk) => Object.assign(accumulator, chunk),
+      {},
+    );
   }
 
   public async privmsg(channelName: string, message: string): Promise<void> {
@@ -200,7 +203,9 @@ export class ChatClient extends BaseClient {
   }
 
   /**
+   * @param channelName The channel name you want to reply in.
    * @param messageID The message ID you want to reply to.
+   * @param message The message you want to send.
    */
   public async reply(
     channelName: string,
@@ -285,11 +290,10 @@ export class ChatClient extends BaseClient {
 
   private reconnectFailedConnection(conn: SingleConnection): void {
     // rejoin channels, creates connections on demand
-    const channels = Array.from(conn.wantedChannels);
+    const channels = [...conn.wantedChannels];
 
     if (channels.length > 0) {
-      //noinspection JSIgnoredPromiseFromCall
-      this.joinAll(channels);
+      void this.joinAll(channels);
     } else if (this.connections.length <= 0) {
       // this ensures that clients with zero joined channels stay connected (so they can receive whispers)
       this.requireConnection();
@@ -309,7 +313,7 @@ export class ChatClient extends BaseClient {
     predicate: ConnectionPredicate = alwaysTrue,
   ): SingleConnection {
     return (
-      findAndPushToEnd(this.connections, predicate) || this.newConnection()
+      findAndPushToEnd(this.connections, predicate) ?? this.newConnection()
     );
   }
 }

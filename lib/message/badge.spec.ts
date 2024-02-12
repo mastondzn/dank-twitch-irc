@@ -1,9 +1,10 @@
-import { TwitchBadge } from "./badge";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./message/badge", function () {
-  describe("TwitchBadge", function () {
-    describe("isKnownBadge style getters", function () {
+import { TwitchBadge } from "./badge";
+
+describe("./message/badge", () => {
+  describe("twitchBadge", () => {
+    describe("isKnownBadge style getters", () => {
       const testCases: [string, string, (b: TwitchBadge) => boolean][] = [
         ["admin", "1", (b) => b.isAdmin],
         ["bits", "1", (b) => b.isBits],
@@ -22,7 +23,7 @@ describe("./message/badge", function () {
       ];
 
       for (const [badgeName, badgeVersion, getter] of testCases) {
-        it(`should recognize ${badgeName}/${badgeVersion}`, function () {
+        it(`should recognize ${badgeName}/${badgeVersion}`, () => {
           const badge = new TwitchBadge(badgeName, badgeVersion);
 
           assert(getter(badge));
@@ -30,7 +31,7 @@ describe("./message/badge", function () {
       }
     });
 
-    it("should return badgeName/badgeVersion from toString()", function () {
+    it("should return badgeName/badgeVersion from toString()", () => {
       assert.strictEqual(
         new TwitchBadge("subscriber", "1").toString(),
         "subscriber/1",
@@ -41,12 +42,14 @@ describe("./message/badge", function () {
       );
     });
 
-    it("should return badgeName/badgeVersion from implcit toString() conversion", function () {
+    it("should return badgeName/badgeVersion from implcit toString() conversion", () => {
       assert.strictEqual(
-        new TwitchBadge("subscriber", "10") + "",
+        // eslint-disable-next-line ts/restrict-template-expressions
+        `${new TwitchBadge("subscriber", "10")}`,
         "subscriber/10",
       );
       assert.strictEqual(
+        // eslint-disable-next-line ts/restrict-template-expressions
         `${new TwitchBadge("subscriber", "10")}`,
         "subscriber/10",
       );

@@ -1,9 +1,10 @@
+import { assert, describe, it } from "vitest";
+
 import { assertThrowsChain } from "./helpers.spec";
 import { splitIntoChunks } from "./split-into-chunks";
-import { describe, it, assert } from "vitest";
 
-describe("./utils/split-into-chunks", function () {
-  describe("#splitIntoChunks()", function () {
+describe("./utils/split-into-chunks", () => {
+  describe("#splitIntoChunks()", () => {
     describe("splitIntoChunks", () => {
       it("should return an empty array when an empty array is passed", () => {
         assert.deepStrictEqual(splitIntoChunks([], " ", 500), []);

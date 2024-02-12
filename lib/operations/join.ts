@@ -1,5 +1,5 @@
 import { awaitResponse } from "../await/await-response";
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { MessageError } from "../client/errors";
 import { JoinMessage } from "../message/twitch-types/membership/join";
 import { NoticeMessage } from "../message/twitch-types/notice";
@@ -22,15 +22,15 @@ export function awaitJoinResponse(
   channelName: string,
 ): Promise<JoinMessage> {
   return awaitResponse(conn, {
-    success: (msg) =>
-      msg instanceof JoinMessage &&
-      msg.channelName === channelName &&
-      msg.joinedUsername === conn.configuration.username,
-    failure: (msg) =>
-      msg instanceof NoticeMessage &&
-      msg.channelName === channelName &&
-      msg.messageID === "msg_channel_suspended",
-    errorType: (m, e) => new JoinError(channelName, m, e),
+    success: (message) =>
+      message instanceof JoinMessage &&
+      message.channelName === channelName &&
+      message.joinedUsername === conn.configuration.username,
+    failure: (message) =>
+      message instanceof NoticeMessage &&
+      message.channelName === channelName &&
+      message.messageID === "msg_channel_suspended",
+    errorType: (message, cause) => new JoinError(channelName, message, cause),
     errorMessage: `Failed to join channel ${channelName}`,
   }) as Promise<JoinMessage>;
 }

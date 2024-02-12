@@ -1,12 +1,15 @@
-import sinon from "sinon";
-import { promisify } from "util";
-import { fakeClient } from "../utils/helpers.spec";
-import { RoomStateTracker } from "./roomstate-tracker";
-import { describe, it, assert } from "vitest";
+import { promisify } from "node:util";
 
-describe("./mixins/roomstate-tracker", function () {
-  describe("RoomstateTracker", function () {
-    it("should set client.roomstateTracker on the client when applied", function () {
+import sinon from "sinon";
+import { assert, describe, it } from "vitest";
+
+import { RoomStateTracker } from "./roomstate-tracker";
+import { fakeClient } from "../utils/helpers.spec";
+
+
+describe("./mixins/roomstate-tracker", () => {
+  describe("roomstateTracker", () => {
+    it("should set client.roomstateTracker on the client when applied", () => {
       const { client } = fakeClient(false);
       const roomStateTracker = new RoomStateTracker();
 
@@ -17,7 +20,7 @@ describe("./mixins/roomstate-tracker", function () {
       assert.strictEqual(client.roomStateTracker, roomStateTracker);
     });
 
-    it("should save/update incoming ROOMSTATE messages", async function () {
+    it("should save/update incoming ROOMSTATE messages", async () => {
       const { client, emit, emitAndEnd } = fakeClient();
       const roomStateTracker = new RoomStateTracker();
 
@@ -96,7 +99,7 @@ describe("./mixins/roomstate-tracker", function () {
       });
     });
 
-    it("should ignore partial ROOMSTATE messages before the first full ROOMSTATE message", async function () {
+    it("should ignore partial ROOMSTATE messages before the first full ROOMSTATE message", async () => {
       const { client, emitAndEnd } = fakeClient();
       const roomStateTracker = new RoomStateTracker();
 
@@ -112,7 +115,7 @@ describe("./mixins/roomstate-tracker", function () {
       assert.isUndefined(roomStateTracker.getChannelState("randers"));
     });
 
-    it("should emit newChannelState on new roomstate", async function () {
+    it("should emit newChannelState on new roomstate", async () => {
       const { client, emit } = fakeClient();
       const roomStateTracker = new RoomStateTracker();
       client.use(roomStateTracker);
@@ -135,7 +138,7 @@ describe("./mixins/roomstate-tracker", function () {
       );
     });
 
-    it("should emit newChannelState on updated roomstate", async function () {
+    it("should emit newChannelState on updated roomstate", async () => {
       const { client, emit, emitAndEnd } = fakeClient();
       const roomStateTracker = new RoomStateTracker();
       client.use(roomStateTracker);

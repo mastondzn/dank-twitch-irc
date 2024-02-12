@@ -1,8 +1,9 @@
-import { TimeoutError } from "../await/timeout-error";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
+import { assert, describe, it, vi } from "vitest";
+
 import { JoinError } from "./join";
 import { joinAll } from "./join-all";
-import { describe, it, vi, assert } from "vitest";
+import { TimeoutError } from "../await/timeout-error";
+import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
 
 function successResponsesForChannelChunk(channels: string[]): string[] {
   return channels.map(
@@ -11,13 +12,13 @@ function successResponsesForChannelChunk(channels: string[]): string[] {
   );
 }
 
-describe("./operations/join-all", function () {
-  describe("#joinAll()", function () {
-    it("should send the correct wire command for a single chunk", function () {
+describe("./operations/join-all", () => {
+  describe("#joinAll()", () => {
+    it("should send the correct wire command for a single chunk", () => {
       vi.useFakeTimers();
       const { client, data } = fakeConnection();
 
-      joinAll(client, ["pajlada", "randers", "nymn_hs", "forsen"]);
+      void joinAll(client, ["pajlada", "randers", "nymn_hs", "forsen"]);
 
       assert.deepStrictEqual(data, [
         "JOIN #pajlada,#randers,#nymn_hs,#forsen\r\n",
@@ -25,7 +26,7 @@ describe("./operations/join-all", function () {
       vi.useRealTimers();
     });
 
-    it("should send the correct wire command for a multiple chunks", async function () {
+    it("should send the correct wire command for a multiple chunks", async () => {
       const { client, clientError, emitAndEnd, emit, data } = fakeConnection();
 
       const firstChunkChannels = [
@@ -382,7 +383,7 @@ describe("./operations/join-all", function () {
 
       // method sends first chunk...
       assert.deepStrictEqual(data, [
-        "JOIN #" + firstChunkChannels.join(",#") + "\r\n",
+        `JOIN #${firstChunkChannels.join(",#")}\r\n`,
       ]);
 
       // then awaits all responses/failures for that chunk...
@@ -393,7 +394,7 @@ describe("./operations/join-all", function () {
       await new Promise((resolve) => setImmediate(resolve));
 
       assert.deepStrictEqual(data, [
-        "JOIN #" + firstChunkChannels.join(",#") + "\r\n",
+        `JOIN #${firstChunkChannels.join(",#")}\r\n`,
         "JOIN #pajlada,#nymn_hs,#forsen\r\n",
       ]);
 
@@ -406,11 +407,11 @@ describe("./operations/join-all", function () {
       const results = await promise;
 
       // no error for successful channel
-      assert.isUndefined(results["pajlada"]);
+      assert.isUndefined(results.pajlada);
 
       // error for nymn_hs (no response received)
       assertErrorChain(
-        results["nymn_hs"],
+        results.nymn_hs,
         JoinError,
         "Failed to join channel nymn_hs: A response to a command issued later than this command was received",
         TimeoutError,

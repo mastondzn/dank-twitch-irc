@@ -1,12 +1,14 @@
 import EventEmitter from "eventemitter3";
-import { debugLogger } from "../utils/debug-logger";
-import { ChatClient } from "../client/client";
+
+import type { ClientMixin } from "./base-mixin";
+import type { ChatClient } from "../client/client";
+import type {
+  RoomState,
+  RoomstateMessage} from "../message/twitch-types/roomstate";
 import {
   hasAllStateTags,
-  RoomState,
-  RoomstateMessage,
 } from "../message/twitch-types/roomstate";
-import { ClientMixin } from "./base-mixin";
+import { debugLogger } from "../utils/debug-logger";
 
 const log = debugLogger("dank-twitch-irc:roomstate-tracker");
 
@@ -32,26 +34,26 @@ export class RoomStateTracker
     client.on("ROOMSTATE", this.onRoomstateMessage.bind(this));
   }
 
-  private onRoomstateMessage(msg: RoomstateMessage): void {
+  private onRoomstateMessage(message: RoomstateMessage): void {
     const currentState: RoomState | undefined = this.getChannelState(
-      msg.channelName,
+      message.channelName,
     );
-    const extractedState: Partial<RoomState> = msg.extractRoomState();
+    const extractedState: Partial<RoomState> = message.extractRoomState();
 
     if (currentState == null) {
       if (!hasAllStateTags(extractedState)) {
         log.warn(
           "Got incomplete ROOMSTATE before receiving complete roomstate:",
-          msg.rawSource,
+          message.rawSource,
         );
         return;
       }
-      this.channelStates[msg.channelName] = extractedState;
-      this.emit("newChannelState", msg.channelName, extractedState);
+      this.channelStates[message.channelName] = extractedState;
+      this.emit("newChannelState", message.channelName, extractedState);
     } else {
       const newState = Object.assign({}, currentState, extractedState);
-      this.channelStates[msg.channelName] = newState;
-      this.emit("newChannelState", msg.channelName, newState);
+      this.channelStates[message.channelName] = newState;
+      this.emit("newChannelState", message.channelName, newState);
     }
   }
 }

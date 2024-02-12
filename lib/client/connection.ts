@@ -1,21 +1,22 @@
-import { debugLogger } from "../utils/debug-logger";
 import split2 from "split2";
-import { ResponseAwaiter } from "../await/await-response";
-import { ClientConfiguration } from "../config/config";
+
+import { BaseClient } from "./base-client";
+import { ConnectionError, ProtocolError } from "./errors";
+import { makeTransport } from "./transport/make-transport";
+import type { Transport } from "./transport/transport";
+import type { ResponseAwaiter } from "../await/await-response";
+import type { ClientConfiguration } from "../config/config";
 import { handleReconnectMessage } from "../functionalities/handle-reconnect-message";
 import { replyToServerPing } from "../functionalities/reply-to-ping";
 import { sendClientPings } from "../functionalities/send-pings";
 import { parseTwitchMessage } from "../message/parser/twitch-message";
-import { ConnectionMixin } from "../mixins/base-mixin";
+import type { ConnectionMixin } from "../mixins/base-mixin";
 import { sendLogin } from "../operations/login";
 import { requestCapabilities } from "../operations/request-capabilities";
 import { anyCauseInstanceof } from "../utils/any-cause-instanceof";
+import { debugLogger } from "../utils/debug-logger";
 import { ignoreErrors } from "../utils/ignore-errors";
 import { validateIRCCommand } from "../validation/irc-command";
-import { BaseClient } from "./base-client";
-import { ConnectionError, ProtocolError } from "./errors";
-import { makeTransport } from "./transport/make-transport";
-import { Transport } from "./transport/transport";
 
 let connectionIDCounter = 0;
 
@@ -35,11 +36,11 @@ export class SingleConnection extends BaseClient {
   public constructor(configuration?: ClientConfiguration) {
     super(configuration);
 
-    this.on("error", (e) => {
-      if (anyCauseInstanceof(e, ConnectionError)) {
+    this.on("error", (error) => {
+      if (anyCauseInstanceof(error, ConnectionError)) {
         process.nextTick(() => {
-          this.emitClosed(e);
-          this.transport.stream.destroy(e);
+          this.emitClosed(error);
+          this.transport.stream.destroy(error);
         });
       }
     });
@@ -50,10 +51,10 @@ export class SingleConnection extends BaseClient {
     this.transport.stream.on("close", () => {
       this.emitClosed();
     });
-    this.transport.stream.on("error", (e) => {
+    this.transport.stream.on("error", (error) => {
       const emittedError = new ConnectionError(
         "Error occurred in transport layer",
-        e,
+        error,
       );
       this.emitError(emittedError);
       this.emitClosed(emittedError);
@@ -65,9 +66,9 @@ export class SingleConnection extends BaseClient {
     replyToServerPing(this);
     handleReconnectMessage(this);
 
-    this.on("message", (msg) => {
+    this.on("message", (message) => {
       for (const awaiter of this.pendingResponses) {
-        const stop = awaiter.onConnectionMessage(msg);
+        const stop = awaiter.onConnectionMessage(message);
         if (stop) {
           break;
         }
@@ -84,7 +85,11 @@ export class SingleConnection extends BaseClient {
 
     this.emitConnecting();
 
-    if (!this.configuration.connection.preSetup) {
+    if (this.configuration.connection.preSetup) {
+      this.once("connect", () => {
+        process.nextTick(() => this.emitReady());
+      });
+    } else {
       const promises = [
         requestCapabilities(
           this,
@@ -98,10 +103,6 @@ export class SingleConnection extends BaseClient {
       ];
 
       Promise.all(promises).then(() => this.emitReady(), ignoreErrors);
-    } else {
-      this.once("connect", () => {
-        process.nextTick(() => this.emitReady());
-      });
     }
 
     this.transport.connect(() => this.emitConnected());
@@ -120,7 +121,7 @@ export class SingleConnection extends BaseClient {
     validateIRCCommand(command);
     this.emit("rawCommmand", command);
     this.log.trace(">", command);
-    this.transport.stream.write(command + "\r\n");
+    this.transport.stream.write(`${command}\r\n`);
   }
 
   public onConnect(): void {
@@ -142,11 +143,11 @@ export class SingleConnection extends BaseClient {
     let message;
     try {
       message = parseTwitchMessage(line);
-    } catch (e) {
+    } catch (error) {
       this.emitError(
         new ProtocolError(
           `Error while parsing IRC message from line "${line}"`,
-          e as Error,
+          error as Error,
         ),
       );
       return;

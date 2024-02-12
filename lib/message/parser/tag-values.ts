@@ -1,45 +1,46 @@
-import { TwitchBadgesList } from "../badges";
-import { Color } from "../color";
-import { TwitchEmoteList } from "../emotes";
-import { TwitchFlagList } from "../flags";
-import { IRCMessageTags } from "../irc/tags";
 import { parseBadges } from "./badges";
 import { parseColor } from "./color";
-import { parseEmoteSets, TwitchEmoteSets } from "./emote-sets";
+import type { TwitchEmoteSets } from "./emote-sets";
+import { parseEmoteSets } from "./emote-sets";
 import { parseEmotes } from "./emotes";
 import { parseFlags } from "./flags";
 import { MissingTagError } from "./missing-tag-error";
 import { ParseError } from "./parse-error";
+import type { TwitchBadgesList } from "../badges";
+import type { Color } from "../color";
+import type { TwitchEmoteList } from "../emotes";
+import type { TwitchFlagList } from "../flags";
+import type { IRCMessageTags } from "../irc/tags";
 
-export function requireData<V, A extends any[]>(
+export function requireData<V, A extends unknown[]>(
   ircTags: IRCMessageTags,
   key: string,
-  converter: (value: string, ...converterArgs: A) => V | undefined,
-  ...converterArgs: A
+  converter: (value: string, ...converterArguments: A) => V | undefined,
+  ...converterArguments: A
 ): V {
   const stringValue = ircTags[key];
   if (stringValue == null) {
     throw new MissingTagError(key, stringValue);
   }
 
-  const value = converter(stringValue, ...converterArgs);
+  const value = converter(stringValue, ...converterArguments);
   if (value == null) {
     throw new MissingTagError(key, stringValue);
   }
   return value;
 }
 
-export function getData<V, A extends any[]>(
+export function getData<V, A extends unknown[]>(
   ircTags: IRCMessageTags,
   key: string,
-  converter: (value: string, ...converterArgs: A) => V,
-  ...converterArgs: A
+  converter: (value: string, ...converterArguments: A) => V,
+  ...converterArguments: A
 ): V | undefined {
   const stringValue = ircTags[key];
   if (stringValue == null) {
     return undefined;
   }
-  return converter(stringValue, ...converterArgs);
+  return converter(stringValue, ...converterArguments);
 }
 
 export function convertToString(value: string): string {
@@ -54,8 +55,8 @@ export function convertToTrimmedString(value: string): string {
 }
 
 export function convertToInt(value: string): number {
-  const parsedInt = parseInt(value);
-  if (isNaN(parsedInt)) {
+  const parsedInt = Number.parseInt(value);
+  if (Number.isNaN(parsedInt)) {
     throw new ParseError(`Failed to parse integer from tag value "${value}"`);
   }
   return parsedInt;

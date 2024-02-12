@@ -1,16 +1,14 @@
+import { sendPrivmsg } from "./privmsg";
 import { awaitResponse } from "../await/await-response";
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { MessageError } from "../client/errors";
 import { NoticeMessage } from "../message/twitch-types/notice";
 import { UserstateMessage } from "../message/twitch-types/userstate";
-import { sendPrivmsg } from "./privmsg";
 
 export function removeCommands(message: string): string {
-  if (message.startsWith(".") || message.startsWith("/")) {
-    return `/ ${message}`;
-  } else {
-    return message;
-  }
+  return message.startsWith(".") || message.startsWith("/")
+    ? `/ ${message}`
+    : message;
 }
 
 export class SayError extends MessageError {
@@ -32,7 +30,7 @@ export class SayError extends MessageError {
   }
 }
 
-const badNoticeIDs = [
+const badNoticeIDs = new Set([
   "msg_banned", // You are permanently banned from talking in <channel>.
   "msg_bad_characters", // Your message was not sent because it contained too many unprocessable characters.
   // If you believe this is an error, please rephrase and try again.
@@ -61,7 +59,7 @@ const badNoticeIDs = [
   "msg_timedout", // You are banned from talking in <channel> for <number> more seconds.
   "msg_verified_email", // 	This room requires a verified email address to chat. Please verify your email at
   // https://www.twitch.tv/settings/profile.
-];
+]);
 
 export async function say(
   conn: SingleConnection,
@@ -76,23 +74,24 @@ export async function say(
   if (action) {
     command = `/me ${messageText}`;
     errorMessage = `Failed to say [#${channelName}]: /me ${messageText}`;
-    errorType = (msg, cause) =>
-      new SayError(channelName, messageText, true, msg, cause);
+    errorType = (message, cause) =>
+      new SayError(channelName, messageText, true, message, cause);
   } else {
     command = removeCommands(messageText);
     errorMessage = `Failed to say [#${channelName}]: ${messageText}`;
-    errorType = (msg, cause) =>
-      new SayError(channelName, messageText, false, msg, cause);
+    errorType = (message, cause) =>
+      new SayError(channelName, messageText, false, message, cause);
   }
-  sendPrivmsg(conn, channelName, command, replyToID);
+  void sendPrivmsg(conn, channelName, command, replyToID);
 
   return awaitResponse(conn, {
-    success: (msg) =>
-      msg instanceof UserstateMessage && msg.channelName === channelName,
-    failure: (msg) =>
-      msg instanceof NoticeMessage &&
-      msg.channelName === channelName &&
-      badNoticeIDs.includes(msg.messageID!),
+    success: (message) =>
+      message instanceof UserstateMessage &&
+      message.channelName === channelName,
+    failure: (message) =>
+      message instanceof NoticeMessage &&
+      message.channelName === channelName &&
+      badNoticeIDs.has(message.messageID!),
     errorType,
     errorMessage,
   }) as Promise<UserstateMessage>;

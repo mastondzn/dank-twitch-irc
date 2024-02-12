@@ -1,4 +1,4 @@
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";
 
 export class ReconnectError extends ConnectionError {
@@ -8,11 +8,11 @@ export class ReconnectError extends ConnectionError {
 }
 
 export function handleReconnectMessage(conn: SingleConnection): void {
-  conn.on("RECONNECT", (msg) => {
+  conn.on("RECONNECT", (message) => {
     process.nextTick(() => {
       conn.emitError(
         new ReconnectError(
-          "RECONNECT command received by server: " + msg.rawSource,
+          `RECONNECT command received by server: ${  message.rawSource}`,
         ),
       );
     });

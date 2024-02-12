@@ -1,5 +1,5 @@
 import { awaitResponse } from "../await/await-response";
-import { SingleConnection } from "../client/connection";
+import type { SingleConnection } from "../client/connection";
 import { MessageError } from "../client/errors";
 import { PartMessage } from "../message/twitch-types/membership/part";
 
@@ -22,11 +22,11 @@ export async function awaitPartResponse(
 ): Promise<PartMessage> {
   return awaitResponse(conn, {
     // :justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv PART #pajlada
-    success: (msg) =>
-      msg instanceof PartMessage &&
-      msg.channelName === channelName &&
-      msg.partedUsername === conn.configuration.username,
-    errorType: (m, e) => new PartError(channelName, m, e),
+    success: (message) =>
+      message instanceof PartMessage &&
+      message.channelName === channelName &&
+      message.partedUsername === conn.configuration.username,
+    errorType: (message, cause) => new PartError(channelName, message, cause),
     errorMessage: `Failed to part channel ${channelName}`,
   }) as Promise<PartMessage>;
 }

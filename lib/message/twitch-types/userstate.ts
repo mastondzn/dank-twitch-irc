@@ -1,8 +1,8 @@
-import { TwitchBadgesList } from "../badges";
-import { Color } from "../color";
+import type { TwitchBadgesList } from "../badges";
+import type { Color } from "../color";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
-import { IRCMessageData } from "../irc/irc-message";
-import { TwitchEmoteSets } from "../parser/emote-sets";
+import type { IRCMessageData } from "../irc/irc-message";
+import type { TwitchEmoteSets } from "../parser/emote-sets";
 import { tagParserFor } from "../parser/tag-values";
 
 /**

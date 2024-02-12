@@ -1,8 +1,9 @@
 import { Sema } from "async-sema";
-import { ChatClient } from "../../client/client";
-import { SingleConnection } from "../../client/connection";
+
+import type { ChatClient } from "../../client/client";
+import type { SingleConnection } from "../../client/connection";
 import { applyReplacements } from "../../utils/apply-function-replacements";
-import { ClientMixin, ConnectionMixin } from "../base-mixin";
+import type { ClientMixin, ConnectionMixin } from "../base-mixin";
 
 export interface ConnectionRateLimits {
   parallelConnections: number;
@@ -29,7 +30,7 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
     const unsubscribers: (() => void)[] = [];
 
     const unsubscribe = (): void => {
-      unsubscribers.forEach((e) => e());
+      for (const callback of unsubscribers) callback();
     };
 
     const done = (): void => {
@@ -43,8 +44,10 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
     conn.on("connect", done);
     conn.on("close", done);
 
-    unsubscribers.push(() => conn.removeListener("connect", done));
-    unsubscribers.push(() => conn.removeListener("close", done));
+    unsubscribers.push(
+      () => conn.removeListener("connect", done),
+      () => conn.removeListener("close", done),
+    );
   }
 
   public applyToClient(client: ChatClient): void {
@@ -55,11 +58,11 @@ export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
     // override transport.connect
     applyReplacements(this, connection.transport, {
       connect(
-        originalFn: (callback?: () => void) => void,
+        originalFunction: (callback?: () => void) => void,
         connectionListener?: () => void,
       ): void {
-        this.acquire().then(() => {
-          originalFn(connectionListener);
+        void this.acquire().then(() => {
+          originalFunction(connectionListener);
           this.releaseOnConnect(connection);
         });
       },

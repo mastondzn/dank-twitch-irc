@@ -1,6 +1,6 @@
-import { ChatClient, ConnectionPredicate } from "../client/client";
-import { ClientMixin } from "../mixins/base-mixin";
-import { SingleConnection } from "../client/connection";
+import type { ClientMixin } from "./base-mixin";
+import type { ChatClient, ConnectionPredicate } from "../client/client";
+import type { SingleConnection } from "../client/connection";
 import { applyReplacements } from "../utils/apply-function-replacements";
 
 export interface ConnectionPoolOptions {
@@ -19,11 +19,12 @@ export class ConnectionPool implements ClientMixin {
   public applyToClient(client: ChatClient): void {
     client.connectionPool = this;
     const replacement = (
-      oldFn: (predicate?: ConnectionPredicate) => SingleConnection,
+      oldFunction: (predicate?: ConnectionPredicate) => SingleConnection,
       predicate?: ConnectionPredicate,
+      // eslint-disable-next-line unicorn/consistent-function-scoping
     ): SingleConnection => {
       this.ensureEnoughConnections();
-      return oldFn(predicate);
+      return oldFunction(predicate);
     };
 
     applyReplacements(this, client, {

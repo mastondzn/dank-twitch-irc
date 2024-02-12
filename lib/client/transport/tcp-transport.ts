@@ -1,7 +1,8 @@
-import { Socket } from "net";
-import { TLSSocket } from "tls";
-import { ExpandedTcpTransportConfiguration } from "../../config/expanded";
-import { Transport } from "./transport";
+import { Socket } from "node:net";
+import { TLSSocket } from "node:tls";
+
+import type { Transport } from "./transport";
+import type { ExpandedTcpTransportConfiguration } from "../../config/expanded";
 
 export class TcpTransport implements Transport {
   public readonly stream: Socket | TLSSocket;
@@ -21,8 +22,8 @@ export class TcpTransport implements Transport {
     }
 
     this.stream.setNoDelay(true);
-    this.stream.setDefaultEncoding("utf-8"); // for writing
-    this.stream.setEncoding("utf-8"); // for reading
+    this.stream.setDefaultEncoding("utf8"); // for writing
+    this.stream.setEncoding("utf8"); // for reading
 
     this.stream.cork();
   }

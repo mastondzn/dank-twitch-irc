@@ -1,5 +1,4 @@
-import { setDefaults } from "../utils/set-defaults";
-import {
+import type {
   BasicTcpTransportConfiguration,
   ClientConfiguration,
   DuplexTransportConfiguration,
@@ -8,7 +7,9 @@ import {
   TransportConfiguration,
   WebSocketTransportConfiguration,
 } from "./config";
-import { rateLimitPresets, RateLimits } from "./rate-limits";
+import type { RateLimits } from "./rate-limits";
+import { rateLimitPresets } from "./rate-limits";
+import { setDefaults } from "../utils/set-defaults";
 
 export type ExpandedDuplexTransportConfiguration =
   Required<DuplexTransportConfiguration>;
@@ -93,16 +94,15 @@ export function expandTransportConfig(
         preSetup: false,
       };
     }
-    case "duplex":
+    case "duplex": {
       return setDefaults(config, { preSetup: false });
+    }
 
     case "websocket": {
-      let url;
-      if ("url" in config) {
-        url = config.url;
-      } else {
-        url = (config.secure ? "wss" : "ws") + "://irc-ws.chat.twitch.tv";
-      }
+      const url =
+        "url" in config
+          ? config.url
+          : `${config.secure ? "wss" : "ws"}://irc-ws.chat.twitch.tv`;
 
       return {
         type: "websocket",
@@ -110,8 +110,9 @@ export function expandTransportConfig(
         preSetup: false,
       };
     }
-    default:
+    default: {
       throw new Error("Unknown transport type");
+    }
   }
 }
 
@@ -122,11 +123,7 @@ export function expandRateLimitsConfig(
     return rateLimitPresets.default;
   }
 
-  if (typeof config === "string") {
-    return rateLimitPresets[config];
-  } else {
-    return config;
-  }
+  return typeof config === "string" ? rateLimitPresets[config] : config;
 }
 
 export function expandConfig(

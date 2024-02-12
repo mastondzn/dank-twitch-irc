@@ -1,4 +1,5 @@
-import { IRCMessage } from "../irc/irc-message";
+import { parseIRCMessage } from "./irc-message";
+import type { IRCMessage } from "../irc/irc-message";
 import { CapMessage } from "../twitch-types/cap";
 import { ClearchatMessage } from "../twitch-types/clearchat";
 import { ClearmsgMessage } from "../twitch-types/clearmsg";
@@ -15,7 +16,6 @@ import { RoomstateMessage } from "../twitch-types/roomstate";
 import { UsernoticeMessage } from "../twitch-types/usernotice";
 import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
-import { parseIRCMessage } from "./irc-message";
 
 // import { T } from 'ts-toolbelt';
 // export const list = [
@@ -81,13 +81,9 @@ export const commandClassMap: {
 
 export type TwitchCommands = typeof commandClassMap;
 
-export function parseTwitchMessage(messageSrc: string): IRCMessage {
-  const ircMessage = parseIRCMessage(messageSrc);
+export function parseTwitchMessage(messageSource: string): IRCMessage {
+  const ircMessage = parseIRCMessage(messageSource);
 
   const constructor = commandClassMap[ircMessage.ircCommand];
-  if (constructor == null) {
-    return ircMessage;
-  } else {
-    return new constructor(ircMessage);
-  }
+  return constructor == null ? ircMessage : new constructor(ircMessage);
 }

@@ -1,10 +1,10 @@
-import { ChatClient } from "../client/client";
-import { PrivmsgMessage } from "../message/twitch-types/privmsg";
-import { applyReplacements } from "../utils/apply-function-replacements";
-import { ClientMixin } from "./base-mixin";
+import type { ClientMixin } from "./base-mixin";
 import { canSpamFast } from "./ratelimiters/utils";
+import type { ChatClient } from "../client/client";
+import type { PrivmsgMessage } from "../message/twitch-types/privmsg";
+import { applyReplacements } from "../utils/apply-function-replacements";
 
-export const invisibleSuffix = " \u{000e0000}";
+export const invisibleSuffix = " \u{000E0000}";
 
 interface LastMessage {
   messageText: string;
@@ -26,35 +26,31 @@ export class AlternateMessageModifier implements ClientMixin {
   ): string {
     const lastMessage: LastMessage | undefined = this.lastMessages[channelName];
 
-    if (
-      lastMessage != null &&
+    return lastMessage != null &&
       lastMessage.messageText === messageText &&
       lastMessage.action === action
-    ) {
-      return messageText + invisibleSuffix;
-    } else {
-      return messageText;
-    }
+      ? messageText + invisibleSuffix
+      : messageText;
   }
 
   public applyToClient(client: ChatClient): void {
-    type GenericReplacementFn = (
-      oldFn: (channelName: string, message: string) => Promise<void>,
+    type GenericReplacementFunction = (
+      oldFunction: (channelName: string, message: string) => Promise<void>,
       channelName: string,
       message: string,
     ) => Promise<void>;
 
     const genericReplament =
-      (action: boolean): GenericReplacementFn =>
-      async <A extends any[]>(
-        oldFn: (
+      (action: boolean): GenericReplacementFunction =>
+      async <A extends unknown[]>(
+        oldFunction: (
           channelName: string,
           message: string,
-          ...args: A
+          ...arguments_: A
         ) => Promise<void>,
         channelName: string,
         message: string,
-        ...args: A
+        ...arguments_: A
       ): Promise<void> => {
         const { fastSpam } = canSpamFast(
           channelName,
@@ -63,23 +59,23 @@ export class AlternateMessageModifier implements ClientMixin {
         );
 
         if (fastSpam) {
-          await oldFn(channelName, message, ...args);
+          await oldFunction(channelName, message, ...arguments_);
           return;
         }
 
-        const newMsg = this.appendInvisibleCharacter(
+        const newMessage = this.appendInvisibleCharacter(
           channelName,
           message,
           action,
         );
-        await oldFn(channelName, newMsg, ...args);
+        await oldFunction(channelName, newMessage, ...arguments_);
 
         if (!this.client.joinedChannels.has(channelName)) {
           // in this case we won't get our own message back via the
           // onPrivmsg handler, so this will have to do. (Save the sent
           // message)
           this.lastMessages[channelName] = {
-            messageText: newMsg,
+            messageText: newMessage,
             action,
           };
         }

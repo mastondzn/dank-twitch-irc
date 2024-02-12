@@ -1,20 +1,17 @@
+import { assert, describe, expectTypeOf, it } from "vitest";
+
+import type { ResubUsernoticeMessage, SubEventParameters } from "./usernotice";
+import { UsernoticeMessage, extractEventParameters } from "./usernotice";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";
 import { parseTwitchMessage } from "../parser/twitch-message";
-import {
-  extractEventParams,
-  ResubUsernoticeMessage,
-  SubEventParams,
-  UsernoticeMessage,
-} from "./usernotice";
-import { describe, expectTypeOf, it, assert } from "vitest";
 
-describe("./message/twitch-types/usernotice", function () {
-  describe("#extractEventParams()", function () {
-    it("should camelCase all properties that start with msg-param-", function () {
+describe("./message/twitch-types/usernotice", () => {
+  describe("#extractEventParams()", () => {
+    it("should camelCase all properties that start with msg-param-", () => {
       assert.deepStrictEqual(
-        extractEventParams({
+        extractEventParameters({
           "msg-param-user-name": "pajlada",
           "msg-id": "abc123efg",
           "msg-parameter-msg-id": "987398274923",
@@ -25,9 +22,9 @@ describe("./message/twitch-types/usernotice", function () {
       );
     });
 
-    it("should parse integer properties and add a raw- property for them", function () {
+    it("should parse integer properties and add a raw- property for them", () => {
       assert.deepStrictEqual(
-        extractEventParams({
+        extractEventParameters({
           "msg-param-months": "12",
         }),
         {
@@ -37,9 +34,9 @@ describe("./message/twitch-types/usernotice", function () {
       );
     });
 
-    it("should parse boolean properties and add a raw- property for them", function () {
+    it("should parse boolean properties and add a raw- property for them", () => {
       assert.deepStrictEqual(
-        extractEventParams({
+        extractEventParameters({
           "msg-param-should-share-streak": "1",
         }),
         {
@@ -49,7 +46,7 @@ describe("./message/twitch-types/usernotice", function () {
       );
 
       assert.deepStrictEqual(
-        extractEventParams({
+        extractEventParameters({
           "msg-param-should-share-streak": "0",
         }),
         {
@@ -59,9 +56,9 @@ describe("./message/twitch-types/usernotice", function () {
       );
     });
 
-    it("should camelCase -id as ID", function () {
+    it("should camelCase -id as ID", () => {
       assert.deepStrictEqual(
-        extractEventParams({
+        extractEventParameters({
           "msg-param-user-id": "1234567",
         }),
         {
@@ -71,9 +68,9 @@ describe("./message/twitch-types/usernotice", function () {
     });
   });
 
-  describe("UsernoticeMessage", function () {
-    it("should be able to parse a USERNOTICE with no message, only system-msg", function () {
-      const msgText =
+  describe("usernoticeMessage", () => {
+    it("should be able to parse a USERNOTICE with no message, only system-msg", () => {
+      const messageText =
         "@badge-info=subscriber/5;badges=subscriber/3;color=;display-name=kakarot127;" +
         "emotes=;flags=;id=5dc14bb3-684b-4c04-8fbb-3c870958ac69;login=kakarot127;mod=0;msg-id=resub;" +
         "msg-param-cumulative-months=5;msg-param-months=0;msg-param-should-share-streak=0;" +
@@ -82,47 +79,47 @@ describe("./message/twitch-types/usernotice", function () {
         "ve\\ssubscribed\\sfor\\s5\\smonths!;tmi-sent-ts=1563102742440;user-id=147030570;user-type= " +
         ":tmi.twitch.tv USERNOTICE #faker";
 
-      const msg = parseTwitchMessage(msgText) as UsernoticeMessage;
+      const message = parseTwitchMessage(messageText) as UsernoticeMessage;
 
-      assert.instanceOf(msg, UsernoticeMessage);
+      assert.instanceOf(message, UsernoticeMessage);
 
-      assert.strictEqual(msg.channelName, "faker");
-      assert.strictEqual(msg.channelID, "43691");
+      assert.strictEqual(message.channelName, "faker");
+      assert.strictEqual(message.channelID, "43691");
 
-      assert.isUndefined(msg.messageText);
+      assert.isUndefined(message.messageText);
       assert.strictEqual(
-        msg.systemMessage,
+        message.systemMessage,
         "kakarot127 subscribed at Tier 1. They've subscribed " +
           "for 5 months!",
       );
-      assert.strictEqual(msg.messageTypeID, "resub");
+      assert.strictEqual(message.messageTypeID, "resub");
 
-      assert.strictEqual(msg.senderUsername, "kakarot127");
-      assert.strictEqual(msg.senderUserID, "147030570");
+      assert.strictEqual(message.senderUsername, "kakarot127");
+      assert.strictEqual(message.senderUserID, "147030570");
 
       assert.deepStrictEqual(
-        msg.badgeInfo,
+        message.badgeInfo,
         new TwitchBadgesList(new TwitchBadge("subscriber", "5")),
       );
-      assert.strictEqual(msg.badgeInfoRaw, "subscriber/5");
+      assert.strictEqual(message.badgeInfoRaw, "subscriber/5");
 
-      assert.isUndefined(msg.bits);
-      assert.isUndefined(msg.bitsRaw);
+      assert.isUndefined(message.bits);
+      assert.isUndefined(message.bitsRaw);
 
-      assert.isUndefined(msg.color);
-      assert.strictEqual(msg.colorRaw, "");
+      assert.isUndefined(message.color);
+      assert.strictEqual(message.colorRaw, "");
 
-      assert.strictEqual(msg.displayName, "kakarot127");
-      assert.deepStrictEqual(msg.emotes, []);
-      assert.deepStrictEqual(msg.emotesRaw, "");
+      assert.strictEqual(message.displayName, "kakarot127");
+      assert.deepStrictEqual(message.emotes, []);
+      assert.deepStrictEqual(message.emotesRaw, "");
 
-      assert.strictEqual(msg.isMod, false);
-      assert.strictEqual(msg.isModRaw, "0");
+      assert.strictEqual(message.isMod, false);
+      assert.strictEqual(message.isModRaw, "0");
 
-      assert.strictEqual(msg.serverTimestamp.getTime(), 1563102742440);
-      assert.strictEqual(msg.serverTimestampRaw, "1563102742440");
+      assert.strictEqual(message.serverTimestamp.getTime(), 1_563_102_742_440);
+      assert.strictEqual(message.serverTimestampRaw, "1563102742440");
 
-      assert.deepStrictEqual(msg.eventParams, {
+      assert.deepStrictEqual(message.eventParams, {
         cumulativeMonths: 5,
         cumulativeMonthsRaw: "5",
         months: 0,
@@ -134,23 +131,25 @@ describe("./message/twitch-types/usernotice", function () {
         subPlanRaw: "1000",
       });
 
-      assert.isTrue(msg.isResub());
-      assert.isFalse(msg.isCheer());
+      assert.isTrue(message.isResub());
+      assert.isFalse(message.isCheer());
 
       // typescript test:
-      if (msg.isResub()) {
-        expectTypeOf(msg).toMatchTypeOf<ResubUsernoticeMessage>();
+      if (message.isResub()) {
+        expectTypeOf(message).toMatchTypeOf<ResubUsernoticeMessage>();
 
-        expectTypeOf(msg.eventParams).toMatchTypeOf<SubEventParams>();
-        expectTypeOf(msg.eventParams.cumulativeMonths).toMatchTypeOf<number>();
+        expectTypeOf(message.eventParams).toMatchTypeOf<SubEventParameters>();
         expectTypeOf(
-          msg.eventParams.cumulativeMonthsRaw,
+          message.eventParams.cumulativeMonths,
+        ).toMatchTypeOf<number>();
+        expectTypeOf(
+          message.eventParams.cumulativeMonthsRaw,
         ).toMatchTypeOf<string>();
       }
     });
 
-    it("should be able to parse a resub with message", function () {
-      const msg = parseTwitchMessage(
+    it("should be able to parse a resub with message", () => {
+      const message = parseTwitchMessage(
         "@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE" +
           ";display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92" +
           "4-cde3-421d-8eea-713401194446;login=5weatynuts;mod=0;msg-id=resu" +
@@ -163,17 +162,17 @@ describe("./message/twitch-types/usernotice", function () {
           "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(msg.messageText, "dafranPrime Clap");
-      assert.deepStrictEqual(msg.emotes, [
+      assert.strictEqual(message.messageText, "dafranPrime Clap");
+      assert.deepStrictEqual(message.emotes, [
         new TwitchEmote("1076725", 0, 11, "dafranPrime"),
       ]);
-      assert.strictEqual(msg.emotesRaw, "1076725:0-10");
+      assert.strictEqual(message.emotesRaw, "1076725:0-10");
 
-      assert(msg.isResub());
+      assert(message.isResub());
     });
 
-    it("trims spaces at the end of display names", function () {
-      const msg = parseTwitchMessage(
+    it("trims spaces at the end of display names", () => {
+      const message = parseTwitchMessage(
         "@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE" +
           ";display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92" +
           "4-cde3-421d-8eea-713401194446;login=5weatynutss;mod=0;msg-id=resu" +
@@ -186,15 +185,15 @@ describe("./message/twitch-types/usernotice", function () {
           "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(msg.displayName, "5weatyNuts");
+      assert.strictEqual(message.displayName, "5weatyNuts");
     });
 
-    it("parses subgift params correctly (correct camelcasing)", function () {
-      const msg = parseTwitchMessage(
+    it("parses subgift params correctly (correct camelcasing)", () => {
+      const message = parseTwitchMessage(
         "@badge-info=;badges=sub-gifter/50;color=;display-name=AdamAtReflectStudios;emotes=;flags=;id=e21409b1-d25d-4a1a-b5cf-ef27d8b7030e;login=adamatreflectstudios;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=2;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=qatarking24xd;msg-param-recipient-id=236653628;msg-param-recipient-user-name=qatarking24xd;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;room-id=71092938;subscriber=0;system-msg=AdamAtReflectStudios\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sqatarking24xd!;tmi-sent-ts=1594583782376;user-id=211711554;user-type= :tmi.twitch.tv USERNOTICE #xqcow",
       ) as UsernoticeMessage;
 
-      assert.deepStrictEqual(msg.eventParams, {
+      assert.deepStrictEqual(message.eventParams, {
         giftMonths: 1,
         giftMonthsRaw: "1",
         months: 2,
@@ -213,23 +212,23 @@ describe("./message/twitch-types/usernotice", function () {
       });
     });
 
-    it("should be able to parse a masssubgift with message", function () {
-      const msg = parseTwitchMessage(
+    it("should be able to parse a masssubgift with message", () => {
+      const message = parseTwitchMessage(
         "@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=realuser;emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=realuser;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=4e\\sd1\\s19\\sc5\\s33\\s80\\s68\\s8c\\sdc\\sc9\\s4d\\s96\\s73\\sd0\\sad\\s40\\s52\\sf3\\s19\\s02;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38244999;subscriber=1;system-msg=realuser\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sbroadcaster's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1633549401426;user-id=239909999;user-type= :tmi.twitch.tv USERNOTICE #broadcaster",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(msg.ircCommand, "USERNOTICE");
-      assert.strictEqual(msg.ircParameters[0], "#broadcaster");
-      assert.strictEqual(msg.ircTags["msg-param-mass-gift-count"], "1");
+      assert.strictEqual(message.ircCommand, "USERNOTICE");
+      assert.strictEqual(message.ircParameters[0], "#broadcaster");
+      assert.strictEqual(message.ircTags["msg-param-mass-gift-count"], "1");
       assert.strictEqual(
-        msg.systemMessage,
+        message.systemMessage,
         "realuser is gifting 1 Tier 1 Subs to broadcaster's community! They've gifted a total of 1 in the channel!",
       );
-      assert.strictEqual(msg.messageTypeID, "submysterygift");
+      assert.strictEqual(message.messageTypeID, "submysterygift");
 
-      assert.isTrue(msg.isMassSubgift());
+      assert.isTrue(message.isMassSubgift());
 
-      assert.deepStrictEqual(msg.eventParams, {
+      assert.deepStrictEqual(message.eventParams, {
         massGiftCount: 1,
         massGiftCountRaw: "1",
         originID: "4e d1 19 c5 33 80 68 8c dc c9 4d 96 73 d0 ad 40 52 f3 19 02",
@@ -242,28 +241,28 @@ describe("./message/twitch-types/usernotice", function () {
       });
     });
 
-    it("should be able to parse an announcement usernotice that was sent via IRC", function () {
-      const msg = parseTwitchMessage(
+    it("should be able to parse an announcement usernotice that was sent via IRC", () => {
+      const message = parseTwitchMessage(
         "@badge-info=;badges=broadcaster/1,glitchcon2020/1;color=#666666;display-name=NotKarar;emotes=;flags=;id=fb6f330a-b47e-4394-bdae-34c545143a1e;login=notkarar;mod=0;" +
           "msg-id=announcement;room-id=89954186;subscriber=0;system-msg=;tmi-sent-ts=1651337290447;user-id=89954186;user-type= :tmi.twitch.tv USERNOTICE #notkarar :test",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(msg.ircCommand, "USERNOTICE");
-      assert.strictEqual(msg.ircTags["msg-param-color"], undefined);
-      assert.strictEqual(msg.eventParams.color, undefined);
-      assert.strictEqual(msg.messageTypeID, "announcement");
+      assert.strictEqual(message.ircCommand, "USERNOTICE");
+      assert.strictEqual(message.ircTags["msg-param-color"], undefined);
+      assert.strictEqual(message.eventParams.color, undefined);
+      assert.strictEqual(message.messageTypeID, "announcement");
     });
 
-    it("should be able to parse an announcement usernotice that was sent via web chat", function () {
-      const msg = parseTwitchMessage(
+    it("should be able to parse an announcement usernotice that was sent via web chat", () => {
+      const message = parseTwitchMessage(
         "@badge-info=;badges=broadcaster/1,glitchcon2020/1;color=#666666;display-name=NotKarar;emotes=;flags=;id=e409ccaf-c439-4438-9153-77a056eab544;login=notkarar;mod=0;" +
           "msg-id=announcement;msg-param-color=PRIMARY;room-id=89954186;subscriber=0;system-msg=;tmi-sent-ts=1651337248093;user-id=89954186;user-type= :tmi.twitch.tv USERNOTICE #notkarar :test",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(msg.ircCommand, "USERNOTICE");
-      assert.strictEqual(msg.ircTags["msg-param-color"], "PRIMARY");
-      assert.strictEqual(msg.messageTypeID, "announcement");
-      assert.strictEqual(msg.eventParams.color, "PRIMARY");
+      assert.strictEqual(message.ircCommand, "USERNOTICE");
+      assert.strictEqual(message.ircTags["msg-param-color"], "PRIMARY");
+      assert.strictEqual(message.messageTypeID, "announcement");
+      assert.strictEqual(message.eventParams.color, "PRIMARY");
     });
   });
 });

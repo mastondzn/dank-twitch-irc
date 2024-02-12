@@ -1,6 +1,7 @@
-import { Duplex } from "stream";
-import { ExpandedDuplexTransportConfiguration } from "../../config/expanded";
-import { Transport } from "./transport";
+import type { Duplex } from "node:stream";
+
+import type { Transport } from "./transport";
+import type { ExpandedDuplexTransportConfiguration } from "../../config/expanded";
 
 export class DuplexTransport implements Transport {
   public readonly stream: Duplex;

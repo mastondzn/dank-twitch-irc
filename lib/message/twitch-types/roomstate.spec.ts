@@ -1,10 +1,11 @@
-import { parseTwitchMessage } from "../parser/twitch-message";
-import { hasAllStateTags, RoomstateMessage } from "./roomstate";
-import { describe, it, assert } from "vitest";
+import { assert, describe, it } from "vitest";
 
-describe("./message/twitch-types/roomstate", function () {
-  describe("#hasAllStateTags()", function () {
-    it("should return true if all properties are present", function () {
+import { RoomstateMessage, hasAllStateTags } from "./roomstate";
+import { parseTwitchMessage } from "../parser/twitch-message";
+
+describe("./message/twitch-types/roomstate", () => {
+  describe("#hasAllStateTags()", () => {
+    it("should return true if all properties are present", () => {
       assert.isTrue(
         hasAllStateTags({
           emoteOnly: true,
@@ -25,7 +26,7 @@ describe("./message/twitch-types/roomstate", function () {
       );
     });
 
-    it("should return false if one property is absent", function () {
+    it("should return false if one property is absent", () => {
       assert.isFalse(
         hasAllStateTags({
           followersOnlyDuration: -1,
@@ -103,7 +104,7 @@ describe("./message/twitch-types/roomstate", function () {
       );
     });
 
-    it("should return false if only one property is present", function () {
+    it("should return false if only one property is present", () => {
       assert.isFalse(
         hasAllStateTags({
           emoteOnly: true,
@@ -137,36 +138,36 @@ describe("./message/twitch-types/roomstate", function () {
     });
   });
 
-  describe("RoomstateMessage", function () {
-    it("should be able to parse a fully-populated ROOMSTATE message", function () {
-      const msgText =
+  describe("roomstateMessage", () => {
+    it("should be able to parse a fully-populated ROOMSTATE message", () => {
+      const messageText =
         "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;" +
         "slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers";
 
-      const msg = parseTwitchMessage(msgText) as RoomstateMessage;
+      const message = parseTwitchMessage(messageText) as RoomstateMessage;
 
-      assert.instanceOf(msg, RoomstateMessage);
+      assert.instanceOf(message, RoomstateMessage);
 
-      assert.strictEqual(msg.channelName, "randers");
+      assert.strictEqual(message.channelName, "randers");
 
-      assert.strictEqual(msg.channelID, "40286300");
+      assert.strictEqual(message.channelID, "40286300");
 
-      assert.strictEqual(msg.emoteOnly, false);
-      assert.strictEqual(msg.emoteOnlyRaw, "0");
+      assert.strictEqual(message.emoteOnly, false);
+      assert.strictEqual(message.emoteOnlyRaw, "0");
 
-      assert.strictEqual(msg.followersOnlyDuration, -1);
-      assert.strictEqual(msg.followersOnlyDurationRaw, "-1");
+      assert.strictEqual(message.followersOnlyDuration, -1);
+      assert.strictEqual(message.followersOnlyDurationRaw, "-1");
 
-      assert.strictEqual(msg.r9k, false);
-      assert.strictEqual(msg.r9kRaw, "0");
+      assert.strictEqual(message.r9k, false);
+      assert.strictEqual(message.r9kRaw, "0");
 
-      assert.strictEqual(msg.slowModeDuration, 0);
-      assert.strictEqual(msg.slowModeDurationRaw, "0");
+      assert.strictEqual(message.slowModeDuration, 0);
+      assert.strictEqual(message.slowModeDurationRaw, "0");
 
-      assert.strictEqual(msg.subscribersOnly, false);
-      assert.strictEqual(msg.subscribersOnlyRaw, "0");
+      assert.strictEqual(message.subscribersOnly, false);
+      assert.strictEqual(message.subscribersOnlyRaw, "0");
 
-      assert.deepStrictEqual(msg.extractRoomState(), {
+      assert.deepStrictEqual(message.extractRoomState(), {
         emoteOnly: false,
         emoteOnlyRaw: "0",
 
@@ -183,39 +184,39 @@ describe("./message/twitch-types/roomstate", function () {
         subscribersOnlyRaw: "0",
       });
 
-      assert.isTrue(hasAllStateTags(msg.extractRoomState()));
+      assert.isTrue(hasAllStateTags(message.extractRoomState()));
     });
 
-    it("should be able to parse a single property change ROOMSTATE message", function () {
-      const msgText =
+    it("should be able to parse a single property change ROOMSTATE message", () => {
+      const messageText =
         "@emote-only=1;room-id=40286300 :tmi.twitch.tv ROOMSTATE #randers";
 
-      const msg = parseTwitchMessage(msgText) as RoomstateMessage;
+      const message = parseTwitchMessage(messageText) as RoomstateMessage;
 
-      assert.instanceOf(msg, RoomstateMessage);
+      assert.instanceOf(message, RoomstateMessage);
 
-      assert.strictEqual(msg.channelName, "randers");
+      assert.strictEqual(message.channelName, "randers");
 
-      assert.strictEqual(msg.channelID, "40286300");
+      assert.strictEqual(message.channelID, "40286300");
 
-      assert.strictEqual(msg.emoteOnly, true);
-      assert.strictEqual(msg.emoteOnlyRaw, "1");
+      assert.strictEqual(message.emoteOnly, true);
+      assert.strictEqual(message.emoteOnlyRaw, "1");
 
-      assert.isUndefined(msg.followersOnlyDuration);
-      assert.isUndefined(msg.followersOnlyDurationRaw);
-      assert.isUndefined(msg.r9k);
-      assert.isUndefined(msg.r9kRaw);
-      assert.isUndefined(msg.slowModeDuration);
-      assert.isUndefined(msg.slowModeDurationRaw);
-      assert.isUndefined(msg.subscribersOnly);
-      assert.isUndefined(msg.subscribersOnlyRaw);
+      assert.isUndefined(message.followersOnlyDuration);
+      assert.isUndefined(message.followersOnlyDurationRaw);
+      assert.isUndefined(message.r9k);
+      assert.isUndefined(message.r9kRaw);
+      assert.isUndefined(message.slowModeDuration);
+      assert.isUndefined(message.slowModeDurationRaw);
+      assert.isUndefined(message.subscribersOnly);
+      assert.isUndefined(message.subscribersOnlyRaw);
 
-      assert.deepStrictEqual(msg.extractRoomState(), {
+      assert.deepStrictEqual(message.extractRoomState(), {
         emoteOnly: true,
         emoteOnlyRaw: "1",
       });
 
-      assert.isFalse(hasAllStateTags(msg.extractRoomState()));
+      assert.isFalse(hasAllStateTags(message.extractRoomState()));
     });
   });
 });

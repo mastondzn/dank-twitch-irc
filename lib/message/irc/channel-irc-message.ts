@@ -1,5 +1,6 @@
+import type { IRCMessageData} from "./irc-message";
+import { IRCMessage, requireParameter } from "./irc-message";
 import { ParseError } from "../parser/parse-error";
-import { IRCMessage, IRCMessageData, requireParameter } from "./irc-message";
 
 export function getIRCChannelName(
   message: Pick<IRCMessage, "ircParameters">,

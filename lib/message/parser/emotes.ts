@@ -1,32 +1,36 @@
-import { TwitchEmote } from "../emote";
-import { TwitchEmoteList } from "../emotes";
 import { parseIntThrowing } from "./common";
 import { ParseError } from "./parse-error";
+import { TwitchEmote } from "../emote";
+import type { TwitchEmoteList } from "../emotes";
 
 export function parseEmotes(
   messageText: string,
-  emotesSrc: string,
+  emotesSource: string,
 ): TwitchEmoteList {
   const emotes: TwitchEmoteList = [];
 
-  if (emotesSrc.length <= 0) {
+  if (emotesSource.length <= 0) {
     return emotes;
   }
 
   const messageCharacters = [...messageText];
 
-  for (const emoteInstancesSrc of emotesSrc.split("/")) {
-    const [emoteID, instancesSrc] = emoteInstancesSrc.split(":", 2) as [
+  for (const emoteInstancesSource of emotesSource.split("/")) {
+    const [emoteID, instancesSource] = emoteInstancesSource.split(":", 2) as [
       string,
       string,
     ];
-    for (const instanceSrc of instancesSrc.split(",")) {
-      let [startIndex, endIndex] = instanceSrc
+    for (const instanceSource of instancesSource.split(",")) {
+      let [startIndex, endIndex] = instanceSource
         .split("-", 2)
-        .map(parseIntThrowing) as [number, number];
+        .map((element) => parseIntThrowing(element)) as [
+        number,
+        number | undefined,
+      ];
+
       if (endIndex == null) {
         throw new ParseError(
-          `No - found in emote index range "${instanceSrc}"`,
+          `No - found in emote index range "${instanceSource}"`,
         );
       }
 

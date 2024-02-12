@@ -1,20 +1,22 @@
-import { promisify } from "util";
-import { fakeClient } from "../utils/helpers.spec";
+import { promisify } from "node:util";
+
+import { assert, describe, it } from "vitest";
+
 import {
   AlternateMessageModifier,
   invisibleSuffix,
 } from "./alternate-message-modifier";
-import { describe, it, assert } from "vitest";
+import { fakeClient } from "../utils/helpers.spec";
 
-describe("./modules/alternate-message-modifier", function () {
-  describe("AlternateMessageModifier", () => {
+describe("./modules/alternate-message-modifier", () => {
+  describe("alternateMessageModifier", () => {
     it("should have the correct escape for the invisible suffix", () => {
       // 1 (space) + 2 (invisible character)
       assert.strictEqual(invisibleSuffix.length, 3);
       assert.strictEqual([...invisibleSuffix].length, 2);
     });
 
-    it("should append invisible character if last message is equal", async function () {
+    it("should append invisible character if last message is equal", async () => {
       const { client, emitAndEnd } = fakeClient();
       client.configuration.username = "randers";
       const messageModifier = new AlternateMessageModifier(client);
@@ -81,7 +83,7 @@ describe("./modules/alternate-message-modifier", function () {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}",
+        "Kappa Keepo PogChamp \u{000E0000}",
       );
 
       // /me makes it different
@@ -95,7 +97,7 @@ describe("./modules/alternate-message-modifier", function () {
       );
     });
 
-    it("should not append invisible character if fast spam is enabled (mod, VIP, etc.)", async function () {
+    it("should not append invisible character if fast spam is enabled (mod, VIP, etc.)", async () => {
       const { client, emitAndEnd } = fakeClient();
       client.configuration.username = "randers";
       const messageModifier = new AlternateMessageModifier(client);
@@ -159,7 +161,7 @@ describe("./modules/alternate-message-modifier", function () {
       );
     });
 
-    it("should append invisible character through the say() function (case where we are joined to channel)", async function () {
+    it("should append invisible character through the say() function (case where we are joined to channel)", async () => {
       const { client, end, transports } = fakeClient();
       client.configuration.username = "randers";
       client.connections[0]!.joinedChannels.add("forsen");
@@ -220,7 +222,7 @@ describe("./modules/alternate-message-modifier", function () {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}",
+        "Kappa Keepo PogChamp \u{000E0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -232,7 +234,7 @@ describe("./modules/alternate-message-modifier", function () {
       );
     });
 
-    it("should append invisible character through the say() function (case where we are not joined to channel)", async function () {
+    it("should append invisible character through the say() function (case where we are not joined to channel)", async () => {
       const { client, end, transports } = fakeClient();
       client.configuration.username = "randers";
 
@@ -267,7 +269,7 @@ describe("./modules/alternate-message-modifier", function () {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}",
+        "Kappa Keepo PogChamp \u{000E0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -281,7 +283,7 @@ describe("./modules/alternate-message-modifier", function () {
       end();
     });
 
-    it("should append invisible character through the me() function (case where we are joined to channel)", async function () {
+    it("should append invisible character through the me() function (case where we are joined to channel)", async () => {
       const { client, end, transports } = fakeClient();
       client.configuration.username = "randers";
       client.connections[0]!.joinedChannels.add("forsen");
@@ -342,7 +344,7 @@ describe("./modules/alternate-message-modifier", function () {
           "Kappa Keepo PogChamp",
           true,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}",
+        "Kappa Keepo PogChamp \u{000E0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -354,7 +356,7 @@ describe("./modules/alternate-message-modifier", function () {
       );
     });
 
-    it("should append invisible character through the me() function (case where we are not joined to channel)", async function () {
+    it("should append invisible character through the me() function (case where we are not joined to channel)", async () => {
       const { client, end, transports } = fakeClient();
       client.configuration.username = "randers";
 
@@ -389,7 +391,7 @@ describe("./modules/alternate-message-modifier", function () {
           "Kappa Keepo PogChamp",
           true,
         ),
-        "Kappa Keepo PogChamp \u{000e0000}",
+        "Kappa Keepo PogChamp \u{000E0000}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
