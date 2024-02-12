@@ -1,11 +1,12 @@
 import { Sema } from "async-sema";
-import { ChatClient } from "../../client/client";
-import { RoomState } from "../../message/twitch-types/roomstate";
-import { UserState } from "../../message/twitch-types/userstate";
+
+import { canSpamFast } from "./utils";
+import type { ChatClient } from "../../client/client";
+import type { RoomState } from "../../message/twitch-types/roomstate";
+import type { UserState } from "../../message/twitch-types/userstate";
 import { applyReplacements } from "../../utils/apply-function-replacements";
 import { EditableTimeout } from "../../utils/editable-timeout";
-import { ClientMixin } from "../base-mixin";
-import { canSpamFast } from "./utils";
+import type { ClientMixin } from "../base-mixin";
 
 export class SlowModeRateLimiter implements ClientMixin {
   public static GLOBAL_SLOW_MODE_COOLDOWN = 1.5;
@@ -21,22 +22,22 @@ export class SlowModeRateLimiter implements ClientMixin {
   }
 
   public applyToClient(client: ChatClient): void {
-    const genericReplacement = async <A extends any[]>(
-      oldFn: (channelName: string, ...args: A) => Promise<void>,
+    const genericReplacement = async <A extends unknown[]>(
+      oldFunction: (channelName: string, ...arguments_: A) => Promise<void>,
       channelName: string,
-      ...args: A
+      ...arguments_: A
+      // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<void> => {
-      const releaseFn = await this.acquire(channelName);
-      if (releaseFn == null) {
-        // queue is full
-        // message is dropped
+      const releaseFunction = await this.acquire(channelName);
+      if (!releaseFunction) {
+        // queue is full & message is dropped
         return;
       }
 
       try {
-        return await oldFn(channelName, ...args);
+        return oldFunction(channelName, ...arguments_);
       } finally {
-        releaseFn();
+        releaseFunction();
       }
     };
 
@@ -46,14 +47,14 @@ export class SlowModeRateLimiter implements ClientMixin {
       privmsg: genericReplacement,
     });
 
-    if (client.roomStateTracker != null) {
+    if (client.roomStateTracker) {
       client.roomStateTracker.on(
         "newChannelState",
         this.onRoomStateChange.bind(this),
       );
     }
 
-    if (client.userStateTracker != null) {
+    if (client.userStateTracker) {
       client.userStateTracker.on(
         "newChannelState",
         this.onUserStateChange.bind(this),
@@ -72,30 +73,14 @@ export class SlowModeRateLimiter implements ClientMixin {
   }
 
   private onUserStateChange(channelName: string, newState: UserState): void {
-    const { fastSpam, certain } = canSpamFast(
+    const { fastSpam } = canSpamFast(
       channelName,
       this.client.configuration.username,
       newState,
     );
 
     const runningTimer = this.runningTimers[channelName];
-    if (fastSpam && runningTimer != null) {
-      runningTimer.update(0);
-    }
-
-    if (certain && channelName in this.semaphores) {
-      const semaphore = this.getSemaphore(channelName);
-
-      const waiterQueue: ((...args: any[]) => any)[] =
-        // @ts-ignore private member access
-        semaphore.promiseResolverQueue;
-
-      // trim waiter queue
-      const removedWaiters = waiterQueue.splice(10);
-      for (const removedWaiter of removedWaiters) {
-        removedWaiter(false);
-      }
-    }
+    if (fastSpam && runningTimer != null) runningTimer.update(0);
   }
 
   private onRoomStateChange(channelName: string, newState: RoomState): void {
@@ -107,9 +92,7 @@ export class SlowModeRateLimiter implements ClientMixin {
     );
 
     const runningTimer = this.runningTimers[channelName];
-    if (runningTimer != null) {
-      runningTimer.update(newSlowModeDuration);
-    }
+    if (runningTimer) runningTimer.update(newSlowModeDuration);
   }
 
   private async acquire(
@@ -123,22 +106,20 @@ export class SlowModeRateLimiter implements ClientMixin {
 
     // nothing is acquired and nothing has to be released
     if (fastSpam) {
+      // eslint-disable-next-line ts/no-empty-function
       return () => {};
     }
 
     const semaphore = this.getSemaphore(channelName);
 
-    // @ts-ignore private member access
-    const waiterQueue: (() => void)[] = semaphore.promiseResolverQueue;
-
     // too many waiting. Message will be dropped.
     // note that we do NOT drop messages when we are unsure about
     // fast spam state (e.g. before the first USERSTATE is received)
-    if (certain && waiterQueue.length >= this.maxQueueLength) {
+    if (certain && semaphore.nrWaiting() >= this.maxQueueLength) {
       return undefined;
     }
 
-    const releaseFn = (): void => {
+    const releaseFunction = (): void => {
       const { fastSpam: fastSpamAfterRelease } = canSpamFast(
         channelName,
         this.client.configuration.username,
@@ -153,22 +134,13 @@ export class SlowModeRateLimiter implements ClientMixin {
       const slowModeDuration = this.getSlowModeDuration(channelName);
 
       this.runningTimers[channelName] = new EditableTimeout(() => {
+        // eslint-disable-next-line ts/no-dynamic-delete
         delete this.runningTimers[channelName];
         semaphore.release();
       }, slowModeDuration * 1000);
     };
 
-    // if success === false then this awaiter got released by the queue
-    // being trimmed (see above in onUserStateChange) which happens
-    // when fastSpam state becomes `certain` and there are more messages
-    // waiting than the maximum. In that case the message should not be
-    // sent, so we return undefined on the spot. We also don't have to
-    // release anything.
-    const success = await semaphore.acquire();
-
-    if (!success) {
-      return undefined;
-    }
+    await semaphore.acquire();
 
     // if we were released by a incoming USERSTATE change (the timer was
     // edited) and spam can now be fast, return the token immediately
@@ -181,10 +153,11 @@ export class SlowModeRateLimiter implements ClientMixin {
 
     if (fastSpamAfterAwait) {
       semaphore.release();
+      // eslint-disable-next-line ts/no-empty-function
       return () => {};
     }
 
-    return releaseFn;
+    return releaseFunction;
   }
 
   private getSlowModeDuration(channelName: string): number {
