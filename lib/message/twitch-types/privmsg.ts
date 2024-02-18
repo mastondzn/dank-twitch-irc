@@ -4,9 +4,8 @@ import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
-import type {
-  IRCMessage} from "../irc/irc-message";
 import {
+  type IRCMessage,
   requireNickname,
   requireParameter,
 } from "../irc/irc-message";
@@ -20,13 +19,15 @@ export function parseActionAndMessage(trailingParameter: string): {
   message: string;
 } {
   const match: RegExpExecArray | null = actionRegex.exec(trailingParameter);
-  return match == null ? {
-      isAction: false,
-      message: trailingParameter,
-    } : {
-      isAction: true,
-      message: match[1]!,
-    };
+  return match == null
+    ? {
+        isAction: false,
+        message: trailingParameter,
+      }
+    : {
+        isAction: true,
+        message: match[1]!,
+      };
 }
 
 interface CheerPrivmsgMessage extends PrivmsgMessage {

@@ -10,7 +10,9 @@ describe("./message/twitch-types/notice", () => {
         "@msg-id=msg_banned :tmi.twitch.tv NOTICE #forsen " +
         ":You are permanently banned from talking in forsen.";
 
-      const message: NoticeMessage = parseTwitchMessage(messageText) as NoticeMessage;
+      const message: NoticeMessage = parseTwitchMessage(
+        messageText,
+      ) as NoticeMessage;
 
       assert.instanceOf(message, NoticeMessage);
 
@@ -25,7 +27,9 @@ describe("./message/twitch-types/notice", () => {
     it("should parse a NOTICE message received before successfuly login", () => {
       const messageText = ":tmi.twitch.tv NOTICE * :Improperly formatted auth";
 
-      const message: NoticeMessage = parseTwitchMessage(messageText) as NoticeMessage;
+      const message: NoticeMessage = parseTwitchMessage(
+        messageText,
+      ) as NoticeMessage;
 
       assert.instanceOf(message, NoticeMessage);
 

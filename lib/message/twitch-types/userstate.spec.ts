@@ -24,7 +24,7 @@ describe("./message/twitch-types/userstate", () => {
       assert.strictEqual(message.badgesRaw, "");
 
       assert.deepStrictEqual(message.color, {
-        r: 0xFF,
+        r: 0xff,
         g: 0x00,
         b: 0x00,
       });
@@ -51,7 +51,7 @@ describe("./message/twitch-types/userstate", () => {
         badgeInfoRaw: "",
         badges: new TwitchBadgesList(),
         badgesRaw: "",
-        color: { r: 0xFF, g: 0x00, b: 0x00 },
+        color: { r: 0xff, g: 0x00, b: 0x00 },
         colorRaw: "#FF0000",
         displayName: "zwb3_pyramids",
         emoteSets: ["0"],

@@ -13,7 +13,7 @@ export interface LogFunction {
    * Outputs the message using the root/default debug instance, without the level suffix.
    * @param args Arguments to format
    */
-  (...arguments_: unknown[]): void;
+  (...args: unknown[]): void;
 
   /**
    * Numerical level value, e.g. <code>0</code> for <code>trace</code>,

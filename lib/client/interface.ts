@@ -31,9 +31,7 @@ export interface SpecificClientEvents {
   ready: [];
   close: [Error | undefined];
   error: [Error];
-
   message: [IRCMessage];
-
   reconnect: [SingleConnection];
 
   rawCommmand: [string];
@@ -44,9 +42,4 @@ export type TwitchMessageEvents = {
   [P in keyof TwitchCommands]: [InstanceType<TwitchCommands[P]>];
 };
 
-// these are all other messages that are not mapped to twitch messages specifically, e.g. 001
-export type IRCMessageEvents = Record<string & Record<never, never>, [IRCMessage]>;
-
-export type ClientEvents = SpecificClientEvents &
-  TwitchMessageEvents &
-  IRCMessageEvents;
+export type ClientEvents = SpecificClientEvents & TwitchMessageEvents;

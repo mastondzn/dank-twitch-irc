@@ -5,7 +5,6 @@ import { ParseError } from "./parse-error";
 import { assertThrowsChain } from "../../utils/helpers.spec";
 import { TwitchEmote } from "../emote";
 
-
 describe("./message/parser/emotes", () => {
   describe("#parseEmotes()", () => {
     it("should parse empty string as no emotes", () => {

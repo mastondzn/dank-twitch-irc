@@ -1,15 +1,11 @@
 /* eslint-disable ts/no-explicit-any */
-export type SomeFunction = (...arguments_: unknown[]) => unknown;
+export type SomeFunction = (...args: unknown[]) => unknown;
 
 export type OverrideFunction<
   S,
   T extends Record<string, any>,
   K extends keyof T,
-> = (
-  this: S,
-  oldFunction: T[K],
-  ...arguments_: Parameters<T[K]>
-) => ReturnType<T[K]>;
+> = (this: S, oldFunction: T[K], ...args: Parameters<T[K]>) => ReturnType<T[K]>;
 
 export function applyReplacement<
   S,
@@ -24,10 +20,10 @@ export function applyReplacement<
   // is additionally the old function.
   function replacementFunction(
     this: T,
-    ...arguments_: Parameters<typeof oldFunction>
+    ...args: Parameters<typeof oldFunction>
   ): ReturnType<typeof oldFunction> {
     // eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-argument, ts/no-unsafe-call
-    return newFunction.call(self, oldFunction.bind(this), ...arguments_);
+    return newFunction.call(self, oldFunction.bind(this), ...args);
   }
 
   // define the new fn as not enumerable
@@ -40,7 +36,7 @@ export function applyReplacement<
 }
 
 export type OverrideFunctions<S, T extends Record<string, any>> = {
-  [K in keyof T as T[K] extends (...arguments_: any) => any
+  [K in keyof T as T[K] extends (...args: any) => any
     ? K
     : never]?: OverrideFunction<S, T, K>;
 };

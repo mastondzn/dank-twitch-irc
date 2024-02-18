@@ -1,7 +1,6 @@
 import { PassThrough } from "node:stream";
 
-import type { Duplexify } from "duplexify";
-import duplexify from "duplexify";
+import duplexify, { type Duplexify } from "duplexify";
 import WebSocketDuplex from "simple-websocket";
 
 import type { Transport } from "./transport";

@@ -1,7 +1,11 @@
 import { assert, describe, expectTypeOf, it } from "vitest";
 
-import type { ResubUsernoticeMessage, SubEventParameters } from "./usernotice";
-import { UsernoticeMessage, extractEventParameters } from "./usernotice";
+import {
+  type ResubUsernoticeMessage,
+  type SubEventParameters,
+  UsernoticeMessage,
+  extractEventParameters,
+} from "./usernotice";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
 import { TwitchEmote } from "../emote";

@@ -12,7 +12,7 @@ export function handleReconnectMessage(conn: SingleConnection): void {
     process.nextTick(() => {
       conn.emitError(
         new ReconnectError(
-          `RECONNECT command received by server: ${  message.rawSource}`,
+          `RECONNECT command received by server: ${message.rawSource}`,
         ),
       );
     });

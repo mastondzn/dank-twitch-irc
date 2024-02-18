@@ -4,7 +4,6 @@ import { parseColor } from "./color";
 import { ParseError } from "./parse-error";
 import { assertThrowsChain } from "../../utils/helpers.spec";
 
-
 describe("./message/parser/color", () => {
   describe("#parseColor()", () => {
     it("should parse numeric color string", () => {
@@ -27,53 +26,53 @@ describe("./message/parser/color", () => {
 
     it("should parse uppercase hex color string", () => {
       assert.deepStrictEqual(parseColor("#AABBCC"), {
-        r: 0xAA,
-        g: 0xBB,
-        b: 0xCC,
+        r: 0xaa,
+        g: 0xbb,
+        b: 0xcc,
       });
       assert.deepStrictEqual(parseColor("#FFFFFF"), {
-        r: 0xFF,
-        g: 0xFF,
-        b: 0xFF,
+        r: 0xff,
+        g: 0xff,
+        b: 0xff,
       });
     });
 
     it("should parse lowercase hex color string", () => {
       assert.deepStrictEqual(parseColor("#aabbcc"), {
-        r: 0xAA,
-        g: 0xBB,
-        b: 0xCC,
+        r: 0xaa,
+        g: 0xbb,
+        b: 0xcc,
       });
       assert.deepStrictEqual(parseColor("#ffffff"), {
-        r: 0xFF,
-        g: 0xFF,
-        b: 0xFF,
+        r: 0xff,
+        g: 0xff,
+        b: 0xff,
       });
     });
 
     it("should parse mixed-case hex color string", () => {
       assert.deepStrictEqual(parseColor("#aAbBcC"), {
-        r: 0xAA,
-        g: 0xBB,
-        b: 0xCC,
+        r: 0xaa,
+        g: 0xbb,
+        b: 0xcc,
       });
       assert.deepStrictEqual(parseColor("#FFffFF"), {
-        r: 0xFF,
-        g: 0xFF,
-        b: 0xFF,
+        r: 0xff,
+        g: 0xff,
+        b: 0xff,
       });
     });
 
     it("should parse alphanumeric hex color string", () => {
       assert.deepStrictEqual(parseColor("#A7F1FF"), {
-        r: 0xA7,
-        g: 0xF1,
-        b: 0xFF,
+        r: 0xa7,
+        g: 0xf1,
+        b: 0xff,
       });
       assert.deepStrictEqual(parseColor("#FF00FF"), {
-        r: 0xFF,
+        r: 0xff,
         g: 0x00,
-        b: 0xFF,
+        b: 0xff,
       });
     });
 

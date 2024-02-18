@@ -15,7 +15,10 @@ describe("./message/twitch-types/clearmsg", () => {
         messageText,
       ) as ClearmsgMessage;
 
-      assert.strictEqual(Object.getPrototypeOf(message), ClearmsgMessage.prototype);
+      assert.strictEqual(
+        Object.getPrototypeOf(message),
+        ClearmsgMessage.prototype,
+      );
       assert.strictEqual(message.channelName, "randers");
       assert.strictEqual(message.targetUsername, "supibot");
       assert.strictEqual(

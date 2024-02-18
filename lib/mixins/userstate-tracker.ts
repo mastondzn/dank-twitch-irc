@@ -7,7 +7,10 @@ import type {
   GlobaluserstateMessage,
 } from "../message/twitch-types/globaluserstate";
 import type { PrivmsgMessage } from "../message/twitch-types/privmsg";
-import type { UserState, UserstateMessage } from "../message/twitch-types/userstate";
+import type {
+  UserState,
+  UserstateMessage,
+} from "../message/twitch-types/userstate";
 
 export interface UserStateTrackerEvents {
   newGlobalState(newState: GlobalUserState): void;
@@ -63,7 +66,11 @@ export class UserStateTracker
 
     const channelState = this.channelStates[message.channelName];
     if (channelState != null) {
-      const newState = Object.assign({}, channelState, message.extractUserState());
+      const newState = Object.assign(
+        {},
+        channelState,
+        message.extractUserState(),
+      );
       this.channelStates[message.channelName] = newState;
       this.emit("newChannelState", message.channelName, newState);
     }

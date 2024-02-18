@@ -18,14 +18,14 @@ export class JoinRateLimiter implements ClientMixin {
 
   public applyToClient(client: ChatClient): void {
     const joinReplacement = async <V, A extends unknown[]>(
-      oldFunction: (channelName: string, ...arguments_: A) => Promise<V>,
+      oldFunction: (channelName: string, ...args: A) => Promise<V>,
       channelName: string,
-      ...arguments_: A
+      ...args: A
       // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<V> => {
       const releaseFunction = await this.acquire();
       try {
-        return await oldFunction(channelName, ...arguments_);
+        return await oldFunction(channelName, ...args);
       } finally {
         setTimeout(releaseFunction, 10 * 1000); // 10 seconds per 20 joined channels.
       }
@@ -34,10 +34,10 @@ export class JoinRateLimiter implements ClientMixin {
     const joinAllReplacement = async <A extends unknown[]>(
       oldFunction: (
         channelNames: string[],
-        ...arguments_: A
+        ...args: A
       ) => Promise<Record<string, Error | undefined>>,
       channelNames: string[],
-      ...arguments_: A
+      ...args: A
       // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<Record<string, Error | undefined>> => {
       const promiseResults = [];
@@ -61,7 +61,7 @@ export class JoinRateLimiter implements ClientMixin {
         );
 
         try {
-          const result = await oldFunction(chunk, ...arguments_);
+          const result = await oldFunction(chunk, ...args);
           promiseResults.push(result);
         } finally {
           for (const releaseFunction of releaseFunctions) {

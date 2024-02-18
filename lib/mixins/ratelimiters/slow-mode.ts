@@ -23,9 +23,9 @@ export class SlowModeRateLimiter implements ClientMixin {
 
   public applyToClient(client: ChatClient): void {
     const genericReplacement = async <A extends unknown[]>(
-      oldFunction: (channelName: string, ...arguments_: A) => Promise<void>,
+      oldFunction: (channelName: string, ...args: A) => Promise<void>,
       channelName: string,
-      ...arguments_: A
+      ...args: A
       // eslint-disable-next-line unicorn/consistent-function-scoping
     ): Promise<void> => {
       const releaseFunction = await this.acquire(channelName);
@@ -35,7 +35,7 @@ export class SlowModeRateLimiter implements ClientMixin {
       }
 
       try {
-        return oldFunction(channelName, ...arguments_);
+        return oldFunction(channelName, ...args);
       } finally {
         releaseFunction();
       }

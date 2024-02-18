@@ -1,7 +1,6 @@
 import { parseBadges } from "./badges";
 import { parseColor } from "./color";
-import type { TwitchEmoteSets } from "./emote-sets";
-import { parseEmoteSets } from "./emote-sets";
+import { type TwitchEmoteSets, parseEmoteSets } from "./emote-sets";
 import { parseEmotes } from "./emotes";
 import { parseFlags } from "./flags";
 import { MissingTagError } from "./missing-tag-error";

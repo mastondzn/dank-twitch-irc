@@ -1,10 +1,8 @@
-/* eslint-disable unicorn/number-literal-case */
 import { assert, describe, it } from "vitest";
 
 import { MissingTagError } from "./missing-tag-error";
 import { ParseError } from "./parse-error";
-import type { TagValueParser } from "./tag-values";
-import { tagParserFor } from "./tag-values";
+import { type TagValueParser, tagParserFor } from "./tag-values";
 import { assertThrowsChain } from "../../utils/helpers.spec";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";

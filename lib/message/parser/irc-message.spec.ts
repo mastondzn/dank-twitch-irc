@@ -5,7 +5,6 @@ import { ParseError } from "./parse-error";
 import { assertThrowsChain } from "../../utils/helpers.spec";
 import { IRCMessage } from "../irc/irc-message";
 
-
 describe("./message/parser/irc-message", () => {
   describe("#parseIRCMessage", () => {
     it("should throw a ParseError on empty string input", () => {
@@ -15,6 +14,7 @@ describe("./message/parser/irc-message", () => {
         'Invalid format for IRC command (given src: "")',
       );
     });
+
     it("should throw a ParseError on malformed input", () => {
       // double space
       assertThrowsChain(
@@ -23,6 +23,7 @@ describe("./message/parser/irc-message", () => {
         'Invalid format for IRC command (given src: ":tmi.twitch.tv  PRIVMSG")',
       );
     });
+
     it("should error on empty prefix", () => {
       assertThrowsChain(
         () => parseIRCMessage(": PING xD"),
@@ -40,11 +41,13 @@ describe("./message/parser/irc-message", () => {
         'Host, nick or user is empty in prefix (given src: ":a!@b PING xD")',
       );
     });
+
     it("should parse this one", () => {
       parseIRCMessage(
         ":justinfan12345.tmi.twitch.tv 353 justinfan12345 = #pajlada :justinfan12345",
       );
     });
+
     it("should parse tags optionally", () => {
       const actual = parseIRCMessage(
         ":tetyys!tetyys@tetyys.tmi.twitch.tv PRIVMSG #pajlada :KKona",
@@ -65,6 +68,7 @@ describe("./message/parser/irc-message", () => {
 
       assert.deepStrictEqual(actual, expected);
     });
+
     it("should parse tags", () => {
       const actual = parseIRCMessage("@abc=def;kkona=kkona;def;def PONG");
       assert.deepStrictEqual(
@@ -83,6 +87,7 @@ describe("./message/parser/irc-message", () => {
         }),
       );
     });
+
     it("should parse prefix optionally", () => {
       const actual = parseIRCMessage("PONG :tmi.twitch.tv");
       assert.deepStrictEqual(
@@ -97,6 +102,7 @@ describe("./message/parser/irc-message", () => {
         }),
       );
     });
+
     it("should parse multiple middle parameters", () => {
       const actual = parseIRCMessage("PONG a b cd");
       assert.deepStrictEqual(
@@ -111,6 +117,7 @@ describe("./message/parser/irc-message", () => {
         }),
       );
     });
+
     it('should allow ":" character in middle parameters', () => {
       const actual = parseIRCMessage("PONG a:b b: :cd");
       assert.deepStrictEqual(
@@ -157,6 +164,7 @@ describe("./message/parser/irc-message", () => {
         }),
       );
     });
+
     it("should recognize server-only prefixes", () => {
       const actual = parseIRCMessage(":leppunen PRIVMSG");
       // note: this could also be a nickname-only prefix but those
@@ -178,6 +186,7 @@ describe("./message/parser/irc-message", () => {
         }),
       );
     });
+
     it("should recognize full prefixes", () => {
       const actual = parseIRCMessage(
         ":leppunen!crazyusername@local.host PRIVMSG",
@@ -255,19 +264,19 @@ describe("./message/parser/irc-message", () => {
         ircParameters: ["#pajlada", "FeelsDankMan ..."],
         ircCommand: "PRIVMSG",
         ircTags: {
-          "historical": "1",
+          historical: "1",
           "badge-info": "subscriber/4",
-          "badges": "subscriber/3,sub-gifter/1",
-          "color": "#492F2F",
+          badges: "subscriber/3,sub-gifter/1",
+          color: "#492F2F",
           "display-name": "Billy_Bones_U",
-          "emotes": "",
-          "flags": "",
-          "id": "d3805a32-df90-4844-a3ab-4ea116fcf1c6",
-          "mod": "0",
+          emotes: "",
+          flags: "",
+          id: "d3805a32-df90-4844-a3ab-4ea116fcf1c6",
+          mod: "0",
           "room-id": "11148817",
-          "subscriber": "1",
+          subscriber: "1",
           "tmi-sent-ts": "1565685067248",
-          "turbo": "0",
+          turbo: "0",
           "user-id": "411604091",
           "user-type": "",
         },

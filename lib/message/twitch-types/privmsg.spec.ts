@@ -61,7 +61,9 @@ describe("./message/twitch-types/privmsg", () => {
         "mod=0;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;turbo=0;" +
         "user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
 
-      const message: PrivmsgMessage = parseTwitchMessage(messageText) as PrivmsgMessage;
+      const message: PrivmsgMessage = parseTwitchMessage(
+        messageText,
+      ) as PrivmsgMessage;
 
       assert.instanceOf(message, PrivmsgMessage);
 
@@ -98,7 +100,7 @@ describe("./message/twitch-types/privmsg", () => {
       assert.isUndefined(message.replyParentUserID);
       assert.isUndefined(message.replyParentUserLogin);
 
-      assert.deepStrictEqual(message.color, { r: 0x19, g: 0xE6, b: 0xE6 });
+      assert.deepStrictEqual(message.color, { r: 0x19, g: 0xe6, b: 0xe6 });
       assert.strictEqual(message.colorRaw, "#19E6E6");
 
       assert.strictEqual(message.displayName, "randers");
@@ -106,7 +108,10 @@ describe("./message/twitch-types/privmsg", () => {
       assert.deepStrictEqual(message.emotes, []);
       assert.strictEqual(message.emotesRaw, "");
 
-      assert.strictEqual(message.messageID, "7eb848c9-1060-4e5e-9f4c-612877982e79");
+      assert.strictEqual(
+        message.messageID,
+        "7eb848c9-1060-4e5e-9f4c-612877982e79",
+      );
 
       assert.isFalse(message.isMod);
       assert.strictEqual(message.isModRaw, "0");
@@ -124,7 +129,7 @@ describe("./message/twitch-types/privmsg", () => {
           new TwitchBadge("subscriber", "0"),
         ),
         badgesRaw: "broadcaster/1,subscriber/0",
-        color: { r: 0x19, g: 0xE6, b: 0xE6 },
+        color: { r: 0x19, g: 0xe6, b: 0xe6 },
         colorRaw: "#19E6E6",
         displayName: "randers",
         isMod: false,
@@ -142,7 +147,9 @@ describe("./message/twitch-types/privmsg", () => {
         "reply-parent-user-id=123;reply-parent-user-login=otheruser;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;" +
         "turbo=0;user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
 
-      const message: PrivmsgMessage = parseTwitchMessage(messageText) as PrivmsgMessage;
+      const message: PrivmsgMessage = parseTwitchMessage(
+        messageText,
+      ) as PrivmsgMessage;
 
       assert.instanceOf(message, PrivmsgMessage);
 
@@ -162,7 +169,9 @@ describe("./message/twitch-types/privmsg", () => {
         "mod=0;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;turbo=0;" +
         "user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
 
-      const message: PrivmsgMessage = parseTwitchMessage(messageText) as PrivmsgMessage;
+      const message: PrivmsgMessage = parseTwitchMessage(
+        messageText,
+      ) as PrivmsgMessage;
 
       assert.strictEqual(message.displayName, "randers");
       assert.strictEqual(message.extractUserState().displayName, "randers");
@@ -178,7 +187,9 @@ describe("./message/twitch-types/privmsg", () => {
         "returning-chatter=0;room-id=11148817;subscriber=0;tmi-sent-ts=1699992432701;turbo=0;user-id=405330073;" +
         "user-type= :survivedby_bot!survivedby_bot@survivedby_bot.tmi.twitch.tv PRIVMSG #pajlada :@SomeUser -tags";
 
-      const message: PrivmsgMessage = parseTwitchMessage(messageText) as PrivmsgMessage;
+      const message: PrivmsgMessage = parseTwitchMessage(
+        messageText,
+      ) as PrivmsgMessage;
 
       assert.instanceOf(message, PrivmsgMessage);
 

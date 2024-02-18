@@ -12,7 +12,6 @@ import type {
   ExpandedWebSocketTransportConfiguration,
 } from "../../config/expanded";
 
-
 describe("./client/transport/make-transport", () => {
   describe("#makeTransport()", () => {
     it("should make a TcpTransport for tcp configurations", () => {

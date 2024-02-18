@@ -23,9 +23,10 @@ export function parseFlags(
       string,
     ];
 
-    let [startIndex, endIndex] = indexes
-      .split("-", 2)
-      .map(Number) as [number, number];
+    let [startIndex, endIndex] = indexes.split("-", 2).map(Number) as [
+      number,
+      number,
+    ];
 
     // to make endIndex exclusive
     endIndex = endIndex + 1;

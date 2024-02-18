@@ -82,13 +82,13 @@ describe("./utils/apply-function-replacements", () => {
 
       applyReplacements(self, target, {
         a(originalFunction: () => string) {
-          return `${originalFunction()  }x`;
+          return `${originalFunction()}x`;
         },
         b(originalFunction: () => string) {
-          return `${originalFunction()  }y`;
+          return `${originalFunction()}y`;
         },
         c(originalFunction: () => string) {
-          return `${originalFunction()  }z`;
+          return `${originalFunction()}z`;
         },
       });
 

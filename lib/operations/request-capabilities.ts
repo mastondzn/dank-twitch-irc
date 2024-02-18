@@ -1,5 +1,4 @@
-import type { Condition } from "../await/await-response";
-import { awaitResponse } from "../await/await-response";
+import { type Condition, awaitResponse } from "../await/await-response";
 import type { SingleConnection } from "../client/connection";
 import { ConnectionError } from "../client/errors";
 import { CapMessage } from "../message/twitch-types/cap";

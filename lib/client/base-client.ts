@@ -1,10 +1,11 @@
 import EventEmitter from "eventemitter3";
 
-import type { ClientEvents} from "./interface";
-import { ClientState } from "./interface";
+import { type ClientEvents, ClientState } from "./interface";
 import type { ClientConfiguration } from "../config/config";
-import type { ExpandedClientConfiguration } from "../config/expanded";
-import { expandConfig } from "../config/expanded";
+import {
+  type ExpandedClientConfiguration,
+  expandConfig,
+} from "../config/expanded";
 import type { IRCMessage } from "../message/irc/irc-message";
 
 export abstract class BaseClient extends EventEmitter<ClientEvents> {

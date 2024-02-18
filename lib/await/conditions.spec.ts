@@ -23,7 +23,9 @@ describe("./await/conditions", () => {
       const message = parseTwitchMessage(
         "@msg-id=timeout_success :tmi.twitch.tv NOTICE #pajlada :WEEB123 has been timed out for 1 second.",
       );
-      assert.isFalse(matchingNotice("pajlada", ["timeout_success_lol"])(message));
+      assert.isFalse(
+        matchingNotice("pajlada", ["timeout_success_lol"])(message),
+      );
       assert.isTrue(matchingNotice("pajlada", ["timeout_success"])(message));
     });
 

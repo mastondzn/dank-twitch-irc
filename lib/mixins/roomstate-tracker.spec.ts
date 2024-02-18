@@ -6,7 +6,6 @@ import { assert, describe, it } from "vitest";
 import { RoomStateTracker } from "./roomstate-tracker";
 import { fakeClient } from "../utils/helpers.spec";
 
-
 describe("./mixins/roomstate-tracker", () => {
   describe("roomstateTracker", () => {
     it("should set client.roomstateTracker on the client when applied", () => {

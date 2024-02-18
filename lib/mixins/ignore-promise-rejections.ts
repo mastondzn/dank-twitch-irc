@@ -4,10 +4,10 @@ import { applyReplacements } from "../utils/apply-function-replacements";
 import { ignoreErrors } from "../utils/ignore-errors";
 
 function genericCatcher<V, A extends unknown[]>(
-  originalFunction: (...arguments_: A) => Promise<V>,
-  ...arguments_: A
+  originalFunction: (...args: A) => Promise<V>,
+  ...args: A
 ): Promise<V | undefined> {
-  const originalPromise = originalFunction(...arguments_);
+  const originalPromise = originalFunction(...args);
   originalPromise.catch(ignoreErrors);
   return originalPromise;
 }

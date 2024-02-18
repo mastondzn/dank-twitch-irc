@@ -7,8 +7,7 @@ import type {
   TransportConfiguration,
   WebSocketTransportConfiguration,
 } from "./config";
-import type { RateLimits } from "./rate-limits";
-import { rateLimitPresets } from "./rate-limits";
+import { type RateLimits, rateLimitPresets } from "./rate-limits";
 import { setDefaults } from "../utils/set-defaults";
 
 export type ExpandedDuplexTransportConfiguration =

@@ -15,7 +15,7 @@ export async function sendLogin(
     if (!isAnonymousUsername(username) && !password.startsWith("oauth:")) {
       // don't append oauth: for the fake passwords that can be sent for
       // anonymous usernames, such as `PASS SCHMOOPIE`
-      password = `oauth:${  password}`;
+      password = `oauth:${password}`;
     }
 
     conn.sendRaw(`PASS ${password}`);

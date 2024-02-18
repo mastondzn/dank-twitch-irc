@@ -28,8 +28,8 @@ describe("./message/twitch-types/whisper", () => {
       assert.strictEqual(message.badgesRaw, "");
 
       assert.deepStrictEqual(message.color, {
-        r: 0x2E,
-        g: 0x8B,
+        r: 0x2e,
+        g: 0x8b,
         b: 0x57,
       });
       assert.strictEqual(message.colorRaw, "#2E8B57");

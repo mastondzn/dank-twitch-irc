@@ -10,7 +10,6 @@ import type { GlobaluserstateMessage } from "../message/twitch-types/globalusers
 import type { UserstateMessage } from "../message/twitch-types/userstate";
 import { fakeClient } from "../utils/helpers.spec";
 
-
 describe("./mixins/userstate-tracker", () => {
   describe("userstateTracker", () => {
     it("should set client.userstateTracker on the client when applied", () => {

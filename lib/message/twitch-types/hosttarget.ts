@@ -1,7 +1,6 @@
 import { reasonForValue } from "../../utils/reason-for-value";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
-import type { IRCMessageData } from "../irc/irc-message";
-import { requireParameter } from "../irc/irc-message";
+import { type IRCMessageData, requireParameter } from "../irc/irc-message";
 import { ParseError } from "../parser/parse-error";
 
 export function parseHostedChannelName(

@@ -76,7 +76,9 @@ describe("./message/irc/channel-irc-message", () => {
 
   describe("channelIRCMessage", () => {
     it("should parse argument 0 into #channelName", () => {
-      const message = new ChannelIRCMessage(parseIRCMessage("PRIVMSG #pajlada"));
+      const message = new ChannelIRCMessage(
+        parseIRCMessage("PRIVMSG #pajlada"),
+      );
       assert.strictEqual(message.channelName, "pajlada");
     });
 

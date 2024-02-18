@@ -216,7 +216,7 @@ export class ResponseAwaiter {
 
   private subscribeTo<T extends keyof ClientEvents>(
     eventName: T,
-    handler: (...arguments_: ClientEvents[T]) => unknown,
+    handler: (...args: ClientEvents[T]) => unknown,
   ): void {
     handler = handler.bind(this);
     this.conn.on(eventName, handler);

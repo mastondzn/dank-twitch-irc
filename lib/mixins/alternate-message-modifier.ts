@@ -40,17 +40,17 @@ export class AlternateMessageModifier implements ClientMixin {
       message: string,
     ) => Promise<void>;
 
-    const genericReplament =
+    const genericReplacement =
       (action: boolean): GenericReplacementFunction =>
       async <A extends unknown[]>(
         oldFunction: (
           channelName: string,
           message: string,
-          ...arguments_: A
+          ...args: A
         ) => Promise<void>,
         channelName: string,
         message: string,
-        ...arguments_: A
+        ...args: A
       ): Promise<void> => {
         const { fastSpam } = canSpamFast(
           channelName,
@@ -59,7 +59,7 @@ export class AlternateMessageModifier implements ClientMixin {
         );
 
         if (fastSpam) {
-          await oldFunction(channelName, message, ...arguments_);
+          await oldFunction(channelName, message, ...args);
           return;
         }
 
@@ -68,7 +68,7 @@ export class AlternateMessageModifier implements ClientMixin {
           message,
           action,
         );
-        await oldFunction(channelName, newMessage, ...arguments_);
+        await oldFunction(channelName, newMessage, ...args);
 
         if (!this.client.joinedChannels.has(channelName)) {
           // in this case we won't get our own message back via the
@@ -82,8 +82,8 @@ export class AlternateMessageModifier implements ClientMixin {
       };
 
     applyReplacements(this, client, {
-      say: genericReplament(false),
-      me: genericReplament(true),
+      say: genericReplacement(false),
+      me: genericReplacement(true),
     });
 
     client.on("PRIVMSG", this.onPrivmsgMessage.bind(this));

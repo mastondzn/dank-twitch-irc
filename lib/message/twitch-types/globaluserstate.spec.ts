@@ -29,7 +29,7 @@ describe("./message/twitch-types/globaluserstate", () => {
       );
       assert.strictEqual(message.badgesRaw, "bits-charity/1");
 
-      assert.deepStrictEqual(message.color, { r: 0x19, g: 0xE6, b: 0xE6 });
+      assert.deepStrictEqual(message.color, { r: 0x19, g: 0xe6, b: 0xe6 });
       assert.strictEqual(message.colorRaw, "#19E6E6");
 
       assert.strictEqual(message.displayName, "RANDERS");
@@ -76,7 +76,7 @@ describe("./message/twitch-types/globaluserstate", () => {
         badges: new TwitchBadgesList(new TwitchBadge("bits-charity", "1")),
         badgesRaw: "bits-charity/1",
 
-        color: { r: 0x19, g: 0xE6, b: 0xE6 },
+        color: { r: 0x19, g: 0xe6, b: 0xe6 },
         colorRaw: "#19E6E6",
 
         displayName: "RANDERS",

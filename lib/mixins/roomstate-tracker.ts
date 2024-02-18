@@ -2,10 +2,9 @@ import EventEmitter from "eventemitter3";
 
 import type { ClientMixin } from "./base-mixin";
 import type { ChatClient } from "../client/client";
-import type {
-  RoomState,
-  RoomstateMessage} from "../message/twitch-types/roomstate";
 import {
+  type RoomState,
+  type RoomstateMessage,
   hasAllStateTags,
 } from "../message/twitch-types/roomstate";
 import { debugLogger } from "../utils/debug-logger";

@@ -20,7 +20,6 @@ import { UsernoticeMessage } from "../twitch-types/usernotice";
 import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
 
-
 describe("./message/parser/twitch-message", () => {
   describe("#parseTwitchpMessage", () => {
     const testCases = [

@@ -1,8 +1,7 @@
-import type {
-  IRCMessageData} from "../../irc/irc-message";
 import {
   IRCMessage,
-  getParameter
+  type IRCMessageData,
+  getParameter,
 } from "../../irc/irc-message";
 
 export class PingMessage extends IRCMessage {

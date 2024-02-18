@@ -1,6 +1,5 @@
 import { ChannelIRCMessage } from "../../irc/channel-irc-message";
-import type { IRCMessageData} from "../../irc/irc-message";
-import { requireNickname } from "../../irc/irc-message";
+import { type IRCMessageData, requireNickname } from "../../irc/irc-message";
 
 export class PartMessage extends ChannelIRCMessage {
   public readonly partedUsername: string;

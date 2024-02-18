@@ -17,30 +17,6 @@ import { UsernoticeMessage } from "../twitch-types/usernotice";
 import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
 
-// import { T } from 'ts-toolbelt';
-// export const list = [
-//    ClearchatMessage,
-//    ClearmsgMessage,
-//    GlobaluserstateMessage,
-//    HosttargetMessage,
-//    NoticeMessage,
-//    PrivmsgMessage,
-//    RoomstateMessage,
-//    UsernoticeMessage,
-//    UserstateMessage,
-//    WhisperMessage,
-//    JoinMessage,
-//    PartMessage,
-//    ReconnectMessage,
-//    PingMessage,
-//    PongMessage
-// ] as const;
-//
-// type x = typeof list;
-// type Commands = { [K in Exclude<keyof x, keyof any[]>]: x[K]['command'] } & { length: x['length'] } & any[];
-// type Instances = { [K in Exclude<keyof x, keyof any[]>]: x[K] } & { length: x['length'] } & any[];
-// type Map = T.ZipObj<Commands, x>;
-
 export const commandClassMap: {
   CLEARCHAT: typeof ClearchatMessage;
   CLEARMSG: typeof ClearmsgMessage;
@@ -59,6 +35,8 @@ export const commandClassMap: {
   PONG: typeof PongMessage;
   CAP: typeof CapMessage;
 
+  // these are all other messages that are not mapped to twitch messages specifically, e.g. 001
+  // the weird index signature is for nicer intellisense
   [key: string & Record<never, never>]: typeof IRCMessage;
 } = {
   CLEARCHAT: ClearchatMessage,
@@ -84,6 +62,6 @@ export type TwitchCommands = typeof commandClassMap;
 export function parseTwitchMessage(messageSource: string): IRCMessage {
   const ircMessage = parseIRCMessage(messageSource);
 
-  const constructor = commandClassMap[ircMessage.ircCommand];
-  return constructor == null ? ircMessage : new constructor(ircMessage);
+  const MessageClass = commandClassMap[ircMessage.ircCommand];
+  return MessageClass == null ? ircMessage : new MessageClass(ircMessage);
 }
