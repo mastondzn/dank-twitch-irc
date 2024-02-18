@@ -6,7 +6,11 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "sourceMap": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true

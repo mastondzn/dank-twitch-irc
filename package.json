@@ -20,18 +20,20 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
     }
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "lib"
   ],
   "scripts": {
-    "build": "tsup lib/index.ts --clean --dts --format cjs --format esm --external semaphore-async-await",
+    "build": "rimraf ./dist && rollup -c",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "format": "prettier . --write !pnpm-lock.yaml",
     "format:check": "prettier --check . !pnpm-lock.yaml",
     "test": "vitest --exclude ./lib/utils/helpers.spec.ts",
@@ -50,25 +52,27 @@
     "split2": "^4.1.0"
   },
   "devDependencies": {
-    "@mastondzn/eslint": "^0.6.13",
+    "@mastondzn/eslint": "^0.7.0",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/chai-as-promised": "^7.1.5",
     "@types/duplexify": "^3.6.1",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.pickby": "^4.6.6",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.11.19",
     "@types/simple-websocket": "^7.0.3",
     "@types/sinon": "^17.0.3",
     "@types/split2": "^4.2.3",
     "@vitest/coverage-v8": "^1.2.2",
     "chai-as-promised": "^7.1.1",
     "doctoc": "^2.1.0",
-    "eslint": "^8.13.0",
+    "eslint": "^8.56.0",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
+    "rollup": "^4.12.0",
     "sinon": "^17.0.1",
     "ts-node": "^10.7.0",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "vitest": "^1.3.0"
   }
 }
