@@ -268,5 +268,60 @@ describe("./message/twitch-types/usernotice", () => {
       assert.strictEqual(message.messageTypeID, "announcement");
       assert.strictEqual(message.eventParams.color, "PRIMARY");
     });
+
+    it("should be able to parse a viewermilestone without message", () => {
+      const message = parseTwitchMessage(
+        "@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\\swatched\\s15\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster",
+      ) as UsernoticeMessage;
+
+      assert.strictEqual(message.ircCommand, "USERNOTICE");
+      assert.strictEqual(message.ircParameters[0], "#broadcaster");
+      assert.strictEqual(message.ircTags["msg-param-category"], "watch-streak");
+      assert.strictEqual(
+        message.systemMessage,
+        "ManuK10 watched 15 consecutive streams this month and sparked a watch streak!",
+      );
+      assert.strictEqual(message.messageTypeID, "viewermilestone");
+      assert.strictEqual(message.messageText, undefined);
+      assert.isTrue(message.isViewerMilestone());
+
+      assert.deepStrictEqual(message.eventParams, {
+        id: "1372187b-d93a-4d25-9ef6-c7bbcf68586d",
+        copoReward: 450,
+        copoRewardRaw: "450",
+        value: 15,
+        valueRaw: "15",
+        category: "watch-streak",
+        categoryRaw: "watch-streak",
+      });
+    });
+
+    it("should be able to parse a viewermilestone with message", () => {
+      const message = parseTwitchMessage(
+        "@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\\swatched\\s15\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster <3",
+      ) as UsernoticeMessage;
+
+      assert.strictEqual(message.messageText, "<3");
+
+      assert.strictEqual(message.ircCommand, "USERNOTICE");
+      assert.strictEqual(message.ircParameters[0], "#broadcaster");
+      assert.strictEqual(message.ircTags["msg-param-category"], "watch-streak");
+      assert.strictEqual(
+        message.systemMessage,
+        "ManuK10 watched 15 consecutive streams this month and sparked a watch streak!",
+      );
+      assert.strictEqual(message.messageTypeID, "viewermilestone");
+      assert.isTrue(message.isViewerMilestone());
+
+      assert.deepStrictEqual(message.eventParams, {
+        id: "1372187b-d93a-4d25-9ef6-c7bbcf68586d",
+        copoReward: 450,
+        copoRewardRaw: "450",
+        value: 15,
+        valueRaw: "15",
+        category: "watch-streak",
+        categoryRaw: "watch-streak",
+      });
+    });
   });
 });

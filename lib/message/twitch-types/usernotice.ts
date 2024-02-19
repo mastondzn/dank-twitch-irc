@@ -32,6 +32,9 @@ const convertersMap: Record<
   "msg-param-origin-id": convertToString,
   "msg-param-sub-plan": convertToString,
   "msg-param-color": convertToString,
+  "msg-param-copoReward": convertToInt,
+  "msg-param-value": convertToInt,
+  "msg-param-category": convertToString,
 };
 
 export function getCamelCasedName(tagKey: string): string {
@@ -166,6 +169,20 @@ export interface AnnouncementParameters extends EventParametersMaybe {
   color?: string;
 }
 
+// viewermilestone
+export interface ViewerMilestoneParameters extends EventParameters {
+  /** The amount of channel points the user gained for reaching this milestone. */
+  copoReward: number;
+  copoRewardRaw: string;
+
+  /** The value of the respective milestone category. (usually amount of viewed streams in a row, for "watch-streak") */
+  value: number;
+  valueRaw: string;
+
+  /** The category of the milestone. (usually "watch-streak") */
+  category: string;
+}
+
 export interface SpecificUsernoticeMessage<
   I extends string,
   E extends EventParameters,
@@ -225,6 +242,10 @@ export type BitsBadgeTierUsernoticeMessage = SpecificUsernoticeMessage<
 export type AnnouncementUsernoticeMessage = AnAnnouncementUsernoticeMessage<
   "announcement",
   AnnouncementParameters
+>;
+export type ViewerMilestoneUsernoticeMessage = SpecificUsernoticeMessage<
+  "viewermilestone",
+  ViewerMilestoneParameters
 >;
 
 interface CheerUsernoticeMessage extends UsernoticeMessage {
@@ -393,5 +414,9 @@ export class UsernoticeMessage extends ChannelIRCMessage {
 
   public isAnnouncement(): this is AnnouncementUsernoticeMessage {
     return this.messageTypeID === "announcement";
+  }
+
+  public isViewerMilestone(): this is ViewerMilestoneUsernoticeMessage {
+    return this.messageTypeID === "viewermilestone";
   }
 }
