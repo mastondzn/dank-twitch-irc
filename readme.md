@@ -1,6 +1,6 @@
 # dank-twitch-irc
 
-This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc) & [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc).
+This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc), [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc) and [kararty/dank-twitch-irc](https://github.com/kararty/dank-twitch-irc).
 
 ![Build](https://github.com/kararty/dank-twitch-irc/workflows/Build/badge.svg)
 
