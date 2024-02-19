@@ -11,6 +11,6 @@ export class BaseError extends Error {
       newMessage = cause.message;
     }
 
-    super(newMessage, { cause });
+    super(newMessage, { ...(cause ? { cause } : {}) });
   }
 }
