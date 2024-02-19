@@ -14,6 +14,7 @@ Requires Node.js 14 or above.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 ## Table of Contents
 
 - [Usage](#usage)
@@ -41,47 +42,47 @@ Requires Node.js 14 or above.
 
 ```javascript
 const { ChatClient } = require("@kararty/dank-twitch-irc");
-let client = new ChatClient();
-client.on("ready", () => console.log("Successfully connected to chat"));
-client.on("close", (error) => {
+let chat = new ChatClient();
+chat.on("ready", () => console.log("Successfully connected to chat"));
+chat.on("close", (error) => {
   if (error != null) {
     console.error("Client closed due to error", error);
   }
 });
-client.on("PRIVMSG", (msg) => {
+chat.on("PRIVMSG", (msg) => {
   console.log(`[#${msg.channelName}] ${msg.displayName}: ${msg.messageText}`);
 });
 // See below for more events
-client.connect();
-client.join("forsen");
+chat.connect();
+chat.join("forsen");
 ```
 
 ## Available client events
 
-- **`client.on("connecting", () => { /* ... */ })`**: Called when the client
+- **`chat.on("connecting", () => { /* ... */ })`**: Called when the client
   starts connecting for the first time.
-- **`client.on("connect", () => { /* ... */ })`**: Called when the client
+- **`chat.on("connect", () => { /* ... */ })`**: Called when the client
   connects for the first time. This is called when the transport layer
   connections (e.g. TCP or WebSocket connection is established), not when login
   to IRC succeeds.
-- **`client.on("ready", () => { /* ... */ })`**: Called when the client becomes
+- **`chat.on("ready", () => { /* ... */ })`**: Called when the client becomes
   ready for the first time (login to the chat server is successful.)
-- **`client.on("close", (error?: Error) => { /* ... */ })`**: Called when the
+- **`chat.on("close", (error?: Error) => { /* ... */ })`**: Called when the
   client is terminated as a whole. Not called for individual connections that
   were disconnected. Can be caused for example by a invalid OAuth token (failure
-  to login), or when `client.close()` or `client.destroy()` was called. `error`
-  is only non-null if the client was closed by a call to `client.close()`.
-- **`client.on("error", (error: Error?) => { /* ... */ })`**: Called when any
+  to login), or when `chat.close()` or `chat.destroy()` was called. `error`
+  is only non-null if the client was closed by a call to `chat.close()`.
+- **`chat.on("error", (error: Error?) => { /* ... */ })`**: Called when any
   error occurs on the client, including non-fatal errors such as a message that
   could not be delivered due to an error.
-- **`client.on("rawCommand", (cmd: string) => { /* ... */ })`**: Called when any
+- **`chat.on("rawCommand", (cmd: string) => { /* ... */ })`**: Called when any
   command is executed by the client.
-- **`client.on("message", (message: IRCMessage) => { /* ... */ })`**: Called on
+- **`chat.on("message", (message: IRCMessage) => { /* ... */ })`**: Called on
   every incoming message. If the message is a message that is further parsed (I
   called these "twitch messages" in this library) then the `message` passed to
   this handler will already be the specific type, e.g. `PrivmsgMessage` if the
   command is `PRIVMSG`.
-- **`client.on("PRIVMSG", (message: PrivmsgMessage) => { /* ... */ })`**: Called
+- **`chat.on("PRIVMSG", (message: PrivmsgMessage) => { /* ... */ })`**: Called
   on incoming messages whose command is `PRIVMSG`. The `message` parameter is
   always instanceof `PrivmsgMessage`. (See the API documentation for what
   properties exist on all `PrivmsgMessage` instances)
@@ -89,7 +90,7 @@ client.join("forsen");
   For example:
 
   ```javascript
-  client.on("CLEARCHAT", (msg) => {
+  chat.on("CLEARCHAT", (msg) => {
     if (msg.isTimeout()) {
       console.log(
         `${msg.targetUsername} just got timed out for ` +
@@ -152,9 +153,7 @@ listed above) will still be emitted under their command name as an
 ```javascript
 // :tmi.twitch.tv 372 botfactory :You are in a maze of twisty passages, all alike.
 // msg will be an instance of IRCMessage
-client.on("372", (msg) =>
-  console.log(`Server MOTD is: ${msg.ircParameters[1]}`),
-);
+chat.on("372", (msg) => console.log(`Server MOTD is: ${msg.ircParameters[1]}`));
 ```
 
 ## Handling `USERNOTICE` messages
@@ -191,7 +190,7 @@ When a user subscribes or resubscribes with his own money/prime (this is NOT
 sent for gift subs, see below)
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   // sub and resub messages have the same parameters, so we can handle them both the same way
   if (!msg.isSub() && !msg.isResub()) {
     return;
@@ -273,7 +272,7 @@ Twitch says:
 > in the community.)
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isRaid()) {
     return;
   }
@@ -309,7 +308,7 @@ chatClient.on("USERNOTICE", (msg) => {
 When a user gifts somebody else a subscription.
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isSubgift()) {
     return;
   }
@@ -374,7 +373,7 @@ chatClient.on("USERNOTICE", (msg) => {
 When an anonymous user gifts a subscription to a viewer.
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isAnonSubgift()) {
     return;
   }
@@ -431,7 +430,7 @@ When a user commits to continue the gift sub by another user (or an anonymous
 gifter).
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isAnonGiftPaidUpgrade()) {
     return;
   }
@@ -459,7 +458,7 @@ chatClient.on("USERNOTICE", (msg) => {
 ```
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isGiftPaidUpgrade()) {
     return;
   }
@@ -503,7 +502,7 @@ Channel ritual. Twitch says:
 > for the first time).
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isRitual()) {
     return;
   }
@@ -536,7 +535,7 @@ just cheered more than/exactly 10000 bits in total, and just earned themselves
 the 10k bits badge)
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isBitsBadgeTier()) {
     return;
   }
@@ -566,7 +565,7 @@ chatClient.on("USERNOTICE", (msg) => {
 When a viewer reaches a milestone in the channel (a watch streak)
 
 ```javascript
-chatClient.on("USERNOTICE", (msg) => {
+chat.on("USERNOTICE", (msg) => {
   if (!msg.isViewerMilestone()) return;
 
   /*
@@ -595,35 +594,35 @@ chatClient.on("USERNOTICE", (msg) => {
 
 You probably will want to use these functions on `ChatClient` most frequently:
 
-- `client.join(channelName: string): Promise<void>` - Join (Listen to) the
+- `chat.join(channelName: string): Promise<void>` - Join (Listen to) the
   channel given by the channel name
-- `client.joinAll(channelNames: string[]): Promise<void>` - Join (Listen to) all
+- `chat.joinAll(channelNames: string[]): Promise<void>` - Join (Listen to) all
   of the listed channels at once (bulk join)
-- `client.part(channelName: string): Promise<void>` - Part (Leave/Unlisten) the
+- `chat.part(channelName: string): Promise<void>` - Part (Leave/Unlisten) the
   channel given by the channel name
-- `client.privmsg(channelName: string, message: string): Promise<void>` - Send a
+- `chat.privmsg(channelName: string, message: string): Promise<void>` - Send a
   raw `PRIVMSG` to the given channel. You can issue chat commands with this
-  function, e.g. `client.privmsg("forsen", "/timeout weeb123 5")` or normal
-  messages, e.g. `client.privmsg("forsen", "Kappa Keepo PogChamp")`.
-- `client.say(channelName: string, message: string): Promise<void>` - Say a
+  function, e.g. `chat.privmsg("forsen", "/timeout weeb123 5")` or normal
+  messages, e.g. `chat.privmsg("forsen", "Kappa Keepo PogChamp")`.
+- `chat.say(channelName: string, message: string): Promise<void>` - Say a
   normal chat message in the given channel. If a command is given as `message`,
   it will be escaped.
-- `client.me(channelName: string, message: string): Promise<void>` - Post a
+- `chat.me(channelName: string, message: string): Promise<void>` - Post a
   `/me` message in the given channel.
-- `client.ping()` - Send a `PING` on a connection from the pool, and awaits the
+- `chat.ping()` - Send a `PING` on a connection from the pool, and awaits the
   `PONG` response. You can use this to measure server latency, for example.
 
 Extra functionality:
 
-- `client.sendRaw(command: string): void` - Send a raw IRC command to a
+- `chat.sendRaw(command: string): void` - Send a raw IRC command to a
   connection in the connection pool.
-- `client.unconnected (boolean)` - Returns whether the client is unconnected.
-- `client.connecting (boolean)` - Returns whether the client is connecting.
-- `client.connected (boolean)` - Returns whether the client is connected
+- `chat.unconnected (boolean)` - Returns whether the client is unconnected.
+- `chat.connecting (boolean)` - Returns whether the client is connecting.
+- `chat.connected (boolean)` - Returns whether the client is connected
   (Transport layer is connected).
-- `client.ready (boolean)` - Returns whether the client is ready (Logged into
+- `chat.ready (boolean)` - Returns whether the client is ready (Logged into
   IRC server).
-- `client.closed (boolean)` - Returns whether the client is closed.
+- `chat.closed (boolean)` - Returns whether the client is closed.
 
 Note that channel names in the above functions always refer to the "login name"
 of a twitch channel. Channel names may not be capitalized, e.g. `Forsen` would
@@ -646,7 +645,7 @@ only set the very config options you need, the rest are usually at a reasonable 
 For most bots, you only need to set `username` and `password`:
 
 ```javascript
-let client = new ChatClient({
+let chat = new ChatClient({
   username: "your-bot-username",
   password: "0123456789abcdef1234567",
 });
@@ -655,7 +654,7 @@ let client = new ChatClient({
 Nevertheless, here are examples of all possible config options:
 
 ```javascript
-let client = new ChatClient({
+let chat = new ChatClient({
   username: "your-bot-username", // justinfan12345 by default - For anonymous chat connection
   password: "0123456789abcdef1234567", // undefined by default (no password)
   // Message rate limits configuration for verified and known bots
@@ -758,30 +757,30 @@ const {
   ChatClient,
   AlternateMessageModifier,
 } = require("@kararty/dank-twitch-irc");
-let client = new ChatClient();
-client.use(new AlternateMessageModifier(client));
+let chat = new ChatClient();
+chat.use(new AlternateMessageModifier(client));
 ```
 
 Available mixins are:
 
-- `new AlternateMessageModifier(client)` will allow your bot to send the same
+- `new AlternateMessageModifier(chat)` will allow your bot to send the same
   message within a 30 seconds period. You must also use `client.say` and
-  `client.me` for this mixin to behave consistently and reliably.
-- `new SlowModeRateLimiter(client, /* optional */ maxWaitingMessages)` will rate
+  `chat.me` for this mixin to behave consistently and reliably.
+- `new SlowModeRateLimiter(chat, /* optional */ maxWaitingMessages)` will rate
   limit your messages in channels where your bot is not moderator, VIP or
   broadcaster and has to wait a bit between sending messages. If more than
   `maxWaitingMessages` are waiting, the outgoing message will be dropped
   silently. `maxWaitingMessages` defaults to 10. Note this mixin only has an
-  effect on `client.say` and `client.me` functions, not `client.privmsg`.
+  effect on `chat.say` and `chat.me` functions, not `chat.privmsg`.
 
 and the mixins installed by default:
 
-- `new PrivmsgMessageRateLimiter(client)` - Rate limits outgoing messages
+- `new PrivmsgMessageRateLimiter(chat)` - Rate limits outgoing messages
   according to the rate limits imposed by Twitch. Configure the verified/known
   status of your bot using the config (see above).
-- `new ConnectionRateLimiter(client)` - Rate limits new connections according to
+- `new ConnectionRateLimiter(chat)` - Rate limits new connections according to
   the rate limits set in the config.
-- `new UserStateTracker(client)` - Used by other mixins. Keeps track of what
+- `new UserStateTracker(chat)` - Used by other mixins. Keeps track of what
   state your bot user has in all channels.
 - `new RoomStateTracker()` - Used by other mixins. Keeps track of each channel's
   state, e.g. sub-mode etc.
@@ -789,7 +788,7 @@ and the mixins installed by default:
   `UnhandledPromiseRejectionWarning`s on promises returned by the client's
   functions. (installed for you if you activate the
   `ignoreUnhandledPromiseRejections` client option)
-- `new JoinRateLimiter(client)` - Rate limits new joins according to join rate
+- `new JoinRateLimiter(chat)` - Rate limits new joins according to join rate
   limits set in the config.
 
 ## Tests
