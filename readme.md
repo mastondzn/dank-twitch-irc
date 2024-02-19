@@ -2,15 +2,15 @@
 
 This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc), [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc) and [kararty/dank-twitch-irc](https://github.com/kararty/dank-twitch-irc).
 
-![Build](https://github.com/kararty/dank-twitch-irc/workflows/Build/badge.svg)
+![Build](https://github.com/mastondzn/dank-twitch-irc/workflows/Build/badge.svg)
 
 Node.js-only Twitch IRC lib, written in TypeScript.
 
-Requires Node.js 14 or above.
+Requires Node.js 18 or above.
 
 - [View on GitHub](https://github.com/kararty/dank-twitch-irc)
-- [View on npm](https://www.npmjs.com/package/@kararty/dank-twitch-irc)
-- [View documentation](https://kararty.github.io/dank-twitch-irc/)
+- [View on npm](https://www.npmjs.com/package/@mastondzn/dank-twitch-irc)
+- [View documentation](https://tsdocs.dev/search/docs/@mastondzn/dank-twitch-irc)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -29,7 +29,6 @@ Requires Node.js 14 or above.
   - [bitsbadgetier](#bitsbadgetier)
   - [viewermilestone](#viewermilestone)
 - [ChatClient API](#chatclient-api)
-- [API Documentation](#api-documentation)
 - [Client options](#client-options)
 - [Features](#features)
 - [Extra Mixins](#extra-mixins)
@@ -41,7 +40,7 @@ Requires Node.js 14 or above.
 ## Usage
 
 ```javascript
-const { ChatClient } = require("@kararty/dank-twitch-irc");
+const { ChatClient } = require("@mastondzn/dank-twitch-irc");
 let chat = new ChatClient();
 chat.on("ready", () => console.log("Successfully connected to chat"));
 chat.on("close", (error) => {
@@ -640,7 +639,7 @@ would be `forsen`, not `#forsen`).
 ## API Documentation
 
 Generated API documentation can be found here:
-<https://kararty.github.io/dank-twitch-irc>
+<https://tsdocs.dev/search/docs/@mastondzn/dank-twitch-irc>
 
 ## Client options
 
@@ -763,7 +762,7 @@ activate mixins by calling:
 const {
   ChatClient,
   AlternateMessageModifier,
-} = require("@kararty/dank-twitch-irc");
+} = require("@mastondzn/dank-twitch-irc");
 let chat = new ChatClient();
 chat.use(new AlternateMessageModifier(client));
 ```
@@ -801,26 +800,24 @@ and the mixins installed by default:
 ## Tests
 
 ```bash
-npm run test
+pnpm run test
 ```
-
-Test run report is available in `./mochawesome-report/mochawesome.html`.
-Coverage report is produced as `./coverage/index.html`.
 
 ## Lint and check code style
 
 ```bash
-# Run eslint and tslint rules and checks code style with prettier
-npm run lint
-npm run check-format
+# Run eslint rules and checks code style with prettier
+pnpm run lint
+pnpm run format:check
 ```
 
 ```bash
-# Run eslint, tslint and pretter fixers
-npm run lintfix
-npm run reformat
+# Run eslint and prettier fixing
+pnpm run lint -- --fix
+pnpm run format
 ```
 
+<!--
 [clearchat]: https://kararty.github.io/dank-twitch-irc/classes/ClearchatMessage.html
 [clearmsg]: https://kararty.github.io/dank-twitch-irc/classes/ClearmsgMessage.html
 [hosttarget]: https://kararty.github.io/dank-twitch-irc/classes/HosttargetMessage.html
@@ -838,3 +835,4 @@ npm run reformat
 [pong]: https://kararty.github.io/dank-twitch-irc/classes/PongMessage.html
 [cap]: https://kararty.github.io/dank-twitch-irc/classes/CapMessage.html
 [ircmessage]: https://kararty.github.io/dank-twitch-irc/classes/IRCMessage.html
+-->
