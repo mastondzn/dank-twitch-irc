@@ -47,7 +47,6 @@
     "eventemitter3": "^5.0.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.pickby": "^4.6.0",
-    "make-error-cause": "^2.3.0",
     "simple-websocket": "^9.1.0",
     "split2": "^4.1.0"
   },

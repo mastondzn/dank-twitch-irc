@@ -3,7 +3,6 @@ import { Duplex } from "node:stream";
 import util, { inspect } from "node:util";
 
 import chaiAsPromised from "chai-as-promised";
-import type { BaseError } from "make-error-cause";
 import sinon from "sinon";
 import { afterEach, assert, chai } from "vitest";
 
@@ -91,7 +90,7 @@ export function assertErrorChain(
 
       for (const errorElement of errors) {
         await assert.isRejected(errorElement);
-        const error = (await errorOf(errorElement)) as BaseError;
+        const error = (await errorOf(errorElement)) as Error;
         assertLink(error, chain);
       }
     })();

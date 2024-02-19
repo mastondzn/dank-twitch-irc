@@ -1,7 +1,7 @@
-import { BaseError } from "make-error-cause";
 import { assert, describe, it } from "vitest";
 
 import { anyCauseInstanceof, causeOf } from "./any-cause-instanceof";
+import { BaseError } from "./base-error";
 
 describe("./utils/any-cause-instanceof", () => {
   describe("#causeOf()", () => {
@@ -20,18 +20,6 @@ describe("./utils/any-cause-instanceof", () => {
 
       // then
       assert.strictEqual(gottenCause, cause);
-    });
-
-    it("ignores #cause property on non-BaseErrors", () => {
-      // given
-      const error = new Error("error");
-      error.cause = "cause string";
-
-      // when
-      const gottenCause = causeOf(error);
-
-      // then
-      assert.isUndefined(gottenCause);
     });
   });
 

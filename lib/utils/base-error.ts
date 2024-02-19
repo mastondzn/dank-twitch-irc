@@ -1,6 +1,4 @@
-import { BaseError as OriginalBaseError } from "make-error-cause";
-
-export class BaseError extends OriginalBaseError {
+export class BaseError extends Error {
   public constructor(message?: string, cause?: Error | undefined) {
     let newMessage;
     if (message != null && cause?.message != null && cause.message.length > 0) {
@@ -13,6 +11,6 @@ export class BaseError extends OriginalBaseError {
       newMessage = cause.message;
     }
 
-    super(newMessage, cause);
+    super(newMessage, { cause });
   }
 }

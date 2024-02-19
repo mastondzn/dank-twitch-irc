@@ -1,8 +1,6 @@
-import { BaseError } from "make-error-cause";
-
 export function causeOf(error: Error): Error | undefined {
-  if (error instanceof BaseError) {
-    return error.cause;
+  if (error instanceof Error) {
+    return error.cause as Error | undefined;
   }
   return undefined;
 }
