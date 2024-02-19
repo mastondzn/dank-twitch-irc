@@ -587,6 +587,13 @@ chat.on("USERNOTICE", (msg) => {
   console.log(
     `${msg.displayName} watched ${msg.value} consecutive streams this month and sparked a watch streak!`,
   );
+
+  // Users are able to share a message with a milestone
+  if (msg.messageText) {
+    console.log(
+      `${msg.displayName} shared the following message with the streamer: ${msg.messageText}`,
+    );
+  }
 });
 ```
 
