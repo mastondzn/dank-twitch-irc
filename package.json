@@ -38,7 +38,7 @@
     "format:check": "prettier --check . !pnpm-lock.yaml",
     "test": "vitest --exclude ./lib/utils/helpers.spec.ts",
     "clean": "rimraf ./dist ./coverage",
-    "generate-readme-toc": "doctoc README.md --github --title \"## Table of Contents\" && prettier --write \"./README.md\""
+    "generate-readme-toc": "doctoc readme.md --github --title \"## Table of Contents\" && prettier --write \"./README.md\""
   },
   "dependencies": {
     "async-sema": "^3.1.1",

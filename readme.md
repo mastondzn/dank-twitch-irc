@@ -14,7 +14,6 @@ Requires Node.js 14 or above.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 ## Table of Contents
 
 - [Usage](#usage)
@@ -27,6 +26,7 @@ Requires Node.js 14 or above.
   - [anongiftpaidupgrade, giftpaidupgrade](#anongiftpaidupgrade-giftpaidupgrade)
   - [ritual](#ritual)
   - [bitsbadgetier](#bitsbadgetier)
+  - [viewermilestone](#viewermilestone)
 - [ChatClient API](#chatclient-api)
 - [API Documentation](#api-documentation)
 - [Client options](#client-options)
@@ -557,6 +557,36 @@ chatClient.on("USERNOTICE", (msg) => {
       " bits badge in " +
       msg.channelName +
       "'s channel!",
+  );
+});
+```
+
+### viewermilestone
+
+When a viewer reaches a milestone in the channel (a watch streak)
+
+```javascript
+chatClient.on("USERNOTICE", (msg) => {
+  if (!msg.isViewerMilestone()) return;
+
+  /*
+   * msg.eventParams are:
+   * {
+   *  // The amount of channel points (community points) the user has earned for this milestone
+   *  "copoReward": 450,
+   *  "copoRewardRaw": "450",
+   *
+   *  // The amount of streams the user has watched in a row
+   *  "value": 15,
+   *  "valueRaw": "15",
+   *
+   *  "category": "watch-streak",
+   * }
+   * Sender user of the USERNOTICE message is the user announcing their watch streak.
+   */
+  // mastondzn watched 15 consecutive streams this month and sparked a watch streak!
+  console.log(
+    `${msg.displayName} watched ${msg.value} consecutive streams this month and sparked a watch streak!`,
   );
 });
 ```
