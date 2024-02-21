@@ -13,8 +13,8 @@ import type {
 } from "../message/twitch-types/userstate";
 
 export interface UserStateTrackerEvents {
-  newGlobalState(newState: GlobalUserState): void;
-  newChannelState(channelLogin: string, newState: UserState): void;
+  newGlobalState: (newState: GlobalUserState) => void;
+  newChannelState: (channelLogin: string, newState: UserState) => void;
 }
 
 /**

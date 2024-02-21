@@ -99,25 +99,25 @@ export function convertToFlags(
 }
 
 export interface TagValueParser {
-  getString(key: string): string | undefined;
+  getString: (key: string) => string | undefined;
   // getTrimmedString: Used for sanitizing display-names. See https://github.com/robotty/dank-twitch-irc/issues/33
-  getTrimmedString(key: string): string | undefined;
-  requireString(key: string): string;
-  getInt(key: string): number | undefined;
-  requireInt(key: string): number;
-  getBoolean(key: string): boolean | undefined;
-  requireBoolean(key: string): boolean;
-  getColor(key: string): Color | undefined;
-  requireColor(key: string): Color;
-  getTimestamp(key: string): Date | undefined;
-  requireTimestamp(key: string): Date;
-  getBadges(key: string): TwitchBadgesList | undefined;
-  requireBadges(key: string): TwitchBadgesList;
-  getEmotes(key: string, messageText: string): TwitchEmoteList | undefined;
-  requireEmotes(key: string, messageText: string): TwitchEmoteList;
-  getEmoteSets(key: string): TwitchEmoteSets | undefined;
-  requireEmoteSets(key: string): TwitchEmoteSets;
-  getFlags(key: string, messageText: string): TwitchFlagList | undefined;
+  getTrimmedString: (key: string) => string | undefined;
+  requireString: (key: string) => string;
+  getInt: (key: string) => number | undefined;
+  requireInt: (key: string) => number;
+  getBoolean: (key: string) => boolean | undefined;
+  requireBoolean: (key: string) => boolean;
+  getColor: (key: string) => Color | undefined;
+  requireColor: (key: string) => Color;
+  getTimestamp: (key: string) => Date | undefined;
+  requireTimestamp: (key: string) => Date;
+  getBadges: (key: string) => TwitchBadgesList | undefined;
+  requireBadges: (key: string) => TwitchBadgesList;
+  getEmotes: (key: string, messageText: string) => TwitchEmoteList | undefined;
+  requireEmotes: (key: string, messageText: string) => TwitchEmoteList;
+  getEmoteSets: (key: string) => TwitchEmoteSets | undefined;
+  requireEmoteSets: (key: string) => TwitchEmoteSets;
+  getFlags: (key: string, messageText: string) => TwitchFlagList | undefined;
 }
 
 export function tagParserFor(ircTags: IRCMessageTags): TagValueParser {

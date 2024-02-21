@@ -12,7 +12,7 @@ import { debugLogger } from "../utils/debug-logger";
 const log = debugLogger("dank-twitch-irc:roomstate-tracker");
 
 export interface RoomStateTrackerEvents {
-  newChannelState(channelLogin: string, newState: RoomState): void;
+  newChannelState: (channelLogin: string, newState: RoomState) => void;
 }
 
 /**

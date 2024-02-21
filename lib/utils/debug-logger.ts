@@ -41,7 +41,7 @@ export interface LogFunction {
   /**
    * Boolean indicating if level's logger is enabled.
    */
-  enabled(): boolean;
+  enabled: () => boolean;
 }
 
 /**
@@ -65,7 +65,7 @@ export type Logger = {
    * Mark the beginning of a time difference measurement.
    * @param label string label
    */
-  time(label: string): void;
+  time: (label: string) => void;
 
   /**
    * Finish timer, record output. level will determine the logger used to output the result
@@ -73,7 +73,7 @@ export type Logger = {
    * @param label Label used in call to {@link Logger#time time()}.
    * @param level Level to determine the logger to output the logged message on.
    */
-  timeEnd(label: string, level?: string): number;
+  timeEnd: (label: string, level?: string) => number;
 
   /**
    * Inspect <code>obj</code>.
@@ -81,16 +81,8 @@ export type Logger = {
    * @param obj The object to inspect.
    * @param level Optional log level, e.g. "warn".
    */
-  dir(object: unknown, level?: string): void;
-
-  /**
-   * Inspect <code>obj</code>.
-   *
-   * @param obj The object to inspect.
-   * @param options Options passed to <code>util.inspect()</code>
-   * @param level Optional log level, e.g. "warn".
-   */
-  dir(object: unknown, options?: InspectOptions, level?: string): void;
+  dir: ((object: unknown, level?: string) => void) &
+    ((object: unknown, options?: InspectOptions, level?: string) => void);
 
   /**
    * Similar to <code>console.assert()</code>.
@@ -100,111 +92,101 @@ export type Logger = {
    * @param formatArgs arguments passed to <code>util.format</code> to format the given
    * <code>message</code>.
    */
-  assert(
+  assert: ((
     expression: boolean,
     message?: string,
     ...formatArguments: unknown[]
-  ): void;
-
-  /**
-   * Similar to <code>console.assert()</code>.
-   * Additionally it outputs the error using the appropriate logger set by level (defaults to 'error').
-   * @param expression boolean expresion to test
-   * @param message Optional message to format <code>AssertionError</code> with.
-   * @param formatArg1 argument passed to <code>util.format</code> to format the given
-   * <code>message</code>.
-   * @param level Chooses to logger to output message with, <code>error</code> by default.
-   */
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    formatArgument4: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    formatArgument4: unknown,
-    formatArgument5: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    formatArgument4: unknown,
-    formatArgument5: unknown,
-    formatArgument6: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    formatArgument4: unknown,
-    formatArgument5: unknown,
-    formatArgument6: unknown,
-    formatArgument7: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    formatArgument4: unknown,
-    formatArgument5: unknown,
-    formatArgument6: unknown,
-    formatArgument7: unknown,
-    formatArgument8: unknown,
-    level: string,
-  ): void;
-  assert(
-    expression: boolean,
-    message: string,
-    formatArgument1: unknown,
-    formatArgument2: unknown,
-    formatArgument3: unknown,
-    formatArgument4: unknown,
-    formatArgument5: unknown,
-    formatArgument6: unknown,
-    formatArgument7: unknown,
-    formatArgument8: unknown,
-    formatArgument9: unknown,
-    level: string,
-  ): void;
+  ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      formatArgument4: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      formatArgument4: unknown,
+      formatArgument5: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      formatArgument4: unknown,
+      formatArgument5: unknown,
+      formatArgument6: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      formatArgument4: unknown,
+      formatArgument5: unknown,
+      formatArgument6: unknown,
+      formatArgument7: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      formatArgument4: unknown,
+      formatArgument5: unknown,
+      formatArgument6: unknown,
+      formatArgument7: unknown,
+      formatArgument8: unknown,
+      level: string,
+    ) => void) &
+    ((
+      expression: boolean,
+      message: string,
+      formatArgument1: unknown,
+      formatArgument2: unknown,
+      formatArgument3: unknown,
+      formatArgument4: unknown,
+      formatArgument5: unknown,
+      formatArgument6: unknown,
+      formatArgument7: unknown,
+      formatArgument8: unknown,
+      formatArgument9: unknown,
+      level: string,
+    ) => void);
 } & {
   trace: LogFunction;
   warn: LogFunction;
