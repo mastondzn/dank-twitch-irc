@@ -1,7 +1,6 @@
 import { promisify } from "node:util";
 
-import sinon from "sinon";
-import { assert, describe, it } from "vitest";
+import { assert, describe, expect, it, vi } from "vitest";
 
 import { UserStateTracker } from "./userstate-tracker";
 import { TwitchBadge } from "../message/badge";
@@ -57,8 +56,8 @@ describe("./mixins/userstate-tracker", () => {
       const userStateTracker = new UserStateTracker(client);
       client.use(userStateTracker);
 
-      const listenerCallback = sinon.fake();
-      userStateTracker.on("newChannelState", listenerCallback);
+      const listener = vi.fn();
+      userStateTracker.on("newChannelState", listener);
 
       emitAndEnd(
         "@badge-info=subscriber/6;badges=broadcaster/1,subscriber/0;" +
@@ -71,11 +70,10 @@ describe("./mixins/userstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      assert(
-        listenerCallback.calledOnceWithExactly(
-          "randers",
-          userStateTracker.getChannelState("randers"),
-        ),
+      expect(listener).toHaveBeenCalledOnce();
+      expect(listener).toHaveBeenCalledWith(
+        "randers",
+        userStateTracker.getChannelState("randers"),
       );
     });
 
@@ -111,8 +109,8 @@ describe("./mixins/userstate-tracker", () => {
       const userStateTracker = new UserStateTracker(client);
       client.use(userStateTracker);
 
-      const listenerCallback = sinon.fake();
-      userStateTracker.on("newGlobalState", listenerCallback);
+      const listener = vi.fn();
+      userStateTracker.on("newGlobalState", listener);
 
       emitAndEnd(
         "@badge-info=;badges=;color=#19E6E6;display-name=randers;" +
@@ -124,11 +122,8 @@ describe("./mixins/userstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      assert(
-        listenerCallback.calledOnceWithExactly(
-          userStateTracker.getGlobalState(),
-        ),
-      );
+      expect(listener).toHaveBeenCalledOnce();
+      expect(listener).toHaveBeenCalledWith(userStateTracker.getGlobalState());
     });
 
     it("should update the userstate on PRIVMSG coming from the logged in user", async () => {

@@ -1,7 +1,6 @@
 import { promisify } from "node:util";
 
-import sinon from "sinon";
-import { assert, describe, it } from "vitest";
+import { assert, describe, expect, it, vi } from "vitest";
 
 import { RoomStateTracker } from "./roomstate-tracker";
 import { fakeClient } from "../utils/helpers.spec";
@@ -119,8 +118,8 @@ describe("./mixins/roomstate-tracker", () => {
       const roomStateTracker = new RoomStateTracker();
       client.use(roomStateTracker);
 
-      const listenerCallback = sinon.fake();
-      roomStateTracker.on("newChannelState", listenerCallback);
+      const listener = vi.fn();
+      roomStateTracker.on("newChannelState", listener);
 
       emit(
         "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers",
@@ -129,11 +128,10 @@ describe("./mixins/roomstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      assert(
-        listenerCallback.calledOnceWithExactly(
-          "randers",
-          roomStateTracker.getChannelState("randers"),
-        ),
+      expect(listener).toBeCalledTimes(1);
+      expect(listener).toBeCalledWith(
+        "randers",
+        roomStateTracker.getChannelState("randers"),
       );
     });
 
@@ -148,8 +146,8 @@ describe("./mixins/roomstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      const listenerCallback = sinon.fake();
-      roomStateTracker.on("newChannelState", listenerCallback);
+      const listener = vi.fn();
+      roomStateTracker.on("newChannelState", listener);
 
       emitAndEnd(
         "@room-id=40286300;subs-only=1 :tmi.twitch.tv ROOMSTATE #randers",
@@ -157,11 +155,10 @@ describe("./mixins/roomstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      assert(
-        listenerCallback.calledOnceWithExactly(
-          "randers",
-          roomStateTracker.getChannelState("randers"),
-        ),
+      expect(listener).toHaveBeenCalledOnce();
+      expect(listener).toHaveBeenCalledWith(
+        "randers",
+        roomStateTracker.getChannelState("randers"),
       );
     });
   });

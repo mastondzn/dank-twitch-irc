@@ -3,18 +3,13 @@ import { Duplex } from "node:stream";
 import util, { inspect } from "node:util";
 
 import chaiAsPromised from "chai-as-promised";
-import sinon from "sinon";
-import { afterEach, assert, chai } from "vitest";
+import { assert, chai, vi } from "vitest";
 
 import { ChatClient } from "../client/client";
 import { SingleConnection } from "../client/connection";
 
 chai.config.includeStack = true;
 chai.use(chaiAsPromised);
-
-afterEach(() => {
-  sinon.restore();
-});
 
 export function errorOf(p: Promise<any>): Promise<any> {
   // eslint-disable-next-line ts/no-unsafe-return
@@ -168,7 +163,8 @@ export type FakeConnectionData = {
 
 export function fakeConnection(): FakeConnectionData {
   // don't start sending pings
-  sinon.stub(SingleConnection.prototype, "onConnect");
+  vi.spyOn(SingleConnection.prototype, "onConnect") //
+    .mockImplementation(() => {});
 
   const transport = createMockTransport();
 
