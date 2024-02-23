@@ -31,6 +31,7 @@
     "vue",
     "html",
     "markdown",
+    "yaml",
     "json",
     "jsonc",
     "toml"
