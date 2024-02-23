@@ -8,5 +8,9 @@ export default defineConfig({
       "./lib/utils/setup.spec.ts",
     ],
     setupFiles: ["./lib/utils/setup.spec.ts"],
+    coverage: {
+      reporter: ["text", "json", "json-summary"],
+      reportOnFailure: true,
+    },
   },
 });
