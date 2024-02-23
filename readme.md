@@ -2,7 +2,7 @@
 
 This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc), [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc) and [kararty/dank-twitch-irc](https://github.com/kararty/dank-twitch-irc).
 
-![Build](https://github.com/mastondzn/dank-twitch-irc/workflows/Build/badge.svg)
+![CI](https://github.com/mastondzn/dank-twitch-irc/actions/workflows/ci.yml/badge.svg)
 
 Node.js-only Twitch IRC lib, written in TypeScript.
 
@@ -40,8 +40,9 @@ Requires Node.js 18 or above.
 ## Usage
 
 ```javascript
-const { ChatClient } = require("@mastondzn/dank-twitch-irc");
-let chat = new ChatClient();
+import { ChatClient } from "@mastondzn/dank-twitch-irc";
+
+const chat = new ChatClient();
 chat.on("ready", () => console.log("Successfully connected to chat"));
 chat.on("close", (error) => {
   if (error != null) {
@@ -759,10 +760,11 @@ for general client/bot operations, so they were packaged as **mixins**. You can
 activate mixins by calling:
 
 ```javascript
-const {
+import {
   ChatClient,
   AlternateMessageModifier,
-} = require("@mastondzn/dank-twitch-irc");
+} from "@mastondzn/dank-twitch-irc";
+
 let chat = new ChatClient();
 chat.use(new AlternateMessageModifier(client));
 ```
