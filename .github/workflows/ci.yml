@@ -24,7 +24,8 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
-        with: node-version ${{ matrix.node }}
+        with:
+          node-version: ${{ matrix.node }}
 
       - name: Get pnpm store directory
         id: pnpm-cache
