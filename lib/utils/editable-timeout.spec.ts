@@ -1,4 +1,4 @@
-import { afterEach, assert, beforeEach, describe, it, vi } from "vitest";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { EditableTimeout } from "./editable-timeout";
 
@@ -16,99 +16,89 @@ describe("./utils/editable-timeout", () => {
     });
 
     it("should run the callback after `runTime` if not edited", () => {
-      let wasHit = false;
-      const timeout = new EditableTimeout(() => {
-        wasHit = true;
-      }, 1234);
+      const callback = vi.fn();
+      const timeout = new EditableTimeout(callback, 1234);
 
       vi.advanceTimersByTime(1233);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       vi.advanceTimersByTime(1);
-      assert.isTrue(wasHit);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalled();
+      expect(timeout.completed).toBe(true);
     });
 
     it("should be stoppable", () => {
-      let wasHit = false;
-      const timeout = new EditableTimeout(() => {
-        wasHit = true;
-      }, 1234);
+      const callback = vi.fn();
+      const timeout = new EditableTimeout(callback, 1234);
 
       vi.advanceTimersByTime(1233);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       timeout.stop();
       vi.advanceTimersByTime(1);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       vi.advanceTimersByTime(1_000_000);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
     });
 
     it("should do nothing if stop is called after timeout is completed", () => {
-      let wasHit = false;
-      const timeout = new EditableTimeout(() => {
-        wasHit = true;
-      }, 1234);
+      const callback = vi.fn();
+      const timeout = new EditableTimeout(callback, 1234);
 
       vi.advanceTimersByTime(1234);
-      assert.isTrue(wasHit);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalledOnce();
+      expect(timeout.completed).toBe(true);
 
       timeout.stop();
-      assert.isTrue(wasHit);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalledOnce();
+      expect(timeout.completed).toBe(true);
     });
 
     it("should be possible to update the remaining run time", () => {
-      let wasHit = false;
-      const timeout = new EditableTimeout(() => {
-        wasHit = true;
-      }, 2000);
+      const callback = vi.fn();
+      const timeout = new EditableTimeout(callback, 2000);
 
       vi.advanceTimersByTime(1000);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       timeout.update(1500);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       vi.advanceTimersByTime(499);
-      assert.isFalse(wasHit);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       vi.advanceTimersByTime(1);
-      assert.isTrue(wasHit);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalled();
+      expect(timeout.completed).toBe(true);
     });
 
     it("should do nothing if update is called after timeout is completed", () => {
-      let hitCount = 0;
-      const timeout = new EditableTimeout(() => {
-        hitCount += 1;
-      }, 1000);
+      const callback = vi.fn();
+      const timeout = new EditableTimeout(callback, 1000);
 
       vi.advanceTimersByTime(999);
-      assert.strictEqual(hitCount, 0);
-      assert.isFalse(timeout.completed);
+      expect(callback).not.toHaveBeenCalled();
+      expect(timeout.completed).toBe(false);
 
       vi.advanceTimersByTime(1);
-      assert.strictEqual(hitCount, 1);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(timeout.completed).toBe(true);
 
       timeout.update(2000);
-      assert.strictEqual(hitCount, 1);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(timeout.completed).toBe(true);
 
       vi.advanceTimersByTime(1000);
-      assert.strictEqual(hitCount, 1);
-      assert.isTrue(timeout.completed);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(timeout.completed).toBe(true);
     });
   });
 });
