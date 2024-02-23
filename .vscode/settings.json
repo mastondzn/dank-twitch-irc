@@ -24,16 +24,17 @@
   ],
 
   "eslint.validate": [
+    "github-actions-workflow",
+    "html",
     "javascript",
     "javascriptreact",
+    "json",
+    "jsonc",
+    "markdown",
+    "toml",
     "typescript",
     "typescriptreact",
     "vue",
-    "html",
-    "markdown",
-    "yaml",
-    "json",
-    "jsonc",
-    "toml"
+    "yaml"
   ]
 }
