@@ -2,14 +2,10 @@
 import { Duplex } from "node:stream";
 import util, { inspect } from "node:util";
 
-import chaiAsPromised from "chai-as-promised";
-import { assert, chai, vi } from "vitest";
+import { assert, expect, vi } from "vitest";
 
 import { ChatClient } from "../client/client";
 import { SingleConnection } from "../client/connection";
-
-chai.config.includeStack = true;
-chai.use(chaiAsPromised);
 
 export function errorOf(p: Promise<any>): Promise<any> {
   // eslint-disable-next-line ts/no-unsafe-return
@@ -60,17 +56,14 @@ function assertLink(error: Error, chain: unknown[], depth = 0): void {
 
 export function assertErrorChain(
   promises: Promise<any> | Promise<any>[],
-
   ...chain: any[]
 ): Promise<void>;
 export function assertErrorChain(
   error: Error | undefined,
-
   ...chain: any[]
 ): void;
 export function assertErrorChain(
   errors: Promise<any> | Promise<any>[] | Error | undefined,
-
   ...chain: any[]
 ): Promise<void> | void {
   if (errors instanceof Error || errors == null) {
@@ -84,7 +77,7 @@ export function assertErrorChain(
       }
 
       for (const errorElement of errors) {
-        await assert.isRejected(errorElement);
+        await expect(errorElement).rejects.toThrow();
         const error = (await errorOf(errorElement)) as Error;
         assertLink(error, chain);
       }

@@ -57,7 +57,6 @@
   "devDependencies": {
     "@mastondzn/eslint": "^0.7.0",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/chai-as-promised": "^7.1.5",
     "@types/duplexify": "^3.6.1",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.pickby": "^4.6.6",
@@ -65,7 +64,6 @@
     "@types/simple-websocket": "^7.0.3",
     "@types/split2": "^4.2.3",
     "@vitest/coverage-v8": "^1.2.2",
-    "chai-as-promised": "^7.1.1",
     "doctoc": "^2.1.0",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",

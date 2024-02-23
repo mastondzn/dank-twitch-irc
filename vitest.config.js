@@ -9,7 +9,7 @@ export default defineConfig({
     ],
     setupFiles: ["./lib/utils/setup.spec.ts"],
     coverage: {
-      reporter: ["text", "json", "json-summary"],
+      reporter: ["text-summary", "json", "json-summary"],
       reportOnFailure: true,
     },
   },
