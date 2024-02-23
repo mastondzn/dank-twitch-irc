@@ -66,7 +66,6 @@ describe("./operations/join", () => {
       const { data, client } = fakeConnection();
       void joinChannel(client, "pajlada");
       assert.deepEqual(data, ["JOIN #pajlada\r\n"]);
-      vi.useRealTimers();
     });
 
     it("does nothing if channel is joined and wanted", () => {
@@ -76,7 +75,6 @@ describe("./operations/join", () => {
       client.joinedChannels.add("pajlada");
       void joinChannel(client, "pajlada");
       assert.deepEqual(data, []);
-      vi.useRealTimers();
     });
 
     it("sends the command if channel is not in joinedChannels but in wantedChannels", () => {
@@ -85,7 +83,6 @@ describe("./operations/join", () => {
       client.wantedChannels.add("pajlada");
       void joinChannel(client, "pajlada");
       assert.deepEqual(data, ["JOIN #pajlada\r\n"]);
-      vi.useRealTimers();
     });
 
     it("resolves on incoming JOIN", async () => {

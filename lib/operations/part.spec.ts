@@ -71,7 +71,6 @@ describe("./operations/part", () => {
       void partChannel(client, "pajlada");
 
       assert.deepStrictEqual(data, ["PART #pajlada\r\n"]);
-      vi.useRealTimers();
     });
 
     it("should do nothing if channel is neither wanted nor joined", async () => {
@@ -111,8 +110,6 @@ describe("./operations/part", () => {
 
       assert.sameMembers([...client.joinedChannels], ["pajlada"]);
       assert.sameMembers([...client.wantedChannels], []);
-
-      vi.useRealTimers();
     });
 
     it("should remove channel from joined and wanted channels on success", async () => {

@@ -185,7 +185,6 @@ describe("./await/await-response", () => {
         TimeoutError,
         "Timed out after waiting for response for 3000 milliseconds",
       );
-      vi.useRealTimers();
     });
 
     it("should timeout after specified timeout (noResponseAction = success)", async () => {
@@ -207,7 +206,6 @@ describe("./await/await-response", () => {
       end();
 
       await Promise.all([promise, clientError]);
-      vi.useRealTimers();
     });
 
     it("should begin timeout only once awaiter is moved to head of queue", async () => {
@@ -244,7 +242,6 @@ describe("./await/await-response", () => {
         TimeoutError,
         "Timed out after waiting for response for 1000 milliseconds",
       );
-      vi.useRealTimers();
     });
 
     it("should notify other awaiters that they are outpaced", async () => {

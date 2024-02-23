@@ -23,7 +23,6 @@ describe("./operations/join-all", () => {
       assert.deepStrictEqual(data, [
         "JOIN #pajlada,#randers,#nymn_hs,#forsen\r\n",
       ]);
-      vi.useRealTimers();
     });
 
     it("should send the correct wire command for a multiple chunks", async () => {

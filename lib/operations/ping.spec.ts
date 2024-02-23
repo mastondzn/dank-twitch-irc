@@ -14,7 +14,6 @@ describe("./operations/ping", () => {
       void sendPing(client, "some identifier");
 
       assert.deepStrictEqual(data, ["PING :some identifier\r\n"]);
-      vi.useRealTimers();
     });
 
     it("should send a random ping identifier if no ping identifier is specified", () => {
@@ -28,7 +27,6 @@ describe("./operations/ping", () => {
         data[0] as string,
         /^PING :dank-twitch-irc:manual:[\da-f]{32}\r\n$/,
       );
-      vi.useRealTimers();
     });
 
     it("should resolve on matching PONG", async () => {
@@ -67,7 +65,6 @@ describe("./operations/ping", () => {
         TimeoutError,
         "Timed out after waiting for response for 2000 milliseconds",
       );
-      vi.useRealTimers();
     });
   });
 

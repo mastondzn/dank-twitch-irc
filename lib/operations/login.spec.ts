@@ -12,7 +12,6 @@ describe("./operations/login", () => {
 
       void sendLogin(client, "justinfan12345");
       assert.deepEqual(data, ["NICK justinfan12345\r\n"]);
-      vi.useRealTimers();
     });
 
     it("should send NICK and PASS if password is specified", () => {
@@ -21,7 +20,6 @@ describe("./operations/login", () => {
 
       void sendLogin(client, "justinfan12345", "SCHMOOPIE");
       assert.deepEqual(data, ["PASS SCHMOOPIE\r\n", "NICK justinfan12345\r\n"]);
-      vi.useRealTimers();
     });
 
     it("should prepend oauth: if missing", () => {
@@ -30,7 +28,6 @@ describe("./operations/login", () => {
 
       void sendLogin(client, "pajlada", "12345");
       assert.deepEqual(data, ["PASS oauth:12345\r\n", "NICK pajlada\r\n"]);
-      vi.useRealTimers();
     });
 
     it("should resolve on 001", async () => {

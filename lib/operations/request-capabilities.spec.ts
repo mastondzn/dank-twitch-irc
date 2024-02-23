@@ -90,7 +90,6 @@ describe("./operations/request-capabilities", () => {
         "CAP REQ :twitch.tv/commands twitch.tv/tags\r\n",
         "CAP REQ :twitch.tv/commands twitch.tv/tags twitch.tv/membership\r\n",
       ]);
-      vi.useRealTimers();
     });
 
     it("should resolve on CAP message acknowledging all capabilities", async () => {

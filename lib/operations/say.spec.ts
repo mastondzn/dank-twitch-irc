@@ -44,7 +44,6 @@ describe("./operations/say", () => {
       assert.deepStrictEqual(data, [
         "PRIVMSG #pajlada :/ /test test abc KKona\r\n",
       ]);
-      vi.useRealTimers();
     });
 
     it("should resolve on USERSTATE", async () => {
@@ -107,7 +106,6 @@ describe("./operations/say", () => {
       assert.deepStrictEqual(data, [
         "PRIVMSG #pajlada :/me test abc KKona\r\n",
       ]);
-      vi.useRealTimers();
     });
 
     it("should resolve on USERSTATE", async () => {

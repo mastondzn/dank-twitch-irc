@@ -6,10 +6,6 @@ beforeEach(() => {
   vi.useFakeTimers({ now: 5000 });
 });
 
-afterEach(() => {
-  vi.useRealTimers();
-});
-
 describe("./utils/editable-timeout", () => {
   describe("editableTimeout", () => {
     it("should capture run time and current time at creation", () => {
