@@ -1,13 +1,13 @@
-import { PassThrough } from "node:stream";
+import { type Duplex, PassThrough } from "node:stream";
 
-import duplexify, { type Duplexify } from "duplexify";
+import duplexify from "duplexer3";
 import WebSocketDuplex from "simple-websocket";
 
 import type { Transport } from "./transport";
 import type { ExpandedWebSocketTransportConfiguration } from "../../config/expanded";
 
 export class WebSocketTransport implements Transport {
-  public readonly stream: Duplexify;
+  public readonly stream: Duplex;
   private readonly readable: PassThrough;
   private readonly writable: PassThrough;
 
@@ -19,10 +19,14 @@ export class WebSocketTransport implements Transport {
 
     this.readable = new PassThrough({ decodeStrings: false, objectMode: true });
     this.writable = new PassThrough({ decodeStrings: false, objectMode: true });
-    this.stream = duplexify(this.writable, this.readable, {
-      decodeStrings: false,
-      objectMode: true,
-    });
+    this.stream = duplexify(
+      {
+        decodeStrings: false,
+        objectMode: true,
+      },
+      this.writable,
+      this.readable,
+    );
   }
 
   public connect(connectionListener?: () => void): void {
