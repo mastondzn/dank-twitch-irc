@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { PongMessage } from "./pong";
-import { parseTwitchMessage } from "../../parser/twitch-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { PongMessage } from "~/message/twitch-types/connection/pong";
 
 describe("./message/twitch-types/connection/pong", () => {
   describe("pongMessage", () => {

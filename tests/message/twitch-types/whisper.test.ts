@@ -1,9 +1,9 @@
 import { assert, describe, it } from "vitest";
 
-import { WhisperMessage } from "./whisper";
-import { TwitchBadgesList } from "../badges";
-import { TwitchEmote } from "../emote";
-import { parseTwitchMessage } from "../parser/twitch-message";
+import { TwitchBadgesList } from "~/message/badges";
+import { TwitchEmote } from "~/message/emote";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { WhisperMessage } from "~/message/twitch-types/whisper";
 
 describe("./message/twitch-types/whisper", () => {
   describe("whisperMessage", () => {

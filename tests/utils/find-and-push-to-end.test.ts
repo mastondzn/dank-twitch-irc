@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { findAndPushToEnd } from "./find-and-push-to-end";
+import { findAndPushToEnd } from "~/utils/find-and-push-to-end";
 
 describe("./utils/find-and-push-to-end", () => {
   describe("findAndPushToEnd", () => {

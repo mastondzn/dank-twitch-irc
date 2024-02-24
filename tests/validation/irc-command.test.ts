@@ -1,8 +1,8 @@
 import { describe, it } from "vitest";
 
-import { validateIRCCommand } from "./irc-command";
-import { ValidationError } from "./validation-error";
-import { assertThrowsChain } from "../utils/helpers.spec";
+import { assertThrowsChain } from "../helpers";
+import { validateIRCCommand } from "~/validation/irc-command";
+import { ValidationError } from "~/validation/validation-error";
 
 describe("./validation/irc-command", () => {
   describe("#validateIRCCommand", () => {

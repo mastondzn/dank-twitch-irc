@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { decodeValue, parseTags } from "./tags";
+import { decodeValue, parseTags } from "~/message/parser/tags";
 
 describe("./message/parser/tags", () => {
   describe("#decodeValue()", () => {

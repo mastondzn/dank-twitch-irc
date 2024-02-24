@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { anyCauseInstanceof, causeOf } from "./any-cause-instanceof";
-import { BaseError } from "./base-error";
+import { anyCauseInstanceof, causeOf } from "~/utils/any-cause-instanceof";
+import { BaseError } from "~/utils/base-error";
 
 describe("./utils/any-cause-instanceof", () => {
   describe("#causeOf()", () => {

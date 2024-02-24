@@ -1,8 +1,8 @@
 import { assert, describe, it } from "vitest";
 
-import { parseColor } from "./color";
-import { ParseError } from "./parse-error";
-import { assertThrowsChain } from "../../utils/helpers.spec";
+import { assertThrowsChain } from "../../helpers";
+import { parseColor } from "~/message/parser/color";
+import { ParseError } from "~/message/parser/parse-error";
 
 describe("./message/parser/color", () => {
   describe("#parseColor()", () => {

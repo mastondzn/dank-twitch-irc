@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { TwitchBadge } from "./badge";
+import { TwitchBadge } from "~/message/badge";
 
 describe("./message/badge", () => {
   describe("twitchBadge", () => {

@@ -1,8 +1,8 @@
 import { describe, it } from "vitest";
 
-import { validateMessageID } from "./reply";
-import { ValidationError } from "./validation-error";
-import { assertThrowsChain } from "../utils/helpers.spec";
+import { assertThrowsChain } from "../helpers";
+import { validateMessageID } from "~/validation/reply";
+import { ValidationError } from "~/validation/validation-error";
 
 describe("./validation/reply", () => {
   describe("#validateMessageID()", () => {

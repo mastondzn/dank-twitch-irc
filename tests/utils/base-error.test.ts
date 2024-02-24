@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { BaseError } from "./base-error";
+import { BaseError } from "~/utils/base-error";
 
 describe("./utils/base-error", () => {
   describe("baseError", () => {

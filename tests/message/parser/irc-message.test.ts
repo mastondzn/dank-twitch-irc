@@ -1,9 +1,9 @@
 import { assert, describe, it } from "vitest";
 
-import { parseIRCMessage } from "./irc-message";
-import { ParseError } from "./parse-error";
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { IRCMessage } from "../irc/irc-message";
+import { assertThrowsChain } from "../../helpers";
+import { IRCMessage } from "~/message/irc/irc-message";
+import { parseIRCMessage } from "~/message/parser/irc-message";
+import { ParseError } from "~/message/parser/parse-error";
 
 describe("./message/parser/irc-message", () => {
   describe("#parseIRCMessage", () => {

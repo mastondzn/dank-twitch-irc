@@ -1,9 +1,9 @@
 import { assert, describe, it, vi } from "vitest";
 
-import { PingTimeoutError, sendPing } from "./ping";
-import { TimeoutError } from "../await/timeout-error";
-import { ClientError, ConnectionError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
+import { assertErrorChain, fakeConnection } from "../helpers";
+import { TimeoutError } from "~/await/timeout-error";
+import { ClientError, ConnectionError } from "~/client/errors";
+import { PingTimeoutError, sendPing } from "~/operations/ping";
 
 describe("./operations/ping", () => {
   describe("#sendPing()", () => {

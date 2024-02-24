@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { parseFlags } from "./flags";
-import { TwitchFlag } from "../flag";
+import { TwitchFlag } from "~/message/flag";
+import { parseFlags } from "~/message/parser/flags";
 
 describe("./message/parser/flags", () => {
   describe("#parseFlags()", () => {

@@ -1,9 +1,9 @@
 import { assert, describe, it } from "vitest";
 
-import { GlobaluserstateMessage } from "./globaluserstate";
-import { TwitchBadge } from "../badge";
-import { TwitchBadgesList } from "../badges";
-import { parseTwitchMessage } from "../parser/twitch-message";
+import { TwitchBadge } from "~/message/badge";
+import { TwitchBadgesList } from "~/message/badges";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { GlobaluserstateMessage } from "~/message/twitch-types/globaluserstate";
 
 describe("./message/twitch-types/globaluserstate", () => {
   describe("globaluserstateMessage", () => {

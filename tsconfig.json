@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
+    "rootDir": "src",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
@@ -15,5 +16,6 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
+  "references": [{ "path": "./tsconfig.test.json" }],
   "include": ["src/**/*.ts"]
 }

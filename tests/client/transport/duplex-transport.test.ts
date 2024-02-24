@@ -2,8 +2,8 @@ import { Duplex } from "node:stream";
 
 import { assert, describe, expect, it, vi } from "vitest";
 
-import { DuplexTransport } from "./duplex-transport";
-import type { ExpandedDuplexTransportConfiguration } from "../../config/expanded";
+import { DuplexTransport } from "~/client/transport/duplex-transport";
+import type { ExpandedDuplexTransportConfiguration } from "~/config/expanded";
 
 describe("./client/transport/duplex-transport", () => {
   describe("duplexTransport", () => {

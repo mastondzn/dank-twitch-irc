@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { parseEmoteSets } from "./emote-sets";
+import { parseEmoteSets } from "~/message/parser/emote-sets";
 
 describe("./message/parser/emote-sets", () => {
   describe("#parseEmoteSets()", () => {

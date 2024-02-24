@@ -1,14 +1,14 @@
 import { assert, describe, it, vi } from "vitest";
 
+import { assertErrorChain, fakeConnection } from "../helpers";
+import { ClientError, ConnectionError, MessageError } from "~/client/errors";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
   CapabilitiesError,
   acknowledgesCapabilities,
   deniedAnyCapability,
   requestCapabilities,
-} from "./request-capabilities";
-import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { parseTwitchMessage } from "../message/parser/twitch-message";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
+} from "~/operations/request-capabilities";
 
 describe("./operations/request-capabilities", () => {
   describe("#acknowledgesCapabilities()", () => {

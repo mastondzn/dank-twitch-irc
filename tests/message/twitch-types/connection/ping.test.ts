@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { PingMessage } from "./ping";
-import { parseTwitchMessage } from "../../parser/twitch-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { PingMessage } from "~/message/twitch-types/connection/ping";
 
 describe("./message/twitch-types/connection/ping", () => {
   describe("pingMessage", () => {

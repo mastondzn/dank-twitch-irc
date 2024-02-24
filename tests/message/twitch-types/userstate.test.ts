@@ -1,8 +1,8 @@
 import { assert, describe, it } from "vitest";
 
-import { UserstateMessage } from "./userstate";
-import { TwitchBadgesList } from "../badges";
-import { parseTwitchMessage } from "../parser/twitch-message";
+import { TwitchBadgesList } from "~/message/badges";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { UserstateMessage } from "~/message/twitch-types/userstate";
 
 describe("./message/twitch-types/userstate", () => {
   describe("userstateMessage", () => {

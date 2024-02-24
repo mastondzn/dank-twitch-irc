@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { isAnonymousUsername } from "./is-anonymous-username";
+import { isAnonymousUsername } from "~/utils/is-anonymous-username";
 
 describe("./utils/is-anonymous-username", () => {
   describe("#isAnonymousUsername()", () => {

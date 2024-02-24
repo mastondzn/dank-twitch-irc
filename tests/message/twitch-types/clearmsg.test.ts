@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { ClearmsgMessage } from "./clearmsg";
-import { parseTwitchMessage } from "../parser/twitch-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { ClearmsgMessage } from "~/message/twitch-types/clearmsg";
 
 describe("./message/twitch-types/clearmsg", () => {
   describe("clearmsgMessage", () => {

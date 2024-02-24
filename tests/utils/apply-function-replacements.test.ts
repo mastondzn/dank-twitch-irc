@@ -3,7 +3,7 @@ import { assert, describe, it } from "vitest";
 import {
   applyReplacement,
   applyReplacements,
-} from "./apply-function-replacements";
+} from "~/utils/apply-function-replacements";
 
 describe("./utils/apply-function-replacements", () => {
   describe("#applyReplacement", () => {

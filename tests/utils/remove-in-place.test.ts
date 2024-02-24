@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { removeInPlace } from "./remove-in-place";
+import { removeInPlace } from "~/utils/remove-in-place";
 
 describe("./utils/remove-in-place", () => {
   describe("#removeInPlace()", () => {

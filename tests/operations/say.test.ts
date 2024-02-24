@@ -1,8 +1,8 @@
 import { assert, describe, it, vi } from "vitest";
 
-import { SayError, me, removeCommands, say } from "./say";
-import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
+import { assertErrorChain, fakeConnection } from "../helpers";
+import { ClientError, ConnectionError, MessageError } from "~/client/errors";
+import { SayError, me, removeCommands, say } from "~/operations/say";
 
 describe("./operations/say", () => {
   describe("#removeCommands()", () => {

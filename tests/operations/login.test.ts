@@ -1,8 +1,8 @@
 import { assert, describe, it, vi } from "vitest";
 
-import { LoginError, sendLogin } from "./login";
-import { ClientError, ConnectionError, MessageError } from "../client/errors";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
+import { assertErrorChain, fakeConnection } from "../helpers";
+import { ClientError, ConnectionError, MessageError } from "~/client/errors";
+import { LoginError, sendLogin } from "~/operations/login";
 
 describe("./operations/login", () => {
   describe("#sendLogin()", () => {

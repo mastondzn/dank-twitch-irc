@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { reasonForValue } from "./reason-for-value";
+import { reasonForValue } from "~/utils/reason-for-value";
 
 describe("./utils/reason-for-value", () => {
   describe("#reasonForValue()", () => {

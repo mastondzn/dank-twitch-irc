@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { matchingNotice } from "./conditions";
-import { parseTwitchMessage } from "../message/parser/twitch-message";
+import { matchingNotice } from "~/await/conditions";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
 
 describe("./await/conditions", () => {
   describe("#matchingNotice()", () => {

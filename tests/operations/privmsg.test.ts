@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { sendPrivmsg } from "./privmsg";
-import { fakeConnection } from "../utils/helpers.spec";
+import { fakeConnection } from "../helpers";
+import { sendPrivmsg } from "~/operations/privmsg";
 
 describe("./operations/privmsg", () => {
   describe("#sendPrivmsg()", () => {

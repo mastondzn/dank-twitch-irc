@@ -2,12 +2,12 @@ import { promisify } from "node:util";
 
 import { assert, describe, expect, it, vi } from "vitest";
 
-import { UserStateTracker } from "./userstate-tracker";
-import { TwitchBadge } from "../message/badge";
-import { parseTwitchMessage } from "../message/parser/twitch-message";
-import type { GlobaluserstateMessage } from "../message/twitch-types/globaluserstate";
-import type { UserstateMessage } from "../message/twitch-types/userstate";
-import { fakeClient } from "../utils/helpers.spec";
+import { fakeClient } from "../helpers";
+import { TwitchBadge } from "~/message/badge";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import type { GlobaluserstateMessage } from "~/message/twitch-types/globaluserstate";
+import type { UserstateMessage } from "~/message/twitch-types/userstate";
+import { UserStateTracker } from "~/mixins/userstate-tracker";
 
 describe("./mixins/userstate-tracker", () => {
   describe("userstateTracker", () => {

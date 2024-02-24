@@ -1,8 +1,8 @@
 import { describe, it } from "vitest";
 
-import { validateChannelName } from "./channel";
-import { ValidationError } from "./validation-error";
-import { assertThrowsChain } from "../utils/helpers.spec";
+import { assertThrowsChain } from "../helpers";
+import { validateChannelName } from "~/validation/channel";
+import { ValidationError } from "~/validation/validation-error";
 
 describe("./validation/channel", () => {
   describe("#validateChannelName()", () => {

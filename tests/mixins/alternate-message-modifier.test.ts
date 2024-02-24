@@ -2,11 +2,11 @@ import { promisify } from "node:util";
 
 import { assert, describe, it } from "vitest";
 
+import { fakeClient } from "../helpers";
 import {
   AlternateMessageModifier,
   invisibleSuffix,
-} from "./alternate-message-modifier";
-import { fakeClient } from "../utils/helpers.spec";
+} from "~/mixins/alternate-message-modifier";
 
 describe("./modules/alternate-message-modifier", () => {
   describe("alternateMessageModifier", () => {

@@ -1,12 +1,12 @@
 import { assert, describe, it, vi } from "vitest";
 
-import { ResponseAwaiter, awaitResponse } from "./await-response";
-import { TimeoutError } from "./timeout-error";
-import { ConnectionError, MessageError } from "../client/errors";
-import { parseTwitchMessage } from "../message/parser/twitch-message";
-import { BaseError } from "../utils/base-error";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
-import { ignoreErrors } from "../utils/ignore-errors";
+import { assertErrorChain, fakeConnection } from "../helpers";
+import { ResponseAwaiter, awaitResponse } from "~/await/await-response";
+import { TimeoutError } from "~/await/timeout-error";
+import { ConnectionError, MessageError } from "~/client/errors";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { BaseError } from "~/utils/base-error";
+import { ignoreErrors } from "~/utils/ignore-errors";
 
 describe("./await/await-response", () => {
   describe("responseAwaiter", () => {

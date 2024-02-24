@@ -1,12 +1,12 @@
 import { assert, describe, it } from "vitest";
 
-import { MissingTagError } from "./missing-tag-error";
-import { ParseError } from "./parse-error";
-import { type TagValueParser, tagParserFor } from "./tag-values";
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { TwitchBadge } from "../badge";
-import { TwitchBadgesList } from "../badges";
-import { TwitchEmote } from "../emote";
+import { assertThrowsChain } from "../../helpers";
+import { TwitchBadge } from "~/message/badge";
+import { TwitchBadgesList } from "~/message/badges";
+import { TwitchEmote } from "~/message/emote";
+import { MissingTagError } from "~/message/parser/missing-tag-error";
+import { ParseError } from "~/message/parser/parse-error";
+import { type TagValueParser, tagParserFor } from "~/message/parser/tag-values";
 
 describe("./message/parser/tag-values", () => {
   function checkRequire<V, A extends unknown[]>(

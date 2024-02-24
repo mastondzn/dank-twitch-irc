@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { CapMessage } from "./cap";
-import { parseTwitchMessage } from "../parser/twitch-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { CapMessage } from "~/message/twitch-types/cap";
 
 describe("./message/twitch-types/cap", () => {
   describe("capMessage", () => {

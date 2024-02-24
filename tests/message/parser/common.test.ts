@@ -1,8 +1,8 @@
 import { assert, describe, it } from "vitest";
 
-import { parseIntThrowing } from "./common";
-import { ParseError } from "./parse-error";
-import { assertThrowsChain } from "../../utils/helpers.spec";
+import { assertThrowsChain } from "../../helpers";
+import { parseIntThrowing } from "~/message/parser/common";
+import { ParseError } from "~/message/parser/parse-error";
 
 describe("./message/parser/common", () => {
   describe("#parseIntThrowing()", () => {

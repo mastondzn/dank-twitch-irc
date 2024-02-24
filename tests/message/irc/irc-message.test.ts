@@ -1,9 +1,9 @@
 import { assert, describe, it } from "vitest";
 
-import { requireNickname, requireParameter } from "./irc-message";
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { parseIRCMessage } from "../parser/irc-message";
-import { MissingDataError } from "../parser/missing-data-error";
+import { assertThrowsChain } from "../../helpers";
+import { requireNickname, requireParameter } from "~/message/irc/irc-message";
+import { parseIRCMessage } from "~/message/parser/irc-message";
+import { MissingDataError } from "~/message/parser/missing-data-error";
 
 describe("./message/irc/irc-message", () => {
   describe("#requireParameter()", () => {

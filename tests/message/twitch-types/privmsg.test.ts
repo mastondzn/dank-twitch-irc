@@ -1,9 +1,12 @@
 import { assert, describe, it } from "vitest";
 
-import { PrivmsgMessage, parseActionAndMessage } from "./privmsg";
-import { TwitchBadge } from "../badge";
-import { TwitchBadgesList } from "../badges";
-import { parseTwitchMessage } from "../parser/twitch-message";
+import { TwitchBadge } from "~/message/badge";
+import { TwitchBadgesList } from "~/message/badges";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import {
+  PrivmsgMessage,
+  parseActionAndMessage,
+} from "~/message/twitch-types/privmsg";
 
 describe("./message/twitch-types/privmsg", () => {
   describe("#parseActionAndMessage()", () => {

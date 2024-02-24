@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { setDefaults } from "./set-defaults";
+import { setDefaults } from "~/utils/set-defaults";
 
 describe("./utils/set-defaults", () => {
   describe("#setDefaults()", () => {

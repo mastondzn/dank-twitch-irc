@@ -1,24 +1,24 @@
 import { assert, describe, it } from "vitest";
 
-import { parseIRCMessage } from "./irc-message";
-import { parseTwitchMessage } from "./twitch-message";
-import { IRCMessage } from "../irc/irc-message";
-import { CapMessage } from "../twitch-types/cap";
-import { ClearchatMessage } from "../twitch-types/clearchat";
-import { ClearmsgMessage } from "../twitch-types/clearmsg";
-import { PingMessage } from "../twitch-types/connection/ping";
-import { PongMessage } from "../twitch-types/connection/pong";
-import { ReconnectMessage } from "../twitch-types/connection/reconnect";
-import { GlobaluserstateMessage } from "../twitch-types/globaluserstate";
-import { HosttargetMessage } from "../twitch-types/hosttarget";
-import { JoinMessage } from "../twitch-types/membership/join";
-import { PartMessage } from "../twitch-types/membership/part";
-import { NoticeMessage } from "../twitch-types/notice";
-import { PrivmsgMessage } from "../twitch-types/privmsg";
-import { RoomstateMessage } from "../twitch-types/roomstate";
-import { UsernoticeMessage } from "../twitch-types/usernotice";
-import { UserstateMessage } from "../twitch-types/userstate";
-import { WhisperMessage } from "../twitch-types/whisper";
+import { IRCMessage } from "~/message/irc/irc-message";
+import { parseIRCMessage } from "~/message/parser/irc-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { CapMessage } from "~/message/twitch-types/cap";
+import { ClearchatMessage } from "~/message/twitch-types/clearchat";
+import { ClearmsgMessage } from "~/message/twitch-types/clearmsg";
+import { PingMessage } from "~/message/twitch-types/connection/ping";
+import { PongMessage } from "~/message/twitch-types/connection/pong";
+import { ReconnectMessage } from "~/message/twitch-types/connection/reconnect";
+import { GlobaluserstateMessage } from "~/message/twitch-types/globaluserstate";
+import { HosttargetMessage } from "~/message/twitch-types/hosttarget";
+import { JoinMessage } from "~/message/twitch-types/membership/join";
+import { PartMessage } from "~/message/twitch-types/membership/part";
+import { NoticeMessage } from "~/message/twitch-types/notice";
+import { PrivmsgMessage } from "~/message/twitch-types/privmsg";
+import { RoomstateMessage } from "~/message/twitch-types/roomstate";
+import { UsernoticeMessage } from "~/message/twitch-types/usernotice";
+import { UserstateMessage } from "~/message/twitch-types/userstate";
+import { WhisperMessage } from "~/message/twitch-types/whisper";
 
 describe("./message/parser/twitch-message", () => {
   describe("#parseTwitchpMessage", () => {

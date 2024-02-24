@@ -4,8 +4,8 @@ import util, { inspect } from "node:util";
 
 import { assert, expect, vi } from "vitest";
 
-import { ChatClient } from "../client/client";
-import { SingleConnection } from "../client/connection";
+import { ChatClient } from "~/client/client";
+import { SingleConnection } from "~/client/connection";
 
 export function errorOf(p: Promise<any>): Promise<any> {
   // eslint-disable-next-line ts/no-unsafe-return

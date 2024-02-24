@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { unionSets } from "./union-sets";
+import { unionSets } from "~/utils/union-sets";
 
 describe("./utils/union-sets", () => {
   describe("#unionSets()", () => {

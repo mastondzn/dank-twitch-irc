@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import { MissingTagError } from "./missing-tag-error";
+import { MissingTagError } from "~/message/parser/missing-tag-error";
 
 describe("./message/parser/missing-tag-error", () => {
   describe("missingTagError", () => {

@@ -1,9 +1,9 @@
 import { assert, describe, it, vi } from "vitest";
 
-import { joinNothingToDo } from "./join";
-import { PartError, partChannel, partNothingToDo } from "./part";
-import { TimeoutError } from "../await/timeout-error";
-import { assertErrorChain, fakeConnection } from "../utils/helpers.spec";
+import { assertErrorChain, fakeConnection } from "../helpers";
+import { TimeoutError } from "~/await/timeout-error";
+import { joinNothingToDo } from "~/operations/join";
+import { PartError, partChannel, partNothingToDo } from "~/operations/part";
 
 describe("./operations/part", () => {
   describe("#partNothingToDo()", () => {

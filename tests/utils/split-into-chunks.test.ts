@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { assertThrowsChain } from "./helpers.spec";
-import { splitIntoChunks } from "./split-into-chunks";
+import { assertThrowsChain } from "../helpers";
+import { splitIntoChunks } from "~/utils/split-into-chunks";
 
 describe("./utils/split-into-chunks", () => {
   describe("#splitIntoChunks()", () => {

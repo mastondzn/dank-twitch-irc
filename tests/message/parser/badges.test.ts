@@ -1,10 +1,10 @@
 import { assert, describe, it } from "vitest";
 
-import { parseBadges, parseSingleBadge } from "./badges";
-import { ParseError } from "./parse-error";
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { TwitchBadge } from "../badge";
-import { TwitchBadgesList } from "../badges";
+import { assertThrowsChain } from "../../helpers";
+import { TwitchBadge } from "~/message/badge";
+import { TwitchBadgesList } from "~/message/badges";
+import { parseBadges, parseSingleBadge } from "~/message/parser/badges";
+import { ParseError } from "~/message/parser/parse-error";
 
 describe("./message/parser/badges", () => {
   describe("#parseSingleBadge()", () => {

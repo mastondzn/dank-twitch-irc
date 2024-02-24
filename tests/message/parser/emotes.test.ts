@@ -1,9 +1,9 @@
 import { assert, describe, it } from "vitest";
 
-import { parseEmotes } from "./emotes";
-import { ParseError } from "./parse-error";
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { TwitchEmote } from "../emote";
+import { assertThrowsChain } from "../../helpers";
+import { TwitchEmote } from "~/message/emote";
+import { parseEmotes } from "~/message/parser/emotes";
+import { ParseError } from "~/message/parser/parse-error";
 
 describe("./message/parser/emotes", () => {
   describe("#parseEmotes()", () => {

@@ -1,7 +1,7 @@
 /* eslint-disable ts/no-confusing-void-expression */
 import { assert, describe, it } from "vitest";
 
-import { ignoreErrors } from "./ignore-errors";
+import { ignoreErrors } from "~/utils/ignore-errors";
 
 describe("./utils/ignore-errors", () => {
   describe("#ignoreErrors()", () => {

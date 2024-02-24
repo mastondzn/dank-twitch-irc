@@ -2,8 +2,8 @@ import { promisify } from "node:util";
 
 import { assert, describe, expect, it, vi } from "vitest";
 
-import { RoomStateTracker } from "./roomstate-tracker";
-import { fakeClient } from "../utils/helpers.spec";
+import { fakeClient } from "../helpers";
+import { RoomStateTracker } from "~/mixins/roomstate-tracker";
 
 describe("./mixins/roomstate-tracker", () => {
   describe("roomstateTracker", () => {

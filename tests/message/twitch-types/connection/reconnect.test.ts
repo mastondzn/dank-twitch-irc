@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { ReconnectMessage } from "./reconnect";
-import { parseTwitchMessage } from "../../parser/twitch-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { ReconnectMessage } from "~/message/twitch-types/connection/reconnect";
 
 describe("./message/twitch-types/connection/reconnect", () => {
   describe("reconnectMessage", () => {

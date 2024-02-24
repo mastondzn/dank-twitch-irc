@@ -1,15 +1,15 @@
 import { assert, describe, it } from "vitest";
 
+import { assertThrowsChain } from "../../helpers";
+import { MissingDataError } from "~/message/parser/missing-data-error";
+import { ParseError } from "~/message/parser/parse-error";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
   HosttargetMessage,
   parseHostedChannelName,
   parseHosttargetParameter,
   parseViewerCount,
-} from "./hosttarget";
-import { assertThrowsChain } from "../../utils/helpers.spec";
-import { MissingDataError } from "../parser/missing-data-error";
-import { ParseError } from "../parser/parse-error";
-import { parseTwitchMessage } from "../parser/twitch-message";
+} from "~/message/twitch-types/hosttarget";
 
 describe("./message/twitch-types/hosttarget", () => {
   describe("#parseHostedChannelName()", () => {

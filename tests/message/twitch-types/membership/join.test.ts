@@ -1,7 +1,7 @@
 import { assert, describe, it } from "vitest";
 
-import { JoinMessage } from "./join";
-import { parseTwitchMessage } from "../../parser/twitch-message";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
+import { JoinMessage } from "~/message/twitch-types/membership/join";
 
 describe("./message/twitch-types/membership/join", () => {
   describe("joinMessage", () => {

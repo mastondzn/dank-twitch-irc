@@ -1,15 +1,15 @@
 import { assert, describe, expectTypeOf, it } from "vitest";
 
+import { TwitchBadge } from "~/message";
+import { TwitchBadgesList } from "~/message/badges";
+import { TwitchEmote } from "~/message/emote";
+import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
   type ResubUsernoticeMessage,
   type SubEventParameters,
   UsernoticeMessage,
   extractEventParameters,
-} from "./usernotice";
-import { TwitchBadge } from "../badge";
-import { TwitchBadgesList } from "../badges";
-import { TwitchEmote } from "../emote";
-import { parseTwitchMessage } from "../parser/twitch-message";
+} from "~/message/twitch-types/usernotice";
 
 describe("./message/twitch-types/usernotice", () => {
   describe("#extractEventParams()", () => {
