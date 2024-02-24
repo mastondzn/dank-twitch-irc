@@ -10,5 +10,5 @@ export default defineConfig({
     },
     include: ["./tests/**/*.test.ts"],
   },
-  plugins: [tsconfigPaths({ configNames: ["tsconfig.test.json"] })],
+  plugins: [tsconfigPaths()],
 });
