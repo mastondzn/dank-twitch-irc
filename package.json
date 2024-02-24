@@ -32,7 +32,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "lib"
+    "src"
   ],
   "scripts": {
     "build": "rimraf ./dist && rollup -c",

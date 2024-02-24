@@ -7,5 +7,9 @@ export default defineConfig({
     { file: "dist/index.cjs", sourcemap: true, format: "cjs" },
     { file: "dist/index.js", sourcemap: true, format: "esm" },
   ],
-  plugins: [typescript()],
+  plugins: [
+    typescript({
+      exclude: ["./tests/**"],
+    }),
+  ],
 });
