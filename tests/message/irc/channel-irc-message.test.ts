@@ -1,7 +1,10 @@
 import { assert, describe, it } from "vitest";
 
 import { assertThrowsChain } from "../../helpers";
-import { ChannelIRCMessage, getIRCChannelName } from "~/message/irc/channel-irc-message";
+import {
+  ChannelIRCMessage,
+  getIRCChannelName,
+} from "~/message/irc/channel-irc-message";
 import { parseIRCMessage } from "~/message/parser/irc-message";
 import { MissingDataError } from "~/message/parser/missing-data-error";
 import { ParseError } from "~/message/parser/parse-error";
