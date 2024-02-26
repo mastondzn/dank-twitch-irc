@@ -79,6 +79,9 @@ devDependencies:
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
+  typescript-transform-paths:
+    specifier: ^3.4.7
+    version: 3.4.7(typescript@5.3.3)
   vite-tsconfig-paths:
     specifier: ^4.3.1
     version: 4.3.1(typescript@5.3.3)
@@ -4361,6 +4364,15 @@ packages:
       call-bind: 1.0.7
       for-each: 0.3.3
       is-typed-array: 1.1.13
+    dev: true
+
+  /typescript-transform-paths@3.4.7(typescript@5.3.3):
+    resolution: {integrity: sha512-1Us1kdkdfKd2unbkBAOV2HHRmbRBYpSuk9nJ7cLD2hP4QmfToiM/VpxNlhJc1eezVwVqSKSBjNSzZsK/fWR/9A==}
+    peerDependencies:
+      typescript: '>=3.6.5'
+    dependencies:
+      minimatch: 3.1.2
+      typescript: 5.3.3
     dev: true
 
   /typescript@5.3.3:

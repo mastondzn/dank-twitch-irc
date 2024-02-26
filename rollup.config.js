@@ -1,6 +1,10 @@
 import typescript from "@rollup/plugin-typescript";
 import { defineConfig } from "rollup";
 
+/** @type {import("typescript-transform-paths").default} */
+const paths = (await import("typescript-transform-paths")).default.default;
+// "typescript-transform-paths" has a broken default export
+
 export default defineConfig({
   input: "src/index.ts",
   output: [
@@ -10,6 +14,10 @@ export default defineConfig({
   plugins: [
     typescript({
       exclude: ["./tests/**"],
+      transformers: {
+        before: [{ type: "program", factory: paths }],
+        afterDeclarations: [{ type: "program", factory: paths }],
+      },
     }),
   ],
 });
