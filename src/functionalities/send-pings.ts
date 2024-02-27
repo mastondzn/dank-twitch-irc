@@ -1,6 +1,6 @@
-import type { SingleConnection } from "../client/connection";
-import { sendPing } from "../operations/ping";
-import { setDefaults } from "../utils/set-defaults";
+import type { SingleConnection } from "~/client/connection";
+import { sendPing } from "~/operations/ping";
+import { setDefaults } from "~/utils/set-defaults";
 
 export interface ClientPingConfig {
   /**

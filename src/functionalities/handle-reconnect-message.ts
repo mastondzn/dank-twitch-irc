@@ -1,5 +1,5 @@
-import type { SingleConnection } from "../client/connection";
-import { ConnectionError } from "../client/errors";
+import type { SingleConnection } from "~/client/connection";
+import { ConnectionError } from "~/client/errors";
 
 export class ReconnectError extends ConnectionError {
   public constructor(message: string, cause?: Error) {

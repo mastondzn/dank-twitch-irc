@@ -1,13 +1,13 @@
 import EventEmitter from "eventemitter3";
 
 import type { ClientMixin } from "./base-mixin";
-import type { ChatClient } from "../client/client";
+import type { ChatClient } from "~/client/client";
 import {
   type RoomState,
   type RoomstateMessage,
   hasAllStateTags,
-} from "../message/twitch-types/roomstate";
-import { debugLogger } from "../utils/debug-logger";
+} from "~/message/twitch-types/roomstate";
+import { debugLogger } from "~/utils/debug-logger";
 
 const log = debugLogger("dank-twitch-irc:roomstate-tracker");
 

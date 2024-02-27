@@ -1,5 +1,5 @@
-import type { IRCMessage } from "../message/irc/irc-message";
-import { NoticeMessage } from "../message/twitch-types/notice";
+import type { IRCMessage } from "~/message/irc/irc-message";
+import { NoticeMessage } from "~/message/twitch-types/notice";
 
 export function matchingNotice(
   channelName: string,

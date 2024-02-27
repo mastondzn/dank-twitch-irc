@@ -1,8 +1,8 @@
 import { Sema } from "async-sema";
 
-import type { ChatClient } from "../../client/client";
-import { applyReplacements } from "../../utils/apply-function-replacements";
 import type { ClientMixin } from "../base-mixin";
+import type { ChatClient } from "~/client/client";
+import { applyReplacements } from "~/utils/apply-function-replacements";
 
 export class JoinRateLimiter implements ClientMixin {
   private readonly client: ChatClient;

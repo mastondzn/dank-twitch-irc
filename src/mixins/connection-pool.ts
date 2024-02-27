@@ -1,7 +1,7 @@
 import type { ClientMixin } from "./base-mixin";
-import type { ChatClient, ConnectionPredicate } from "../client/client";
-import type { SingleConnection } from "../client/connection";
-import { applyReplacements } from "../utils/apply-function-replacements";
+import type { ChatClient, ConnectionPredicate } from "~/client/client";
+import type { SingleConnection } from "~/client/connection";
+import { applyReplacements } from "~/utils/apply-function-replacements";
 
 export interface ConnectionPoolOptions {
   poolSize: number; //how many fast connection to create

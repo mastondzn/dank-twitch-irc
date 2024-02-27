@@ -1,5 +1,5 @@
 import { ValidationError } from "./validation-error";
-import { reasonForValue } from "../utils/reason-for-value";
+import { reasonForValue } from "~/utils/reason-for-value";
 
 const messageIDRegex = /^[\w-]+$/;
 

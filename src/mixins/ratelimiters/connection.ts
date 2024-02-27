@@ -1,9 +1,9 @@
 import { Sema } from "async-sema";
 
-import type { ChatClient } from "../../client/client";
-import type { SingleConnection } from "../../client/connection";
-import { applyReplacements } from "../../utils/apply-function-replacements";
 import type { ClientMixin, ConnectionMixin } from "../base-mixin";
+import type { ChatClient } from "~/client/client";
+import type { SingleConnection } from "~/client/connection";
+import { applyReplacements } from "~/utils/apply-function-replacements";
 
 export interface ConnectionRateLimits {
   parallelConnections: number;

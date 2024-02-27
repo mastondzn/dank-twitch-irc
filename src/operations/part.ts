@@ -1,7 +1,7 @@
-import { awaitResponse } from "../await/await-response";
-import type { SingleConnection } from "../client/connection";
-import { MessageError } from "../client/errors";
-import { PartMessage } from "../message/twitch-types/membership/part";
+import { awaitResponse } from "~/await/await-response";
+import type { SingleConnection } from "~/client/connection";
+import { MessageError } from "~/client/errors";
+import { PartMessage } from "~/message/twitch-types/membership/part";
 
 export class PartError extends MessageError {
   public failedChannelName: string;

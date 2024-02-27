@@ -1,9 +1,9 @@
 import { randomBytes } from "node:crypto";
 
-import { awaitResponse } from "../await/await-response";
-import type { SingleConnection } from "../client/connection";
-import { ConnectionError } from "../client/errors";
-import { PongMessage } from "../message/twitch-types/connection/pong";
+import { awaitResponse } from "~/await/await-response";
+import type { SingleConnection } from "~/client/connection";
+import { ConnectionError } from "~/client/errors";
+import { PongMessage } from "~/message/twitch-types/connection/pong";
 
 export class PingTimeoutError extends ConnectionError {}
 

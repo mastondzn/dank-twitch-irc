@@ -1,8 +1,8 @@
-import { awaitResponse } from "../await/await-response";
-import type { SingleConnection } from "../client/connection";
-import { MessageError } from "../client/errors";
-import { JoinMessage } from "../message/twitch-types/membership/join";
-import { NoticeMessage } from "../message/twitch-types/notice";
+import { awaitResponse } from "~/await/await-response";
+import type { SingleConnection } from "~/client/connection";
+import { MessageError } from "~/client/errors";
+import { JoinMessage } from "~/message/twitch-types/membership/join";
+import { NoticeMessage } from "~/message/twitch-types/notice";
 
 export class JoinError extends MessageError {
   public readonly failedChannelName: string;

@@ -1,6 +1,6 @@
 import type { SingleConnection } from "./connection";
-import type { IRCMessage } from "../message/irc/irc-message";
-import type { TwitchCommands } from "../message/parser/twitch-message";
+import type { IRCMessage } from "~/message/irc/irc-message";
+import type { TwitchCommands } from "~/message/parser/twitch-message";
 
 export enum ClientState {
   UNCONNECTED,

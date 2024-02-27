@@ -1,7 +1,7 @@
 import type { Duplex } from "node:stream";
 
 import type { PresetKeys, RateLimits } from "./rate-limits";
-import type { ConnectionRateLimits } from "../mixins/ratelimiters/connection";
+import type { ConnectionRateLimits } from "~/mixins/ratelimiters/connection";
 
 export interface DuplexTransportConfiguration {
   type: "duplex";

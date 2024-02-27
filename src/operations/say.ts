@@ -1,9 +1,9 @@
 import { sendPrivmsg } from "./privmsg";
-import { awaitResponse } from "../await/await-response";
-import type { SingleConnection } from "../client/connection";
-import { MessageError } from "../client/errors";
-import { NoticeMessage } from "../message/twitch-types/notice";
-import { UserstateMessage } from "../message/twitch-types/userstate";
+import { awaitResponse } from "~/await/await-response";
+import type { SingleConnection } from "~/client/connection";
+import { MessageError } from "~/client/errors";
+import { NoticeMessage } from "~/message/twitch-types/notice";
+import { UserstateMessage } from "~/message/twitch-types/userstate";
 
 export function removeCommands(message: string): string {
   return message.startsWith(".") || message.startsWith("/")

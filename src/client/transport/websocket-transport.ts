@@ -4,7 +4,7 @@ import duplexify from "duplexer3";
 import WebSocketDuplex from "simple-websocket";
 
 import type { Transport } from "./transport";
-import type { ExpandedWebSocketTransportConfiguration } from "../../config/expanded";
+import type { ExpandedWebSocketTransportConfiguration } from "~/config/expanded";
 
 export class WebSocketTransport implements Transport {
   public readonly stream: Duplex;

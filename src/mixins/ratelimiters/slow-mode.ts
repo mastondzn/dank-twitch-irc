@@ -1,12 +1,12 @@
 import { Sema } from "async-sema";
 
 import { canSpamFast } from "./utils";
-import type { ChatClient } from "../../client/client";
-import type { RoomState } from "../../message/twitch-types/roomstate";
-import type { UserState } from "../../message/twitch-types/userstate";
-import { applyReplacements } from "../../utils/apply-function-replacements";
-import { EditableTimeout } from "../../utils/editable-timeout";
 import type { ClientMixin } from "../base-mixin";
+import type { ChatClient } from "~/client/client";
+import type { RoomState } from "~/message/twitch-types/roomstate";
+import type { UserState } from "~/message/twitch-types/userstate";
+import { applyReplacements } from "~/utils/apply-function-replacements";
+import { EditableTimeout } from "~/utils/editable-timeout";
 
 export class SlowModeRateLimiter implements ClientMixin {
   public static GLOBAL_SLOW_MODE_COOLDOWN = 1.5;

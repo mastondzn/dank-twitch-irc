@@ -2,7 +2,7 @@ import { Socket } from "node:net";
 import { TLSSocket } from "node:tls";
 
 import type { Transport } from "./transport";
-import type { ExpandedTcpTransportConfiguration } from "../../config/expanded";
+import type { ExpandedTcpTransportConfiguration } from "~/config/expanded";
 
 export class TcpTransport implements Transport {
   public readonly stream: Socket | TLSSocket;

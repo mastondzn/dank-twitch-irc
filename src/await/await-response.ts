@@ -1,9 +1,9 @@
 import { TimeoutError } from "./timeout-error";
-import type { SingleConnection } from "../client/connection";
-import { ConnectionError, MessageError } from "../client/errors";
-import type { ClientEvents } from "../client/interface";
-import type { IRCMessage } from "../message/irc/irc-message";
-import { setDefaults } from "../utils/set-defaults";
+import type { SingleConnection } from "~/client/connection";
+import { ConnectionError, MessageError } from "~/client/errors";
+import type { ClientEvents } from "~/client/interface";
+import type { IRCMessage } from "~/message/irc/irc-message";
+import { setDefaults } from "~/utils/set-defaults";
 
 export type Condition = (message: IRCMessage) => boolean;
 export const alwaysFalse: Condition = (): false => false;

@@ -1,8 +1,8 @@
-import { awaitResponse } from "../await/await-response";
-import type { SingleConnection } from "../client/connection";
-import { ConnectionError } from "../client/errors";
-import { NoticeMessage } from "../message/twitch-types/notice";
-import { isAnonymousUsername } from "../utils/is-anonymous-username";
+import { awaitResponse } from "~/await/await-response";
+import type { SingleConnection } from "~/client/connection";
+import { ConnectionError } from "~/client/errors";
+import { NoticeMessage } from "~/message/twitch-types/notice";
+import { isAnonymousUsername } from "~/utils/is-anonymous-username";
 
 export class LoginError extends ConnectionError {}
 

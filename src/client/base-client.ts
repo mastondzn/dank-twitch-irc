@@ -1,12 +1,12 @@
 import EventEmitter from "eventemitter3";
 
 import { type ClientEvents, ClientState } from "./interface";
-import type { ClientConfiguration } from "../config/config";
+import type { ClientConfiguration } from "~/config/config";
 import {
   type ExpandedClientConfiguration,
   expandConfig,
-} from "../config/expanded";
-import type { IRCMessage } from "../message/irc/irc-message";
+} from "~/config/expanded";
+import type { IRCMessage } from "~/message/irc/irc-message";
 
 export abstract class BaseClient extends EventEmitter<ClientEvents> {
   public get unconnected(): boolean {

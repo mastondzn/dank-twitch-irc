@@ -1,4 +1,4 @@
-import { BaseError } from "../utils/base-error";
+import { BaseError } from "~/utils/base-error";
 
 /**
  * Indicates an error directly caused by some bad server message being received,
