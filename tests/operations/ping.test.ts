@@ -53,7 +53,7 @@ describe("./operations/ping", () => {
       await assertErrorChain(
         promise,
         PingTimeoutError,
-        "Server did not PONG back: Timed out after waiting for response for 2000 milliseconds",
+        "Server did not PONG back",
         TimeoutError,
         "Timed out after waiting for response for 2000 milliseconds",
       );
@@ -61,7 +61,7 @@ describe("./operations/ping", () => {
       await assertErrorChain(
         clientError,
         PingTimeoutError,
-        "Server did not PONG back: Timed out after waiting for response for 2000 milliseconds",
+        "Server did not PONG back",
         TimeoutError,
         "Timed out after waiting for response for 2000 milliseconds",
       );
@@ -70,10 +70,10 @@ describe("./operations/ping", () => {
 
   describe("pingTimeoutError", () => {
     it("should be instanceof ConnectionError", () => {
-      assert.instanceOf(new PingTimeoutError(), ConnectionError);
+      assert.instanceOf(new PingTimeoutError("message"), ConnectionError);
     });
     it("should not be instanceof ClientError", () => {
-      assert.notInstanceOf(new PingTimeoutError(), ClientError);
+      assert.notInstanceOf(new PingTimeoutError("message"), ClientError);
     });
   });
 });

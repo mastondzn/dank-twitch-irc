@@ -65,7 +65,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         promise,
         BaseError,
-        "test awaiter failure: Bad response message: PONG :tmi.twitch.tv",
+        "test awaiter failure",
         MessageError,
         "Bad response message: PONG :tmi.twitch.tv",
       );
@@ -74,7 +74,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         clientError,
         BaseError,
-        "test awaiter failure: Bad response message: PONG :tmi.twitch.tv",
+        "test awaiter failure",
         MessageError,
         "Bad response message: PONG :tmi.twitch.tv",
       );
@@ -97,7 +97,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         [promise, clientErrorAfterClose],
         BaseError,
-        "test awaiter failure: Connection closed with no error",
+        "test awaiter failure",
         ConnectionError,
         "Connection closed with no error",
       );
@@ -132,11 +132,11 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         promise,
         BaseError,
-        "test awaiter failure: Connection closed due to error: Error occurred in transport layer: peer reset connection",
+        "test awaiter failure",
         ConnectionError,
-        "Connection closed due to error: Error occurred in transport layer: peer reset connection",
+        "Connection closed due to error",
         ConnectionError,
-        "Error occurred in transport layer: peer reset connection",
+        "Error occurred in transport layer",
         Error,
         "peer reset connection",
       );
@@ -144,7 +144,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         clientError,
         ConnectionError,
-        "Error occurred in transport layer: peer reset connection",
+        "Error occurred in transport layer",
         Error,
         "peer reset connection",
       );
@@ -152,11 +152,11 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         clientErrorAfterClose,
         BaseError,
-        "test awaiter failure: Connection closed due to error: Error occurred in transport layer: peer reset connection",
+        "test awaiter failure",
         ConnectionError,
-        "Connection closed due to error: Error occurred in transport layer: peer reset connection",
+        "Connection closed due to error",
         ConnectionError,
-        "Error occurred in transport layer: peer reset connection",
+        "Error occurred in transport layer",
         Error,
         "peer reset connection",
       );
@@ -181,7 +181,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         [promise, clientError],
         BaseError,
-        "test awaiter failure: Timed out after waiting for response for 3000 milliseconds",
+        "test awaiter failure",
         TimeoutError,
         "Timed out after waiting for response for 3000 milliseconds",
       );
@@ -229,7 +229,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         [promise1, clientError],
         BaseError,
-        "test awaiter1 failure: Timed out after waiting for response for 1000 milliseconds",
+        "test awaiter1 failure",
         TimeoutError,
         "Timed out after waiting for response for 1000 milliseconds",
       );
@@ -238,7 +238,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         promise2,
         BaseError,
-        "test awaiter2 failure: Timed out after waiting for response for 1000 milliseconds",
+        "test awaiter2 failure",
         TimeoutError,
         "Timed out after waiting for response for 1000 milliseconds",
       );
@@ -267,7 +267,7 @@ describe("./await/await-response", () => {
       await assertErrorChain(
         [promise1, clientError],
         BaseError,
-        "test awaiter1 failure: A response to a command issued later than this command was received",
+        "test awaiter1 failure",
         TimeoutError,
         "A response to a command issued later than this command was received",
       );

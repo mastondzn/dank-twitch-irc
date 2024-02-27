@@ -116,9 +116,7 @@ describe("./operations/request-capabilities", () => {
       await assertErrorChain(
         promise,
         CapabilitiesError,
-        "Failed to request server capabilities twitch.tv/commands, " +
-          "twitch.tv/tags: Bad response message: :tmi.twitch.tv CAP " +
-          "* NAK :twitch.tv/tags",
+        "Failed to request server capabilities twitch.tv/commands, twitch.tv/tags",
         MessageError,
         "Bad response message: :tmi.twitch.tv CAP * NAK :twitch.tv/tags",
       );
@@ -126,9 +124,7 @@ describe("./operations/request-capabilities", () => {
       await assertErrorChain(
         clientError,
         CapabilitiesError,
-        "Failed to request server capabilities twitch.tv/commands, " +
-          "twitch.tv/tags: Bad response message: :tmi.twitch.tv CAP * " +
-          "NAK :twitch.tv/tags",
+        "Failed to request server capabilities twitch.tv/commands, twitch.tv/tags",
         MessageError,
         "Bad response message: :tmi.twitch.tv CAP * NAK :twitch.tv/tags",
       );
@@ -137,10 +133,10 @@ describe("./operations/request-capabilities", () => {
 
   describe("capabilitiesError", () => {
     it("should be instanceof ConnectionError", () => {
-      assert.instanceOf(new CapabilitiesError(), ConnectionError);
+      assert.instanceOf(new CapabilitiesError("message"), ConnectionError);
     });
     it("should not be instanceof ClientError", () => {
-      assert.notInstanceOf(new CapabilitiesError(), ClientError);
+      assert.notInstanceOf(new CapabilitiesError("message"), ClientError);
     });
   });
 });

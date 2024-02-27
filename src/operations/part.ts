@@ -8,7 +8,7 @@ export class PartError extends MessageError {
 
   public constructor(
     failedChannelName: string,
-    message?: string,
+    message: string,
     cause?: Error | undefined,
   ) {
     super(message, cause);

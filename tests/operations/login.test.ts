@@ -52,8 +52,7 @@ describe("./operations/login", () => {
       await assertErrorChain(
         promise,
         LoginError,
-        "Failed to login: Bad response message: :tmi.twitch" +
-          ".tv NOTICE * :Improperly formatted auth",
+        "Failed to login",
         MessageError,
         "Bad response message: :tmi.twitch.tv NOTICE * :Improperly formatted auth",
       );
@@ -61,8 +60,7 @@ describe("./operations/login", () => {
       await assertErrorChain(
         clientError,
         LoginError,
-        "Failed to login: Bad response message: :tmi.twitch." +
-          "tv NOTICE * :Improperly formatted auth",
+        "Failed to login",
         MessageError,
         "Bad response message: :tmi.twitch.tv NOTICE * :Improperly formatted auth",
       );
@@ -71,10 +69,10 @@ describe("./operations/login", () => {
 
   describe("loginError", () => {
     it("should be instanceof ConnectionError", () => {
-      assert.instanceOf(new LoginError(), ConnectionError);
+      assert.instanceOf(new LoginError("message"), ConnectionError);
     });
     it("should not be instanceof ClientError", () => {
-      assert.notInstanceOf(new LoginError(), ClientError);
+      assert.notInstanceOf(new LoginError("message"), ClientError);
     });
   });
 });

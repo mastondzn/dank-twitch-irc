@@ -20,7 +20,7 @@ export class SayError extends MessageError {
     failedChannelName: string,
     failedMessage: string,
     action: boolean,
-    message?: string,
+    message: string,
     cause?: Error,
   ) {
     super(message, cause);
@@ -70,7 +70,7 @@ export async function say(
 ): Promise<UserstateMessage> {
   let command;
   let errorMessage;
-  let errorType: (message?: string, cause?: Error) => Error;
+  let errorType: (message: string, cause?: Error) => Error;
   if (action) {
     command = `/me ${messageText}`;
     errorMessage = `Failed to say [#${channelName}]: /me ${messageText}`;

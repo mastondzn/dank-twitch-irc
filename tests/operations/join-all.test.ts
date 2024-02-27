@@ -412,7 +412,7 @@ describe("./operations/join-all", () => {
       assertErrorChain(
         results.nymn_hs,
         JoinError,
-        "Failed to join channel nymn_hs: A response to a command issued later than this command was received",
+        "Failed to join channel nymn_hs",
         TimeoutError,
         "A response to a command issued later than this command was received",
       );
@@ -426,7 +426,7 @@ describe("./operations/join-all", () => {
       await assertErrorChain(
         clientError,
         JoinError,
-        "Failed to join channel nymn_hs: A response to a command issued later than this command was received",
+        "Failed to join channel nymn_hs",
         TimeoutError,
         "A response to a command issued later than this command was received",
       );

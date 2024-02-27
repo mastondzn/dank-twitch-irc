@@ -50,7 +50,7 @@ export interface AwaitConfig {
    * @param message Optional message
    * @param cause Optional cause
    */
-  errorType: (message?: string, cause?: Error) => Error;
+  errorType: (message: string, cause?: Error) => Error;
 
   /**
    * Custom error message to pass to the {@link errorType} function

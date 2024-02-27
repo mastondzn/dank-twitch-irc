@@ -25,12 +25,15 @@ describe("./operations/say", () => {
   describe("sayError", () => {
     it("should not be instanceof ConnectionError", () => {
       assert.notInstanceOf(
-        new SayError("pajlada", "test", true),
+        new SayError("pajlada", "test", true, "error message"),
         ConnectionError,
       );
     });
     it("should not be instanceof ClientError", () => {
-      assert.notInstanceOf(new SayError("pajlada", "test", true), ClientError);
+      assert.notInstanceOf(
+        new SayError("pajlada", "test", true, "error message"),
+        ClientError,
+      );
     });
   });
 
@@ -75,9 +78,7 @@ describe("./operations/say", () => {
       await assertErrorChain(
         promise,
         SayError,
-        "Failed to say [#pajlada]: abc def: Bad response message: " +
-          "@msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE #pajlad" +
-          "a :This channel has been suspended.",
+        "Failed to say [#pajlada]: abc def",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twit" +
           "ch.tv NOTICE #pajlada :This channel has been suspended.",
@@ -86,9 +87,7 @@ describe("./operations/say", () => {
       await assertErrorChain(
         clientError,
         SayError,
-        "Failed to say [#pajlada]: abc def: Bad response message: @msg" +
-          "-id=msg_channel_suspended :tmi.twitch.tv NOTICE #pajlada :Th" +
-          "is channel has been suspended.",
+        "Failed to say [#pajlada]: abc def",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitc" +
           "h.tv NOTICE #pajlada :This channel has been suspended.",
@@ -137,9 +136,7 @@ describe("./operations/say", () => {
       await assertErrorChain(
         promise,
         SayError,
-        "Failed to say [#pajlada]: /me abc def: Bad response message: " +
-          "@msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE #pajlad" +
-          "a :This channel has been suspended.",
+        "Failed to say [#pajlada]: /me abc def",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twit" +
           "ch.tv NOTICE #pajlada :This channel has been suspended.",
@@ -148,9 +145,7 @@ describe("./operations/say", () => {
       await assertErrorChain(
         clientError,
         SayError,
-        "Failed to say [#pajlada]: /me abc def: Bad response message: @msg" +
-          "-id=msg_channel_suspended :tmi.twitch.tv NOTICE #pajlada :Th" +
-          "is channel has been suspended.",
+        "Failed to say [#pajlada]: /me abc def",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitc" +
           "h.tv NOTICE #pajlada :This channel has been suspended.",

@@ -140,9 +140,7 @@ describe("./operations/join", () => {
       await assertErrorChain(
         promise,
         JoinError,
-        "Failed to join channel test: Bad response message: @msg-id=msg_cha" +
-          "nnel_suspended :tmi.twitch.tv NOTICE #test :This channel has bee" +
-          "n suspended.",
+        "Failed to join channel test",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE " +
           "#test :This channel has been suspended.",
@@ -151,9 +149,7 @@ describe("./operations/join", () => {
       await assertErrorChain(
         clientError,
         JoinError,
-        "Failed to join channel test: Bad response message: @msg-id=msg_cha" +
-          "nnel_suspended :tmi.twitch.tv NOTICE #test :This channel has bee" +
-          "n suspended.",
+        "Failed to join channel test",
         MessageError,
         "Bad response message: @msg-id=msg_channel_suspended :tmi.twitch.tv NOTICE " +
           "#test :This channel has been suspended.",
@@ -175,7 +171,7 @@ describe("./operations/join", () => {
       await assertErrorChain(
         promise,
         JoinError,
-        "Failed to join channel pajlada: Connection closed with no error",
+        "Failed to join channel pajlada",
         ConnectionError,
         "Connection closed with no error",
       );
@@ -200,14 +196,11 @@ describe("./operations/join", () => {
       await assertErrorChain(
         promise,
         JoinError,
-        "Failed to join channel pajlada: Connection closed " +
-          "due to error: Error occurred in transport layer: p" +
-          "eer reset connection",
+        "Failed to join channel pajlada",
         ConnectionError,
-        "Connection closed due to error: Error occurred in tran" +
-          "sport layer: peer reset connection",
+        "Connection closed due to error",
         ConnectionError,
-        "Error occurred in transport layer: peer reset connection",
+        "Error occurred in transport layer",
         Error,
         "peer reset connection",
       );
@@ -215,7 +208,7 @@ describe("./operations/join", () => {
       await assertErrorChain(
         clientError,
         ConnectionError,
-        "Error occurred in transport layer: peer reset connection",
+        "Error occurred in transport layer",
         Error,
         "peer reset connection",
       );
@@ -239,8 +232,7 @@ describe("./operations/join", () => {
       await assertErrorChain(
         promise,
         JoinError,
-        "Failed to join channel test: Timed out after waiting for res" +
-          "ponse for 2000 milliseconds",
+        "Failed to join channel test",
         TimeoutError,
         "Timed out after waiting for response for 2000 milliseconds",
       );
@@ -248,8 +240,7 @@ describe("./operations/join", () => {
       await assertErrorChain(
         clientError,
         JoinError,
-        "Failed to join channel test: Timed out after waiting for res" +
-          "ponse for 2000 milliseconds",
+        "Failed to join channel test",
         TimeoutError,
         "Timed out after waiting for response for 2000 milliseconds",
       );
@@ -258,10 +249,10 @@ describe("./operations/join", () => {
 
   describe("joinError", () => {
     it("should not be instanceof ConnectionError", () => {
-      assert.notInstanceOf(new JoinError("test"), ConnectionError);
+      assert.notInstanceOf(new JoinError("test", "failed"), ConnectionError);
     });
     it("should not be instanceof ClientError", () => {
-      assert.notInstanceOf(new JoinError("test"), ClientError);
+      assert.notInstanceOf(new JoinError("test", "failed"), ClientError);
     });
   });
 });

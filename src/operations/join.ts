@@ -9,7 +9,7 @@ export class JoinError extends MessageError {
 
   public constructor(
     failedChannelName: string,
-    message?: string,
+    message: string,
     cause?: Error,
   ) {
     super(message, cause);
