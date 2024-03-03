@@ -52,7 +52,7 @@
   "dependencies": {
     "async-sema": "^3.1.1",
     "debug-logger": "^0.4.1",
-    "duplexer3": "^1.0.0",
+    "duplexify": "^4.1.2",
     "eventemitter3": "^5.0.1",
     "lodash.camelcase": "^4.3.0",
     "lodash.pickby": "^4.6.0",
@@ -62,7 +62,7 @@
   "devDependencies": {
     "@mastondzn/eslint": "^0.7.0",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/duplexer3": "^0.1.4",
+    "@types/duplexify": "^3.6.4",
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.pickby": "^4.6.6",
     "@types/node": "^20.11.19",

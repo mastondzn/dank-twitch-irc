@@ -11,9 +11,9 @@ dependencies:
   debug-logger:
     specifier: ^0.4.1
     version: 0.4.1
-  duplexer3:
-    specifier: ^1.0.0
-    version: 1.0.0
+  duplexify:
+    specifier: ^4.1.2
+    version: 4.1.2
   eventemitter3:
     specifier: ^5.0.1
     version: 5.0.1
@@ -37,9 +37,9 @@ devDependencies:
   '@rollup/plugin-typescript':
     specifier: ^11.1.6
     version: 11.1.6(rollup@4.12.0)(tslib@2.6.2)(typescript@5.3.3)
-  '@types/duplexer3':
-    specifier: ^0.1.4
-    version: 0.1.4
+  '@types/duplexify':
+    specifier: ^3.6.4
+    version: 3.6.4
   '@types/lodash.camelcase':
     specifier: ^4.3.6
     version: 4.3.9
@@ -868,8 +868,8 @@ packages:
       - supports-color
     dev: true
 
-  /@types/duplexer3@0.1.4:
-    resolution: {integrity: sha512-dvMpf/6D5nUKK/ATVSo2guk3Ya1cWmEbwg7j+dtzuwpG3dPCVjptzFGBx4GfrQC9VZRWkY3yUoq4C2H7uMBMGQ==}
+  /@types/duplexify@3.6.4:
+    resolution: {integrity: sha512-2eahVPsd+dy3CL6FugAzJcxoraWhUghZGEQJns1kTKfCXWKJ5iG/VkaB05wRVrDKHfOFKqb0X0kXh91eE99RZg==}
     dependencies:
       '@types/node': 20.11.19
     dev: true
@@ -1806,9 +1806,13 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /duplexer3@1.0.0:
-    resolution: {integrity: sha512-6O5ndCyJ9CGF9cR2Yi3VFq1OvXXLEgX848InIOl8xUBPYwb8jn/93j10lGaZyLnMRa71IT5OHhURlOiVjH9OVg==}
-    engines: {node: '>=14.16'}
+  /duplexify@4.1.2:
+    resolution: {integrity: sha512-fz3OjcNCHmRP12MJoZMPglx8m4rrFP8rovnk4vT8Fs+aonZoCwGg10dSsQsfP/E62eZcPTMSMP6686fu9Qlqtw==}
+    dependencies:
+      end-of-stream: 1.4.4
+      inherits: 2.0.4
+      readable-stream: 3.6.2
+      stream-shift: 1.0.3
     dev: false
 
   /eastasianwidth@0.2.0:
@@ -1830,6 +1834,12 @@ packages:
   /emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
     dev: true
+
+  /end-of-stream@1.4.4:
+    resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
+    dependencies:
+      once: 1.4.0
+    dev: false
 
   /enhanced-resolve@5.15.0:
     resolution: {integrity: sha512-LXYT42KJ7lpIKECr2mAXIaMldcNCh/7E0KBKOu4KSfkHmP+mZmSs+8V5gBAqisWBy0OO4W5Oyys0GO1Y8KtdKg==}
@@ -3709,7 +3719,6 @@ packages:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
     dependencies:
       wrappy: 1.0.2
-    dev: true
 
   /onetime@6.0.0:
     resolution: {integrity: sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==}
@@ -4303,6 +4312,10 @@ packages:
   /std-env@3.7.0:
     resolution: {integrity: sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==}
     dev: true
+
+  /stream-shift@1.0.3:
+    resolution: {integrity: sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==}
+    dev: false
 
   /string-argv@0.3.2:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
@@ -4930,7 +4943,6 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-    dev: true
 
   /ws@7.5.9:
     resolution: {integrity: sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==}

@@ -1,6 +1,6 @@
 import { type Duplex, PassThrough } from "node:stream";
 
-import duplexify from "duplexer3";
+import duplexify from "duplexify";
 import WebSocketDuplex from "simple-websocket";
 
 import type { Transport } from "./transport";
@@ -19,14 +19,10 @@ export class WebSocketTransport implements Transport {
 
     this.readable = new PassThrough({ decodeStrings: false, objectMode: true });
     this.writable = new PassThrough({ decodeStrings: false, objectMode: true });
-    this.stream = duplexify(
-      {
-        decodeStrings: false,
-        objectMode: true,
-      },
-      this.writable,
-      this.readable,
-    );
+    this.stream = duplexify(this.writable, this.readable, {
+      decodeStrings: false,
+      objectMode: true,
+    });
   }
 
   public connect(connectionListener?: () => void): void {
