@@ -8,7 +8,7 @@ Node.js-only Twitch IRC lib, written in TypeScript.
 
 Requires Node.js 18 or above.
 
-- [View on GitHub](https://github.com/kararty/dank-twitch-irc)
+- [View on GitHub](https://github.com/mastondzn/dank-twitch-irc)
 - [View on npm](https://www.npmjs.com/package/@mastondzn/dank-twitch-irc)
 - [View documentation](https://tsdocs.dev/search/docs/@mastondzn/dank-twitch-irc)
 
