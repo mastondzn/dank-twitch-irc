@@ -10,6 +10,7 @@ export default defineConfig({
   base: process.env.GITHUB_ACTIONS ? "/dank-twitch-irc/" : "/",
   cleanUrls: true,
   themeConfig: {
+    search: { provider: "local" },
     nav: [
       { link: "https://github.com/mastondzn/dank-twitch-irc", text: "GitHub" },
     ],
