@@ -164,3 +164,6 @@ fabric.properties
 /mocha-report/
 /test-results.xml
 .idea/
+.vitepress/**
+!.vitepress/config.js
+api/
