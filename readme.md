@@ -1,8 +1,6 @@
-# dank-twitch-irc
+# @mastondzn/dank-twitch-irc
 
 This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc), [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc) and [kararty/dank-twitch-irc](https://github.com/kararty/dank-twitch-irc).
-
-![CI](https://github.com/mastondzn/dank-twitch-irc/actions/workflows/ci.yml/badge.svg)
 
 Node.js-only Twitch IRC lib, written in TypeScript.
 
@@ -10,32 +8,9 @@ Requires Node.js 18 or above.
 
 - [View on GitHub](https://github.com/mastondzn/dank-twitch-irc)
 - [View on npm](https://www.npmjs.com/package/@mastondzn/dank-twitch-irc)
-- [View documentation](https://tsdocs.dev/search/docs/@mastondzn/dank-twitch-irc)
+- [View documentation](https://mastondzn.github.io/dank-twitch-irc)
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-## Table of Contents
-
-- [Usage](#usage)
-- [Available client events](#available-client-events)
-- [Handling `USERNOTICE` messages](#handling-usernotice-messages)
-  - [Sub and resub](#sub-and-resub)
-  - [Incoming raids](#incoming-raids)
-  - [Subgift](#subgift)
-  - [Anonsubgift](#anonsubgift)
-  - [anongiftpaidupgrade, giftpaidupgrade](#anongiftpaidupgrade-giftpaidupgrade)
-  - [ritual](#ritual)
-  - [bitsbadgetier](#bitsbadgetier)
-  - [viewermilestone](#viewermilestone)
-- [ChatClient API](#chatclient-api)
-- [Client options](#client-options)
-- [Features](#features)
-- [Extra Mixins](#extra-mixins)
-- [Tests](#tests)
-- [Lint and check code style](#lint-and-check-code-style)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+![CI](https://github.com/mastondzn/dank-twitch-irc/actions/workflows/ci.yml/badge.svg)
 
 ## Usage
 
@@ -640,7 +615,7 @@ would be `forsen`, not `#forsen`).
 ## API Documentation
 
 Generated API documentation can be found here:
-<https://tsdocs.dev/search/docs/@mastondzn/dank-twitch-irc>
+<https://mastondzn.github.io/dank-twitch-irc>
 
 ## Client options
 
@@ -819,22 +794,20 @@ pnpm run lint -- --fix
 pnpm run format
 ```
 
-<!--
-[clearchat]: https://kararty.github.io/dank-twitch-irc/classes/ClearchatMessage.html
-[clearmsg]: https://kararty.github.io/dank-twitch-irc/classes/ClearmsgMessage.html
-[hosttarget]: https://kararty.github.io/dank-twitch-irc/classes/HosttargetMessage.html
-[notice]: https://kararty.github.io/dank-twitch-irc/classes/NoticeMessage.html
-[privmsg]: https://kararty.github.io/dank-twitch-irc/classes/PrivmsgMessage.html
-[roomstate]: https://kararty.github.io/dank-twitch-irc/classes/RoomstateMessage.html
-[usernotice]: https://kararty.github.io/dank-twitch-irc/classes/UsernoticeMessage.html
-[userstate]: https://kararty.github.io/dank-twitch-irc/classes/UserstateMessage.html
-[globaluserstate]: https://kararty.github.io/dank-twitch-irc/classes/GlobaluserstateMessage.html
-[whisper]: https://kararty.github.io/dank-twitch-irc/classes/WhisperMessage.html
-[join]: https://kararty.github.io/dank-twitch-irc/classes/JoinMessage.html
-[part]: https://kararty.github.io/dank-twitch-irc/classes/PartMessage.html
-[reconnect]: https://kararty.github.io/dank-twitch-irc/classes/ReconnectMessage.html
-[ping]: https://kararty.github.io/dank-twitch-irc/classes/PingMessage.html
-[pong]: https://kararty.github.io/dank-twitch-irc/classes/PongMessage.html
-[cap]: https://kararty.github.io/dank-twitch-irc/classes/CapMessage.html
-[ircmessage]: https://kararty.github.io/dank-twitch-irc/classes/IRCMessage.html
--->
+[clearchat]: https://mastondzn.github.io/dank-twitch-irc/classes/ClearchatMessage
+[clearmsg]: https://mastondzn.github.io/dank-twitch-irc/classes/ClearmsgMessage
+[hosttarget]: https://mastondzn.github.io/dank-twitch-irc/classes/HosttargetMessage
+[notice]: https://mastondzn.github.io/dank-twitch-irc/classes/NoticeMessage
+[privmsg]: https://mastondzn.github.io/dank-twitch-irc/classes/PrivmsgMessage
+[roomstate]: https://mastondzn.github.io/dank-twitch-irc/classes/RoomstateMessage
+[usernotice]: https://mastondzn.github.io/dank-twitch-irc/classes/UsernoticeMessage
+[userstate]: https://mastondzn.github.io/dank-twitch-irc/classes/UserstateMessage
+[globaluserstate]: https://mastondzn.github.io/dank-twitch-irc/classes/GlobaluserstateMessage
+[whisper]: https://mastondzn.github.io/dank-twitch-irc/classes/WhisperMessage
+[join]: https://mastondzn.github.io/dank-twitch-irc/classes/JoinMessage
+[part]: https://mastondzn.github.io/dank-twitch-irc/classes/PartMessage
+[reconnect]: https://mastondzn.github.io/dank-twitch-irc/classes/ReconnectMessage
+[ping]: https://mastondzn.github.io/dank-twitch-irc/classes/PingMessage
+[pong]: https://mastondzn.github.io/dank-twitch-irc/classes/PongMessage
+[cap]: https://mastondzn.github.io/dank-twitch-irc/classes/CapMessage
+[ircmessage]: https://mastondzn.github.io/dank-twitch-irc/classes/IRCMessage
