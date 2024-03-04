@@ -17,7 +17,7 @@ export default defineConfig({
     sidebar: [
       {
         text: "API Reference",
-        link: "./globals",
+        link: "/globals",
         items: sidebar
           .map((item) => ({
             ...item,
