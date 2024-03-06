@@ -1,5 +1,3 @@
-import camelCase from "lodash.camelcase";
-
 import type { TwitchBadgesList } from "../badges";
 import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
@@ -14,6 +12,7 @@ import {
   requireData,
   tagParserFor,
 } from "../parser/tag-values";
+import { kebabToCamelCase } from "~/utils/kebab-to-camel";
 
 const convertersMap: Record<
   string,
@@ -44,7 +43,7 @@ export function getCamelCasedName(tagKey: string): string {
   newKey = newKey.slice(10);
 
   // camel case
-  newKey = camelCase(newKey);
+  newKey = kebabToCamelCase(newKey);
 
   // convert somethingId to somethingID
   newKey = newKey.replaceAll(/Id$/g, "ID");

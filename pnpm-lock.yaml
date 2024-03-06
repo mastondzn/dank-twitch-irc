@@ -17,9 +17,6 @@ dependencies:
   eventemitter3:
     specifier: ^5.0.1
     version: 5.0.1
-  lodash.camelcase:
-    specifier: ^4.3.0
-    version: 4.3.0
   simple-websocket:
     specifier: ^9.1.0
     version: 9.1.0
@@ -37,9 +34,6 @@ devDependencies:
   '@types/duplexify':
     specifier: ^3.6.4
     version: 3.6.4
-  '@types/lodash.camelcase':
-    specifier: ^4.3.6
-    version: 4.3.9
   '@types/node':
     specifier: ^20.11.19
     version: 20.11.19
@@ -1069,16 +1063,6 @@ packages:
 
   /@types/linkify-it@3.0.5:
     resolution: {integrity: sha512-yg6E+u0/+Zjva+buc3EIb+29XEg4wltq7cSmd4Uc2EE/1nUVmxyzpX6gUXD0V8jIrG0r7YeOGVIbYRkxeooCtw==}
-    dev: true
-
-  /@types/lodash.camelcase@4.3.9:
-    resolution: {integrity: sha512-ys9/hGBfsKxzmFI8hckII40V0ASQ83UM2pxfQRghHAwekhH4/jWtjz/3/9YDy7ZpUd/H0k2STSqmPR28dnj7Zg==}
-    dependencies:
-      '@types/lodash': 4.14.202
-    dev: true
-
-  /@types/lodash@4.14.202:
-    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
     dev: true
 
   /@types/markdown-it@13.0.7:
@@ -3541,10 +3525,6 @@ packages:
     dependencies:
       p-locate: 6.0.0
     dev: true
-
-  /lodash.camelcase@4.3.0:
-    resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
-    dev: false
 
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
