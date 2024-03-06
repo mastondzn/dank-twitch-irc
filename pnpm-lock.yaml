@@ -20,9 +20,6 @@ dependencies:
   lodash.camelcase:
     specifier: ^4.3.0
     version: 4.3.0
-  lodash.pickby:
-    specifier: ^4.6.0
-    version: 4.6.0
   simple-websocket:
     specifier: ^9.1.0
     version: 9.1.0
@@ -43,9 +40,6 @@ devDependencies:
   '@types/lodash.camelcase':
     specifier: ^4.3.6
     version: 4.3.9
-  '@types/lodash.pickby':
-    specifier: ^4.6.6
-    version: 4.6.9
   '@types/node':
     specifier: ^20.11.19
     version: 20.11.19
@@ -1079,12 +1073,6 @@ packages:
 
   /@types/lodash.camelcase@4.3.9:
     resolution: {integrity: sha512-ys9/hGBfsKxzmFI8hckII40V0ASQ83UM2pxfQRghHAwekhH4/jWtjz/3/9YDy7ZpUd/H0k2STSqmPR28dnj7Zg==}
-    dependencies:
-      '@types/lodash': 4.14.202
-    dev: true
-
-  /@types/lodash.pickby@4.6.9:
-    resolution: {integrity: sha512-SPI248FYnyd3jOxDeJq2vX2UKQnDzqacuqdeOVqwE1MPSk8gN8TA3FcHSMQWLlpBnuHgXvgKInvywbOFbidpJA==}
     dependencies:
       '@types/lodash': 4.14.202
     dev: true
@@ -3561,10 +3549,6 @@ packages:
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
-
-  /lodash.pickby@4.6.0:
-    resolution: {integrity: sha512-AZV+GsS/6ckvPOVQPXSiFFacKvKB4kOQu6ynt9wz0F3LO4R9Ij4K1ddYsIytDpSgLz88JHd9P+oaLeej5/Sl7Q==}
-    dev: false
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}

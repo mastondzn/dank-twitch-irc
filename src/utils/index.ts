@@ -10,3 +10,4 @@ export * from "./remove-in-place";
 export * from "./set-defaults";
 export * from "./split-into-chunks";
 export * from "./union-sets";
+export * from "./pick-by";

@@ -57,7 +57,6 @@
     "duplexify": "^4.1.2",
     "eventemitter3": "^5.0.1",
     "lodash.camelcase": "^4.3.0",
-    "lodash.pickby": "^4.6.0",
     "simple-websocket": "^9.1.0",
     "split2": "^4.1.0"
   },
@@ -66,7 +65,6 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/duplexify": "^3.6.4",
     "@types/lodash.camelcase": "^4.3.6",
-    "@types/lodash.pickby": "^4.6.6",
     "@types/node": "^20.11.19",
     "@types/simple-websocket": "^7.0.3",
     "@types/split2": "^4.2.3",

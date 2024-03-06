@@ -1,8 +1,7 @@
-import pickBy from "lodash.pickby";
-
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
 import type { IRCMessageData } from "../irc/irc-message";
 import { tagParserFor } from "../parser/tag-values";
+import { pickBy } from "~/utils/pick-by";
 
 export interface RoomState {
   emoteOnly: boolean;
