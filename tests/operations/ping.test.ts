@@ -25,7 +25,7 @@ describe("./operations/ping", () => {
       assert.strictEqual(data.length, 1);
       assert.match(
         data[0] as string,
-        /^PING :dank-twitch-irc:manual:[\da-f]{32}\r\n$/,
+        /^PING :dank-twitch-irc:manual:[\da-f]{12}\r\n$/,
       );
     });
 
