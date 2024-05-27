@@ -1,23 +1,20 @@
-import { type Condition, awaitResponse } from "~/await/await-response";
+import { awaitResponse } from "~/await/await-response";
 import type { SingleConnection } from "~/client/connection";
 import { ConnectionError } from "~/client/errors";
+import type { IRCMessage } from "~/message/irc/irc-message";
 import { CapMessage } from "~/message/twitch-types/cap";
 
 export class CapabilitiesError extends ConnectionError {}
 
-export function acknowledgesCapabilities(
-  requestedCapabilities: string[],
-): Condition {
-  return (event) =>
+export function acknowledgesCapabilities(requestedCapabilities: string[]) {
+  return (event: IRCMessage): event is CapMessage =>
     event instanceof CapMessage &&
     event.subCommand === "ACK" &&
     requestedCapabilities.every((cap) => event.capabilities.includes(cap));
 }
 
-export function deniedAnyCapability(
-  requestedCapabilities: string[],
-): Condition {
-  return (event) =>
+export function deniedAnyCapability(requestedCapabilities: string[]) {
+  return (event: IRCMessage): event is CapMessage =>
     event instanceof CapMessage &&
     event.subCommand === "NAK" &&
     requestedCapabilities.some((cap) => event.capabilities.includes(cap));

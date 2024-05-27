@@ -85,7 +85,7 @@ export async function say(
   void sendPrivmsg(conn, channelName, command, replyToID);
 
   return awaitResponse(conn, {
-    success: (message) =>
+    success: (message): message is UserstateMessage =>
       message instanceof UserstateMessage &&
       message.channelName === channelName,
     failure: (message) =>
@@ -94,7 +94,7 @@ export async function say(
       badNoticeIDs.has(message.messageID!),
     errorType,
     errorMessage,
-  }) as Promise<UserstateMessage>;
+  });
 }
 
 export async function me(

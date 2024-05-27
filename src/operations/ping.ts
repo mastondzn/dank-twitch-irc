@@ -17,11 +17,11 @@ export async function sendPing(
 ): Promise<PongMessage> {
   conn.sendRaw(`PING :${pingIdentifier}`);
 
-  return (await awaitResponse(conn, {
-    success: (message) =>
+  return await awaitResponse(conn, {
+    success: (message): message is PongMessage =>
       message instanceof PongMessage && message.argument === pingIdentifier,
     timeout,
     errorType: (message, cause) => new PingTimeoutError(message, cause),
     errorMessage: "Server did not PONG back",
-  })) as PongMessage;
+  });
 }

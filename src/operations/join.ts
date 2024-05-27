@@ -22,7 +22,7 @@ export function awaitJoinResponse(
   channelName: string,
 ): Promise<JoinMessage> {
   return awaitResponse(conn, {
-    success: (message) =>
+    success: (message): message is JoinMessage =>
       message instanceof JoinMessage &&
       message.channelName === channelName &&
       message.joinedUsername === conn.configuration.username,
@@ -32,7 +32,7 @@ export function awaitJoinResponse(
       message.messageID === "msg_channel_suspended",
     errorType: (message, cause) => new JoinError(channelName, message, cause),
     errorMessage: `Failed to join channel ${channelName}`,
-  }) as Promise<JoinMessage>;
+  });
 }
 
 export function joinNothingToDo(

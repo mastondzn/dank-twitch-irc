@@ -6,6 +6,8 @@ import type { IRCMessage } from "~/message/irc/irc-message";
 import { setDefaults } from "~/utils/set-defaults";
 
 export type Condition = (message: IRCMessage) => boolean;
+export type NoResponseAction = "success" | "failure";
+
 export const alwaysFalse: Condition = (): false => false;
 export const alwaysTrue: Condition = (): true => true;
 
@@ -41,7 +43,7 @@ export interface AwaitConfig {
    *     in that order. In that case, the response for <code>b</code> can be
    *     rejected the moment the response for <code>c</code> is received.
    */
-  noResponseAction?: "success" | "failure";
+  noResponseAction?: NoResponseAction;
 
   /**
    * Function to create custom error type given optional message and
@@ -224,23 +226,17 @@ export class ResponseAwaiter {
   }
 }
 
-export function awaitResponse(
+export function awaitResponse<
+  TMessage extends IRCMessage = IRCMessage,
+  const TNoResponseAction extends NoResponseAction | undefined = undefined,
+>(
   conn: SingleConnection,
-  config: Omit<AwaitConfig, "noResponseAction"> & {
-    noResponseAction: "success";
+  config: AwaitConfig & {
+    noResponseAction?: TNoResponseAction;
+    success?: ((message: IRCMessage) => message is TMessage) | Condition;
   },
-): Promise<IRCMessage | undefined>;
-
-export function awaitResponse(
-  conn: SingleConnection,
-  config: Omit<AwaitConfig, "noResponseAction"> & {
-    noResponseAction?: "failure";
-  },
-): Promise<IRCMessage>;
-
-export function awaitResponse(
-  conn: SingleConnection,
-  config: AwaitConfig,
-): Promise<IRCMessage | undefined> {
-  return new ResponseAwaiter(conn, config).promise;
+) {
+  return new ResponseAwaiter(conn, config).promise as Promise<
+    TNoResponseAction extends "success" ? TMessage | undefined : TMessage
+  >;
 }
