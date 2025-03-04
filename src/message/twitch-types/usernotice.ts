@@ -391,7 +391,7 @@ export class UsernoticeMessage
     this.messageType =
       this.sourceMessageTypeId === "sharedchatnotice"
         ? this.messageTypeID
-        : this.sourceMessageTypeId ?? this.messageTypeID;
+        : (this.sourceMessageTypeId ?? this.messageTypeID);
   }
 
   public isCheer(): this is CheerUsernoticeMessage {
