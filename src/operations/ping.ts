@@ -1,5 +1,5 @@
-import { awaitResponse } from "~/await/await-response";
 import type { SingleConnection } from "~/client/connection";
+import { awaitResponse } from "~/await/await-response";
 import { ConnectionError } from "~/client/errors";
 import { PongMessage } from "~/message/twitch-types/connection/pong";
 
@@ -17,7 +17,7 @@ export async function sendPing(
 ): Promise<PongMessage> {
   conn.sendRaw(`PING :${pingIdentifier}`);
 
-  return await awaitResponse(conn, {
+  return awaitResponse(conn, {
     success: (message): message is PongMessage =>
       message instanceof PongMessage && message.argument === pingIdentifier,
     timeout,

@@ -1,3 +1,8 @@
+import type { TwitchBadgesList } from "../badges";
+import type { Color } from "../color";
+import type { TwitchEmoteList } from "../emotes";
+import type { TwitchFlagList } from "../flags";
+import type { IRCMessageTags } from "../irc/tags";
 import { parseBadges } from "./badges";
 import { parseColor } from "./color";
 import { type TwitchEmoteSets, parseEmoteSets } from "./emote-sets";
@@ -5,11 +10,6 @@ import { parseEmotes } from "./emotes";
 import { parseFlags } from "./flags";
 import { MissingTagError } from "./missing-tag-error";
 import { ParseError } from "./parse-error";
-import type { TwitchBadgesList } from "../badges";
-import type { Color } from "../color";
-import type { TwitchEmoteList } from "../emotes";
-import type { TwitchFlagList } from "../flags";
-import type { IRCMessageTags } from "../irc/tags";
 
 export function requireData<V, A extends unknown[]>(
   ircTags: IRCMessageTags,

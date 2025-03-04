@@ -1,19 +1,18 @@
 /* eslint-disable ts/no-explicit-any, ts/no-empty-function */
 import { Duplex } from "node:stream";
-import util, { inspect } from "node:util";
+import { inspect } from "node:util";
 
 import { assert, expect, vi } from "vitest";
 
 import { ChatClient } from "~/client/client";
 import { SingleConnection } from "~/client/connection";
 
-export function errorOf(p: Promise<any>): Promise<any> {
-  // eslint-disable-next-line ts/no-unsafe-return
-  return p.catch((error) => error);
+export async function errorOf(p: Promise<any>): Promise<any> {
+  return p.catch((error: unknown) => error);
 }
 
 export async function causeOf(p: Promise<any>): Promise<any> {
-  // eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-member-access
+  // eslint-disable-next-line ts/no-unsafe-member-access
   return (await errorOf(p)).cause;
 }
 
@@ -28,8 +27,8 @@ function assertLink(error: Error, chain: unknown[], depth = 0): void {
     actualPrototype,
     expectedPrototype,
     `Error at depth ${depth} should be directly instanceof ` +
-      `${util.inspect(expectedPrototype)}, ` +
-      `is instance of: ${util.inspect(actualPrototype)}`,
+      `${inspect(expectedPrototype)}, ` +
+      `is instance of: ${inspect(actualPrototype)}`,
   );
 
   assert.strictEqual(
@@ -72,7 +71,6 @@ export function assertErrorChain(
   } else {
     return (async () => {
       if (!Array.isArray(errors)) {
-        // eslint-disable-next-line ts/no-floating-promises
         errors = [errors];
       }
 

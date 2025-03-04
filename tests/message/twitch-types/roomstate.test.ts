@@ -2,8 +2,8 @@ import { assert, describe, it } from "vitest";
 
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
-  RoomstateMessage,
   hasAllStateTags,
+  RoomstateMessage,
 } from "~/message/twitch-types/roomstate";
 
 describe("./message/twitch-types/roomstate", () => {

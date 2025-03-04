@@ -12,27 +12,27 @@ describe("./message/parser/tags", () => {
       assert.strictEqual("", decodeValue(""));
     });
     it("should decode semicolons", () => {
-      assert.strictEqual("abc;def", decodeValue("abc\\:def"));
-      assert.strictEqual(";", decodeValue("\\:"));
+      assert.strictEqual("abc;def", decodeValue(String.raw`abc\:def`));
+      assert.strictEqual(";", decodeValue(String.raw`\:`));
     });
     it("should decode spaces", () => {
-      assert.strictEqual("abc def", decodeValue("abc\\sdef"));
-      assert.strictEqual(" ", decodeValue("\\s"));
+      assert.strictEqual("abc def", decodeValue(String.raw`abc\sdef`));
+      assert.strictEqual(" ", decodeValue(String.raw`\s`));
     });
     it("should decode backslashes", () => {
-      assert.strictEqual("abc\\def", decodeValue("abc\\\\def"));
+      assert.strictEqual(String.raw`abc\def`, decodeValue(String.raw`abc\\def`));
       assert.strictEqual("\\", decodeValue("\\\\"));
     });
     it("should decode CR", () => {
-      assert.strictEqual("abc\rdef", decodeValue("abc\\rdef"));
-      assert.strictEqual("\r", decodeValue("\\r"));
+      assert.strictEqual("abc\rdef", decodeValue(String.raw`abc\rdef`));
+      assert.strictEqual("\r", decodeValue(String.raw`\r`));
     });
     it("should decode LF", () => {
-      assert.strictEqual("abc\ndef", decodeValue("abc\\ndef"));
-      assert.strictEqual("\n", decodeValue("\\n"));
+      assert.strictEqual("abc\ndef", decodeValue(String.raw`abc\ndef`));
+      assert.strictEqual("\n", decodeValue(String.raw`\n`));
     });
     it("should not apply unescaping multiple times", () => {
-      assert.strictEqual("abc\\ndef", decodeValue("abc\\\\ndef"));
+      assert.strictEqual(String.raw`abc\ndef`, decodeValue(String.raw`abc\\ndef`));
     });
     it("should ignore dangling backslashes", () => {
       assert.strictEqual("abc def", decodeValue("abc\\sdef\\"));
@@ -59,7 +59,7 @@ describe("./message/parser/tags", () => {
     });
 
     it("should decode escaped tag values", () => {
-      assert.deepStrictEqual(parseTags("message=Hello\\sWorld!"), {
+      assert.deepStrictEqual(parseTags(String.raw`message=Hello\sWorld!`), {
         message: "Hello World!",
       });
     });

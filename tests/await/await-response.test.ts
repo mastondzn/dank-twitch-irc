@@ -1,7 +1,7 @@
 import { assert, describe, it, vi } from "vitest";
 
 import { assertErrorChain, fakeConnection } from "../helpers";
-import { ResponseAwaiter, awaitResponse } from "~/await/await-response";
+import { awaitResponse, ResponseAwaiter } from "~/await/await-response";
 import { TimeoutError } from "~/await/timeout-error";
 import { ConnectionError, MessageError } from "~/client/errors";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";

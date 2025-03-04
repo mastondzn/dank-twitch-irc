@@ -13,6 +13,7 @@ describe("./modules/alternate-message-modifier", () => {
     it("should have the correct escape for the invisible suffix", () => {
       // 1 (space) + 2 (invisible character)
       assert.strictEqual(invisibleSuffix.length, 3);
+      // eslint-disable-next-line ts/no-misused-spread
       assert.strictEqual([...invisibleSuffix].length, 2);
     });
 

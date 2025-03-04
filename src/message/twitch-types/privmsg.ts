@@ -1,8 +1,8 @@
-import type { UserState } from "./userstate";
 import type { TwitchBadgesList } from "../badges";
 import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
+import type { UserState } from "./userstate";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
 import {
   type IRCMessage,

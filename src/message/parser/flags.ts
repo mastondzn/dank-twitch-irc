@@ -1,5 +1,5 @@
-import { TwitchFlag } from "../flag";
 import type { TwitchFlagList } from "../flags";
+import { TwitchFlag } from "../flag";
 
 export function parseFlags(
   messageText: string,
@@ -7,15 +7,15 @@ export function parseFlags(
 ): TwitchFlagList {
   const flags: TwitchFlagList = [];
 
-  const regex = /^(,?\d+-\d+:(?:(?:[AIPS]\.\d+\/?)+)?)+$/g;
+  // eslint-disable-next-line regexp/no-super-linear-backtracking
+  const regex = /^(?:,?\d+-\d+:(?:[AIPS]\.\d+\/?)*)+$/g;
 
   const matchFlagsSource = flagsSource.match(regex);
-
   if (flagsSource.length <= 0 || matchFlagsSource === null) {
     return flags;
   }
 
-  const messageCharacters = [...messageText];
+  const messageCharacters = messageText.split("");
 
   for (const flagInstancesSource of flagsSource.split(",")) {
     const [indexes, instancesSource] = flagInstancesSource.split(":", 2) as [

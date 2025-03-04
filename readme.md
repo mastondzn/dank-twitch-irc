@@ -191,49 +191,49 @@ chat.on("USERNOTICE", (msg) => {
   if (msg.isSub()) {
     // Leppunen just subscribed to ninja with a tier 1000 (The Ninjas) sub for the first time!
     console.log(
-      msg.displayName +
-        " just subscribed to " +
-        msg.channelName +
-        " with a tier " +
-        msg.eventParams.subPlan +
-        " (" +
-        msg.eventParams.subPlanName +
-        ") sub for the first time!",
+      `${msg.displayName 
+        } just subscribed to ${ 
+        msg.channelName 
+        } with a tier ${ 
+        msg.eventParams.subPlan 
+        } (${ 
+        msg.eventParams.subPlanName 
+        }) sub for the first time!`,
     );
   } else if (msg.isResub()) {
     let streakMessage = "";
     if (msg.eventParams.shouldShareStreak) {
       streakMessage =
-        ", currently " + msg.eventParams.streakMonths + " months in a row";
+        `, currently ${  msg.eventParams.streakMonths  } months in a row`;
     }
     // Leppunen just resubscribed to ninja with a tier 1000 (The Ninjas) sub!
     // They are resubscribing for 10 months, currently 7 months in a row!
     console.log(
-      msg.displayName +
-        " just resubscribed to " +
-        msg.channelName +
-        " with a tier " +
-        msg.eventParams.subPlan +
-        " (" +
-        msg.eventParams.subPlanName +
-        ") sub! They are resubscribing for " +
-        msg.eventParams.cumulativeMonths +
-        " months" +
-        streakMessage +
-        "!",
+      `${msg.displayName 
+        } just resubscribed to ${ 
+        msg.channelName 
+        } with a tier ${ 
+        msg.eventParams.subPlan 
+        } (${ 
+        msg.eventParams.subPlanName 
+        }) sub! They are resubscribing for ${ 
+        msg.eventParams.cumulativeMonths 
+        } months${ 
+        streakMessage 
+        }!`,
     );
   }
-  if (msg.messageText != null) {
+  if (msg.messageText == null) {
+    console.log("They did not share a message with the streamer.");
+  } else {
     // you also have access to lots of other properties also present on PRIVMSG messages,
     // such as msg.badges, msg.senderUsername, msg.badgeInfo, msg.bits/msg.isCheer(),
     // msg.color, msg.emotes, msg.messageID, msg.serverTimestamp, etc...
     console.log(
-      msg.displayName +
-        " shared the following message with the streamer: " +
-        msg.messageText,
+      `${msg.displayName 
+        } shared the following message with the streamer: ${ 
+        msg.messageText}`,
     );
-  } else {
-    console.log("They did not share a message with the streamer.");
   }
 });
 ```
@@ -268,12 +268,12 @@ chat.on("USERNOTICE", (msg) => {
   // source user is the channel/streamer raiding
   // Leppunen just raided Supinic with 12 viewers!
   console.log(
-    msg.displayName +
-      " just raided " +
-      msg.channelName +
-      " with " +
-      msg.eventParams.viewerCount +
-      " viewers!",
+    `${msg.displayName 
+      } just raided ${ 
+      msg.channelName 
+      } with ${ 
+      msg.eventParams.viewerCount 
+      } viewers!`,
   );
 });
 ```
@@ -307,32 +307,32 @@ chat.on("USERNOTICE", (msg) => {
   if (msg.eventParams.months === 1) {
     // Leppunen just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
     console.log(
-      msg.displayName +
-        " just gifted " +
-        msg.eventParams.recipientDisplayName +
-        " a fresh tier " +
-        msg.eventParams.subPlan +
-        " (" +
-        msg.eventParams +
-        ") sub to " +
-        msg.channelName +
-        "!",
+      `${msg.displayName 
+        } just gifted ${ 
+        msg.eventParams.recipientDisplayName 
+        } a fresh tier ${ 
+        msg.eventParams.subPlan 
+        } (${ 
+        msg.eventParams 
+        }) sub to ${ 
+        msg.channelName 
+        }!`,
     );
   } else {
     // Leppunen just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
     console.log(
-      msg.displayName +
-        " just gifted " +
-        msg.eventParams.recipientDisplayName +
-        " a tier " +
-        msg.eventParams.subPlan +
-        " (" +
-        msg.eventParams +
-        ") resub to " +
-        msg.channelName +
-        ", that's " +
-        msg.eventParams.months +
-        " in a row!",
+      `${msg.displayName 
+        } just gifted ${ 
+        msg.eventParams.recipientDisplayName 
+        } a tier ${ 
+        msg.eventParams.subPlan 
+        } (${ 
+        msg.eventParams 
+        }) resub to ${ 
+        msg.channelName 
+        }, that's ${ 
+        msg.eventParams.months 
+        } in a row!`,
     );
   }
   // note: if the subgift was from an anonymous user, the sender user for the USERNOTICE message will be
@@ -370,30 +370,30 @@ chat.on("USERNOTICE", (msg) => {
   if (msg.eventParams.months === 1) {
     // An anonymous gifter just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
     console.log(
-      "An anonymous gifter just gifted " +
-        msg.eventParams.recipientDisplayName +
-        " a fresh tier " +
-        msg.eventParams.subPlan +
-        " (" +
-        msg.eventParams +
-        ") sub to " +
-        msg.channelName +
-        "!",
+      `An anonymous gifter just gifted ${ 
+        msg.eventParams.recipientDisplayName 
+        } a fresh tier ${ 
+        msg.eventParams.subPlan 
+        } (${ 
+        msg.eventParams 
+        }) sub to ${ 
+        msg.channelName 
+        }!`,
     );
   } else {
     // An anonymous gifter just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
     console.log(
-      "An anonymous gifter just gifted " +
-        msg.eventParams.recipientDisplayName +
-        " a tier " +
-        msg.eventParams.subPlan +
-        " (" +
-        msg.eventParams +
-        ") resub to " +
-        msg.channelName +
-        ", that's " +
-        msg.eventParams.months +
-        " in a row!",
+      `An anonymous gifter just gifted ${ 
+        msg.eventParams.recipientDisplayName 
+        } a tier ${ 
+        msg.eventParams.subPlan 
+        } (${ 
+        msg.eventParams 
+        }) resub to ${ 
+        msg.channelName 
+        }, that's ${ 
+        msg.eventParams.months 
+        } in a row!`,
     );
   }
 });
@@ -424,10 +424,10 @@ chat.on("USERNOTICE", (msg) => {
    */
   // Leppunen is continuing their ninja gift sub they got from an anonymous user!
   console.log(
-    msg.displayName +
-      " is continuing their " +
-      msg.channelName +
-      " gift sub they got from an anonymous user!",
+    `${msg.displayName 
+      } is continuing their ${ 
+      msg.channelName 
+      } gift sub they got from an anonymous user!`,
   );
 });
 ```
@@ -457,12 +457,12 @@ chat.on("USERNOTICE", (msg) => {
    */
   // Leppunen is continuing their ninja gift sub they got from Krakenbul!
   console.log(
-    msg.displayName +
-      " is continuing their " +
-      msg.channelName +
-      " gift sub they got from " +
-      msg.msgParam.senderName +
-      "!",
+    `${msg.displayName 
+      } is continuing their ${ 
+      msg.channelName 
+      } gift sub they got from ${ 
+      msg.msgParam.senderName 
+      }!`,
   );
 });
 ```
@@ -493,11 +493,11 @@ chat.on("USERNOTICE", (msg) => {
   // Leppunen is new to ninja's chat! Say hello!
   if (msg.eventParams.ritualName === "new_chatter") {
     console.log(
-      msg.displayName + " is new to " + msg.channelName + "'s chat! Say hello!",
+      `${msg.displayName  } is new to ${  msg.channelName  }'s chat! Say hello!`,
     );
   } else {
     console.warn(
-      "Unknown (unhandled) ritual type: " + msg.eventParams.ritualName,
+      `Unknown (unhandled) ritual type: ${  msg.eventParams.ritualName}`,
     );
   }
 });
@@ -525,12 +525,12 @@ chat.on("USERNOTICE", (msg) => {
    */
   // Leppunen just earned themselves the 10000 bits badge in ninja's channel!
   console.log(
-    msg.displayName +
-      " just earned themselves the " +
-      msg.threshold +
-      " bits badge in " +
-      msg.channelName +
-      "'s channel!",
+    `${msg.displayName 
+      } just earned themselves the ${ 
+      msg.threshold 
+      } bits badge in ${ 
+      msg.channelName 
+      }'s channel!`,
   );
 });
 ```
@@ -627,7 +627,7 @@ only set the very config options you need, the rest are usually at a reasonable 
 For most bots, you only need to set `username` and `password`:
 
 ```javascript
-let chat = new ChatClient({
+const chat = new ChatClient({
   username: "your-bot-username",
   password: "0123456789abcdef1234567",
 });
@@ -636,7 +636,7 @@ let chat = new ChatClient({
 Nevertheless, here are examples of all possible config options:
 
 ```javascript
-let chat = new ChatClient({
+const chat = new ChatClient({
   username: "your-bot-username", // justinfan12345 by default - For anonymous chat connection
   password: "0123456789abcdef1234567", // undefined by default (no password)
   // Message rate limits configuration for verified and known bots
@@ -736,11 +736,11 @@ activate mixins by calling:
 
 ```javascript
 import {
-  ChatClient,
   AlternateMessageModifier,
+  ChatClient,
 } from "@mastondzn/dank-twitch-irc";
 
-let chat = new ChatClient();
+const chat = new ChatClient();
 chat.use(new AlternateMessageModifier(client));
 ```
 

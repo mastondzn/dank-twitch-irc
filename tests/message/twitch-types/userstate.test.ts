@@ -63,9 +63,9 @@ describe("./message/twitch-types/userstate", () => {
 
     it("trims spaces at the end of display names", () => {
       const message = parseTwitchMessage(
-        "@badge-info=;badges=;color=#FF0000;" +
-          "display-name=zwb3_pyramids\\s;emote-sets=0;mod=0;subscriber=0;user-type=" +
-          " :tmi.twitch.tv USERSTATE #randers",
+        `@badge-info=;badges=;color=#FF0000;${ 
+          String.raw`display-name=zwb3_pyramids\s;emote-sets=0;mod=0;subscriber=0;user-type=` 
+          } :tmi.twitch.tv USERSTATE #randers`,
       ) as UserstateMessage;
 
       assert.strictEqual(message.displayName, "zwb3_pyramids");

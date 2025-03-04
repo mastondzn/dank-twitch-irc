@@ -1,7 +1,7 @@
+import type { TwitchEmoteList } from "../emotes";
+import { TwitchEmote } from "../emote";
 import { parseIntThrowing } from "./common";
 import { ParseError } from "./parse-error";
-import { TwitchEmote } from "../emote";
-import type { TwitchEmoteList } from "../emotes";
 
 export function parseEmotes(
   messageText: string,
@@ -13,6 +13,7 @@ export function parseEmotes(
     return emotes;
   }
 
+  // eslint-disable-next-line ts/no-misused-spread
   const messageCharacters = [...messageText];
 
   for (const emoteInstancesSource of emotesSource.split("/")) {

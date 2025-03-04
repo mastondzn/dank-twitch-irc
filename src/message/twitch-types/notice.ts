@@ -1,7 +1,7 @@
 import { getIRCChannelName } from "../irc/channel-irc-message";
 import {
-  IRCMessage,
   type IRCMessageData,
+  IRCMessage,
   requireParameter,
 } from "../irc/irc-message";
 import { tagParserFor } from "../parser/tag-values";

@@ -1,6 +1,6 @@
 import {
-  IRCMessage,
   type IRCMessageData,
+  IRCMessage,
   requireParameter,
 } from "../irc/irc-message";
 

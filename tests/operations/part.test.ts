@@ -3,7 +3,7 @@ import { assert, describe, it, vi } from "vitest";
 import { assertErrorChain, fakeConnection } from "../helpers";
 import { TimeoutError } from "~/await/timeout-error";
 import { joinNothingToDo } from "~/operations/join";
-import { PartError, partChannel, partNothingToDo } from "~/operations/part";
+import { partChannel, PartError, partNothingToDo } from "~/operations/part";
 
 describe("./operations/part", () => {
   describe("#partNothingToDo()", () => {

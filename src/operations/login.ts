@@ -1,5 +1,5 @@
-import { awaitResponse } from "~/await/await-response";
 import type { SingleConnection } from "~/client/connection";
+import { awaitResponse } from "~/await/await-response";
 import { ConnectionError } from "~/client/errors";
 import { NoticeMessage } from "~/message/twitch-types/notice";
 import { isAnonymousUsername } from "~/utils/is-anonymous-username";

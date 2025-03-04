@@ -4,8 +4,8 @@ import { TwitchBadge } from "~/message/badge";
 import { TwitchBadgesList } from "~/message/badges";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
-  PrivmsgMessage,
   parseActionAndMessage,
+  PrivmsgMessage,
 } from "~/message/twitch-types/privmsg";
 
 describe("./message/twitch-types/privmsg", () => {
@@ -144,11 +144,11 @@ describe("./message/twitch-types/privmsg", () => {
 
     it("should be able to parse a reply PRIVMSG message", () => {
       const messageText =
-        "@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;" +
-        "color=#19E6E6;display-name=randers;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;mod=0;" +
-        "reply-parent-display-name=OtherUser;reply-parent-msg-body=Test:\\sAbc;reply-parent-msg-id=abcd;" +
-        "reply-parent-user-id=123;reply-parent-user-login=otheruser;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;" +
-        "turbo=0;user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
+        `@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;` +
+        `color=#19E6E6;display-name=randers;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;mod=0;${ 
+        String.raw`reply-parent-display-name=OtherUser;reply-parent-msg-body=Test:\sAbc;reply-parent-msg-id=abcd;` 
+        }reply-parent-user-id=123;reply-parent-user-login=otheruser;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;` +
+        `turbo=0;user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test`;
 
       const message: PrivmsgMessage = parseTwitchMessage(
         messageText,
@@ -167,10 +167,10 @@ describe("./message/twitch-types/privmsg", () => {
 
     it("trims spaces at the end of display names", () => {
       const messageText =
-        "@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;" +
-        "color=#19E6E6;display-name=randers\\s;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;" +
-        "mod=0;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;turbo=0;" +
-        "user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
+        `@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;${ 
+        String.raw`color=#19E6E6;display-name=randers\s;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;` 
+        }mod=0;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;turbo=0;` +
+        `user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test`;
 
       const message: PrivmsgMessage = parseTwitchMessage(
         messageText,

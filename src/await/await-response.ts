@@ -1,8 +1,8 @@
-import { TimeoutError } from "./timeout-error";
 import type { SingleConnection } from "~/client/connection";
-import { ConnectionError, MessageError } from "~/client/errors";
 import type { ClientEvents } from "~/client/interface";
 import type { IRCMessage } from "~/message/irc/irc-message";
+import { TimeoutError } from "./timeout-error";
+import { ConnectionError, MessageError } from "~/client/errors";
 import { setDefaults } from "~/utils/set-defaults";
 
 export type Condition = (message: IRCMessage) => boolean;
@@ -167,7 +167,7 @@ export class ResponseAwaiter {
     this.unsubscribers.push(() => {
       const selfPosition = this.conn.pendingResponses.indexOf(this);
 
-      if (selfPosition < 0) {
+      if (selfPosition === -1) {
         // we are not in the queue anymore (e.g. sliced off by other
         // awaiter)
         return;
@@ -226,17 +226,16 @@ export class ResponseAwaiter {
   }
 }
 
-export function awaitResponse<
-  TMessage extends IRCMessage = IRCMessage,
+export async function awaitResponse<
   const TNoResponseAction extends NoResponseAction | undefined = undefined,
 >(
   conn: SingleConnection,
   config: AwaitConfig & {
     noResponseAction?: TNoResponseAction;
-    success?: ((message: IRCMessage) => message is TMessage) | Condition;
+    success?: ((message: IRCMessage) => message is IRCMessage) | Condition;
   },
 ) {
   return new ResponseAwaiter(conn, config).promise as Promise<
-    TNoResponseAction extends "success" ? TMessage | undefined : TMessage
+    TNoResponseAction extends "success" ? IRCMessage | undefined : IRCMessage
   >;
 }

@@ -1,5 +1,5 @@
-export * from "./join-all";
 export * from "./join";
+export * from "./join-all";
 export * from "./login";
 export * from "./part";
 export * from "./ping";

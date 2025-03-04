@@ -1,6 +1,6 @@
+import type { SingleConnection } from "~/client/connection";
 import { sendPrivmsg } from "./privmsg";
 import { awaitResponse } from "~/await/await-response";
-import type { SingleConnection } from "~/client/connection";
 import { MessageError } from "~/client/errors";
 import { NoticeMessage } from "~/message/twitch-types/notice";
 import { UserstateMessage } from "~/message/twitch-types/userstate";

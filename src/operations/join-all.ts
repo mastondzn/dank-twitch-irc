@@ -1,6 +1,6 @@
-import { awaitJoinResponse } from "./join";
-import { MAX_OUTGOING_COMMAND_LENGTH } from "../constants";
 import type { SingleConnection } from "~/client/connection";
+import { MAX_OUTGOING_COMMAND_LENGTH } from "../constants";
+import { awaitJoinResponse } from "./join";
 import { splitIntoChunks } from "~/utils/split-into-chunks";
 
 export async function joinAll(
@@ -35,7 +35,7 @@ export async function joinAll(
             conn.joinedChannels.add(channelName);
             resultsMap[channelName] = undefined;
           },
-          (error) => {
+          (error: unknown) => {
             // on failure
             resultsMap[channelName] = error as Error;
           },

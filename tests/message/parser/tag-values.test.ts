@@ -9,10 +9,10 @@ import { ParseError } from "~/message/parser/parse-error";
 import { type TagValueParser, tagParserFor } from "~/message/parser/tag-values";
 
 describe("./message/parser/tag-values", () => {
-  function checkRequire<V, A extends unknown[]>(
+  function checkRequire<A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,
-    ) => (key: string, ...converterArguments: A) => V,
+    ) => (key: string, ...converterArguments: A) => unknown,
     ...converterArguments: A
   ): void {
     describe("#requireData", () => {
@@ -35,10 +35,10 @@ describe("./message/parser/tag-values", () => {
     });
   }
 
-  function checkGet<V, A extends unknown[]>(
+  function checkGet<A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,
-    ) => (key: string, ...converterArguments: A) => V | undefined,
+    ) => (key: string, ...converterArguments: A) => unknown,
     ...converterArguments: A
   ): void {
     describe("#getData", () => {
@@ -75,10 +75,10 @@ describe("./message/parser/tag-values", () => {
   });
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
-  function checkThrowsUnparseableInt<V, A extends unknown[]>(
+  function checkThrowsUnparseableInt<A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,
-    ) => (key: string, ...converterArguments: A) => V | undefined,
+    ) => (key: string, ...converterArguments: A) => unknown,
     ...converterArguments: A
   ): void {
     it("should throw ParseError on empty string input", () => {
@@ -224,7 +224,7 @@ describe("./message/parser/tag-values", () => {
 
   describe("#getTagEmotes()", () => {
     checkGet((p) => p.getEmotes.bind(p), "lul");
-    // @ts-expect-error ???
+    // @ts-expect-error ??? not sure why it doesnt like this
     checkRequire((p) => p.requireEmoteSets.bind(p), "lul");
 
     it("should return an empty list on empty string input", () => {

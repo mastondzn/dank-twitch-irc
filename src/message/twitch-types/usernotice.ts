@@ -2,9 +2,9 @@ import type { TwitchBadgesList } from "../badges";
 import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
+import type { IRCMessageTags } from "../irc/tags";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
 import { type IRCMessageData, getParameter } from "../irc/irc-message";
-import type { IRCMessageTags } from "../irc/tags";
 import {
   convertToBoolean,
   convertToInt,

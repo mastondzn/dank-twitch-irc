@@ -3,7 +3,7 @@ import type { ChatClient } from "~/client/client";
 import { applyReplacements } from "~/utils/apply-function-replacements";
 import { ignoreErrors } from "~/utils/ignore-errors";
 
-function genericCatcher<V, A extends unknown[]>(
+async function genericCatcher<V, A extends unknown[]>(
   originalFunction: (...args: A) => Promise<V>,
   ...args: A
 ): Promise<V | undefined> {

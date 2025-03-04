@@ -1,4 +1,3 @@
-import { parseIRCMessage } from "./irc-message";
 import type { IRCMessage } from "../irc/irc-message";
 import { CapMessage } from "../twitch-types/cap";
 import { ClearchatMessage } from "../twitch-types/clearchat";
@@ -16,6 +15,7 @@ import { RoomstateMessage } from "../twitch-types/roomstate";
 import { UsernoticeMessage } from "../twitch-types/usernotice";
 import { UserstateMessage } from "../twitch-types/userstate";
 import { WhisperMessage } from "../twitch-types/whisper";
+import { parseIRCMessage } from "./irc-message";
 
 export const commandClassMap: {
   CLEARCHAT: typeof ClearchatMessage;

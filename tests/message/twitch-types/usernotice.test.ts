@@ -7,8 +7,8 @@ import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
   type ResubUsernoticeMessage,
   type SubEventParameters,
-  UsernoticeMessage,
   extractEventParameters,
+  UsernoticeMessage,
 } from "~/message/twitch-types/usernotice";
 
 describe("./message/twitch-types/usernotice", () => {
@@ -75,13 +75,13 @@ describe("./message/twitch-types/usernotice", () => {
   describe("usernoticeMessage", () => {
     it("should be able to parse a USERNOTICE with no message, only system-msg", () => {
       const messageText =
-        "@badge-info=subscriber/5;badges=subscriber/3;color=;display-name=kakarot127;" +
-        "emotes=;flags=;id=5dc14bb3-684b-4c04-8fbb-3c870958ac69;login=kakarot127;mod=0;msg-id=resub;" +
-        "msg-param-cumulative-months=5;msg-param-months=0;msg-param-should-share-streak=0;" +
-        "msg-param-sub-plan-name=Channel\\sSubscription\\s(faker);msg-param-sub-plan=1000;" +
-        "room-id=43691;subscriber=1;system-msg=kakarot127\\ssubscribed\\sat\\sTier\\s1.\\sThey'" +
-        "ve\\ssubscribed\\sfor\\s5\\smonths!;tmi-sent-ts=1563102742440;user-id=147030570;user-type= " +
-        ":tmi.twitch.tv USERNOTICE #faker";
+        `@badge-info=subscriber/5;badges=subscriber/3;color=;display-name=kakarot127;` +
+        `emotes=;flags=;id=5dc14bb3-684b-4c04-8fbb-3c870958ac69;login=kakarot127;mod=0;msg-id=resub;` +
+        `msg-param-cumulative-months=5;msg-param-months=0;msg-param-should-share-streak=0;${ 
+        String.raw`msg-param-sub-plan-name=Channel\sSubscription\s(faker);msg-param-sub-plan=1000;` 
+        }${String.raw`room-id=43691;subscriber=1;system-msg=kakarot127\ssubscribed\sat\sTier\s1.\sThey'` 
+        }${String.raw`ve\ssubscribed\sfor\s5\smonths!;tmi-sent-ts=1563102742440;user-id=147030570;user-type= ` 
+        }:tmi.twitch.tv USERNOTICE #faker`;
 
       const message = parseTwitchMessage(messageText) as UsernoticeMessage;
 
@@ -154,16 +154,16 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("should be able to parse a resub with message", () => {
       const message = parseTwitchMessage(
-        "@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE" +
-          ";display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92" +
-          "4-cde3-421d-8eea-713401194446;login=5weatynuts;mod=0;msg-id=resu" +
-          "b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh" +
-          "ould-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscripti" +
-          "on\\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs" +
-          "criber=1;system-msg=5weatyNuts\\ssubscribed\\swith\\sTwitch\\sPri" +
-          "me.\\sThey've\\ssubscribed\\sfor\\s15\\smonths!;tmi-sent-ts=1565" +
-          "699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE " +
-          "#dafran :dafranPrime Clap",
+        `@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE` +
+          `;display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92` +
+          `4-cde3-421d-8eea-713401194446;login=5weatynuts;mod=0;msg-id=resu` +
+          `b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh${ 
+          String.raw`ould-share-streak=0;msg-param-sub-plan-name=Channel\sSubscripti` 
+          }${String.raw`on\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs` 
+          }${String.raw`criber=1;system-msg=5weatyNuts\ssubscribed\swith\sTwitch\sPri` 
+          }${String.raw`me.\sThey've\ssubscribed\sfor\s15\smonths!;tmi-sent-ts=1565` 
+          }699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE ` +
+          `#dafran :dafranPrime Clap`,
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.messageText, "dafranPrime Clap");
@@ -177,16 +177,16 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("trims spaces at the end of display names", () => {
       const message = parseTwitchMessage(
-        "@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE" +
-          ";display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92" +
-          "4-cde3-421d-8eea-713401194446;login=5weatynutss;mod=0;msg-id=resu" +
-          "b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh" +
-          "ould-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscripti" +
-          "on\\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs" +
-          "criber=1;system-msg=5weatyNuts\\ssubscribed\\swith\\sTwitch\\sPri" +
-          "me.\\sThey've\\ssubscribed\\sfor\\s15\\smonths!;tmi-sent-ts=1565" +
-          "699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE " +
-          "#dafran :dafranPrime Clap",
+        `@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE` +
+          `;display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92` +
+          `4-cde3-421d-8eea-713401194446;login=5weatynutss;mod=0;msg-id=resu` +
+          `b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh${ 
+          String.raw`ould-share-streak=0;msg-param-sub-plan-name=Channel\sSubscripti` 
+          }${String.raw`on\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs` 
+          }${String.raw`criber=1;system-msg=5weatyNuts\ssubscribed\swith\sTwitch\sPri` 
+          }${String.raw`me.\sThey've\ssubscribed\sfor\s15\smonths!;tmi-sent-ts=1565` 
+          }699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE ` +
+          `#dafran :dafranPrime Clap`,
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.displayName, "5weatyNuts");
@@ -194,7 +194,7 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("parses subgift params correctly (correct camelcasing)", () => {
       const message = parseTwitchMessage(
-        "@badge-info=;badges=sub-gifter/50;color=;display-name=AdamAtReflectStudios;emotes=;flags=;id=e21409b1-d25d-4a1a-b5cf-ef27d8b7030e;login=adamatreflectstudios;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=2;msg-param-origin-id=da\\s39\\sa3\\see\\s5e\\s6b\\s4b\\s0d\\s32\\s55\\sbf\\sef\\s95\\s60\\s18\\s90\\saf\\sd8\\s07\\s09;msg-param-recipient-display-name=qatarking24xd;msg-param-recipient-id=236653628;msg-param-recipient-user-name=qatarking24xd;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;room-id=71092938;subscriber=0;system-msg=AdamAtReflectStudios\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sqatarking24xd!;tmi-sent-ts=1594583782376;user-id=211711554;user-type= :tmi.twitch.tv USERNOTICE #xqcow",
+        String.raw`@badge-info=;badges=sub-gifter/50;color=;display-name=AdamAtReflectStudios;emotes=;flags=;id=e21409b1-d25d-4a1a-b5cf-ef27d8b7030e;login=adamatreflectstudios;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=2;msg-param-origin-id=da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09;msg-param-recipient-display-name=qatarking24xd;msg-param-recipient-id=236653628;msg-param-recipient-user-name=qatarking24xd;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\sSubscription\s(xqcow);msg-param-sub-plan=1000;room-id=71092938;subscriber=0;system-msg=AdamAtReflectStudios\sgifted\sa\sTier\s1\ssub\sto\sqatarking24xd!;tmi-sent-ts=1594583782376;user-id=211711554;user-type= :tmi.twitch.tv USERNOTICE #xqcow`,
       ) as UsernoticeMessage;
 
       assert.deepStrictEqual(message.eventParams, {
@@ -218,7 +218,7 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("should be able to parse a masssubgift with message", () => {
       const message = parseTwitchMessage(
-        "@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=realuser;emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=realuser;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=4e\\sd1\\s19\\sc5\\s33\\s80\\s68\\s8c\\sdc\\sc9\\s4d\\s96\\s73\\sd0\\sad\\s40\\s52\\sf3\\s19\\s02;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38244999;subscriber=1;system-msg=realuser\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sbroadcaster's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1633549401426;user-id=239909999;user-type= :tmi.twitch.tv USERNOTICE #broadcaster",
+        String.raw`@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=realuser;emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=realuser;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=4e\sd1\s19\sc5\s33\s80\s68\s8c\sdc\sc9\s4d\s96\s73\sd0\sad\s40\s52\sf3\s19\s02;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38244999;subscriber=1;system-msg=realuser\sis\sgifting\s1\sTier\s1\sSubs\sto\sbroadcaster's\scommunity!\sThey've\sgifted\sa\stotal\sof\s1\sin\sthe\schannel!;tmi-sent-ts=1633549401426;user-id=239909999;user-type= :tmi.twitch.tv USERNOTICE #broadcaster`,
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.ircCommand, "USERNOTICE");
@@ -271,7 +271,7 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("should be able to parse a viewermilestone without message", () => {
       const message = parseTwitchMessage(
-        "@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\\swatched\\s15\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster",
+        String.raw`@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\swatched\s15\sconsecutive\sstreams\sthis\smonth\sand\ssparked\sa\swatch\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster`,
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.ircCommand, "USERNOTICE");
@@ -298,7 +298,7 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("should be able to parse a viewermilestone with message", () => {
       const message = parseTwitchMessage(
-        "@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\\swatched\\s15\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster <3",
+        String.raw`@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\swatched\s15\sconsecutive\sstreams\sthis\smonth\sand\ssparked\sa\swatch\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster <3`,
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.messageText, "<3");

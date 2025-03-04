@@ -1,8 +1,8 @@
 import { Sema } from "async-sema";
 
-import { canSpamFast } from "./utils";
 import type { ClientMixin } from "../base-mixin";
 import type { ChatClient } from "~/client/client";
+import { canSpamFast } from "./utils";
 import { applyReplacements } from "~/utils/apply-function-replacements";
 
 export class PrivmsgMessageRateLimiter implements ClientMixin {

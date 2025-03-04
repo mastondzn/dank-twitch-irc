@@ -29,8 +29,8 @@ describe("./message/parser/badges", () => {
         new TwitchBadge("predictions", "blue-1"),
       );
       assert.deepStrictEqual(
-        parseSingleBadge("predictions/foo bar\\n baz"),
-        new TwitchBadge("predictions", "foo bar\\n baz"),
+        parseSingleBadge(String.raw`predictions/foo bar\n baz`),
+        new TwitchBadge("predictions", String.raw`foo bar\n baz`),
       );
       assert.deepStrictEqual(
         parseSingleBadge("predictions/<<<<<< HEAD[15A⸝asdf/test"),

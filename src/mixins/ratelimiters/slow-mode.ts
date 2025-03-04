@@ -1,10 +1,10 @@
 import { Sema } from "async-sema";
 
-import { canSpamFast } from "./utils";
 import type { ClientMixin } from "../base-mixin";
 import type { ChatClient } from "~/client/client";
 import type { RoomState } from "~/message/twitch-types/roomstate";
 import type { UserState } from "~/message/twitch-types/userstate";
+import { canSpamFast } from "./utils";
 import { applyReplacements } from "~/utils/apply-function-replacements";
 import { EditableTimeout } from "~/utils/editable-timeout";
 
@@ -35,6 +35,7 @@ export class SlowModeRateLimiter implements ClientMixin {
       }
 
       try {
+        // eslint-disable-next-line ts/return-await
         return oldFunction(channelName, ...args);
       } finally {
         releaseFunction();

@@ -4,8 +4,8 @@ import { assertErrorChain, fakeConnection } from "../helpers";
 import { ClientError, ConnectionError, MessageError } from "~/client/errors";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import {
-  CapabilitiesError,
   acknowledgesCapabilities,
+  CapabilitiesError,
   deniedAnyCapability,
   requestCapabilities,
 } from "~/operations/request-capabilities";

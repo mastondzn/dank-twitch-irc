@@ -1,7 +1,7 @@
 import {
-  IRCMessage,
   type IRCMessageData,
   getParameter,
+  IRCMessage,
 } from "../../irc/irc-message";
 
 export class PongMessage extends IRCMessage {

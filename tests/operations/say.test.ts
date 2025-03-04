@@ -2,7 +2,7 @@ import { assert, describe, it, vi } from "vitest";
 
 import { assertErrorChain, fakeConnection } from "../helpers";
 import { ClientError, ConnectionError, MessageError } from "~/client/errors";
-import { SayError, me, removeCommands, say } from "~/operations/say";
+import { me, removeCommands, say, SayError } from "~/operations/say";
 
 describe("./operations/say", () => {
   describe("#removeCommands()", () => {
@@ -17,7 +17,7 @@ describe("./operations/say", () => {
 
     it("should not prepend a slash to other messages", () => {
       assert.strictEqual(removeCommands(""), "");
-      assert.strictEqual(removeCommands("\\me hi"), "\\me hi");
+      assert.strictEqual(removeCommands(String.raw`\me hi`), String.raw`\me hi`);
       assert.strictEqual(removeCommands("hello world!"), "hello world!");
     });
   });

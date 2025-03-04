@@ -2,15 +2,15 @@ import { Duplex } from "node:stream";
 
 import { assert, describe, it } from "vitest";
 
-import { DuplexTransport } from "~/client/transport/duplex-transport";
-import { makeTransport } from "~/client/transport/make-transport";
-import { TcpTransport } from "~/client/transport/tcp-transport";
-import { WebSocketTransport } from "~/client/transport/websocket-transport";
 import type {
   ExpandedDuplexTransportConfiguration,
   ExpandedTcpTransportConfiguration,
   ExpandedWebSocketTransportConfiguration,
 } from "~/config/expanded";
+import { DuplexTransport } from "~/client/transport/duplex-transport";
+import { makeTransport } from "~/client/transport/make-transport";
+import { TcpTransport } from "~/client/transport/tcp-transport";
+import { WebSocketTransport } from "~/client/transport/websocket-transport";
 
 describe("./client/transport/make-transport", () => {
   describe("#makeTransport()", () => {

@@ -1,8 +1,8 @@
+import type { Transport } from "./transport";
+import type { ExpandedTransportConfiguration } from "~/config/expanded";
 import { DuplexTransport } from "./duplex-transport";
 import { TcpTransport } from "./tcp-transport";
-import type { Transport } from "./transport";
 import { WebSocketTransport } from "./websocket-transport";
-import type { ExpandedTransportConfiguration } from "~/config/expanded";
 
 export function makeTransport(
   config: ExpandedTransportConfiguration,

@@ -1,7 +1,7 @@
-import { ParseError } from "./parse-error";
 import type { Color } from "../color";
+import { ParseError } from "./parse-error";
 
-const rgbColorRegex = /^#([\dA-Fa-f]{2})([\dA-Fa-f]{2})([\dA-Fa-f]{2})$/;
+const rgbColorRegex = /^#([\dA-F]{2})([\dA-F]{2})([\dA-F]{2})$/i;
 
 export function parseColor(colorSource: string): Color {
   const match = rgbColorRegex.exec(colorSource);

@@ -1,11 +1,11 @@
 import { assert, describe, it, vi } from "vitest";
 
+import type { JoinMessage } from "~/message/twitch-types/membership/join";
 import { assertErrorChain, fakeConnection } from "../helpers";
 import { TimeoutError } from "~/await/timeout-error";
 import { ClientError, ConnectionError, MessageError } from "~/client/errors";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
-import type { JoinMessage } from "~/message/twitch-types/membership/join";
-import { JoinError, joinChannel, joinNothingToDo } from "~/operations/join";
+import { joinChannel, JoinError, joinNothingToDo } from "~/operations/join";
 
 describe("./operations/join", () => {
   describe("#joinNotingToDo()", () => {

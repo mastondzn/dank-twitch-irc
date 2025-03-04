@@ -1,9 +1,9 @@
+import type { IRCMessageTags } from "../irc/tags";
+import { IRCMessage } from "../irc/irc-message";
 import { ParseError } from "./parse-error";
 import { parseTags } from "./tags";
-import { IRCMessage } from "../irc/irc-message";
-import type { IRCMessageTags } from "../irc/tags";
 
-const VALID_CMD_REGEX = /^(?:[A-Za-z]+|\d{3})$/;
+const VALID_CMD_REGEX = /^(?:[A-Z]+|\d{3})$/i;
 
 export function parseIRCMessage(messageSource: string): IRCMessage {
   let remainder = messageSource;
@@ -13,7 +13,7 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
     remainder = remainder.slice(1); // remove @ sign
 
     const spaceIndex = remainder.indexOf(" ");
-    if (spaceIndex < 0) {
+    if (spaceIndex === -1) {
       // not found
       throw new ParseError(
         `No space found after tags declaration (given src: "${messageSource}")`,
@@ -40,7 +40,7 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
     remainder = remainder.slice(1); // remove : sign
 
     const spaceIndex = remainder.indexOf(" ");
-    if (spaceIndex < 0) {
+    if (spaceIndex === -1) {
       // not found
       throw new ParseError(
         `No space found after prefix declaration (given src: "${messageSource}")`,
@@ -75,7 +75,7 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
       const exclamationIndex = nickAndUser.indexOf("!");
       let nick;
       let user;
-      if (exclamationIndex < 0) {
+      if (exclamationIndex === -1) {
         // no ! found
         nick = nickAndUser;
         user = undefined;
@@ -117,7 +117,7 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
   let ircCommand;
   let ircParameters;
 
-  if (spaceAfterCommandIndex < 0) {
+  if (spaceAfterCommandIndex === -1) {
     // no space after commands, i.e. no params.
     ircCommand = remainder;
     ircParameters = [];
@@ -140,7 +140,7 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
         const spaceIndex = parametersRemainder.indexOf(" ");
 
         let parameter;
-        if (spaceIndex < 0) {
+        if (spaceIndex === -1) {
           // no space found
           parameter = parametersRemainder;
           parametersRemainder = null;

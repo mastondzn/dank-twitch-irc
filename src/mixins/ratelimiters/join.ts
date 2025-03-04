@@ -57,7 +57,7 @@ export class JoinRateLimiter implements ClientMixin {
         ) as (() => Promise<() => void>)[];
 
         const releaseFunctions = await Promise.all(
-          acquireFunctions.map((acquire) => acquire()),
+          acquireFunctions.map(async (acquire) => acquire()),
         );
 
         try {

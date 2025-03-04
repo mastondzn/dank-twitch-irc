@@ -1,5 +1,5 @@
-import { awaitResponse } from "~/await/await-response";
 import type { SingleConnection } from "~/client/connection";
+import { awaitResponse } from "~/await/await-response";
 import { MessageError } from "~/client/errors";
 import { JoinMessage } from "~/message/twitch-types/membership/join";
 import { NoticeMessage } from "~/message/twitch-types/notice";
@@ -17,7 +17,7 @@ export class JoinError extends MessageError {
   }
 }
 
-export function awaitJoinResponse(
+export async function awaitJoinResponse(
   conn: SingleConnection,
   channelName: string,
 ): Promise<JoinMessage> {

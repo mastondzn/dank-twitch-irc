@@ -1,6 +1,6 @@
-import { ParseError } from "./parse-error";
 import { TwitchBadge } from "../badge";
 import { TwitchBadgesList } from "../badges";
+import { ParseError } from "./parse-error";
 
 export function parseSingleBadge(badgeSource: string): TwitchBadge {
   // src format: <badge>/<version>

@@ -1,5 +1,5 @@
-import { UserStateTracker } from "../userstate-tracker";
 import type { UserState } from "~/message/twitch-types/userstate";
+import { UserStateTracker } from "../userstate-tracker";
 
 interface FastSpamResult {
   fastSpam: boolean;

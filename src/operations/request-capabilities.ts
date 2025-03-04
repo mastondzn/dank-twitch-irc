@@ -1,7 +1,7 @@
-import { awaitResponse } from "~/await/await-response";
 import type { SingleConnection } from "~/client/connection";
-import { ConnectionError } from "~/client/errors";
 import type { IRCMessage } from "~/message/irc/irc-message";
+import { awaitResponse } from "~/await/await-response";
+import { ConnectionError } from "~/client/errors";
 import { CapMessage } from "~/message/twitch-types/cap";
 
 export class CapabilitiesError extends ConnectionError {}

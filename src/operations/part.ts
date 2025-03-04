@@ -1,5 +1,5 @@
-import { awaitResponse } from "~/await/await-response";
 import type { SingleConnection } from "~/client/connection";
+import { awaitResponse } from "~/await/await-response";
 import { MessageError } from "~/client/errors";
 import { PartMessage } from "~/message/twitch-types/membership/part";
 
@@ -9,7 +9,7 @@ export class PartError extends MessageError {
   public constructor(
     failedChannelName: string,
     message: string,
-    cause?: Error | undefined,
+    cause?: Error,
   ) {
     super(message, cause);
     this.failedChannelName = failedChannelName;

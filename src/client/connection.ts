@@ -1,16 +1,16 @@
 import split2 from "split2";
 
-import { BaseClient } from "./base-client";
-import { ConnectionError, ProtocolError } from "./errors";
-import { makeTransport } from "./transport/make-transport";
 import type { Transport } from "./transport/transport";
 import type { ResponseAwaiter } from "~/await/await-response";
 import type { ClientConfiguration } from "~/config/config";
+import type { ConnectionMixin } from "~/mixins/base-mixin";
+import { BaseClient } from "./base-client";
+import { ConnectionError, ProtocolError } from "./errors";
+import { makeTransport } from "./transport/make-transport";
 import { handleReconnectMessage } from "~/functionalities/handle-reconnect-message";
 import { replyToServerPing } from "~/functionalities/reply-to-ping";
 import { sendClientPings } from "~/functionalities/send-pings";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
-import type { ConnectionMixin } from "~/mixins/base-mixin";
 import { sendLogin } from "~/operations/login";
 import { requestCapabilities } from "~/operations/request-capabilities";
 import { anyCauseInstanceof } from "~/utils/any-cause-instanceof";

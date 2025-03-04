@@ -164,8 +164,8 @@ describe("./message/twitch-types/globaluserstate", () => {
 
     it("trims spaces at the end of display names", () => {
       const messageText =
-        "@badge-info=;badges=;color=;display-name=receivertest3\\s;emote-sets=0;user-id=422021310;" +
-        "user-type= :tmi.twitch.tv GLOBALUSERSTATE";
+        `${String.raw`@badge-info=;badges=;color=;display-name=receivertest3\s;emote-sets=0;user-id=422021310;` 
+        }user-type= :tmi.twitch.tv GLOBALUSERSTATE`;
 
       const message: GlobaluserstateMessage = parseTwitchMessage(
         messageText,

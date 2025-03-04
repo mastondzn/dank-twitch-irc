@@ -1,9 +1,9 @@
-import { BaseClient } from "./base-client";
-import { SingleConnection } from "./connection";
-import { ClientError } from "./errors";
 import type { ClientConfiguration } from "~/config/config";
 import type { ClientMixin, ConnectionMixin } from "~/mixins/base-mixin";
 import type { ConnectionPool } from "~/mixins/connection-pool";
+import { BaseClient } from "./base-client";
+import { SingleConnection } from "./connection";
+import { ClientError } from "./errors";
 import { IgnoreUnhandledPromiseRejectionsMixin } from "~/mixins/ignore-promise-rejections";
 import { ConnectionRateLimiter } from "~/mixins/ratelimiters/connection";
 import { JoinRateLimiter } from "~/mixins/ratelimiters/join";
