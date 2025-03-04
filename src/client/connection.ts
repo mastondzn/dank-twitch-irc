@@ -120,7 +120,7 @@ export class SingleConnection extends BaseClient {
   public sendRaw(command: string): void {
     validateIRCCommand(command);
     this.emit("rawCommmand", command);
-    this.log.trace(">", command);
+    this.log.debug(">", command);
     this.transport.stream.write(`${command}\r\n`);
   }
 
@@ -138,7 +138,7 @@ export class SingleConnection extends BaseClient {
       return;
     }
 
-    this.log.trace("<", line);
+    this.log.debug("<", line);
 
     let message;
     try {

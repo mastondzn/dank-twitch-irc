@@ -227,15 +227,17 @@ export class ResponseAwaiter {
 }
 
 export async function awaitResponse<
+  // eslint-disable-next-line ts/no-unnecessary-type-parameters -- not detected correctly
+  TMessage extends IRCMessage = IRCMessage,
   const TNoResponseAction extends NoResponseAction | undefined = undefined,
 >(
   conn: SingleConnection,
   config: AwaitConfig & {
     noResponseAction?: TNoResponseAction;
-    success?: ((message: IRCMessage) => message is IRCMessage) | Condition;
+    success?: ((message: IRCMessage) => message is TMessage) | Condition;
   },
 ) {
   return new ResponseAwaiter(conn, config).promise as Promise<
-    TNoResponseAction extends "success" ? IRCMessage | undefined : IRCMessage
+    TNoResponseAction extends "success" ? TMessage | undefined : TMessage
   >;
 }
