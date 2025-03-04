@@ -7,4 +7,5 @@ export * from "./flag";
 export * from "./flags";
 export * from "./irc";
 export * from "./parser";
+export * from "./shared-chat";
 export * from "./twitch-types";

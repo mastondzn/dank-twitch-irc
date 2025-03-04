@@ -3,6 +3,7 @@ import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
 import type { IRCMessageTags } from "../irc/tags";
+import type { SharedChatFields } from "../shared-chat";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
 import { type IRCMessageData, getParameter } from "../irc/irc-message";
 import {
@@ -252,14 +253,18 @@ interface CheerUsernoticeMessage extends UsernoticeMessage {
   readonly bitsRaw: string;
 }
 
-export class UsernoticeMessage extends ChannelIRCMessage {
+export class UsernoticeMessage
+  extends ChannelIRCMessage
+  implements Partial<SharedChatFields & { sourceMessageTypeID: string }>
+{
   public readonly channelID: string;
 
   public readonly messageText: string | undefined;
   public readonly systemMessage: string;
 
-  /** sub, resub, subgift, etc... */
+  /** sub, resub, subgift, etc..., or the uuid of the message if its a shared chat */
   public readonly messageTypeID: string;
+  public readonly messageType: string;
 
   public readonly senderUsername: string;
   public readonly senderUserID: string;
@@ -315,6 +320,14 @@ export class UsernoticeMessage extends ChannelIRCMessage {
 
   public readonly eventParams: EventParameters;
 
+  public readonly sourceID: string | undefined;
+  public readonly sourceChannelID: string | undefined;
+  public readonly sourceBadges: TwitchBadgesList | undefined;
+  public readonly sourceBadgesRaw: string | undefined;
+  public readonly sourceBadgesInfo: TwitchBadgesList | undefined;
+  public readonly sourceBadgesInfoRaw: string | undefined;
+  public readonly sourceMessageTypeId: string | undefined;
+
   public constructor(message: IRCMessageData) {
     super(message);
 
@@ -365,6 +378,20 @@ export class UsernoticeMessage extends ChannelIRCMessage {
     this.serverTimestampRaw = tagParser.requireString("tmi-sent-ts");
 
     this.eventParams = extractEventParameters(this.ircTags);
+
+    this.sourceID = tagParser.getString("source-id");
+    this.sourceChannelID = tagParser.getString("source-room-id");
+    this.sourceBadges = tagParser.getBadges("source-badges");
+    this.sourceBadgesRaw = tagParser.getString("source-badges");
+    this.sourceBadgesInfo = tagParser.getBadges("source-badge-info");
+    this.sourceBadgesInfoRaw = tagParser.getString("source-badge-info");
+    this.sourceMessageTypeId = tagParser.getString("source-msg-id");
+
+    // when in shared chat, the message type is the source message type
+    this.messageType =
+      this.sourceMessageTypeId === "sharedchatnotice"
+        ? this.messageTypeID
+        : this.sourceMessageTypeId ?? this.messageTypeID;
   }
 
   public isCheer(): this is CheerUsernoticeMessage {
@@ -372,50 +399,61 @@ export class UsernoticeMessage extends ChannelIRCMessage {
   }
 
   public isSub(): this is SubUsernoticeMessage {
-    return this.messageTypeID === "sub";
+    return this.messageType === "sub";
   }
 
   public isResub(): this is ResubUsernoticeMessage {
-    return this.messageTypeID === "resub";
+    return this.messageType === "resub";
   }
 
   public isRaid(): this is RaidUsernoticeMessage {
-    return this.messageTypeID === "raid";
+    return this.messageType === "raid";
   }
 
   public isSubgift(): this is SubgiftUsernoticeMessage {
-    return this.messageTypeID === "subgift";
+    return this.messageType === "subgift";
   }
 
   public isMassSubgift(): this is MassSubgiftParameters {
-    return this.messageTypeID === "submysterygift";
+    return this.messageType === "submysterygift";
   }
 
   public isAnonSubgift(): this is AnonSubgiftUsernoticeMessage {
-    return this.messageTypeID === "anonsubgift";
+    return this.messageType === "anonsubgift";
   }
 
   public isAnonGiftPaidUpgrade(): this is AnonGiftPaidUpgradeUsernoticeMessage {
-    return this.messageTypeID === "anongiftpaidupgrade";
+    return this.messageType === "anongiftpaidupgrade";
   }
 
   public isGiftPaidUpgrade(): this is GiftPaidUpgradeUsernoticeMessage {
-    return this.messageTypeID === "giftpaidupgrade";
+    return this.messageType === "giftpaidupgrade";
   }
 
   public isRitual(): this is RitualUsernoticeMessage {
-    return this.messageTypeID === "ritual";
+    return this.messageType === "ritual";
   }
 
   public isBitsBadgeTier(): this is BitsBadgeTierUsernoticeMessage {
-    return this.messageTypeID === "bitsbadgetier";
+    return this.messageType === "bitsbadgetier";
   }
 
   public isAnnouncement(): this is AnnouncementUsernoticeMessage {
-    return this.messageTypeID === "announcement";
+    return this.messageType === "announcement";
   }
 
   public isViewerMilestone(): this is ViewerMilestoneUsernoticeMessage {
-    return this.messageTypeID === "viewermilestone";
+    return this.messageType === "viewermilestone";
+  }
+
+  /**
+   * Whether or not this message is during a shared chat session.
+   * This does NOT necessarily mean that the message is originating from another channel.
+   * Check if `message.sourceChannelId !== message.channelId` for that
+   * @see https://dev.twitch.tv/docs/chat/irc/#shared-chat
+   */
+  public isSharedChat(): this is this &
+    SharedChatFields & { sourceMessageTypeID: string } {
+    return this.sourceID != null;
   }
 }

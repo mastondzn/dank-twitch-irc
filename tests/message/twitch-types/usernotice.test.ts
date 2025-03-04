@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-string-raw */
 import { assert, describe, expectTypeOf, it } from "vitest";
 
 import { TwitchBadge } from "~/message";
@@ -75,13 +76,13 @@ describe("./message/twitch-types/usernotice", () => {
   describe("usernoticeMessage", () => {
     it("should be able to parse a USERNOTICE with no message, only system-msg", () => {
       const messageText =
-        `@badge-info=subscriber/5;badges=subscriber/3;color=;display-name=kakarot127;` +
-        `emotes=;flags=;id=5dc14bb3-684b-4c04-8fbb-3c870958ac69;login=kakarot127;mod=0;msg-id=resub;` +
-        `msg-param-cumulative-months=5;msg-param-months=0;msg-param-should-share-streak=0;${ 
-        String.raw`msg-param-sub-plan-name=Channel\sSubscription\s(faker);msg-param-sub-plan=1000;` 
-        }${String.raw`room-id=43691;subscriber=1;system-msg=kakarot127\ssubscribed\sat\sTier\s1.\sThey'` 
-        }${String.raw`ve\ssubscribed\sfor\s5\smonths!;tmi-sent-ts=1563102742440;user-id=147030570;user-type= ` 
-        }:tmi.twitch.tv USERNOTICE #faker`;
+        "@badge-info=subscriber/5;badges=subscriber/3;color=;display-name=kakarot127;" +
+        "emotes=;flags=;id=5dc14bb3-684b-4c04-8fbb-3c870958ac69;login=kakarot127;mod=0;msg-id=resub;" +
+        "msg-param-cumulative-months=5;msg-param-months=0;msg-param-should-share-streak=0;" +
+        "msg-param-sub-plan-name=Channel\\sSubscription\\s(faker);msg-param-sub-plan=1000;" +
+        "room-id=43691;subscriber=1;system-msg=kakarot127\\ssubscribed\\sat\\sTier\\s1.\\sThey'" +
+        "ve\\ssubscribed\\sfor\\s5\\smonths!;tmi-sent-ts=1563102742440;user-id=147030570;user-type= " +
+        ":tmi.twitch.tv USERNOTICE #faker";
 
       const message = parseTwitchMessage(messageText) as UsernoticeMessage;
 
@@ -154,16 +155,16 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("should be able to parse a resub with message", () => {
       const message = parseTwitchMessage(
-        `@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE` +
-          `;display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92` +
-          `4-cde3-421d-8eea-713401194446;login=5weatynuts;mod=0;msg-id=resu` +
-          `b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh${ 
-          String.raw`ould-share-streak=0;msg-param-sub-plan-name=Channel\sSubscripti` 
-          }${String.raw`on\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs` 
-          }${String.raw`criber=1;system-msg=5weatyNuts\ssubscribed\swith\sTwitch\sPri` 
-          }${String.raw`me.\sThey've\ssubscribed\sfor\s15\smonths!;tmi-sent-ts=1565` 
-          }699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE ` +
-          `#dafran :dafranPrime Clap`,
+        "@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE" +
+          ";display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92" +
+          "4-cde3-421d-8eea-713401194446;login=5weatynutss;mod=0;msg-id=resu" +
+          "b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh" +
+          "ould-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscripti" +
+          "on\\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs" +
+          "criber=1;system-msg=5weatyNuts\\ssubscribed\\swith\\sTwitch\\sPri" +
+          "me.\\sThey've\\ssubscribed\\sfor\\s15\\smonths!;tmi-sent-ts=1565" +
+          "699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE " +
+          "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.messageText, "dafranPrime Clap");
@@ -177,16 +178,16 @@ describe("./message/twitch-types/usernotice", () => {
 
     it("trims spaces at the end of display names", () => {
       const message = parseTwitchMessage(
-        `@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE` +
-          `;display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92` +
-          `4-cde3-421d-8eea-713401194446;login=5weatynutss;mod=0;msg-id=resu` +
-          `b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh${ 
-          String.raw`ould-share-streak=0;msg-param-sub-plan-name=Channel\sSubscripti` 
-          }${String.raw`on\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs` 
-          }${String.raw`criber=1;system-msg=5weatyNuts\ssubscribed\swith\sTwitch\sPri` 
-          }${String.raw`me.\sThey've\ssubscribed\sfor\s15\smonths!;tmi-sent-ts=1565` 
-          }699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE ` +
-          `#dafran :dafranPrime Clap`,
+        "@badge-info=subscriber/15;badges=subscriber/12;color=#00CCBE" +
+          ";display-name=5weatyNuts;emotes=1076725:0-10;flags=;id=fda4d92" +
+          "4-cde3-421d-8eea-713401194446;login=5weatynutss;mod=0;msg-id=resu" +
+          "b;msg-param-cumulative-months=15;msg-param-months=0;msg-param-sh" +
+          "ould-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscripti" +
+          "on\\s(dafrancsgo);msg-param-sub-plan=Prime;room-id=41314239;subs" +
+          "criber=1;system-msg=5weatyNuts\\ssubscribed\\swith\\sTwitch\\sPri" +
+          "me.\\sThey've\\ssubscribed\\sfor\\s15\\smonths!;tmi-sent-ts=1565" +
+          "699032594;user-id=169613447;user-type= :tmi.twitch.tv USERNOTICE " +
+          "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
       assert.strictEqual(message.displayName, "5weatyNuts");
@@ -322,6 +323,23 @@ describe("./message/twitch-types/usernotice", () => {
         category: "watch-streak",
         categoryRaw: "watch-streak",
       });
+    });
+
+    it("should be able to parse a shared chat session message", () => {
+      const messages = [
+        parseTwitchMessage(
+          String.raw`@badge-info=;badges=;color=#1E90FF;display-name=naronu;emotes=;flags=;id=120537f4-0261-4c25-b52f-fa41683ed47c;login=naronu;mod=0;msg-id=sharedchatnotice;msg-param-cumulative-months=16;msg-param-months=0;msg-param-multimonth-duration=9;msg-param-multimonth-tenure=9;msg-param-should-share-streak=1;msg-param-streak-months=14;msg-param-sub-plan-name=Channel\sSubscription\s(caedrel);msg-param-sub-plan=1000;msg-param-was-gifted=false;room-id=45098797;source-badge-info=subscriber/16;source-badges=subscriber/12;source-id=b119fb84-ecb6-4543-99bb-b797a335083c;source-msg-id=resub;source-room-id=92038375;subscriber=0;system-msg=naronu\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s16\smonths,\scurrently\son\sa\s14\smonth\sstreak!;tmi-sent-ts=1741080304993;user-id=106354170;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #cdawgva`,
+        ) as UsernoticeMessage,
+        parseTwitchMessage(
+          String.raw`@badge-info=subscriber/16;badges=subscriber/12,premium/1;color=#00ECFF;display-name=kxmiixdd;emotes=;flags=;id=676aa8bb-2a81-4348-aee2-c92f57409634;login=kxmiixdd;mod=0;msg-id=resub;msg-param-cumulative-months=16;msg-param-months=0;msg-param-multimonth-duration=1;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\sSubscription\s(caedrel);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=92038375;source-badge-info=subscriber/16;source-badges=subscriber/12,premium/1;source-id=676aa8bb-2a81-4348-aee2-c92f57409634;source-msg-id=resub;source-room-id=92038375;subscriber=1;system-msg=kxmiixdd\ssubscribed\swith\sPrime.\sThey've\ssubscribed\sfor\s16\smonths!;tmi-sent-ts=1741083498145;user-id=193342839;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #caedrel`,
+        ) as UsernoticeMessage,
+      ];
+
+      for (const message of messages) {
+        assert.instanceOf(message, UsernoticeMessage);
+        assert.isTrue(message.isResub());
+        assert.isTrue(message.isSharedChat());
+      }
     });
   });
 });

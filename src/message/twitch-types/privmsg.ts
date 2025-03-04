@@ -2,6 +2,7 @@ import type { TwitchBadgesList } from "../badges";
 import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
+import type { SharedChatFields } from "../shared-chat";
 import type { UserState } from "./userstate";
 import { ChannelIRCMessage } from "../irc/channel-irc-message";
 import {
@@ -51,7 +52,7 @@ export type PrivmsgUserState = Omit<UserState, "emoteSets" | "emoteSetsRaw">;
 
 export class PrivmsgMessage
   extends ChannelIRCMessage
-  implements PrivmsgUserState
+  implements PrivmsgUserState, Partial<SharedChatFields>
 {
   public readonly messageText: string;
   public readonly isAction: boolean;
@@ -116,6 +117,13 @@ export class PrivmsgMessage
   public readonly serverTimestamp: Date;
   public readonly serverTimestampRaw: string;
 
+  public readonly sourceID: string | undefined;
+  public readonly sourceChannelID: string | undefined;
+  public readonly sourceBadges: TwitchBadgesList | undefined;
+  public readonly sourceBadgesRaw: string | undefined;
+  public readonly sourceBadgesInfo: TwitchBadgesList | undefined;
+  public readonly sourceBadgesInfoRaw: string | undefined;
+
   public constructor(ircMessage: IRCMessage) {
     super(ircMessage);
 
@@ -168,6 +176,13 @@ export class PrivmsgMessage
 
     this.serverTimestamp = tagParser.requireTimestamp("tmi-sent-ts");
     this.serverTimestampRaw = tagParser.requireString("tmi-sent-ts");
+
+    this.sourceID = tagParser.getString("source-id");
+    this.sourceChannelID = tagParser.getString("source-room-id");
+    this.sourceBadges = tagParser.getBadges("source-badges");
+    this.sourceBadgesRaw = tagParser.getString("source-badges");
+    this.sourceBadgesInfo = tagParser.getBadges("source-badge-info");
+    this.sourceBadgesInfoRaw = tagParser.getString("source-badge-info");
   }
 
   /**
@@ -194,5 +209,15 @@ export class PrivmsgMessage
 
   public isReply(): this is ReplyPrivmsgMessage {
     return this.replyParentMessageID != null;
+  }
+
+  /**
+   * Whether or not this message is during a shared chat session.
+   * This does NOT necessarily mean that the message is originating from another channel.
+   * Check if `message.sourceChannelId !== message.channelId` for that
+   * @see https://dev.twitch.tv/docs/chat/irc/#shared-chat
+   */
+  public isSharedChat(): this is this & SharedChatFields {
+    return this.sourceID != null;
   }
 }

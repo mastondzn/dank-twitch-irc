@@ -45,8 +45,7 @@ describe("./message/twitch-types/whisper", () => {
 
     it("trims spaces at the end of display names", () => {
       const message = parseTwitchMessage(
-        `${String.raw`@badges=;color=#2E8B57;display-name=pajbot\s;emotes=25:7-11;message-id=` 
-          }2034;thread-id=40286300_82008718;turbo=0;user-id=82008718;user-type= ` +
+        `${String.raw`@badges=;color=#2E8B57;display-name=pajbot\s;emotes=25:7-11;message-id=`}2034;thread-id=40286300_82008718;turbo=0;user-id=82008718;user-type= ` +
           `:pajbot!pajbot@pajbot.tmi.twitch.tv WHISPER randers :Riftey Kappa`,
       ) as WhisperMessage;
 

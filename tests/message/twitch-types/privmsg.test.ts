@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-string-raw */
 import { assert, describe, it } from "vitest";
 
 import { TwitchBadge } from "~/message/badge";
@@ -144,11 +145,11 @@ describe("./message/twitch-types/privmsg", () => {
 
     it("should be able to parse a reply PRIVMSG message", () => {
       const messageText =
-        `@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;` +
-        `color=#19E6E6;display-name=randers;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;mod=0;${ 
-        String.raw`reply-parent-display-name=OtherUser;reply-parent-msg-body=Test:\sAbc;reply-parent-msg-id=abcd;` 
-        }reply-parent-user-id=123;reply-parent-user-login=otheruser;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;` +
-        `turbo=0;user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test`;
+        "@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;" +
+        "color=#19E6E6;display-name=randers;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;mod=0;" +
+        "reply-parent-display-name=OtherUser;reply-parent-msg-body=Test:\\sAbc;reply-parent-msg-id=abcd;" +
+        "reply-parent-user-id=123;reply-parent-user-login=otheruser;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;" +
+        "turbo=0;user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
 
       const message: PrivmsgMessage = parseTwitchMessage(
         messageText,
@@ -167,10 +168,10 @@ describe("./message/twitch-types/privmsg", () => {
 
     it("trims spaces at the end of display names", () => {
       const messageText =
-        `@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;${ 
-        String.raw`color=#19E6E6;display-name=randers\s;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;` 
-        }mod=0;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;turbo=0;` +
-        `user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test`;
+        "@badge-info=subscriber/5;badges=broadcaster/1,subscriber/0;" +
+        "color=#19E6E6;display-name=randers\\s;emotes=;flags=;id=7eb848c9-1060-4e5e-9f4c-612877982e79;" +
+        "mod=0;room-id=40286300;subscriber=1;tmi-sent-ts=1563096499780;turbo=0;" +
+        "user-id=40286300;user-type= :randers!randers@randers.tmi.twitch.tv PRIVMSG #randers :test";
 
       const message: PrivmsgMessage = parseTwitchMessage(
         messageText,
@@ -206,6 +207,51 @@ describe("./message/twitch-types/privmsg", () => {
       );
       assert.strictEqual(message.replyParentUserID, "441347665");
       assert.strictEqual(message.replyParentUserLogin, "someuser");
+    });
+
+    it("should be able to parse shared chat session PRIVMSG messages", () => {
+      const messageText =
+        "@badge-info=;badges=no_audio/1;client-nonce=f60079ca90dad2c060ca58e16dbc531d;color=#1E90FF;" +
+        "display-name=IAmAGeeAm;emotes=;flags=;id=a5517da5-24c9-48ae-aa59-69763c5d8292;mod=0;room-id=45098797;" +
+        "source-badge-info=subscriber/10;source-badges=subscriber/9,no_audio/1;" +
+        "source-id=b1d05b12-e1ee-4538-bdcf-ccd9a4419d1c;source-room-id=92038375;subscriber=0;" +
+        "tmi-sent-ts=1741081026619;turbo=0;user-id=31721778;user-type= " +
+        ":iamageeam!iamageeam@iamageeam.tmi.twitch.tv PRIVMSG #cdawgva :HUHH";
+
+      const message: PrivmsgMessage = parseTwitchMessage(
+        messageText,
+      ) as PrivmsgMessage;
+
+      assert.instanceOf(message, PrivmsgMessage);
+      assert.isTrue(message.isSharedChat());
+
+      assert.strictEqual(message.sourceChannelID, "92038375");
+      assert.strictEqual(message.channelID, "45098797");
+    });
+
+    it("should be able to parse shared chat session PRIVMSG messages that are also replies", () => {
+      const messageText =
+        "@badge-info=;badges=moderator/1,partner/1;color=#54BC75;display-name=Moobot;emotes=;first-msg=0;" +
+        "flags=;id=8afcfd84-703d-489b-88d9-c1bbb2213d9c;mod=1;reply-parent-display-name=ATruthfulLiar18;" +
+        "reply-parent-msg-body=!dpmlol;reply-parent-msg-id=be526917-00bd-42fe-98da-1d5ec62a45d4;reply-parent-user-id=140051573;" +
+        "reply-parent-user-login=atruthfulliar18;reply-thread-parent-display-name=ATruthfulLiar18;" +
+        "reply-thread-parent-msg-id=be526917-00bd-42fe-98da-1d5ec62a45d4;reply-thread-parent-user-id=140051573;" +
+        "reply-thread-parent-user-login=atruthfulliar18;returning-chatter=0;room-id=92038375;source-badge-info=;" +
+        "source-badges=moderator/1,partner/1;source-id=8afcfd84-703d-489b-88d9-c1bbb2213d9c;source-room-id=92038375;" +
+        "subscriber=0;tmi-sent-ts=1741081205072;turbo=0;user-id=1564983;user-type=mod " +
+        ":moobot!moobot@moobot.tmi.twitch.tv PRIVMSG #caedrel :foo";
+
+      const message: PrivmsgMessage = parseTwitchMessage(
+        messageText,
+      ) as PrivmsgMessage;
+
+      assert.instanceOf(message, PrivmsgMessage);
+      assert.isTrue(message.isSharedChat());
+      assert.isTrue(message.isReply());
+      assert.strictEqual(message.replyParentDisplayName, "ATruthfulLiar18");
+      assert.strictEqual(message.replyParentMessageBody, "!dpmlol");
+      assert.strictEqual(message.channelID, "92038375");
+      assert.strictEqual(message.sourceChannelID, "92038375");
     });
   });
 });

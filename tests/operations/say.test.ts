@@ -17,7 +17,10 @@ describe("./operations/say", () => {
 
     it("should not prepend a slash to other messages", () => {
       assert.strictEqual(removeCommands(""), "");
-      assert.strictEqual(removeCommands(String.raw`\me hi`), String.raw`\me hi`);
+      assert.strictEqual(
+        removeCommands(String.raw`\me hi`),
+        String.raw`\me hi`,
+      );
       assert.strictEqual(removeCommands("hello world!"), "hello world!");
     });
   });

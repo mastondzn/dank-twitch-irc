@@ -20,7 +20,10 @@ describe("./message/parser/tags", () => {
       assert.strictEqual(" ", decodeValue(String.raw`\s`));
     });
     it("should decode backslashes", () => {
-      assert.strictEqual(String.raw`abc\def`, decodeValue(String.raw`abc\\def`));
+      assert.strictEqual(
+        String.raw`abc\def`,
+        decodeValue(String.raw`abc\\def`),
+      );
       assert.strictEqual("\\", decodeValue("\\\\"));
     });
     it("should decode CR", () => {
@@ -32,7 +35,10 @@ describe("./message/parser/tags", () => {
       assert.strictEqual("\n", decodeValue(String.raw`\n`));
     });
     it("should not apply unescaping multiple times", () => {
-      assert.strictEqual(String.raw`abc\ndef`, decodeValue(String.raw`abc\\ndef`));
+      assert.strictEqual(
+        String.raw`abc\ndef`,
+        decodeValue(String.raw`abc\\ndef`),
+      );
     });
     it("should ignore dangling backslashes", () => {
       assert.strictEqual("abc def", decodeValue("abc\\sdef\\"));
