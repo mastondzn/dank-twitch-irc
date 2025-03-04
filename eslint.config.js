@@ -1,14 +1,22 @@
-import { defineConfig } from "@mastondzn/eslint";
+import { maston } from "@mastondzn/eslint";
 
 // if you wish to see what this config adds
 // you can run `pnpx eslint-flat-config-viewer`
-export default defineConfig({
-  stylistic: false,
-  typescript: {
-    tsconfigPath: ["./tsconfig.json"],
+export default maston(
+  {
+    typescript: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+    javascript: {
+      overrides: {
+        "no-dupe-keys": "off",
+      },
+    },
   },
-
-  rules: {
-    "unicorn/prevent-abbreviations": "off",
+  {
+    rules: {
+      "ts/no-non-null-assertion": "warn",
+    },
   },
-});
+);

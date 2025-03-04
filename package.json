@@ -60,7 +60,7 @@
     "split2": "^4.1.0"
   },
   "devDependencies": {
-    "@mastondzn/eslint": "^0.7.0",
+    "@mastondzn/eslint": "^1.1.1",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/duplexify": "^3.6.4",
     "@types/node": "^20.11.19",
@@ -68,7 +68,7 @@
     "@types/split2": "^4.2.3",
     "@vitest/coverage-v8": "^1.2.2",
     "bumpp": "^9.3.0",
-    "eslint": "^8.56.0",
+    "eslint": "^9.20.0",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "rollup": "^4.12.0",
