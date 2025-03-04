@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Get pnpm store directory
         id: pnpm-cache
@@ -51,7 +51,7 @@ jobs:
         if: github.event_name == 'push'
         with:
           ref: ${{ github.ref }}
-          check-name: ci (20)
+          check-name: ci (22)
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           verbose: true
           wait-interval: 8
