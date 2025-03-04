@@ -58,18 +58,11 @@ describe("./message/parser/twitch-message", () => {
         instanceOf: PrivmsgMessage,
       },
       {
-        irc:
-          `${String.raw`@badge-info=predictions/foo\sbar\\n\sbaz;badges=predictions/blue-1;`}client-nonce=15debb48897591dc6c0e8f1df61ee07b;color=#D2691E;display-name=BeFriendlier;` +
-          `emotes=;first-msg=0;flags=;id=58eef077-2f04-43ed-9624-5407fd1fd366;mod=0;room-id=99631238;` +
-          `subscriber=0;tmi-sent-ts=1653494875994;turbo=0;user-id=23729448;` +
-          `user-type= :befriendlier!befriendlier@befriendlier.tmi.twitch.tv PRIVMSG #zneix :-tags`,
+        irc: String.raw`@badge-info=predictions/foo\sbar\\n\sbaz;badges=predictions/blue-1;client-nonce=15debb48897591dc6c0e8f1df61ee07b;color=#D2691E;display-name=BeFriendlier;emotes=;first-msg=0;flags=;id=58eef077-2f04-43ed-9624-5407fd1fd366;mod=0;room-id=99631238;subscriber=0;tmi-sent-ts=1653494875994;turbo=0;user-id=23729448;user-type= :befriendlier!befriendlier@befriendlier.tmi.twitch.tv PRIVMSG #zneix :-tags`,
         instanceOf: PrivmsgMessage,
       },
       {
-        irc:
-          `${String.raw`@badge-info=predictions/<<<<<<\sHEAD[15A⸝asdf/test,founder/17;badges=predictions/pink-2,vip/1,founder/0,bits/1;`}client-nonce=9b836e232170a9df213aefdcb458b67e;color=#696969;display-name=NotKarar;emotes=;first-msg=0;flags=;` +
-          `id=e00881bd-5f21-4993-8bbd-1736cd13d42e;mod=0;room-id=99631238;subscriber=1;tmi-sent-ts=1653494879409;turbo=0;` +
-          `user-id=89954186;user-type= :notkarar!notkarar@notkarar.tmi.twitch.tv PRIVMSG #zneix :-tags`,
+        irc: String.raw`@badge-info=predictions/<<<<<<\sHEAD[15A⸝asdf/test,founder/17;badges=predictions/pink-2,vip/1,founder/0,bits/1;client-nonce=9b836e232170a9df213aefdcb458b67e;color=#696969;display-name=NotKarar;emotes=;first-msg=0;flags=;id=e00881bd-5f21-4993-8bbd-1736cd13d42e;mod=0;room-id=99631238;subscriber=1;tmi-sent-ts=1653494879409;turbo=0;user-id=89954186;user-type= :notkarar!notkarar@notkarar.tmi.twitch.tv PRIVMSG #zneix :-tags`,
         instanceOf: PrivmsgMessage,
       },
       {
@@ -77,17 +70,11 @@ describe("./message/parser/twitch-message", () => {
         instanceOf: RoomstateMessage,
       },
       {
-        irc:
-          `@badge-info=;badges=subscriber/0,premium/1;color=;display-name=FletcherCodes;` +
-          `emotes=;flags=;id=57cbe8d9-8d17-4760-b1e7-0d888e1fdc60;login=fletchercodes;mod=0;` +
-          `msg-id=sub;msg-param-cumulative-months=0;msg-param-months=0;${String.raw`msg-param-should-share-streak=0;msg-param-sub-plan-name=The\sWhatevas;`}msg-param-sub-plan=Prime;room-id=408892348;subscriber=1;system-msg=fletchercodes${String.raw`\ssubscribed\swith\sTwitch\sPrime.;tmi-sent-ts=1551486064328;`}turbo=0;user-id=269899575;user-type= :tmi.twitch.tv USERNOTICE #clippyassistant`,
+        irc: String.raw`@badge-info=;badges=subscriber/0,premium/1;color=;display-name=FletcherCodes;emotes=;flags=;id=57cbe8d9-8d17-4760-b1e7-0d888e1fdc60;login=fletchercodes;mod=0;msg-id=sub;msg-param-cumulative-months=0;msg-param-months=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=The\sWhatevas;msg-param-sub-plan=Prime;room-id=408892348;subscriber=1;system-msg=fletchercodes\ssubscribed\swith\sTwitch\sPrime.;tmi-sent-ts=1551486064328;turbo=0;user-id=269899575;user-type= :tmi.twitch.tv USERNOTICE #clippyassistant`,
         instanceOf: UsernoticeMessage,
       },
       {
-        irc:
-          `@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=yurixxxxx14;` +
-          `emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=yurixxxxx14;mod=0;msg-id=submysterygift;` +
-          `msg-param-mass-gift-count=1;msg-param-origin-id=4e\\sd1\\s19\\sc5\\s33\\s80\\s68\\${String.raw`s8c\sdc\sc9\s4d\s96\s73\sd0\sad\s40\s52\sf3\s19\s02;`}msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38884180;subscriber=1;${String.raw`system-msg=yurixxxxx14\sis\sgifting\s1\sTier\s1\sSubs\sto\susertag's\scommunity!`}${String.raw`\sThey've\sgifted\sa\stotal\sof\s1\sin\sthe\schannel!;tmi-sent-ts=1633549401426;`}user-id=238886165;user-type= :tmi.twitch.tv USERNOTICE #usertag`,
+        irc: String.raw`@badge-info=subscriber/12;badges=subscriber/12,premium/1;color=;display-name=yurixxxxx14;emotes=;flags=;id=99b77ba7-c77f-4d92-ac3a-ad556e921672;login=yurixxxxx14;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=4e\\sd1\\s19\\sc5\\s33\\s80\\s68\\s8c\sdc\sc9\s4d\s96\s73\sd0\sad\s40\s52\sf3\s19\s02;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=38884180;subscriber=1;system-msg=yurixxxxx14\sis\sgifting\s1\sTier\s1\sSubs\sto\susertag's\scommunity!\sThey've\sgifted\sa\stotal\sof\s1\sin\sthe\schannel!;tmi-sent-ts=1633549401426;user-id=238886165;user-type= :tmi.twitch.tv USERNOTICE #usertag`,
         instanceOf: UsernoticeMessage,
       },
       {
