@@ -56,7 +56,7 @@ jobs:
         run: pnpm build
 
       - name: Run tests
-        run: pnpm test -- --coverage
+        run: pnpm test --coverage
 
       - name: Report Coverage
         if: always()
