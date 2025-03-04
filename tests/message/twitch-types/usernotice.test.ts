@@ -141,15 +141,13 @@ describe("./message/twitch-types/usernotice", () => {
 
       // typescript test:
       if (message.isResub()) {
-        expectTypeOf(message).toMatchTypeOf<ResubUsernoticeMessage>();
+        expectTypeOf(message).toExtend<ResubUsernoticeMessage>();
 
-        expectTypeOf(message.eventParams).toMatchTypeOf<SubEventParameters>();
-        expectTypeOf(
-          message.eventParams.cumulativeMonths,
-        ).toMatchTypeOf<number>();
+        expectTypeOf(message.eventParams).toExtend<SubEventParameters>();
+        expectTypeOf(message.eventParams.cumulativeMonths).toExtend<number>();
         expectTypeOf(
           message.eventParams.cumulativeMonthsRaw,
-        ).toMatchTypeOf<string>();
+        ).toExtend<string>();
       }
     });
 

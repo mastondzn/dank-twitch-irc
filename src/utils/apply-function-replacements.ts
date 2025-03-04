@@ -22,7 +22,7 @@ export function applyReplacement<
     this: T,
     ...args: Parameters<typeof oldFunction>
   ): ReturnType<typeof oldFunction> {
-    // eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-argument, ts/no-unsafe-call
+    // eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-call
     return newFunction.call(self, oldFunction.bind(this), ...args);
   }
 
