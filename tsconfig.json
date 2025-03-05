@@ -9,13 +9,13 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "declaration": true,
-    "declarationMap": true,
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "sourceMap": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "erasableSyntaxOnly": true
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"]
 }

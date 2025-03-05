@@ -1,6 +1,5 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.experimental.useFlatConfig": true,
 
   "prettier.enable": true,
   "prettier.prettierPath": "./node_modules/prettier",
@@ -9,6 +8,7 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
+  "typescript.tsdk": "node_modules/typescript/lib",
 
   "eslint.rules.customizations": [
     { "rule": "style/*", "severity": "downgrade" },

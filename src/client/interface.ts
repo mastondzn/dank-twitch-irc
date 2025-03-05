@@ -2,13 +2,15 @@ import type { SingleConnection } from "./connection";
 import type { IRCMessage } from "~/message/irc/irc-message";
 import type { TwitchCommands } from "~/message/parser/twitch-message";
 
-export enum ClientState {
-  UNCONNECTED,
-  CONNECTING,
-  CONNECTED,
-  READY,
-  CLOSED,
-}
+export const CLIENT_STATES = [
+  "UNCONNECTED",
+  "CONNECTING",
+  "CONNECTED",
+  "READY",
+  "CLOSED",
+] as const;
+
+export type ClientState = (typeof CLIENT_STATES)[number];
 
 export interface ClientStateChangeEvent {
   oldState: ClientState;

@@ -2,9 +2,12 @@ import { MissingDataError } from "./missing-data-error";
 import { reasonForValue } from "~/utils/reason-for-value";
 
 export class MissingTagError extends MissingDataError {
-  public constructor(
-    public tagKey: string,
-    public actualValue: string | null | undefined,
+  tagKey: string;
+  actualValue: string | null | undefined;
+
+  constructor(
+    tagKey: string,
+    actualValue: string | null | undefined,
     cause?: Error,
   ) {
     super(
@@ -13,5 +16,8 @@ export class MissingTagError extends MissingDataError {
       )})`,
       cause,
     );
+
+    this.tagKey = tagKey;
+    this.actualValue = actualValue;
   }
 }
