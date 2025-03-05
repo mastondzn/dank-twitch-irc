@@ -9,7 +9,6 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "declaration": true,
-    "declarationMap": true,
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "sourceMap": true,
