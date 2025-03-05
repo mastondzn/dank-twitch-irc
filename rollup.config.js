@@ -15,7 +15,7 @@ export default defineConfig({
   })),
   plugins: [
     typescript({
-      exclude: ["./tests/**"],
+      include: ["./src/**"],
       transformers: {
         before: [{ type: "program", factory: paths.default }],
         afterDeclarations: [{ type: "program", factory: paths.default }],
