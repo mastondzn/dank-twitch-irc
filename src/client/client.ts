@@ -20,6 +20,7 @@ import { anyCauseInstanceof } from "~/utils/any-cause-instanceof";
 import { debugLogger } from "~/utils/debug-logger";
 import { findAndPushToEnd } from "~/utils/find-and-push-to-end";
 import { removeInPlace } from "~/utils/remove-in-place";
+import { toChunked } from "~/utils/to-chunked";
 import { unionSets } from "~/utils/union-sets";
 import { correctChannelName, validateChannelName } from "~/validation/channel";
 import { validateMessageID } from "~/validation/reply";
@@ -117,9 +118,16 @@ export class ChatClient extends BaseClient {
       return;
     }
 
-    const conn = this.requireConnection(
-      maxJoinedChannels(this.configuration.maxChannelCountPerConnection),
-    );
+    // check if any existing conn wants this channel (and is not joined), if not find any conn that has space
+    // if none is found, create a new connection
+    const conn =
+      findAndPushToEnd(this.connections, (conn) =>
+        conn.wantedChannels.has(channelName),
+      ) ??
+      this.requireConnection(
+        maxJoinedChannels(this.configuration.maxChannelCountPerConnection),
+      );
+
     await joinChannel(conn, channelName);
   }
 
@@ -147,27 +155,55 @@ export class ChatClient extends BaseClient {
       return v;
     });
 
-    const needToJoin: string[] = channelNames.filter(
-      (channelName) =>
-        !this.connections.some((c) => joinNothingToDo(c, channelName)),
+    const needToJoin = new Set(
+      channelNames.filter(
+        (channelName) =>
+          !this.connections.some((c) => joinNothingToDo(c, channelName)),
+      ),
     );
 
-    const promises: Promise<Record<string, Error | undefined>>[] = [];
+    const chunks: [SingleConnection, string[]][] = this.connections.map(
+      (conn) => [conn, []],
+    );
 
-    let index = 0;
-    while (index < needToJoin.length) {
-      const conn = this.requireConnection(
-        maxJoinedChannels(this.configuration.maxChannelCountPerConnection),
+    // add channels to the connections that wants them
+    for (const [conn, list] of chunks) {
+      // list of channels this conn wants but is not joined to
+      const channels = [...conn.wantedChannels].filter((channelName) =>
+        needToJoin.has(channelName),
       );
 
-      const canJoin =
+      list.push(...channels);
+      for (const channel of channels) {
+        needToJoin.delete(channel);
+      }
+    }
+
+    // now we can add channels to the connections that have space
+    for (const [conn, list] of chunks) {
+      // number of channels this conn can still join
+      const count =
         this.configuration.maxChannelCountPerConnection -
         conn.wantedChannels.size;
+      const channels = [...needToJoin].slice(0, count);
 
-      const channelsSlice = needToJoin.slice(index, (index += canJoin));
-
-      promises.push(joinAll(conn, channelsSlice));
+      list.push(...channels);
+      for (const channel of channels) {
+        needToJoin.delete(channel);
+      }
     }
+
+    // finally, create new connections for the remaining channels
+    for (const chunk of toChunked(
+      [...needToJoin],
+      this.configuration.maxChannelCountPerConnection,
+    )) {
+      chunks.push([this.newConnection(), chunk]);
+    }
+
+    const promises: Promise<Record<string, Error | undefined>>[] = chunks.map(
+      async (args) => joinAll(...args),
+    );
 
     const errorChunks = await Promise.all(promises);
     return errorChunks.reduce(
