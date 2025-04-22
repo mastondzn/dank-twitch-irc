@@ -2,7 +2,11 @@ import EventEmitter from "eventemitter3";
 
 import type { ClientConfiguration } from "~/config/config";
 import type { IRCMessage } from "~/message/irc/irc-message";
-import { type ClientEvents, ClientState } from "./interface";
+import {
+  type ClientEvents,
+  type ClientState,
+  CLIENT_STATES,
+} from "./interface";
 import {
   type ExpandedClientConfiguration,
   expandConfig,
@@ -10,30 +14,30 @@ import {
 
 export abstract class BaseClient extends EventEmitter<ClientEvents> {
   public get unconnected(): boolean {
-    return this.state === ClientState.UNCONNECTED;
+    return this.state === "UNCONNECTED";
   }
 
   public get connecting(): boolean {
-    return this.state === ClientState.CONNECTING;
+    return this.state === "CONNECTING";
   }
 
   public get connected(): boolean {
-    return this.state === ClientState.CONNECTED;
+    return this.state === "CONNECTED";
   }
 
   public get ready(): boolean {
-    return this.state === ClientState.READY;
+    return this.state === "READY";
   }
 
   public get closed(): boolean {
-    return this.state === ClientState.CLOSED;
+    return this.state === "CLOSED";
   }
 
   public readonly configuration: ExpandedClientConfiguration;
   public abstract readonly wantedChannels: Set<string>;
   public abstract readonly joinedChannels: Set<string>;
 
-  public state: ClientState = ClientState.UNCONNECTED;
+  public state: ClientState = "UNCONNECTED";
 
   protected constructor(partialConfig?: ClientConfiguration) {
     super();
@@ -54,31 +58,31 @@ export abstract class BaseClient extends EventEmitter<ClientEvents> {
   }
 
   public emitConnecting(): void {
-    if (this.advanceState(ClientState.CONNECTING)) {
+    if (this.advanceState("CONNECTING")) {
       this.emit("connecting");
     }
   }
 
   public emitConnected(): void {
-    if (this.advanceState(ClientState.CONNECTED)) {
+    if (this.advanceState("CONNECTED")) {
       this.emit("connect");
     }
   }
 
   public emitReady(): void {
-    if (this.advanceState(ClientState.READY)) {
+    if (this.advanceState("READY")) {
       this.emit("ready");
     }
   }
 
   public emitClosed(error?: Error): void {
-    if (this.advanceState(ClientState.CLOSED)) {
+    if (this.advanceState("CLOSED")) {
       this.emit("close", error);
     }
   }
 
   public advanceState(newState: ClientState): boolean {
-    if (newState <= this.state) {
+    if (CLIENT_STATES.indexOf(newState) <= CLIENT_STATES.indexOf(this.state)) {
       return false;
     }
 

@@ -4,20 +4,17 @@ import paths from "typescript-transform-paths";
 
 export default defineConfig({
   input: "src/index.ts",
-  output: [
-    { format: "esm", entryFileNames: "[name].js" },
-    { format: "cjs", entryFileNames: "[name].cjs" },
-  ].map((output) => ({
+  output: {
+    format: "esm",
+    entryFileNames: "[name].js",
     sourcemap: true,
     dir: "dist",
     preserveModules: true,
-    ...output,
-  })),
+  },
   plugins: [
     typescript({
-      exclude: ["./tests/**"],
+      include: ["./src/**"],
       transformers: {
-        before: [{ type: "program", factory: paths.default }],
         afterDeclarations: [{ type: "program", factory: paths.default }],
       },
     }),
