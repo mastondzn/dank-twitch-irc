@@ -1,21 +1,17 @@
 import { maston } from "@mastondzn/eslint";
 
 // if you wish to see what this config adds
-// you can run `pnpx eslint-flat-config-viewer`
+// you can run `pnpm eslint --inspect-config`
 export default maston(
   {
     typescript: {
       projectService: true,
       tsconfigRootDir: import.meta.dirname,
     },
-    javascript: {
-      overrides: {
-        "no-dupe-keys": "off",
-      },
-    },
   },
   {
     rules: {
+      "no-dupe-keys": "off",
       "ts/no-non-null-assertion": "warn",
     },
   },
