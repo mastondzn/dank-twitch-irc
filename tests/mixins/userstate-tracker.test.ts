@@ -7,26 +7,18 @@ import type { UserstateMessage } from "~/message/twitch-types/userstate";
 import { fakeClient } from "../helpers";
 import { TwitchBadge } from "~/message/badge";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
-import { UserStateTracker } from "~/mixins/userstate-tracker";
 
 describe("./mixins/userstate-tracker", () => {
   describe("userstateTracker", () => {
-    it("should set client.userstateTracker on the client when applied", () => {
+    it("should always be present on the client", () => {
       const { client } = fakeClient(false);
-      const userStateTracker = new UserStateTracker(client);
 
-      assert.isUndefined(client.userStateTracker);
-
-      client.use(userStateTracker);
-
-      assert.strictEqual(client.userStateTracker, userStateTracker);
+      assert.isDefined(client.userStateTracker);
     });
 
     it("should save incoming USERSTATE messages", async () => {
       const { client, emitAndEnd } = fakeClient();
-      const userStateTracker = new UserStateTracker(client);
-
-      client.use(userStateTracker);
+      const userStateTracker = client.userStateTracker;
 
       assert.isUndefined(userStateTracker.getChannelState("randers"));
 
@@ -53,8 +45,7 @@ describe("./mixins/userstate-tracker", () => {
 
     it("should emit newChannelState on new USERSTATE", async () => {
       const { client, emitAndEnd } = fakeClient();
-      const userStateTracker = new UserStateTracker(client);
-      client.use(userStateTracker);
+      const userStateTracker = client.userStateTracker;
 
       const listener = vi.fn();
       userStateTracker.on("newChannelState", listener);
@@ -79,9 +70,7 @@ describe("./mixins/userstate-tracker", () => {
 
     it("should save incoming GLOBALUSERSTATE messages", async () => {
       const { client, emitAndEnd } = fakeClient();
-      const userStateTracker = new UserStateTracker(client);
-
-      client.use(userStateTracker);
+      const userStateTracker = client.userStateTracker;
 
       assert.isUndefined(userStateTracker.globalState);
       assert.isUndefined(userStateTracker.getGlobalState());
@@ -106,8 +95,7 @@ describe("./mixins/userstate-tracker", () => {
 
     it("should emit newGlobalState on new GLOBALUSERSTATE", async () => {
       const { client, emitAndEnd } = fakeClient();
-      const userStateTracker = new UserStateTracker(client);
-      client.use(userStateTracker);
+      const userStateTracker = client.userStateTracker;
 
       const listener = vi.fn();
       userStateTracker.on("newGlobalState", listener);
@@ -130,9 +118,7 @@ describe("./mixins/userstate-tracker", () => {
       const { client, emit, emitAndEnd } = fakeClient();
       client.configuration.username = "randers";
 
-      const userStateTracker = new UserStateTracker(client);
-
-      client.use(userStateTracker);
+      const userStateTracker = client.userStateTracker;
 
       assert.isUndefined(userStateTracker.getChannelState("randers"));
 

@@ -76,7 +76,6 @@ chat.join("forsen");
   ```
 
   Other message types that have specific message parsing are:
-
   - **`CLEARCHAT`** (maps to [`ClearchatMessage`][clearchat]) - Timeout and ban
     messages
   - **`CLEARMSG`** (maps to [`ClearmsgMessage`][clearmsg]) - Single message
@@ -651,15 +650,8 @@ const chat = new ChatClient({
   // is also more reliable
   requestMembershipCapability: false, // false by default
   // read more about mixins below
-  // this disables the connection rate limiter, message rate limiter
-  // and Room- and Userstate trackers (which are important for other mixins)
+  // this disables the connection rate limiter and message rate limiter
   installDefaultMixins: false, // true by default
-  // Silence UnandledPromiseRejectionWarnings on all client methods
-  // that return promises.
-  // With this option enabled, the returned promises will still be rejected/
-  // resolved as without this option, this option ONLY silences the
-  // UnhandledPromiseRejectionWarning.
-  ignoreUnhandledPromiseRejections: true, // false by default
 });
 ```
 
@@ -721,16 +713,16 @@ and the mixins installed by default:
   status of your bot using the config (see above).
 - `new ConnectionRateLimiter(chat)` - Rate limits new connections according to
   the rate limits set in the config.
-- `new UserStateTracker(chat)` - Used by other mixins. Keeps track of what
-  state your bot user has in all channels.
-- `new RoomStateTracker()` - Used by other mixins. Keeps track of each channel's
-  state, e.g. sub-mode etc.
-- `new IgnoreUnhandledPromiseRejectionsMixin()` - Silences
-  `UnhandledPromiseRejectionWarning`s on promises returned by the client's
-  functions. (installed for you if you activate the
-  `ignoreUnhandledPromiseRejections` client option)
 - `new JoinRateLimiter(chat)` - Rate limits new joins according to join rate
   limits set in the config.
+
+The following are always installed (not affected by `installDefaultMixins`):
+
+- `client.userStateTracker` (`UserStateTracker`) - Keeps track of what state
+  your bot user has in all channels. Used by rate limiters and other mixins.
+- `client.roomStateTracker` (`RoomStateTracker`) - Keeps track of each
+  channel's state, e.g. sub-mode, slow mode, etc. Used by rate limiters and
+  other mixins.
 
 ## Tests
 

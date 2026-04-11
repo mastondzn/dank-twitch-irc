@@ -29,7 +29,6 @@ export class RoomStateTracker
   }
 
   public applyToClient(client: ChatClient): void {
-    client.roomStateTracker = this;
     client.on("ROOMSTATE", this.onRoomstateMessage.bind(this));
   }
 

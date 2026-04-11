@@ -59,7 +59,6 @@ const defaults: Omit<
   },
 
   installDefaultMixins: true,
-  ignoreUnhandledPromiseRejections: false,
 };
 
 export function expandTransportConfig(

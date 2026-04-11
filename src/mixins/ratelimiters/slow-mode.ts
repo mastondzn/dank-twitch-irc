@@ -48,19 +48,15 @@ export class SlowModeRateLimiter implements ClientMixin {
       privmsg: genericReplacement,
     });
 
-    if (client.roomStateTracker) {
-      client.roomStateTracker.on(
-        "newChannelState",
-        this.onRoomStateChange.bind(this),
-      );
-    }
+    client.roomStateTracker.on(
+      "newChannelState",
+      this.onRoomStateChange.bind(this),
+    );
 
-    if (client.userStateTracker) {
-      client.userStateTracker.on(
-        "newChannelState",
-        this.onUserStateChange.bind(this),
-      );
-    }
+    client.userStateTracker.on(
+      "newChannelState",
+      this.onUserStateChange.bind(this),
+    );
   }
 
   private getSemaphore(channelName: string): Sema {
@@ -162,15 +158,12 @@ export class SlowModeRateLimiter implements ClientMixin {
   }
 
   private getSlowModeDuration(channelName: string): number {
-    if (this.client.roomStateTracker != null) {
-      const roomState =
-        this.client.roomStateTracker.getChannelState(channelName);
-      if (roomState != null) {
-        return Math.max(
-          roomState.slowModeDuration,
-          SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN,
-        );
-      }
+    const roomState = this.client.roomStateTracker.getChannelState(channelName);
+    if (roomState != null) {
+      return Math.max(
+        roomState.slowModeDuration,
+        SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN,
+      );
     }
 
     return SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN;

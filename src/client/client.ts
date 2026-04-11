@@ -4,7 +4,6 @@ import type { ConnectionPool } from "~/mixins/connection-pool";
 import { BaseClient } from "./base-client";
 import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
-import { IgnoreUnhandledPromiseRejectionsMixin } from "~/mixins/ignore-promise-rejections";
 import { ConnectionRateLimiter } from "~/mixins/ratelimiters/connection";
 import { JoinRateLimiter } from "~/mixins/ratelimiters/join";
 import { PrivmsgMessageRateLimiter } from "~/mixins/ratelimiters/privmsg";
@@ -38,8 +37,8 @@ export class ChatClient extends BaseClient {
     return unionSets(this.connections.map((c) => c.joinedChannels));
   }
 
-  public roomStateTracker?: RoomStateTracker;
-  public userStateTracker?: UserStateTracker;
+  public readonly userStateTracker: UserStateTracker;
+  public readonly roomStateTracker: RoomStateTracker;
   public connectionPool?: ConnectionPool;
   public readonly connectionMixins: ConnectionMixin[] = [];
 
@@ -49,16 +48,15 @@ export class ChatClient extends BaseClient {
   public constructor(configuration?: ClientConfiguration) {
     super(configuration);
 
+    this.userStateTracker = new UserStateTracker(this);
+    this.use(this.userStateTracker);
+    this.roomStateTracker = new RoomStateTracker();
+    this.use(this.roomStateTracker);
+
     if (this.configuration.installDefaultMixins) {
-      this.use(new UserStateTracker(this));
-      this.use(new RoomStateTracker());
       this.use(new ConnectionRateLimiter(this));
       this.use(new PrivmsgMessageRateLimiter(this));
       this.use(new JoinRateLimiter(this));
-    }
-
-    if (this.configuration.ignoreUnhandledPromiseRejections) {
-      this.use(new IgnoreUnhandledPromiseRejectionsMixin());
     }
 
     this.on("error", (error) => {

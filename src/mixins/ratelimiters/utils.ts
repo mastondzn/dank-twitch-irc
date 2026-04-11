@@ -6,24 +6,10 @@ interface FastSpamResult {
   certain: boolean;
 }
 
-// userStateTracker is optional in case no user state tracker
-// is installed on the client
 export function canSpamFast(
   channelName: string,
   loggedInUsername: string,
-  userStateTracker?: UserStateTracker,
-): FastSpamResult;
-
-export function canSpamFast(
-  channelName: string,
-  loggedInUsername: string,
-  userState: UserState,
-): FastSpamResult;
-
-export function canSpamFast(
-  channelName: string,
-  loggedInUsername: string,
-  userStateInput: UserStateTracker | UserState | undefined,
+  userStateInput: UserStateTracker | UserState,
 ): FastSpamResult {
   // broadcaster?
   if (channelName === loggedInUsername) {
