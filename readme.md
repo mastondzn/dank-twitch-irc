@@ -76,6 +76,7 @@ chat.join("forsen");
   ```
 
   Other message types that have specific message parsing are:
+
   - **`CLEARCHAT`** (maps to [`ClearchatMessage`][clearchat]) - Timeout and ban
     messages
   - **`CLEARMSG`** (maps to [`ClearmsgMessage`][clearmsg]) - Single message
