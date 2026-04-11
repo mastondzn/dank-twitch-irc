@@ -11,4 +11,5 @@ export * from "./reason-for-value";
 export * from "./remove-in-place";
 export * from "./set-defaults";
 export * from "./split-into-chunks";
+export * from "./to-chunked";
 export * from "./union-sets";
