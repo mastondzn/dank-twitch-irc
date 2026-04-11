@@ -11,8 +11,8 @@ import {
 describe("./modules/alternate-message-modifier", () => {
   describe("alternateMessageModifier", () => {
     it("should have the correct escape for the invisible suffix", () => {
-      // 1 (space) + 2 (invisible character)
-      assert.strictEqual(invisibleSuffix.length, 3);
+      // 1 (space) + 1 (invisible character)
+      assert.strictEqual(invisibleSuffix.length, 2);
       // eslint-disable-next-line ts/no-misused-spread
       assert.strictEqual([...invisibleSuffix].length, 2);
     });
@@ -84,7 +84,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{000E0000}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
 
       // /me makes it different
@@ -223,7 +223,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{000E0000}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -270,7 +270,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{000E0000}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -345,7 +345,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           true,
         ),
-        "Kappa Keepo PogChamp \u{000E0000}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -392,7 +392,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           true,
         ),
-        "Kappa Keepo PogChamp \u{000E0000}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
