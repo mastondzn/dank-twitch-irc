@@ -84,7 +84,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{34f}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
 
       // /me makes it different
@@ -223,7 +223,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{34f}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -270,7 +270,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           false,
         ),
-        "Kappa Keepo PogChamp \u{34f}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -345,7 +345,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           true,
         ),
-        "Kappa Keepo PogChamp \u{34f}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
@@ -392,7 +392,7 @@ describe("./modules/alternate-message-modifier", () => {
           "Kappa Keepo PogChamp",
           true,
         ),
-        "Kappa Keepo PogChamp \u{34f}",
+        "Kappa Keepo PogChamp \u{34F}",
       );
       assert.strictEqual(
         messageModifier.appendInvisibleCharacter(
