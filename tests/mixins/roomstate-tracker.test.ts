@@ -117,8 +117,8 @@ describe("./mixins/roomstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      expect(listener).toBeCalledTimes(1);
-      expect(listener).toBeCalledWith(
+      expect(listener).toHaveBeenCalledTimes(1);
+      expect(listener).toHaveBeenCalledWith(
         "randers",
         roomStateTracker.getChannelState("randers"),
       );

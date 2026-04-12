@@ -26,7 +26,7 @@ export default defineConfig({
               link: subItem.link.replace(/^\/.vitepress\/typedoc/, ""),
             })),
           }))
-          .sort((a, b) => a.text.localeCompare(b.text)),
+          .toSorted((a, b) => a.text.localeCompare(b.text)),
       },
     ],
   },

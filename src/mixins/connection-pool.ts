@@ -21,7 +21,7 @@ export class ConnectionPool implements ClientMixin {
     const replacement = (
       oldFunction: (predicate?: ConnectionPredicate) => SingleConnection,
       predicate?: ConnectionPredicate,
-      // eslint-disable-next-line unicorn/consistent-function-scoping
+       
     ): SingleConnection => {
       this.ensureEnoughConnections();
       return oldFunction(predicate);

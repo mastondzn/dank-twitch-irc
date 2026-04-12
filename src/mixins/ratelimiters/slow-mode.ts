@@ -26,7 +26,7 @@ export class SlowModeRateLimiter implements ClientMixin {
       oldFunction: (channelName: string, ...args: A) => Promise<void>,
       channelName: string,
       ...args: A
-      // eslint-disable-next-line unicorn/consistent-function-scoping
+       
     ): Promise<void> => {
       const releaseFunction = await this.acquire(channelName);
       if (!releaseFunction) {

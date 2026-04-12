@@ -74,7 +74,7 @@ describe("./message/parser/tag-values", () => {
     });
   });
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
+   
   function checkThrowsUnparseableInt<A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,

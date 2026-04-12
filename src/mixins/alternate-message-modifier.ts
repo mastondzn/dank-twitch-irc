@@ -26,8 +26,7 @@ export class AlternateMessageModifier implements ClientMixin {
   ): string {
     const lastMessage: LastMessage | undefined = this.lastMessages[channelName];
 
-    return lastMessage != null &&
-      lastMessage.messageText === messageText &&
+    return lastMessage?.messageText === messageText &&
       lastMessage.action === action
       ? messageText + invisibleSuffix
       : messageText;

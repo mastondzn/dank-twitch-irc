@@ -26,7 +26,7 @@ export class PrivmsgMessageRateLimiter implements ClientMixin {
       oldFunction: (channelName: string, ...args: A) => Promise<V>,
       channelName: string,
       ...args: A
-      // eslint-disable-next-line unicorn/consistent-function-scoping
+       
     ): Promise<V> => {
       const releaseFunction = await this.acquire(channelName);
       try {

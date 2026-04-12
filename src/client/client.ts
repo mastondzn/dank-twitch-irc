@@ -299,9 +299,7 @@ export class ChatClient extends BaseClient {
     conn.on("message", (message) => {
       // only forward whispers from the currently active whisper connection
       if (message.ircCommand === "WHISPER") {
-        if (this.activeWhisperConn == null) {
-          this.activeWhisperConn = conn;
-        }
+        this.activeWhisperConn ??= conn;
 
         if (this.activeWhisperConn !== conn) {
           // message is ignored.
