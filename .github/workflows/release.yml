@@ -47,6 +47,9 @@ jobs:
           verbose: true
           wait-interval: 8
 
+      - name: whoami
+        run: npm whoami && node -v
+
       - name: Create release
         run: pnpm publish --no-git-checks --access public
 
