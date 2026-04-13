@@ -21,7 +21,6 @@ export class JoinRateLimiter implements ClientMixin {
       oldFunction: (channelName: string, ...args: A) => Promise<V>,
       channelName: string,
       ...args: A
-       
     ): Promise<V> => {
       const releaseFunction = await this.acquire();
       try {
@@ -38,7 +37,6 @@ export class JoinRateLimiter implements ClientMixin {
       ) => Promise<Record<string, Error | undefined>>,
       channelNames: string[],
       ...args: A
-       
     ): Promise<Record<string, Error | undefined>> => {
       const promiseResults = [];
 

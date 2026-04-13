@@ -2,9 +2,9 @@ import type { TwitchBadgesList } from "../badges";
 import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
-import type { SharedChatFields } from "../shared-chat";
+import type { SharedChatFields, SharedChatSource } from "../shared-chat";
 import type { UserState } from "./userstate";
-import { ChannelIRCMessage } from "../irc/channel-irc-message";
+import { ChannelIRCMessage, type Channel } from "../irc/channel-irc-message";
 import {
   type IRCMessage,
   requireNickname,
@@ -31,51 +31,129 @@ export function parseActionAndMessage(trailingParameter: string): {
       };
 }
 
+export interface MessageSender {
+  readonly login: string;
+  /** @deprecated Use {@link MessageSender.login} instead. */
+  readonly username: string;
+  readonly id: string;
+  readonly displayName: string;
+  readonly color: Color | undefined;
+  readonly colorRaw: string;
+  readonly badgeInfo: TwitchBadgesList;
+  readonly badgeInfoRaw: string;
+  readonly badges: TwitchBadgesList;
+  readonly badgesRaw: string;
+  readonly isMod: boolean;
+  readonly isModRaw: string;
+}
+
+export interface ReplyParent {
+  readonly displayName: string;
+  readonly messageBody: string;
+  readonly messageId: string;
+  readonly userId: string;
+  readonly userLogin: string;
+}
+
 interface CheerPrivmsgMessage extends PrivmsgMessage {
   readonly bits: number;
   readonly bitsRaw: string;
 }
 
 interface ReplyPrivmsgMessage extends PrivmsgMessage {
-  readonly replyParentDisplayName: string;
-  readonly replyParentMsgBody: string;
-  readonly replyParentMsgID: string;
-  readonly replyParentUserID: string;
-  readonly replyParentUserLogin: string;
+  readonly replyParent: ReplyParent;
 }
 
 /**
  * Omits `emoteSets` and `emoteSetsRaw` from {@link UserState} (because they are not sent
  * for `PRIVMSG` messages)
+ * @deprecated Use {@link PrivmsgMessage.sender} instead.
  */
 export type PrivmsgUserState = Omit<UserState, "emoteSets" | "emoteSetsRaw">;
 
 export class PrivmsgMessage
   extends ChannelIRCMessage
+  // eslint-disable-next-line ts/no-deprecated
   implements PrivmsgUserState, Partial<SharedChatFields>
 {
-  public readonly messageText: string;
-  public readonly isAction: boolean;
+  private readonly _content: string;
+  private readonly _action: boolean;
+  private readonly _senderLogin: string;
+  private readonly _senderId: string;
+  private readonly _badgeInfo: TwitchBadgesList;
+  private readonly _badgeInfoRaw: string;
+  private readonly _badges: TwitchBadgesList;
+  private readonly _badgesRaw: string;
+  private readonly _bits: number | undefined;
+  private readonly _bitsRaw: string | undefined;
+  private readonly _color: Color | undefined;
+  private readonly _colorRaw: string;
+  private readonly _displayName: string;
+  private readonly _emotes: TwitchEmoteList;
+  private readonly _emotesRaw: string;
+  private readonly _flags: TwitchFlagList | undefined;
+  private readonly _flagsRaw: string | undefined;
+  private readonly _replyParentDisplayName: string | undefined;
+  private readonly _replyParentMessageBody: string | undefined;
+  private readonly _replyParentMessageId: string | undefined;
+  private readonly _replyParentUserId: string | undefined;
+  private readonly _replyParentUserLogin: string | undefined;
+  private readonly _id: string;
+  private readonly _isMod: boolean;
+  private readonly _isModRaw: string;
+  private readonly _channelRoomId: string;
+  private readonly _timestamp: Date;
+  private readonly _timestampRaw: string;
+  private readonly _sourceId: string | undefined;
+  private readonly _sourceChannelId: string | undefined;
+  private readonly _sourceBadges: TwitchBadgesList | undefined;
+  private readonly _sourceBadgesRaw: string | undefined;
+  private readonly _sourceBadgeInfo: TwitchBadgesList | undefined;
+  private readonly _sourceBadgeInfoRaw: string | undefined;
 
-  public readonly senderUsername: string;
-  public readonly senderUserID: string;
+  public get isAction(): boolean {
+    return this._action;
+  }
 
-  public readonly badgeInfo: TwitchBadgesList;
-  public readonly badgeInfoRaw: string;
+  public get content(): string {
+    return this._content;
+  }
 
-  public readonly badges: TwitchBadgesList;
-  public readonly badgesRaw: string;
+  /**
+   * The id of the message.
+   * @example "7eb848c9-1060-4e5e-9f4c-612877982e79"
+   */
+  public get id(): string {
+    return this._id;
+  }
 
-  public readonly bits: number | undefined;
-  public readonly bitsRaw: string | undefined;
+  /**
+   * The timestamp of when the message was sent, as reported by Twitch.
+   * This is not necessarily the same as the time the message was received by your client.
+   */
+  public get timestamp(): Date {
+    return this._timestamp;
+  }
 
-  public readonly color: Color | undefined;
-  public readonly colorRaw: string;
+  public get timestampRaw(): string {
+    return this._timestampRaw;
+  }
 
-  public readonly displayName: string;
+  public get bits(): number | undefined {
+    return this._bits;
+  }
 
-  public readonly emotes: TwitchEmoteList;
-  public readonly emotesRaw: string;
+  public get bitsRaw(): string | undefined {
+    return this._bitsRaw;
+  }
+
+  public get emotes(): TwitchEmoteList {
+    return this._emotes;
+  }
+
+  public get emotesRaw(): string {
+    return this._emotesRaw;
+  }
 
   /**
    * Can be an array of Twitch AutoMod flagged words, for use in moderation and/or filtering purposes.
@@ -88,7 +166,9 @@ export class PrivmsgMessage
    * Twitch changes something. In short: **Use at your own risk** and make sure your
    * implementation can handle the case where this is `undefined`.
    */
-  public readonly flags: TwitchFlagList | undefined;
+  public get flags(): TwitchFlagList | undefined {
+    return this._flags;
+  }
 
   /**
    * Twitch AutoMod raw flags string.
@@ -99,30 +179,204 @@ export class PrivmsgMessage
    * In short, ensure your implementation can handle the case where this is `undefined` or is in
    * a format you don't expect.
    */
-  public readonly flagsRaw: string | undefined;
+  public get flagsRaw(): string | undefined {
+    return this._flagsRaw;
+  }
 
-  public readonly replyParentDisplayName: string | undefined;
-  public readonly replyParentMessageBody: string | undefined;
-  public readonly replyParentMessageID: string | undefined;
-  public readonly replyParentUserID: string | undefined;
-  public readonly replyParentUserLogin: string | undefined;
+  public override get channel(): Channel & { readonly id: string } {
+    return {
+      login: this._channelLogin,
+      username: this._channelLogin,
+      id: this._channelRoomId,
+    };
+  }
 
-  public readonly messageID: string;
+  public get sender(): MessageSender {
+    return {
+      login: this._senderLogin,
+      username: this._senderLogin,
+      id: this._senderId,
+      displayName: this._displayName,
+      color: this._color,
+      colorRaw: this._colorRaw,
+      badgeInfo: this._badgeInfo,
+      badgeInfoRaw: this._badgeInfoRaw,
+      badges: this._badges,
+      badgesRaw: this._badgesRaw,
+      isMod: this._isMod,
+      isModRaw: this._isModRaw,
+    };
+  }
 
-  public readonly isMod: boolean;
-  public readonly isModRaw: string;
+  public get replyParent(): ReplyParent | undefined {
+    if (this._replyParentMessageId == null) return undefined;
+    return {
+      displayName: this._replyParentDisplayName!,
+      messageBody: this._replyParentMessageBody!,
+      messageId: this._replyParentMessageId,
+      userId: this._replyParentUserId!,
+      userLogin: this._replyParentUserLogin!,
+    };
+  }
 
-  public readonly channelID: string;
+  public get source(): SharedChatSource | undefined {
+    if (this._sourceId == null) return undefined;
+    return {
+      id: this._sourceId,
+      channelId: this._sourceChannelId!,
+      badges: this._sourceBadges!,
+      badgesRaw: this._sourceBadgesRaw!,
+      badgeInfo: this._sourceBadgeInfo!,
+      badgeInfoRaw: this._sourceBadgeInfoRaw!,
+    };
+  }
 
-  public readonly serverTimestamp: Date;
-  public readonly serverTimestampRaw: string;
+  // ---- Deprecated aliases ----
 
-  public readonly sourceID: string | undefined;
-  public readonly sourceChannelID: string | undefined;
-  public readonly sourceBadges: TwitchBadgesList | undefined;
-  public readonly sourceBadgesRaw: string | undefined;
-  public readonly sourceBadgesInfo: TwitchBadgesList | undefined;
-  public readonly sourceBadgesInfoRaw: string | undefined;
+  /** @deprecated Use {@link content} instead. */
+  public get messageText(): string {
+    return this._content;
+  }
+
+  /** @deprecated Use {@link sender.login} instead. */
+  public get senderUsername(): string {
+    return this._senderLogin;
+  }
+
+  /** @deprecated Use {@link sender.id} instead. */
+  public get senderUserID(): string {
+    return this._senderId;
+  }
+
+  /** @deprecated Use {@link sender.id} instead. */
+  public get senderUserId(): string {
+    return this._senderId;
+  }
+
+  /** @deprecated Use {@link sender.badgeInfo} instead. */
+  public get badgeInfo(): TwitchBadgesList {
+    return this._badgeInfo;
+  }
+
+  /** @deprecated Use {@link sender.badgeInfoRaw} instead. */
+  public get badgeInfoRaw(): string {
+    return this._badgeInfoRaw;
+  }
+
+  /** @deprecated Use {@link sender.badges} instead. */
+  public get badges(): TwitchBadgesList {
+    return this._badges;
+  }
+
+  /** @deprecated Use {@link sender.badgesRaw} instead. */
+  public get badgesRaw(): string {
+    return this._badgesRaw;
+  }
+
+  /** @deprecated Use {@link sender.color} instead. */
+  public get color(): Color | undefined {
+    return this._color;
+  }
+
+  /** @deprecated Use {@link sender.colorRaw} instead. */
+  public get colorRaw(): string {
+    return this._colorRaw;
+  }
+
+  /** @deprecated Use {@link sender.displayName} instead. */
+  public get displayName(): string {
+    return this._displayName;
+  }
+
+  /** @deprecated Use {@link id} instead. */
+  public get messageID(): string {
+    return this._id;
+  }
+
+  /** @deprecated Use {@link id} instead. */
+  public get messageId(): string {
+    return this._id;
+  }
+
+  /** @deprecated Use {@link sender.isMod} instead. */
+  public get isMod(): boolean {
+    return this._isMod;
+  }
+
+  /** @deprecated Use {@link sender.isModRaw} instead. */
+  public get isModRaw(): string {
+    return this._isModRaw;
+  }
+
+  /** @deprecated Use {@link channel.id} instead. */
+  public get channelID(): string {
+    return this._channelRoomId;
+  }
+
+  /** @deprecated Use {@link timestamp} instead. */
+  public get serverTimestamp(): Date {
+    return this._timestamp;
+  }
+
+  /** @deprecated Use {@link timestampRaw} instead. */
+  public get serverTimestampRaw(): string {
+    return this._timestampRaw;
+  }
+
+  /** @deprecated Use {@link replyParent.displayName} instead. */
+  public get replyParentDisplayName(): string | undefined {
+    return this._replyParentDisplayName;
+  }
+
+  /** @deprecated Use {@link replyParent.messageBody} instead. */
+  public get replyParentMessageBody(): string | undefined {
+    return this._replyParentMessageBody;
+  }
+
+  /** @deprecated Use {@link replyParent.messageId} instead. */
+  public get replyParentMessageID(): string | undefined {
+    return this._replyParentMessageId;
+  }
+
+  /** @deprecated Use {@link replyParent.userId} instead. */
+  public get replyParentUserID(): string | undefined {
+    return this._replyParentUserId;
+  }
+
+  /** @deprecated Use {@link replyParent.userLogin} instead. */
+  public get replyParentUserLogin(): string | undefined {
+    return this._replyParentUserLogin;
+  }
+
+  /** @deprecated Use {@link source.id} instead. */
+  public get sourceID(): string | undefined {
+    return this._sourceId;
+  }
+
+  /** @deprecated Use {@link source.channelID} instead. */
+  public get sourceChannelID(): string | undefined {
+    return this._sourceChannelId;
+  }
+
+  /** @deprecated Use {@link source.badges} instead. */
+  public get sourceBadges(): TwitchBadgesList | undefined {
+    return this._sourceBadges;
+  }
+
+  /** @deprecated Use {@link source.badgesRaw} instead. */
+  public get sourceBadgesRaw(): string | undefined {
+    return this._sourceBadgesRaw;
+  }
+
+  /** @deprecated Use {@link source.badgeInfo} instead. */
+  public get sourceBadgesInfo(): TwitchBadgesList | undefined {
+    return this._sourceBadgeInfo;
+  }
+
+  /** @deprecated Use {@link source.badgeInfoRaw} instead. */
+  public get sourceBadgesInfoRaw(): string | undefined {
+    return this._sourceBadgeInfoRaw;
+  }
 
   public constructor(ircMessage: IRCMessage) {
     super(ircMessage);
@@ -130,94 +384,95 @@ export class PrivmsgMessage
     const { isAction, message } = parseActionAndMessage(
       requireParameter(this, 1),
     );
-    this.messageText = message;
-    this.isAction = isAction;
+    this._content = message;
+    this._action = isAction;
 
-    this.senderUsername = requireNickname(this);
+    this._senderLogin = requireNickname(this);
 
     const tagParser = tagParserFor(this.ircTags);
-    this.channelID = tagParser.requireString("room-id");
+    this._channelRoomId = tagParser.requireString("room-id");
 
-    this.senderUserID = tagParser.requireString("user-id");
+    this._senderId = tagParser.requireString("user-id");
 
-    this.badgeInfo = tagParser.requireBadges("badge-info");
-    this.badgeInfoRaw = tagParser.requireString("badge-info");
+    this._badgeInfo = tagParser.requireBadges("badge-info");
+    this._badgeInfoRaw = tagParser.requireString("badge-info");
 
-    this.badges = tagParser.requireBadges("badges");
-    this.badgesRaw = tagParser.requireString("badges");
+    this._badges = tagParser.requireBadges("badges");
+    this._badgesRaw = tagParser.requireString("badges");
 
-    this.bits = tagParser.getInt("bits");
-    this.bitsRaw = tagParser.getString("bits");
+    this._bits = tagParser.getInt("bits");
+    this._bitsRaw = tagParser.getString("bits");
 
-    this.color = tagParser.getColor("color");
-    this.colorRaw = tagParser.requireString("color");
+    this._color = tagParser.getColor("color");
+    this._colorRaw = tagParser.requireString("color");
 
     // trim: Twitch workaround for unsanitized data, see https://github.com/robotty/dank-twitch-irc/issues/33
-    this.displayName = tagParser.requireString("display-name").trim();
+    this._displayName = tagParser.requireString("display-name").trim();
 
-    this.emotes = tagParser.requireEmotes("emotes", this.messageText);
-    this.emotesRaw = tagParser.requireString("emotes");
+    this._emotes = tagParser.requireEmotes("emotes", this._content);
+    this._emotesRaw = tagParser.requireString("emotes");
 
-    this.flags = tagParser.getFlags("flags", this.messageText);
-    this.flagsRaw = tagParser.getString("flags");
+    this._flags = tagParser.getFlags("flags", this._content);
+    this._flagsRaw = tagParser.getString("flags");
 
-    this.replyParentDisplayName = tagParser.getTrimmedString(
+    this._replyParentDisplayName = tagParser.getTrimmedString(
       "reply-parent-display-name",
     );
-    this.replyParentMessageBody = tagParser.getString("reply-parent-msg-body");
-    this.replyParentMessageID = tagParser.getString("reply-parent-msg-id");
-    this.replyParentUserID = tagParser.getString("reply-parent-user-id");
-    this.replyParentUserLogin = tagParser.getString("reply-parent-user-login");
+    this._replyParentMessageBody = tagParser.getString("reply-parent-msg-body");
+    this._replyParentMessageId = tagParser.getString("reply-parent-msg-id");
+    this._replyParentUserId = tagParser.getString("reply-parent-user-id");
+    this._replyParentUserLogin = tagParser.getString("reply-parent-user-login");
 
-    this.messageID = tagParser.requireString("id");
+    this._id = tagParser.requireString("id");
 
-    this.isMod = tagParser.requireBoolean("mod");
-    this.isModRaw = tagParser.requireString("mod");
+    this._isMod = tagParser.requireBoolean("mod");
+    this._isModRaw = tagParser.requireString("mod");
 
-    this.serverTimestamp = tagParser.requireTimestamp("tmi-sent-ts");
-    this.serverTimestampRaw = tagParser.requireString("tmi-sent-ts");
+    this._timestamp = tagParser.requireTimestamp("tmi-sent-ts");
+    this._timestampRaw = tagParser.requireString("tmi-sent-ts");
 
-    this.sourceID = tagParser.getString("source-id");
-    this.sourceChannelID = tagParser.getString("source-room-id");
-    this.sourceBadges = tagParser.getBadges("source-badges");
-    this.sourceBadgesRaw = tagParser.getString("source-badges");
-    this.sourceBadgesInfo = tagParser.getBadges("source-badge-info");
-    this.sourceBadgesInfoRaw = tagParser.getString("source-badge-info");
+    this._sourceId = tagParser.getString("source-id");
+    this._sourceChannelId = tagParser.getString("source-room-id");
+    this._sourceBadges = tagParser.getBadges("source-badges");
+    this._sourceBadgesRaw = tagParser.getString("source-badges");
+    this._sourceBadgeInfo = tagParser.getBadges("source-badge-info");
+    this._sourceBadgeInfoRaw = tagParser.getString("source-badge-info");
   }
 
   /**
-   * Extracts a plain object only containing the fields defined by the
-   * {@link PrivmsgUserState} interface.
+   * @deprecated Use {@link sender} instead.
    */
+  // eslint-disable-next-line ts/no-deprecated
   public extractUserState(): PrivmsgUserState {
     return {
-      badgeInfo: this.badgeInfo,
-      badgeInfoRaw: this.badgeInfoRaw,
-      badges: this.badges,
-      badgesRaw: this.badgesRaw,
-      color: this.color,
-      colorRaw: this.colorRaw,
-      displayName: this.displayName,
-      isMod: this.isMod,
-      isModRaw: this.isModRaw,
+      badgeInfo: this._badgeInfo,
+      badgeInfoRaw: this._badgeInfoRaw,
+      badges: this._badges,
+      badgesRaw: this._badgesRaw,
+      color: this._color,
+      colorRaw: this._colorRaw,
+      displayName: this._displayName,
+      isMod: this._isMod,
+      isModRaw: this._isModRaw,
     };
   }
 
   public isCheer(): this is CheerPrivmsgMessage {
-    return this.bits != null;
+    return this._bits != null;
   }
 
   public isReply(): this is ReplyPrivmsgMessage {
-    return this.replyParentMessageID != null;
+    return this._replyParentMessageId != null;
   }
 
   /**
    * Whether or not this message is during a shared chat session.
    * This does NOT necessarily mean that the message is originating from another channel.
-   * Check if `message.sourceChannelId !== message.channelId` for that
+   * Check if `message.source.channelID !== message.channel.id` for that
    * @see https://dev.twitch.tv/docs/chat/irc/#shared-chat
    */
+  // eslint-disable-next-line ts/no-deprecated
   public isSharedChat(): this is this & SharedChatFields {
-    return this.sourceID != null;
+    return this._sourceId != null;
   }
 }

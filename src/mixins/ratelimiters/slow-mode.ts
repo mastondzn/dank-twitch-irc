@@ -26,7 +26,6 @@ export class SlowModeRateLimiter implements ClientMixin {
       oldFunction: (channelName: string, ...args: A) => Promise<void>,
       channelName: string,
       ...args: A
-       
     ): Promise<void> => {
       const releaseFunction = await this.acquire(channelName);
       if (!releaseFunction) {

@@ -12,7 +12,7 @@ describe("./message/twitch-types/membership/join", () => {
 
       assert.instanceOf(message, JoinMessage);
 
-      assert.strictEqual(message.channelName, "pajlada");
+      assert.strictEqual(message.channel.login, "pajlada");
       assert.strictEqual(message.joinedUsername, "justinfan11111");
     });
   });

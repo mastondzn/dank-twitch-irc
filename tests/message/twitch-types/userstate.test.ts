@@ -15,7 +15,7 @@ describe("./message/twitch-types/userstate", () => {
 
       assert.instanceOf(message, UserstateMessage);
 
-      assert.strictEqual(message.channelName, "randers");
+      assert.strictEqual(message.channel.login, "randers");
 
       assert.deepStrictEqual(message.badgeInfo, new TwitchBadgesList());
       assert.strictEqual(message.badgeInfoRaw, "");

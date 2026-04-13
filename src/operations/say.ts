@@ -87,11 +87,11 @@ export async function say(
   return awaitResponse(conn, {
     success: (message): message is UserstateMessage =>
       message instanceof UserstateMessage &&
-      message.channelName === channelName,
+      message.channel.login === channelName,
     failure: (message) =>
       message instanceof NoticeMessage &&
-      message.channelName === channelName &&
-      badNoticeIDs.has(message.messageID!),
+      message.channel?.login === channelName &&
+      badNoticeIDs.has(message.id!),
     errorType,
     errorMessage,
   });

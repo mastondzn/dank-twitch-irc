@@ -74,7 +74,6 @@ describe("./message/parser/tag-values", () => {
     });
   });
 
-   
   function checkThrowsUnparseableInt<A extends unknown[]>(
     subject: (
       tagParser: TagValueParser,

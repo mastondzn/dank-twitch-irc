@@ -25,7 +25,9 @@ chat.on("close", (error) => {
   }
 });
 chat.on("PRIVMSG", (msg) => {
-  console.log(`[#${msg.channelName}] ${msg.displayName}: ${msg.messageText}`);
+  console.log(
+    `[#${msg.channel.login}] ${msg.sender.displayName}: ${msg.content}`,
+  );
 });
 // See below for more events
 chat.connect();
@@ -68,8 +70,8 @@ chat.join("forsen");
   chat.on("CLEARCHAT", (msg) => {
     if (msg.isTimeout()) {
       console.log(
-        `${msg.targetUsername} just got timed out for ` +
-          `${msg.banDuration} seconds in channel ${msg.channelName}`,
+        `${msg.target.login} just got timed out for ` +
+          `${msg.banDuration} seconds in channel ${msg.channel.login}`,
       );
     }
   });
@@ -151,12 +153,12 @@ Every `USERNOTICE` message is sent by a user, and always contains a
 every `USERNOTICE` message can have a message that is additionally sent/shared
 from the sending user, for example the "share this message with the streamer"
 message sent with resubs and subs. If no message is sent by the user,
-`msg.messageText` is `undefined`.
+`msg.content` is `undefined`.
 
 `dank-twitch-irc` currently does not have special parsing code for each
-`USERNOTICE` `messageTypeID` (e.g. `sub`, `resub`, `raid`, etc...) - Instead the
+`USERNOTICE` `messageTypeId` (e.g. `sub`, `resub`, `raid`, etc...) - Instead the
 parser assigns all `msg-param-` tags to the `msg.eventParams` object. See below
-on what `msg.eventParams` are available for each of the `messageTypeID`s.
+on what `msg.eventParams` are available for each of the `messageTypeId`s.
 
 ### Sub and resub
 
@@ -190,7 +192,7 @@ chat.on("USERNOTICE", (msg) => {
   if (msg.isSub()) {
     // Leppunen just subscribed to ninja with a tier 1000 (The Ninjas) sub for the first time!
     console.log(
-      `${msg.displayName} just subscribed to ${msg.channelName} with a tier ${msg.eventParams.subPlan} (${msg.eventParams.subPlanName}) sub for the first time!`,
+      `${msg.sender.displayName} just subscribed to ${msg.channel.login} with a tier ${msg.eventParams.subPlan} (${msg.eventParams.subPlanName}) sub for the first time!`,
     );
   } else if (msg.isResub()) {
     let streakMessage = "";
@@ -200,17 +202,17 @@ chat.on("USERNOTICE", (msg) => {
     // Leppunen just resubscribed to ninja with a tier 1000 (The Ninjas) sub!
     // They are resubscribing for 10 months, currently 7 months in a row!
     console.log(
-      `${msg.displayName} just resubscribed to ${msg.channelName} with a tier ${msg.eventParams.subPlan} (${msg.eventParams.subPlanName}) sub! They are resubscribing for ${msg.eventParams.cumulativeMonths} months${streakMessage}!`,
+      `${msg.sender.displayName} just resubscribed to ${msg.channel.login} with a tier ${msg.eventParams.subPlan} (${msg.eventParams.subPlanName}) sub! They are resubscribing for ${msg.eventParams.cumulativeMonths} months${streakMessage}!`,
     );
   }
-  if (msg.messageText == null) {
+  if (msg.content == null) {
     console.log("They did not share a message with the streamer.");
   } else {
     // you also have access to lots of other properties also present on PRIVMSG messages,
-    // such as msg.badges, msg.senderUsername, msg.badgeInfo, msg.bits/msg.isCheer(),
-    // msg.color, msg.emotes, msg.messageID, msg.serverTimestamp, etc...
+    // such as msg.sender.badges, msg.sender.login, msg.sender.badgeInfo, msg.bits/msg.isCheer(),
+    // msg.sender.color, msg.emotes, msg.id, msg.timestamp, etc...
     console.log(
-      `${msg.displayName} shared the following message with the streamer: ${msg.messageText}`,
+      `${msg.sender.displayName} shared the following message with the streamer: ${msg.content}`,
     );
   }
 });
@@ -239,14 +241,14 @@ chat.on("USERNOTICE", (msg) => {
    * }
    * Sender user of the USERNOTICE message is the user raiding this channel.
    * Note that the display name and login present in msg.eventParams are
-   * the same as msg.displayName and msg.senderUsername, so it doesn't matter
+   * the same as msg.sender.displayName and msg.sender.login, so it doesn't matter
    * which one you use (although I recommend the properties directly on the
    * message object, not in eventParams)
    */
   // source user is the channel/streamer raiding
   // Leppunen just raided Supinic with 12 viewers!
   console.log(
-    `${msg.displayName} just raided ${msg.channelName} with ${msg.eventParams.viewerCount} viewers!`,
+    `${msg.sender.displayName} just raided ${msg.channel.login} with ${msg.eventParams.viewerCount} viewers!`,
   );
 });
 ```
@@ -268,7 +270,7 @@ chat.on("USERNOTICE", (msg) => {
    *   "giftMonths": 5,
    *   "giftMonthsRaw": "5",
    *   "recipientDisplayName": "Leppunen",
-   *   "recipientID": "42239452",
+   *   "recipientId": "42239452",
    *   "recipientUsername": "leppunen",
    *   "subPlan": "1000",
    *   "subPlanName": "The Ninjas",
@@ -280,17 +282,17 @@ chat.on("USERNOTICE", (msg) => {
   if (msg.eventParams.months === 1) {
     // Leppunen just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
     console.log(
-      `${msg.displayName} just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channelName}!`,
+      `${msg.sender.displayName} just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channel.login}!`,
     );
   } else {
     // Leppunen just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
     console.log(
-      `${msg.displayName} just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channelName}, that's ${msg.eventParams.months} in a row!`,
+      `${msg.sender.displayName} just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channel.login}, that's ${msg.eventParams.months} in a row!`,
     );
   }
   // note: if the subgift was from an anonymous user, the sender user for the USERNOTICE message will be
   // AnAnonymousGifter (user ID 274598607)
-  if (msg.senderUserID === "274598607") {
+  if (msg.sender.id === "274598607") {
     console.log("That (re)sub was gifted anonymously!");
   }
 });
@@ -311,7 +313,7 @@ chat.on("USERNOTICE", (msg) => {
    *   "months": 5,
    *   "monthsRaw": "5",
    *   "recipientDisplayName": "Leppunen",
-   *   "recipientID": "42239452",
+   *   "recipientId": "42239452",
    *   "recipientUsername": "leppunen",
    *   "subPlan": "1000",
    *   "subPlanName": "The Ninjas"
@@ -323,12 +325,12 @@ chat.on("USERNOTICE", (msg) => {
   if (msg.eventParams.months === 1) {
     // An anonymous gifter just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
     console.log(
-      `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channelName}!`,
+      `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channel.login}!`,
     );
   } else {
     // An anonymous gifter just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
     console.log(
-      `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channelName}, that's ${msg.eventParams.months} in a row!`,
+      `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channel.login}, that's ${msg.eventParams.months} in a row!`,
     );
   }
 });
@@ -359,7 +361,7 @@ chat.on("USERNOTICE", (msg) => {
    */
   // Leppunen is continuing their ninja gift sub they got from an anonymous user!
   console.log(
-    `${msg.displayName} is continuing their ${msg.channelName} gift sub they got from an anonymous user!`,
+    `${msg.sender.displayName} is continuing their ${msg.channel.login} gift sub they got from an anonymous user!`,
   );
 });
 ```
@@ -389,7 +391,7 @@ chat.on("USERNOTICE", (msg) => {
    */
   // Leppunen is continuing their ninja gift sub they got from Krakenbul!
   console.log(
-    `${msg.displayName} is continuing their ${msg.channelName} gift sub they got from ${msg.msgParam.senderName}!`,
+    `${msg.sender.displayName} is continuing their ${msg.channel.login} gift sub they got from ${msg.msgParam.senderName}!`,
   );
 });
 ```
@@ -420,7 +422,7 @@ chat.on("USERNOTICE", (msg) => {
   // Leppunen is new to ninja's chat! Say hello!
   if (msg.eventParams.ritualName === "new_chatter") {
     console.log(
-      `${msg.displayName} is new to ${msg.channelName}'s chat! Say hello!`,
+      `${msg.sender.displayName} is new to ${msg.channel.login}'s chat! Say hello!`,
     );
   } else {
     console.warn(
@@ -452,7 +454,7 @@ chat.on("USERNOTICE", (msg) => {
    */
   // Leppunen just earned themselves the 10000 bits badge in ninja's channel!
   console.log(
-    `${msg.displayName} just earned themselves the ${msg.threshold} bits badge in ${msg.channelName}'s channel!`,
+    `${msg.sender.displayName} just earned themselves the ${msg.threshold} bits badge in ${msg.channel.login}'s channel!`,
   );
 });
 ```
@@ -482,13 +484,13 @@ chat.on("USERNOTICE", (msg) => {
    */
   // mastondzn watched 15 consecutive streams this month and sparked a watch streak!
   console.log(
-    `${msg.displayName} watched ${msg.value} consecutive streams this month and sparked a watch streak!`,
+    `${msg.sender.displayName} watched ${msg.value} consecutive streams this month and sparked a watch streak!`,
   );
 
   // Users are able to share a message with a milestone
-  if (msg.messageText) {
+  if (msg.content) {
     console.log(
-      `${msg.displayName} shared the following message with the streamer: ${msg.messageText}`,
+      `${msg.sender.displayName} shared the following message with the streamer: ${msg.content}`,
     );
   }
 });
@@ -510,7 +512,7 @@ chat.on("USERNOTICE", (msg) => {
     }
   }
 
-  if (msg.isSharedChat() && msg.channelID !== msg.sourceChannelID) {
+  if (msg.isSharedChat() && msg.channel.id !== msg.source.channelID) {
     // handle messages that originate from a different chat
   }
 });
@@ -521,7 +523,7 @@ chat.on("PRIVMSG", (msg) => {
     // NOTE: this does not necessarily mean that the message originates from a different chat
   }
 
-  if (msg.isSharedChat() && msg.channelID !== msg.sourceChannelID) {
+  if (msg.isSharedChat() && msg.channel.id !== msg.source.channelID) {
     // handle messages that originate from a different chat
   }
 });
@@ -566,7 +568,7 @@ Extra functionality:
 Note that channel names in the above functions always refer to the "login name"
 of a twitch channel. Channel names may not be capitalized, e.g. `Forsen` would
 be invalid, but `forsen` not. This library also does not accept the leading `#`
-character and never returns it on any message objects (e.g. `msg.channelName`
+character and never returns it on any message objects (e.g. `msg.channel.login`
 would be `forsen`, not `#forsen`).
 
 ## API Documentation

@@ -19,14 +19,14 @@ describe("./message/twitch-types/clearmsg", () => {
         Object.getPrototypeOf(message),
         ClearmsgMessage.prototype,
       );
-      assert.strictEqual(message.channelName, "randers");
-      assert.strictEqual(message.targetUsername, "supibot");
+      assert.strictEqual(message.channel.login, "randers");
+      assert.strictEqual(message.target.login, "supibot");
       assert.strictEqual(
-        message.targetMessageID,
+        message.target.messageId,
         "25fd76d9-4731-4907-978e-a391134ebd67",
       );
       assert.strictEqual(
-        message.targetMessageContent,
+        message.target.content,
         "Pong! Uptime: 6h, 15m; Temperature: 54.8°C; " +
           "Latency to TMI: 183ms; Commands used: 795",
       );

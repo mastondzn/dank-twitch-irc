@@ -8,8 +8,8 @@ export function matchingNotice(
   return (message: IRCMessage) => {
     return (
       message instanceof NoticeMessage &&
-      message.channelName === channelName &&
-      noticeIDs.includes(message.messageID!)
+      message.channel?.login === channelName &&
+      noticeIDs.includes(message.id!)
     );
   };
 }

@@ -16,8 +16,8 @@ describe("./message/twitch-types/clearchat", () => {
 
       assert.instanceOf(message, ClearchatMessage);
 
-      assert.strictEqual(message.channelName, "randers");
-      assert.strictEqual(message.targetUsername, "weeb123");
+      assert.strictEqual(message.channel.login, "randers");
+      assert.strictEqual(message.target.login, "weeb123");
       assert.strictEqual(message.banDuration, 600);
       assert.isFalse(message.wasChatCleared());
       assert.isTrue(message.isTimeout());
@@ -35,8 +35,8 @@ describe("./message/twitch-types/clearchat", () => {
 
       assert.instanceOf(message, ClearchatMessage);
 
-      assert.strictEqual(message.channelName, "randers");
-      assert.strictEqual(message.targetUsername, "weeb123");
+      assert.strictEqual(message.channel.login, "randers");
+      assert.strictEqual(message.target.login, "weeb123");
       assert.isUndefined(message.banDuration);
       assert.isFalse(message.wasChatCleared());
       assert.isFalse(message.isTimeout());
@@ -53,8 +53,8 @@ describe("./message/twitch-types/clearchat", () => {
 
       assert.instanceOf(message, ClearchatMessage);
 
-      assert.strictEqual(message.channelName, "randers");
-      assert.isUndefined(message.targetUsername);
+      assert.strictEqual(message.channel.login, "randers");
+      assert.isUndefined(message.target.login);
       assert.isUndefined(message.banDuration);
       assert.isTrue(message.wasChatCleared());
       assert.isFalse(message.isTimeout());

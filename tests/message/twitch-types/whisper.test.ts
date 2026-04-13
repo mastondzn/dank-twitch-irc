@@ -16,31 +16,31 @@ describe("./message/twitch-types/whisper", () => {
 
       assert.instanceOf(message, WhisperMessage);
 
-      assert.strictEqual(message.messageText, "Riftey Kappa");
+      assert.strictEqual(message.content, "Riftey Kappa");
 
-      assert.strictEqual(message.senderUsername, "pajbot");
-      assert.strictEqual(message.senderUserID, "82008718");
-      assert.strictEqual(message.displayName, "pajbot");
+      assert.strictEqual(message.sender.login, "pajbot");
+      assert.strictEqual(message.sender.id, "82008718");
+      assert.strictEqual(message.sender.displayName, "pajbot");
 
       assert.strictEqual(message.recipientUsername, "randers");
 
-      assert.deepStrictEqual(message.badges, new TwitchBadgesList());
-      assert.strictEqual(message.badgesRaw, "");
+      assert.deepStrictEqual(message.sender.badges, new TwitchBadgesList());
+      assert.strictEqual(message.sender.badgesRaw, "");
 
-      assert.deepStrictEqual(message.color, {
+      assert.deepStrictEqual(message.sender.color, {
         r: 0x2e,
         g: 0x8b,
         b: 0x57,
       });
-      assert.strictEqual(message.colorRaw, "#2E8B57");
+      assert.strictEqual(message.sender.colorRaw, "#2E8B57");
 
       assert.deepStrictEqual(message.emotes, [
         new TwitchEmote("25", 7, 12, "Kappa"),
       ]);
       assert.strictEqual(message.emotesRaw, "25:7-11");
 
-      assert.strictEqual(message.messageID, "2034");
-      assert.strictEqual(message.threadID, "40286300_82008718");
+      assert.strictEqual(message.id, "2034");
+      assert.strictEqual(message.threadId, "40286300_82008718");
     });
 
     it("trims spaces at the end of display names", () => {
@@ -48,7 +48,7 @@ describe("./message/twitch-types/whisper", () => {
         String.raw`@badges=;color=#2E8B57;display-name=pajbot\s;emotes=25:7-11;message-id=2034;thread-id=40286300_82008718;turbo=0;user-id=82008718;user-type= :pajbot!pajbot@pajbot.tmi.twitch.tv WHISPER randers :Riftey Kappa`,
       ) as WhisperMessage;
 
-      assert.strictEqual(message.displayName, "pajbot");
+      assert.strictEqual(message.sender.displayName, "pajbot");
     });
   });
 });

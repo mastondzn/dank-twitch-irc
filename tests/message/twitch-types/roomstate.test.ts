@@ -151,9 +151,9 @@ describe("./message/twitch-types/roomstate", () => {
 
       assert.instanceOf(message, RoomstateMessage);
 
-      assert.strictEqual(message.channelName, "randers");
+      assert.strictEqual(message.channel.login, "randers");
 
-      assert.strictEqual(message.channelID, "40286300");
+      assert.strictEqual(message.channel.id, "40286300");
 
       assert.strictEqual(message.emoteOnly, false);
       assert.strictEqual(message.emoteOnlyRaw, "0");
@@ -198,9 +198,8 @@ describe("./message/twitch-types/roomstate", () => {
 
       assert.instanceOf(message, RoomstateMessage);
 
-      assert.strictEqual(message.channelName, "randers");
-
-      assert.strictEqual(message.channelID, "40286300");
+      assert.strictEqual(message.channel.login, "randers");
+      assert.strictEqual(message.channel.id, "40286300");
 
       assert.strictEqual(message.emoteOnly, true);
       assert.strictEqual(message.emoteOnlyRaw, "1");

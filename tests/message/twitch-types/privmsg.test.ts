@@ -71,61 +71,69 @@ describe("./message/twitch-types/privmsg", () => {
 
       assert.instanceOf(message, PrivmsgMessage);
 
-      assert.strictEqual(message.channelName, "randers");
+      assert.strictEqual(message.channel.login, "randers");
 
-      assert.strictEqual(message.messageText, "test");
+      assert.strictEqual(message.content, "test");
       assert.isFalse(message.isAction);
 
-      assert.strictEqual(message.senderUsername, "randers");
+      assert.strictEqual(message.sender.login, "randers");
 
-      assert.strictEqual(message.senderUserID, "40286300");
+      assert.strictEqual(message.sender.id, "40286300");
 
       assert.deepStrictEqual(
-        message.badgeInfo,
+        message.sender.badgeInfo,
         new TwitchBadgesList(new TwitchBadge("subscriber", "5")),
       );
-      assert.strictEqual(message.badgeInfoRaw, "subscriber/5");
+      assert.strictEqual(message.sender.badgeInfoRaw, "subscriber/5");
 
       assert.deepStrictEqual(
-        message.badges,
+        message.sender.badges,
         new TwitchBadgesList(
           new TwitchBadge("broadcaster", "1"),
           new TwitchBadge("subscriber", "0"),
         ),
       );
-      assert.strictEqual(message.badgesRaw, "broadcaster/1,subscriber/0");
+      assert.strictEqual(
+        message.sender.badgesRaw,
+        "broadcaster/1,subscriber/0",
+      );
 
       assert.isUndefined(message.bits);
       assert.isUndefined(message.bitsRaw);
 
-      assert.isUndefined(message.replyParentDisplayName);
-      assert.isUndefined(message.replyParentMessageBody);
-      assert.isUndefined(message.replyParentMessageID);
-      assert.isUndefined(message.replyParentUserID);
-      assert.isUndefined(message.replyParentUserLogin);
+      assert.isUndefined(message.replyParent?.displayName);
+      assert.isUndefined(message.replyParent?.messageBody);
+      assert.isUndefined(message.replyParent?.messageId);
+      assert.isUndefined(message.replyParent?.userId);
+      assert.isUndefined(message.replyParent?.userLogin);
 
-      assert.deepStrictEqual(message.color, { r: 0x19, g: 0xe6, b: 0xe6 });
-      assert.strictEqual(message.colorRaw, "#19E6E6");
+      assert.deepStrictEqual(message.sender.color, {
+        r: 0x19,
+        g: 0xe6,
+        b: 0xe6,
+      });
+      assert.strictEqual(message.sender.colorRaw, "#19E6E6");
 
-      assert.strictEqual(message.displayName, "randers");
+      assert.strictEqual(message.sender.displayName, "randers");
 
       assert.deepStrictEqual(message.emotes, []);
       assert.strictEqual(message.emotesRaw, "");
 
-      assert.strictEqual(
-        message.messageID,
-        "7eb848c9-1060-4e5e-9f4c-612877982e79",
-      );
+      assert.strictEqual(message.id, "7eb848c9-1060-4e5e-9f4c-612877982e79");
 
-      assert.isFalse(message.isMod);
-      assert.strictEqual(message.isModRaw, "0");
+      assert.isFalse(message.sender.isMod);
+      assert.strictEqual(message.sender.isModRaw, "0");
 
-      assert.strictEqual(message.channelID, "40286300");
+      assert.strictEqual(message.channel.id, "40286300");
 
-      assert.strictEqual(message.serverTimestamp.getTime(), 1_563_096_499_780);
-      assert.strictEqual(message.serverTimestampRaw, "1563096499780");
+      assert.strictEqual(message.timestamp.getTime(), 1_563_096_499_780);
+      assert.strictEqual(message.timestampRaw, "1563096499780");
 
-      assert.deepStrictEqual(message.extractUserState(), {
+      assert.deepStrictEqual(message.sender, {
+        login: "randers",
+        username: "randers",
+        displayName: "randers",
+        id: "40286300",
         badgeInfo: new TwitchBadgesList(new TwitchBadge("subscriber", "5")),
         badgeInfoRaw: "subscriber/5",
         badges: new TwitchBadgesList(
@@ -135,7 +143,6 @@ describe("./message/twitch-types/privmsg", () => {
         badgesRaw: "broadcaster/1,subscriber/0",
         color: { r: 0x19, g: 0xe6, b: 0xe6 },
         colorRaw: "#19E6E6",
-        displayName: "randers",
         isMod: false,
         isModRaw: "0",
       });
@@ -159,11 +166,11 @@ describe("./message/twitch-types/privmsg", () => {
 
       assert.isTrue(message.isReply());
 
-      assert.strictEqual(message.replyParentDisplayName, "OtherUser");
-      assert.strictEqual(message.replyParentMessageBody, "Test: Abc");
-      assert.strictEqual(message.replyParentMessageID, "abcd");
-      assert.strictEqual(message.replyParentUserID, "123");
-      assert.strictEqual(message.replyParentUserLogin, "otheruser");
+      assert.strictEqual(message.replyParent?.displayName, "OtherUser");
+      assert.strictEqual(message.replyParent?.messageBody, "Test: Abc");
+      assert.strictEqual(message.replyParent?.messageId, "abcd");
+      assert.strictEqual(message.replyParent?.userId, "123");
+      assert.strictEqual(message.replyParent?.userLogin, "otheruser");
     });
 
     it("trims spaces at the end of display names", () => {
@@ -177,8 +184,7 @@ describe("./message/twitch-types/privmsg", () => {
         messageText,
       ) as PrivmsgMessage;
 
-      assert.strictEqual(message.displayName, "randers");
-      assert.strictEqual(message.extractUserState().displayName, "randers");
+      assert.strictEqual(message.sender.displayName, "randers");
     });
 
     it('should be able to parse a reply PRIVMSG message that has the reply message body "foo=bar"', () => {
@@ -199,14 +205,14 @@ describe("./message/twitch-types/privmsg", () => {
 
       assert.isTrue(message.isReply());
 
-      assert.strictEqual(message.replyParentDisplayName, "SomeUser");
-      assert.strictEqual(message.replyParentMessageBody, "foo=bar");
+      assert.strictEqual(message.replyParent?.displayName, "SomeUser");
+      assert.strictEqual(message.replyParent?.messageBody, "foo=bar");
       assert.strictEqual(
-        message.replyParentMessageID,
+        message.replyParent?.messageId,
         "725d8358-d934-42c7-a606-a0b3ed82a642",
       );
-      assert.strictEqual(message.replyParentUserID, "441347665");
-      assert.strictEqual(message.replyParentUserLogin, "someuser");
+      assert.strictEqual(message.replyParent?.userId, "441347665");
+      assert.strictEqual(message.replyParent?.userLogin, "someuser");
     });
 
     it("should be able to parse shared chat session PRIVMSG messages", () => {
@@ -225,8 +231,8 @@ describe("./message/twitch-types/privmsg", () => {
       assert.instanceOf(message, PrivmsgMessage);
       assert.isTrue(message.isSharedChat());
 
-      assert.strictEqual(message.sourceChannelID, "92038375");
-      assert.strictEqual(message.channelID, "45098797");
+      assert.strictEqual(message.source?.channelId, "92038375");
+      assert.strictEqual(message.channel.id, "45098797");
     });
 
     it("should be able to parse shared chat session PRIVMSG messages that are also replies", () => {
@@ -248,10 +254,10 @@ describe("./message/twitch-types/privmsg", () => {
       assert.instanceOf(message, PrivmsgMessage);
       assert.isTrue(message.isSharedChat());
       assert.isTrue(message.isReply());
-      assert.strictEqual(message.replyParentDisplayName, "ATruthfulLiar18");
-      assert.strictEqual(message.replyParentMessageBody, "!dpmlol");
-      assert.strictEqual(message.channelID, "92038375");
-      assert.strictEqual(message.sourceChannelID, "92038375");
+      assert.strictEqual(message.replyParent?.displayName, "ATruthfulLiar18");
+      assert.strictEqual(message.replyParent?.messageBody, "!dpmlol");
+      assert.strictEqual(message.channel.id, "92038375");
+      assert.strictEqual(message.source?.channelId, "92038375");
     });
   });
 });
