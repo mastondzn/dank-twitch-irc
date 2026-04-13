@@ -33,7 +33,6 @@ export interface WebSocketTransportConfiguration {
 
 export interface PresetWebSocketTransportConfiguration {
   type: "websocket";
-  secure: boolean;
 }
 
 export type TransportConfiguration =

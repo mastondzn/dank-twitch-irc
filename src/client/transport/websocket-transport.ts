@@ -1,7 +1,6 @@
 import { type Duplex, PassThrough } from "node:stream";
 
 import duplexify from "duplexify";
-import WebSocketDuplex from "simple-websocket";
 
 import type { Transport } from "./transport";
 import type { ExpandedWebSocketTransportConfiguration } from "~/config/expanded";
@@ -12,7 +11,9 @@ export class WebSocketTransport implements Transport {
   private readonly writable: PassThrough;
 
   private readonly config: ExpandedWebSocketTransportConfiguration;
-  private wsStream: WebSocketDuplex | undefined;
+  private ws: WebSocket | undefined;
+  private sendBuffer: string[] = [];
+  private opened = false;
 
   public constructor(config: ExpandedWebSocketTransportConfiguration) {
     this.config = config;
@@ -26,16 +27,39 @@ export class WebSocketTransport implements Transport {
   }
 
   public connect(connectionListener?: () => void): void {
-    this.wsStream = new WebSocketDuplex({
-      url: this.config.url,
-      decodeStrings: false,
-      objectMode: true,
-    });
-    if (connectionListener != null) {
-      this.wsStream.once("connect", connectionListener);
-    }
+    this.ws = new WebSocket(this.config.url);
 
-    this.wsStream.pipe(this.readable);
-    this.writable.pipe(this.wsStream);
+    this.writable.on("data", (data: unknown) => {
+      if (this.opened) {
+        this.ws?.send(String(data));
+      } else {
+        this.sendBuffer.push(String(data));
+      }
+    });
+
+    this.ws.addEventListener("message", (event: MessageEvent) => {
+      this.readable.push(event.data);
+    });
+
+    this.ws.addEventListener("error", (event: Event) => {
+      const error =
+        event instanceof ErrorEvent
+          ? event.error
+          : new Error("WebSocket error");
+      this.readable.destroy(error);
+    });
+
+    this.ws.addEventListener("close", () => {
+      this.readable.push(null);
+    });
+
+    this.ws.addEventListener("open", () => {
+      this.opened = true;
+      for (const data of this.sendBuffer) {
+        this.ws?.send(data);
+      }
+      this.sendBuffer = [];
+      connectionListener?.();
+    });
   }
 }
