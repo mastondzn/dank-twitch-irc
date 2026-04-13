@@ -25,7 +25,7 @@ jobs:
           cache: true
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: "https://registry.npmjs.org"
@@ -38,11 +38,11 @@ jobs:
 
         # We make sure ci is passing before releasing
       - name: Wait for CI to finish
-        uses: lewagon/wait-on-check-action@v1.3.3
+        uses: lewagon/wait-on-check-action@v1.6.0
         if: github.event_name == 'push'
         with:
           ref: ${{ github.ref }}
-          check-name: ci (22)
+          check-name: ci (24)
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           verbose: true
           wait-interval: 8
