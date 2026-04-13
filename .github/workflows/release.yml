@@ -48,7 +48,7 @@ jobs:
           wait-interval: 8
 
       - name: Create release
-        run: pnpm publish --no-git-checks
+        run: pnpm publish --no-git-checks --access public
 
       - run: pnpx changelogithub
         env:
