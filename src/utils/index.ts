@@ -3,7 +3,6 @@ export * from "./apply-function-replacements";
 export * from "./base-error";
 export * from "./editable-timeout";
 export * from "./find-and-push-to-end";
-export * from "./ignore-errors";
 export * from "./is-anonymous-username";
 export * from "./kebab-to-camel";
 export * from "./pick-by";

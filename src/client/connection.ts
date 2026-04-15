@@ -15,7 +15,6 @@ import { sendLogin } from "~/operations/login";
 import { requestCapabilities } from "~/operations/request-capabilities";
 import { anyCauseInstanceof } from "~/utils/any-cause-instanceof";
 import { debugLogger } from "~/utils/debug-logger";
-import { ignoreErrors } from "~/utils/ignore-errors";
 import { validateIRCCommand } from "~/validation/irc-command";
 
 let connectionIDCounter = 0;
@@ -61,10 +60,11 @@ export class SingleConnection extends BaseClient {
       this.transport.stream.destroy(emittedError);
     });
 
-    createInterface({ input: this.transport.stream, crlfDelay: Infinity }).on(
-      "line",
-      this.handleLine.bind(this),
-    );
+    createInterface({ input: this.transport.stream, crlfDelay: Infinity })
+      .on("line", this.handleLine.bind(this))
+      // we need to have an error handler to prevent unhandled "error" events on the readline interface, which would cause the process to crash
+      // eslint-disable-next-line ts/no-empty-function
+      .on("error", () => {});
 
     replyToServerPing(this);
     handleReconnectMessage(this);
@@ -105,7 +105,11 @@ export class SingleConnection extends BaseClient {
         ),
       ];
 
-      Promise.all(promises).then(() => this.emitReady(), ignoreErrors);
+      Promise.all(promises).then(
+        () => this.emitReady(),
+        // eslint-disable-next-line ts/no-empty-function
+        () => {},
+      );
     }
 
     this.transport.connect(() => this.emitConnected());
