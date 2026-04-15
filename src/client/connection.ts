@@ -1,4 +1,4 @@
-import split2 from "split2";
+import { createInterface } from "node:readline";
 
 import type { Transport } from "./transport/transport";
 import type { ResponseAwaiter } from "~/await/await-response";
@@ -61,7 +61,10 @@ export class SingleConnection extends BaseClient {
       this.transport.stream.destroy(emittedError);
     });
 
-    this.transport.stream.pipe(split2()).on("data", this.handleLine.bind(this));
+    createInterface({ input: this.transport.stream, crlfDelay: Infinity }).on(
+      "line",
+      this.handleLine.bind(this),
+    );
 
     replyToServerPing(this);
     handleReconnectMessage(this);
