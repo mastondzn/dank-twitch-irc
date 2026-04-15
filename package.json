@@ -40,7 +40,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown --entry ./src/index.ts --out ./dist --unbundle --sourcemap",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier . --write !pnpm-lock.yaml",
