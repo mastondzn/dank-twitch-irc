@@ -531,6 +531,47 @@ chat.on("PRIVMSG", (msg) => {
 
 Shared chat messages are duplicated if you are joined to 2 channels that are sharing each other's chat. [See Twitch's Documentation](https://dev.twitch.tv/docs/chat/irc/#shared-chat).
 
+## Collecting Messages
+
+`chat.collectMessages()` returns an async generator that yields incoming messages. It automatically cleans up listeners when the client closes or you break out of the loop.
+
+```ts
+// Collect all incoming messages (typed as IRCMessage)
+for await (const msg of chat.collectMessages()) {
+  console.log(msg.ircCommand, msg.rawSource);
+}
+```
+
+```ts
+// Filter to a specific message type — the type guard narrows `msg`
+import { PrivmsgMessage } from "@mastondzn/dank-twitch-irc";
+
+for await (const msg of chat.collectMessages({
+  filter: (msg): msg is PrivmsgMessage => msg instanceof PrivmsgMessage,
+})) {
+  console.log(
+    `[${msg.channel.login}] ${msg.sender.displayName}: ${msg.content}`,
+  );
+}
+```
+
+```ts
+// Collect only chat messages (PrivmsgMessage) with a predicate
+for await (const msg of chat.collectChatMessages({
+  filter: (msg) =>
+    msg.sender.login === "forsen" && msg.channel.login === "forsen",
+})) {
+  console.log(`forsen said in his own channel: ${msg.content}`);
+}
+```
+
+```ts
+// Collect messages for 5 seconds then stop
+for await (const msg of chat.collectMessages({ timeout: 5000 })) {
+  console.log(msg.ircCommand, msg.rawSource);
+}
+```
+
 ## ChatClient API
 
 You probably will want to use these functions on `ChatClient` most frequently:
@@ -552,6 +593,8 @@ You probably will want to use these functions on `ChatClient` most frequently:
   `/me` message in the given channel.
 - `chat.ping()` - Send a `PING` on a connection from the pool, and awaits the
   `PONG` response. You can use this to measure server latency, for example.
+- `chat.collectMessages(options?)` - Returns an async generator that yields incoming messages. See the "Collecting Messages" section above for details and examples.
+- `chat.collectChatMessages(options?)` - Shorthand for `collectMessages` that filters to `PrivmsgMessage` only. See the "Collecting Messages" section above.
 
 Extra functionality:
 

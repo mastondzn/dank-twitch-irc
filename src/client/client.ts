@@ -1,9 +1,11 @@
 import type { ClientConfiguration } from "~/config/config";
+import type { IRCMessage } from "~/message/irc/irc-message";
 import type { ClientMixin, ConnectionMixin } from "~/mixins/base-mixin";
 import type { ConnectionPool } from "~/mixins/connection-pool";
 import { BaseClient } from "./base-client";
 import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
+import { PrivmsgMessage } from "~/message";
 import { ConnectionRateLimiter } from "~/mixins/ratelimiters/connection";
 import { JoinRateLimiter } from "~/mixins/ratelimiters/join";
 import { PrivmsgMessageRateLimiter } from "~/mixins/ratelimiters/privmsg";
@@ -331,6 +333,96 @@ export class ChatClient extends BaseClient {
     }
 
     this.emit("reconnect", conn);
+  }
+
+  /**
+   * @param options the options object
+   * @param options.filter only messages for which this function returns true will be yielded. This can be used with type guards to create typed async generators, e.g. for only chat messages (PrivmsgMessage).
+   * @param options.limit the generator will end after yielding this many messages
+   * @param options.timeout the generator will end after this many milliseconds
+   * @returns An async generator yielding matching messages
+   */
+  public async *collectMessages<
+    TMessage extends IRCMessage = IRCMessage,
+  >(options?: {
+    filter?: (message: IRCMessage) => message is TMessage;
+    limit?: number;
+    timeout?: number;
+  }): AsyncGenerator<TMessage, void, void> {
+    const { filter, limit, timeout } = options ?? {};
+    const queue: IRCMessage[] = [];
+    let resolveNext: ((value: IRCMessage | null) => void) | null = null;
+    let closed = this.closed;
+    let yielded = 0;
+
+    const onMessage = (message: IRCMessage): void => {
+      if (closed) return;
+      if (filter && !filter(message)) return;
+      if (resolveNext) {
+        resolveNext(message);
+        resolveNext = null;
+      } else {
+        queue.push(message);
+      }
+    };
+
+    const onClose = (): void => {
+      closed = true;
+      if (resolveNext) {
+        resolveNext(null);
+        resolveNext = null;
+      }
+    };
+
+    this.on("message", onMessage);
+    this.on("close", onClose);
+
+    const timer = timeout == null ? null : setTimeout(() => onClose(), timeout);
+
+    try {
+      // eslint-disable-next-line no-unmodified-loop-condition -- it is modified in the onClose callback
+      while (!closed) {
+        if (queue.length > 0) {
+          yield queue.shift() as TMessage;
+          yielded++;
+          if (limit != null && yielded >= limit) return;
+        } else {
+          const message = await new Promise<IRCMessage | null>((resolve) => {
+            resolveNext = resolve;
+          });
+          if (message === null) {
+            return;
+          }
+          yield message as TMessage;
+          yielded++;
+          if (limit != null && yielded >= limit) return;
+        }
+      }
+    } finally {
+      if (timer != null) clearTimeout(timer);
+      this.off("message", onMessage);
+      this.off("close", onClose);
+    }
+  }
+
+  /**
+   * @param options the options object
+   * @param options.filter only chat messages for which this function returns true will be yielded
+   * @param options.limit the generator will end after yielding this many messages
+   * @param options.timeout the generator will end after this many milliseconds
+   * @returns An async generator yielding matching messages
+   */
+  public collectChatMessages(options?: {
+    filter?: (message: PrivmsgMessage) => boolean;
+    limit?: number;
+    timeout?: number;
+  }): AsyncGenerator<PrivmsgMessage, void, void> {
+    return this.collectMessages({
+      ...options,
+      filter: (message): message is PrivmsgMessage =>
+        message instanceof PrivmsgMessage &&
+        (options?.filter?.(message) ?? true),
+    });
   }
 
   /**
