@@ -8,9 +8,6 @@ import { setDefaults } from "~/utils/set-defaults";
 export type Condition = (message: IRCMessage) => boolean;
 export type NoResponseAction = "success" | "failure";
 
-export const alwaysFalse: Condition = (): false => false;
-export const alwaysTrue: Condition = (): true => true;
-
 export interface AwaitConfig {
   /**
    * If this condition evaluates to true on any incoming message, the promise is resolved with the message
@@ -63,8 +60,8 @@ export interface AwaitConfig {
 }
 
 const configDefaults = {
-  success: alwaysFalse,
-  failure: alwaysFalse,
+  success: () => false,
+  failure: () => false,
   timeout: 2000,
   noResponseAction: "failure",
 };

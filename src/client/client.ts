@@ -27,7 +27,6 @@ import { validateMessageID } from "~/validation/reply";
 const log = debugLogger("dank-twitch-irc:client");
 
 export type ConnectionPredicate = (conn: SingleConnection) => boolean;
-const alwaysTrue = (): true => true as const;
 
 export class ChatClient extends BaseClient {
   public get wantedChannels(): Set<string> {
@@ -342,7 +341,7 @@ export class ChatClient extends BaseClient {
    * @param predicate The predicate the connection must fulfill.
    */
   public requireConnection(
-    predicate: ConnectionPredicate = alwaysTrue,
+    predicate: ConnectionPredicate = () => true,
   ): SingleConnection {
     return (
       findAndPushToEnd(this.connections, predicate) ?? this.newConnection()
