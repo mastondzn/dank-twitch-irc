@@ -338,6 +338,7 @@ export class ChatClient extends BaseClient {
   /**
    * @param options the options object
    * @param options.filter only messages for which this function returns true will be yielded. This can be used with type guards to create typed async generators, e.g. for only chat messages (PrivmsgMessage).
+   * @param options.stopOn the generator will end after yielding a message for which this predicate returns true
    * @param options.limit the generator will end after yielding this many messages
    * @param options.timeout the generator will end after this many milliseconds
    * @returns An async generator yielding matching messages
@@ -346,16 +347,17 @@ export class ChatClient extends BaseClient {
     TMessage extends IRCMessage = IRCMessage,
   >(options?: {
     filter?: (message: IRCMessage) => message is TMessage;
+    stopOn?: (message: TMessage) => boolean;
     limit?: number;
     timeout?: number;
   }): AsyncGenerator<TMessage, void, void> {
-    const { filter, limit, timeout } = options ?? {};
+    const { filter, limit, timeout, stopOn } = options ?? {};
     const queue: IRCMessage[] = [];
     let resolveNext: ((value: IRCMessage | null) => void) | null = null;
     let closed = this.closed;
     let yielded = 0;
 
-    const onMessage = (message: IRCMessage): void => {
+    function onMessage(message: IRCMessage): void {
       if (closed) return;
       if (filter && !filter(message)) return;
       if (resolveNext) {
@@ -364,28 +366,32 @@ export class ChatClient extends BaseClient {
       } else {
         queue.push(message);
       }
-    };
+    }
 
-    const onClose = (): void => {
+    function onClose(): void {
       closed = true;
       if (resolveNext) {
         resolveNext(null);
         resolveNext = null;
       }
-    };
+    }
 
     this.on("message", onMessage);
     this.on("close", onClose);
 
-    const timer = timeout == null ? null : setTimeout(() => onClose(), timeout);
+    const timer = timeout ? setTimeout(() => onClose(), timeout) : null;
 
     try {
-      // eslint-disable-next-line no-unmodified-loop-condition -- it is modified in the onClose callback
       while (!closed) {
         if (queue.length > 0) {
-          yield queue.shift() as TMessage;
+          const message = queue.shift() as TMessage;
+          yield message;
           yielded++;
           if (limit != null && yielded >= limit) return;
+          if (stopOn?.(message)) {
+            onClose();
+            return;
+          }
         } else {
           const message = await new Promise<IRCMessage | null>((resolve) => {
             resolveNext = resolve;
@@ -396,10 +402,14 @@ export class ChatClient extends BaseClient {
           yield message as TMessage;
           yielded++;
           if (limit != null && yielded >= limit) return;
+          if (stopOn?.(message as TMessage)) {
+            onClose();
+            return;
+          }
         }
       }
     } finally {
-      if (timer != null) clearTimeout(timer);
+      if (timer) clearTimeout(timer);
       this.off("message", onMessage);
       this.off("close", onClose);
     }
@@ -410,18 +420,25 @@ export class ChatClient extends BaseClient {
    * @param options.filter only chat messages for which this function returns true will be yielded
    * @param options.limit the generator will end after yielding this many messages
    * @param options.timeout the generator will end after this many milliseconds
+   * @param options.stopOn the generator will end after yielding a message for which this predicate returns true
    * @returns An async generator yielding matching messages
    */
   public collectChatMessages(options?: {
     filter?: (message: PrivmsgMessage) => boolean;
+    stopOn?: (message: PrivmsgMessage) => boolean;
     limit?: number;
     timeout?: number;
   }): AsyncGenerator<PrivmsgMessage, void, void> {
+    const { filter, stopOn } = options ?? {};
+
     return this.collectMessages({
       ...options,
       filter: (message): message is PrivmsgMessage =>
-        message instanceof PrivmsgMessage &&
-        (options?.filter?.(message) ?? true),
+        message instanceof PrivmsgMessage && (filter?.(message) ?? true),
+      stopOn: stopOn
+        ? (message: IRCMessage) =>
+            message instanceof PrivmsgMessage && stopOn(message)
+        : undefined,
     });
   }
 
