@@ -7,7 +7,7 @@ import { applyReplacements } from "~/utils/apply-function-replacements";
 export const invisibleSuffix = " \u{34F}";
 
 interface LastMessage {
-  messageText: string;
+  content: string;
   action: boolean;
 }
 
@@ -26,9 +26,7 @@ export class AlternateMessageModifier implements ClientMixin {
   ): string {
     const lastMessage: LastMessage | undefined = this.lastMessages[channelName];
 
-    return lastMessage != null &&
-      lastMessage.messageText === messageText &&
-      lastMessage.action === action
+    return lastMessage?.content === messageText && lastMessage.action === action
       ? messageText + invisibleSuffix
       : messageText;
   }
@@ -75,7 +73,7 @@ export class AlternateMessageModifier implements ClientMixin {
           // onPrivmsg handler, so this will have to do. (Save the sent
           // message)
           this.lastMessages[channelName] = {
-            messageText: newMessage,
+            content: newMessage,
             action,
           };
         }
@@ -91,12 +89,12 @@ export class AlternateMessageModifier implements ClientMixin {
 
   private onPrivmsgMessage(message: PrivmsgMessage): void {
     // msg must be from us (the logged in user)
-    if (!(message.senderUsername === this.client.configuration.username)) {
+    if (!(message.sender.login === this.client.configuration.username)) {
       return;
     }
 
-    this.lastMessages[message.channelName] = {
-      messageText: message.messageText,
+    this.lastMessages[message.channel.login] = {
+      content: message.content,
       action: message.isAction,
     };
   }

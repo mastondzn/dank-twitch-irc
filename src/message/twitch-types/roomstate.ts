@@ -1,5 +1,5 @@
 import type { IRCMessageData } from "../irc/irc-message";
-import { ChannelIRCMessage } from "../irc/channel-irc-message";
+import { ChannelIRCMessage, type Channel } from "../irc/channel-irc-message";
 import { tagParserFor } from "../parser/tag-values";
 import { pickBy } from "~/utils/pick-by";
 
@@ -36,7 +36,7 @@ export function hasAllStateTags(
 }
 
 export class RoomstateMessage extends ChannelIRCMessage {
-  public readonly channelID: string;
+  private readonly _channelRoomId: string;
 
   public readonly emoteOnly: boolean | undefined;
   public readonly emoteOnlyRaw: string | undefined;
@@ -53,11 +53,26 @@ export class RoomstateMessage extends ChannelIRCMessage {
   public readonly subscribersOnly: boolean | undefined;
   public readonly subscribersOnlyRaw: string | undefined;
 
+  public override get channel(): Channel & { readonly id: string } {
+    return {
+      login: this._channelLogin,
+      username: this._channelLogin,
+      id: this._channelRoomId,
+    };
+  }
+
+  // ---- Deprecated aliases ----
+
+  /** @deprecated Use {@link channel.id} instead. */
+  public get channelID(): string {
+    return this._channelRoomId;
+  }
+
   public constructor(message: IRCMessageData) {
     super(message);
 
     const tagParser = tagParserFor(this.ircTags);
-    this.channelID = tagParser.requireString("room-id");
+    this._channelRoomId = tagParser.requireString("room-id");
 
     this.emoteOnly = tagParser.getBoolean("emote-only");
     this.emoteOnlyRaw = tagParser.getString("emote-only");

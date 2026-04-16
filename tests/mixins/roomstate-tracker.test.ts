@@ -3,26 +3,18 @@ import { promisify } from "node:util";
 import { assert, describe, expect, it, vi } from "vitest";
 
 import { fakeClient } from "../helpers";
-import { RoomStateTracker } from "~/mixins/roomstate-tracker";
 
 describe("./mixins/roomstate-tracker", () => {
   describe("roomstateTracker", () => {
-    it("should set client.roomstateTracker on the client when applied", () => {
+    it("should always be present on the client", () => {
       const { client } = fakeClient(false);
-      const roomStateTracker = new RoomStateTracker();
 
-      assert.isUndefined(client.roomStateTracker);
-
-      client.use(roomStateTracker);
-
-      assert.strictEqual(client.roomStateTracker, roomStateTracker);
+      assert.isDefined(client.roomStateTracker);
     });
 
     it("should save/update incoming ROOMSTATE messages", async () => {
       const { client, emit, emitAndEnd } = fakeClient();
-      const roomStateTracker = new RoomStateTracker();
-
-      client.use(roomStateTracker);
+      const roomStateTracker = client.roomStateTracker;
 
       assert.isUndefined(roomStateTracker.getChannelState("randers"));
 
@@ -99,9 +91,7 @@ describe("./mixins/roomstate-tracker", () => {
 
     it("should ignore partial ROOMSTATE messages before the first full ROOMSTATE message", async () => {
       const { client, emitAndEnd } = fakeClient();
-      const roomStateTracker = new RoomStateTracker();
-
-      client.use(roomStateTracker);
+      const roomStateTracker = client.roomStateTracker;
 
       assert.isUndefined(roomStateTracker.getChannelState("randers"));
 
@@ -115,8 +105,7 @@ describe("./mixins/roomstate-tracker", () => {
 
     it("should emit newChannelState on new roomstate", async () => {
       const { client, emit } = fakeClient();
-      const roomStateTracker = new RoomStateTracker();
-      client.use(roomStateTracker);
+      const roomStateTracker = client.roomStateTracker;
 
       const listener = vi.fn();
       roomStateTracker.on("newChannelState", listener);
@@ -128,8 +117,8 @@ describe("./mixins/roomstate-tracker", () => {
 
       await promisify(setImmediate)();
 
-      expect(listener).toBeCalledTimes(1);
-      expect(listener).toBeCalledWith(
+      expect(listener).toHaveBeenCalledTimes(1);
+      expect(listener).toHaveBeenCalledWith(
         "randers",
         roomStateTracker.getChannelState("randers"),
       );
@@ -137,8 +126,7 @@ describe("./mixins/roomstate-tracker", () => {
 
     it("should emit newChannelState on updated roomstate", async () => {
       const { client, emit, emitAndEnd } = fakeClient();
-      const roomStateTracker = new RoomStateTracker();
-      client.use(roomStateTracker);
+      const roomStateTracker = client.roomStateTracker;
 
       emit(
         "@emote-only=0;followers-only=-1;r9k=0;rituals=0;room-id=40286300;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #randers",

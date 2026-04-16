@@ -31,11 +31,29 @@ export function getIRCChannelName(
   return parameter.slice(1);
 }
 
+export interface Channel {
+  readonly login: string;
+  /** @deprecated Same as {@link Channel.login}. */
+  readonly username: string;
+}
+
 export class ChannelIRCMessage extends IRCMessage {
-  public readonly channelName: string;
+  protected readonly _channelLogin: string;
+
+  public get channel(): Channel {
+    return {
+      login: this._channelLogin,
+      username: this._channelLogin,
+    };
+  }
+
+  /** @deprecated Use {@link channel.login} instead. */
+  public get channelName(): string {
+    return this._channelLogin;
+  }
 
   public constructor(message: IRCMessageData) {
     super(message);
-    this.channelName = getIRCChannelName(this);
+    this._channelLogin = getIRCChannelName(this);
   }
 }

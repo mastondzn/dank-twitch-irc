@@ -33,7 +33,6 @@ export interface WebSocketTransportConfiguration {
 
 export interface PresetWebSocketTransportConfiguration {
   type: "websocket";
-  secure: boolean;
 }
 
 export type TransportConfiguration =
@@ -78,5 +77,4 @@ export interface ClientConfiguration {
   rateLimits?: RateLimitsConfig;
   connectionRateLimits?: ConnectionRateLimits;
   installDefaultMixins?: boolean;
-  ignoreUnhandledPromiseRejections?: boolean;
 }

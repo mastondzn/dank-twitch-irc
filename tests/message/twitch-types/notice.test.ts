@@ -16,12 +16,12 @@ describe("./message/twitch-types/notice", () => {
 
       assert.instanceOf(message, NoticeMessage);
 
-      assert.strictEqual(message.channelName, "forsen");
+      assert.strictEqual(message.channel?.login, "forsen");
       assert.strictEqual(
-        message.messageText,
+        message.content,
         "You are permanently banned from talking in forsen.",
       );
-      assert.strictEqual(message.messageID, "msg_banned");
+      assert.strictEqual(message.id, "msg_banned");
     });
 
     it("should parse a NOTICE message received before successfuly login", () => {
@@ -33,9 +33,9 @@ describe("./message/twitch-types/notice", () => {
 
       assert.instanceOf(message, NoticeMessage);
 
-      assert.isUndefined(message.channelName);
-      assert.strictEqual(message.messageText, "Improperly formatted auth");
-      assert.isUndefined(message.messageID);
+      assert.isUndefined(message.channel?.login);
+      assert.strictEqual(message.content, "Improperly formatted auth");
+      assert.isUndefined(message.id);
     });
   });
 });

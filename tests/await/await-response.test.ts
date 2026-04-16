@@ -6,7 +6,6 @@ import { TimeoutError } from "~/await/timeout-error";
 import { ConnectionError, MessageError } from "~/client/errors";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import { BaseError } from "~/utils/base-error";
-import { ignoreErrors } from "~/utils/ignore-errors";
 
 describe("./await/await-response", () => {
   describe("responseAwaiter", () => {
@@ -17,13 +16,15 @@ describe("./await/await-response", () => {
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter 1 failure",
       });
-      awaiter1.promise.catch(ignoreErrors);
+      // eslint-disable-next-line ts/no-empty-function
+      awaiter1.promise.catch(() => {});
 
       const awaiter2 = new ResponseAwaiter(client, {
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter 2 failure",
       });
-      awaiter2.promise.catch(ignoreErrors);
+      // eslint-disable-next-line ts/no-empty-function
+      awaiter2.promise.catch(() => {});
 
       assert.deepStrictEqual(client.pendingResponses, [awaiter1, awaiter2]);
 

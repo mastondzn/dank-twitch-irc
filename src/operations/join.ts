@@ -24,12 +24,12 @@ export async function awaitJoinResponse(
   return awaitResponse(conn, {
     success: (message): message is JoinMessage =>
       message instanceof JoinMessage &&
-      message.channelName === channelName &&
+      message.channel.login === channelName &&
       message.joinedUsername === conn.configuration.username,
     failure: (message) =>
       message instanceof NoticeMessage &&
-      message.channelName === channelName &&
-      message.messageID === "msg_channel_suspended",
+      message.channel?.login === channelName &&
+      message.id === "msg_channel_suspended",
     errorType: (message, cause) => new JoinError(channelName, message, cause),
     errorMessage: `Failed to join channel ${channelName}`,
   });

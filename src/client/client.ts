@@ -1,10 +1,11 @@
 import type { ClientConfiguration } from "~/config/config";
+import type { IRCMessage } from "~/message/irc/irc-message";
 import type { ClientMixin, ConnectionMixin } from "~/mixins/base-mixin";
 import type { ConnectionPool } from "~/mixins/connection-pool";
 import { BaseClient } from "./base-client";
 import { SingleConnection } from "./connection";
 import { ClientError } from "./errors";
-import { IgnoreUnhandledPromiseRejectionsMixin } from "~/mixins/ignore-promise-rejections";
+import { PrivmsgMessage } from "~/message";
 import { ConnectionRateLimiter } from "~/mixins/ratelimiters/connection";
 import { JoinRateLimiter } from "~/mixins/ratelimiters/join";
 import { PrivmsgMessageRateLimiter } from "~/mixins/ratelimiters/privmsg";
@@ -23,12 +24,11 @@ import { removeInPlace } from "~/utils/remove-in-place";
 import { toChunked } from "~/utils/to-chunked";
 import { unionSets } from "~/utils/union-sets";
 import { correctChannelName, validateChannelName } from "~/validation/channel";
-import { validateMessageID } from "~/validation/reply";
+import { validateMessageId } from "~/validation/reply";
 
 const log = debugLogger("dank-twitch-irc:client");
 
 export type ConnectionPredicate = (conn: SingleConnection) => boolean;
-const alwaysTrue = (): true => true as const;
 
 export class ChatClient extends BaseClient {
   public get wantedChannels(): Set<string> {
@@ -39,8 +39,8 @@ export class ChatClient extends BaseClient {
     return unionSets(this.connections.map((c) => c.joinedChannels));
   }
 
-  public roomStateTracker?: RoomStateTracker;
-  public userStateTracker?: UserStateTracker;
+  public readonly userStateTracker: UserStateTracker;
+  public readonly roomStateTracker: RoomStateTracker;
   public connectionPool?: ConnectionPool;
   public readonly connectionMixins: ConnectionMixin[] = [];
 
@@ -50,16 +50,15 @@ export class ChatClient extends BaseClient {
   public constructor(configuration?: ClientConfiguration) {
     super(configuration);
 
+    this.userStateTracker = new UserStateTracker(this);
+    this.use(this.userStateTracker);
+    this.roomStateTracker = new RoomStateTracker();
+    this.use(this.roomStateTracker);
+
     if (this.configuration.installDefaultMixins) {
-      this.use(new UserStateTracker(this));
-      this.use(new RoomStateTracker());
       this.use(new ConnectionRateLimiter(this));
       this.use(new PrivmsgMessageRateLimiter(this));
       this.use(new JoinRateLimiter(this));
-    }
-
-    if (this.configuration.ignoreUnhandledPromiseRejections) {
-      this.use(new IgnoreUnhandledPromiseRejectionsMixin());
     }
 
     this.on("error", (error) => {
@@ -240,21 +239,21 @@ export class ChatClient extends BaseClient {
 
   /**
    * @param channelName The channel name you want to reply in.
-   * @param messageID The message ID you want to reply to.
+   * @param messageId The message ID you want to reply to.
    * @param message The message you want to send.
    */
   public async reply(
     channelName: string,
-    messageID: string,
+    messageId: string,
     message: string,
   ): Promise<void> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
-    validateMessageID(messageID);
+    validateMessageId(messageId);
     await reply(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      messageID,
+      messageId,
       message,
     );
   }
@@ -266,7 +265,7 @@ export class ChatClient extends BaseClient {
   public newConnection(): SingleConnection {
     const conn = new SingleConnection(this.configuration);
 
-    log.debug(`Creating new connection (ID ${conn.connectionID})`);
+    log.debug(`Creating new connection (ID ${conn.connectionId})`);
 
     for (const mixin of this.connectionMixins) {
       conn.use(mixin);
@@ -278,9 +277,9 @@ export class ChatClient extends BaseClient {
     conn.on("error", (error) => this.emitError(error));
     conn.on("close", (hadError) => {
       if (hadError) {
-        log.warn(`Connection ${conn.connectionID} was closed due to error`);
+        log.warn(`Connection ${conn.connectionId} was closed due to error`);
       } else {
-        log.debug(`Connection ${conn.connectionID} closed normally`);
+        log.debug(`Connection ${conn.connectionId} closed normally`);
       }
 
       removeInPlace(this.connections, conn);
@@ -301,9 +300,7 @@ export class ChatClient extends BaseClient {
     conn.on("message", (message) => {
       // only forward whispers from the currently active whisper connection
       if (message.ircCommand === "WHISPER") {
-        if (this.activeWhisperConn == null) {
-          this.activeWhisperConn = conn;
-        }
+        this.activeWhisperConn ??= conn;
 
         if (this.activeWhisperConn !== conn) {
           // message is ignored.
@@ -339,6 +336,96 @@ export class ChatClient extends BaseClient {
   }
 
   /**
+   * @param options the options object
+   * @param options.filter only messages for which this function returns true will be yielded. This can be used with type guards to create typed async generators, e.g. for only chat messages (PrivmsgMessage).
+   * @param options.limit the generator will end after yielding this many messages
+   * @param options.timeout the generator will end after this many milliseconds
+   * @returns An async generator yielding matching messages
+   */
+  public async *collectMessages<
+    TMessage extends IRCMessage = IRCMessage,
+  >(options?: {
+    filter?: (message: IRCMessage) => message is TMessage;
+    limit?: number;
+    timeout?: number;
+  }): AsyncGenerator<TMessage, void, void> {
+    const { filter, limit, timeout } = options ?? {};
+    const queue: IRCMessage[] = [];
+    let resolveNext: ((value: IRCMessage | null) => void) | null = null;
+    let closed = this.closed;
+    let yielded = 0;
+
+    const onMessage = (message: IRCMessage): void => {
+      if (closed) return;
+      if (filter && !filter(message)) return;
+      if (resolveNext) {
+        resolveNext(message);
+        resolveNext = null;
+      } else {
+        queue.push(message);
+      }
+    };
+
+    const onClose = (): void => {
+      closed = true;
+      if (resolveNext) {
+        resolveNext(null);
+        resolveNext = null;
+      }
+    };
+
+    this.on("message", onMessage);
+    this.on("close", onClose);
+
+    const timer = timeout == null ? null : setTimeout(() => onClose(), timeout);
+
+    try {
+      // eslint-disable-next-line no-unmodified-loop-condition -- it is modified in the onClose callback
+      while (!closed) {
+        if (queue.length > 0) {
+          yield queue.shift() as TMessage;
+          yielded++;
+          if (limit != null && yielded >= limit) return;
+        } else {
+          const message = await new Promise<IRCMessage | null>((resolve) => {
+            resolveNext = resolve;
+          });
+          if (message === null) {
+            return;
+          }
+          yield message as TMessage;
+          yielded++;
+          if (limit != null && yielded >= limit) return;
+        }
+      }
+    } finally {
+      if (timer != null) clearTimeout(timer);
+      this.off("message", onMessage);
+      this.off("close", onClose);
+    }
+  }
+
+  /**
+   * @param options the options object
+   * @param options.filter only chat messages for which this function returns true will be yielded
+   * @param options.limit the generator will end after yielding this many messages
+   * @param options.timeout the generator will end after this many milliseconds
+   * @returns An async generator yielding matching messages
+   */
+  public collectChatMessages(options?: {
+    filter?: (message: PrivmsgMessage) => boolean;
+    limit?: number;
+    timeout?: number;
+  }): AsyncGenerator<PrivmsgMessage, void, void> {
+    return this.collectMessages({
+      ...options,
+      filter: (message): message is PrivmsgMessage =>
+        message instanceof PrivmsgMessage &&
+        (options?.filter?.(message) ?? true),
+    });
+  }
+
+  /**
    * Finds a connection from the list of connections that satisfies the given predicate,
    * or if none was found, returns makes a new connection. This means that the given predicate must be specified
    * in a way that a new connection always satisfies it.
@@ -346,7 +433,7 @@ export class ChatClient extends BaseClient {
    * @param predicate The predicate the connection must fulfill.
    */
   public requireConnection(
-    predicate: ConnectionPredicate = alwaysTrue,
+    predicate: ConnectionPredicate = () => true,
   ): SingleConnection {
     return (
       findAndPushToEnd(this.connections, predicate) ?? this.newConnection()

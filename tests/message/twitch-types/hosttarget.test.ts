@@ -128,7 +128,7 @@ describe("./message/twitch-types/hosttarget", () => {
 
       assert.instanceOf(message, HosttargetMessage);
 
-      assert.strictEqual(message.channelName, "randers");
+      assert.strictEqual(message.channel.login, "randers");
       assert.strictEqual(message.hostedChannelName, "leebaxd");
       assert.strictEqual(message.viewerCount, 0);
 
@@ -145,7 +145,7 @@ describe("./message/twitch-types/hosttarget", () => {
 
       assert.instanceOf(message, HosttargetMessage);
 
-      assert.strictEqual(message.channelName, "randers");
+      assert.strictEqual(message.channel.login, "randers");
       assert.strictEqual(message.hostedChannelName, "leebaxd");
       assert.isUndefined(message.viewerCount);
 
@@ -162,7 +162,7 @@ describe("./message/twitch-types/hosttarget", () => {
 
       assert.instanceOf(message, HosttargetMessage);
 
-      assert.strictEqual(message.channelName, "randers");
+      assert.strictEqual(message.channel.login, "randers");
       assert.isUndefined(message.hostedChannelName);
       assert.strictEqual(message.viewerCount, 0);
 

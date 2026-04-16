@@ -61,13 +61,13 @@ describe("./message/twitch-types/usernotice", () => {
       );
     });
 
-    it("should camelCase -id as ID", () => {
+    it("should camelCase -id as Id", () => {
       assert.deepStrictEqual(
         extractEventParameters({
           "msg-param-user-id": "1234567",
         }),
         {
-          userID: "1234567",
+          userId: "1234567",
         },
       );
     });
@@ -88,41 +88,41 @@ describe("./message/twitch-types/usernotice", () => {
 
       assert.instanceOf(message, UsernoticeMessage);
 
-      assert.strictEqual(message.channelName, "faker");
-      assert.strictEqual(message.channelID, "43691");
+      assert.strictEqual(message.channel.login, "faker");
+      assert.strictEqual(message.channel.id, "43691");
 
-      assert.isUndefined(message.messageText);
+      assert.isUndefined(message.content);
       assert.strictEqual(
         message.systemMessage,
         "kakarot127 subscribed at Tier 1. They've subscribed " +
           "for 5 months!",
       );
-      assert.strictEqual(message.messageTypeID, "resub");
+      assert.strictEqual(message.messageTypeId, "resub");
 
-      assert.strictEqual(message.senderUsername, "kakarot127");
-      assert.strictEqual(message.senderUserID, "147030570");
+      assert.strictEqual(message.sender.login, "kakarot127");
+      assert.strictEqual(message.sender.id, "147030570");
 
       assert.deepStrictEqual(
-        message.badgeInfo,
+        message.sender.badgeInfo,
         new TwitchBadgesList(new TwitchBadge("subscriber", "5")),
       );
-      assert.strictEqual(message.badgeInfoRaw, "subscriber/5");
+      assert.strictEqual(message.sender.badgeInfoRaw, "subscriber/5");
 
       assert.isUndefined(message.bits);
       assert.isUndefined(message.bitsRaw);
 
-      assert.isUndefined(message.color);
-      assert.strictEqual(message.colorRaw, "");
+      assert.isUndefined(message.sender.color);
+      assert.strictEqual(message.sender.colorRaw, "");
 
-      assert.strictEqual(message.displayName, "kakarot127");
+      assert.strictEqual(message.sender.displayName, "kakarot127");
       assert.deepStrictEqual(message.emotes, []);
       assert.deepStrictEqual(message.emotesRaw, "");
 
-      assert.strictEqual(message.isMod, false);
-      assert.strictEqual(message.isModRaw, "0");
+      assert.strictEqual(message.sender.isMod, false);
+      assert.strictEqual(message.sender.isModRaw, "0");
 
-      assert.strictEqual(message.serverTimestamp.getTime(), 1_563_102_742_440);
-      assert.strictEqual(message.serverTimestampRaw, "1563102742440");
+      assert.strictEqual(message.timestamp.getTime(), 1_563_102_742_440);
+      assert.strictEqual(message.timestampRaw, "1563102742440");
 
       assert.deepStrictEqual(message.eventParams, {
         cumulativeMonths: 5,
@@ -165,7 +165,7 @@ describe("./message/twitch-types/usernotice", () => {
           "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(message.messageText, "dafranPrime Clap");
+      assert.strictEqual(message.content, "dafranPrime Clap");
       assert.deepStrictEqual(message.emotes, [
         new TwitchEmote("1076725", 0, 11, "dafranPrime"),
       ]);
@@ -188,7 +188,7 @@ describe("./message/twitch-types/usernotice", () => {
           "#dafran :dafranPrime Clap",
       ) as UsernoticeMessage;
 
-      assert.strictEqual(message.displayName, "5weatyNuts");
+      assert.strictEqual(message.sender.displayName, "5weatyNuts");
     });
 
     it("parses subgift params correctly (correct camelcasing)", () => {
@@ -201,11 +201,11 @@ describe("./message/twitch-types/usernotice", () => {
         giftMonthsRaw: "1",
         months: 2,
         monthsRaw: "2",
-        originID: "da 39 a3 ee 5e 6b 4b 0d 32 55 bf ef 95 60 18 90 af d8 07 09",
-        originIDRaw:
+        originId: "da 39 a3 ee 5e 6b 4b 0d 32 55 bf ef 95 60 18 90 af d8 07 09",
+        originIdRaw:
           "da 39 a3 ee 5e 6b 4b 0d 32 55 bf ef 95 60 18 90 af d8 07 09",
         recipientDisplayName: "qatarking24xd",
-        recipientID: "236653628",
+        recipientId: "236653628",
         recipientUsername: "qatarking24xd",
         senderCount: 0,
         senderCountRaw: "0",
@@ -227,15 +227,15 @@ describe("./message/twitch-types/usernotice", () => {
         message.systemMessage,
         "realuser is gifting 1 Tier 1 Subs to broadcaster's community! They've gifted a total of 1 in the channel!",
       );
-      assert.strictEqual(message.messageTypeID, "submysterygift");
+      assert.strictEqual(message.messageTypeId, "submysterygift");
 
       assert.isTrue(message.isMassSubgift());
 
       assert.deepStrictEqual(message.eventParams, {
         massGiftCount: 1,
         massGiftCountRaw: "1",
-        originID: "4e d1 19 c5 33 80 68 8c dc c9 4d 96 73 d0 ad 40 52 f3 19 02",
-        originIDRaw:
+        originId: "4e d1 19 c5 33 80 68 8c dc c9 4d 96 73 d0 ad 40 52 f3 19 02",
+        originIdRaw:
           "4e d1 19 c5 33 80 68 8c dc c9 4d 96 73 d0 ad 40 52 f3 19 02",
         senderCount: 1,
         senderCountRaw: "1",
@@ -253,7 +253,7 @@ describe("./message/twitch-types/usernotice", () => {
       assert.strictEqual(message.ircCommand, "USERNOTICE");
       assert.strictEqual(message.ircTags["msg-param-color"], undefined);
       assert.strictEqual(message.eventParams.color, undefined);
-      assert.strictEqual(message.messageTypeID, "announcement");
+      assert.strictEqual(message.messageTypeId, "announcement");
     });
 
     it("should be able to parse an announcement usernotice that was sent via web chat", () => {
@@ -264,7 +264,7 @@ describe("./message/twitch-types/usernotice", () => {
 
       assert.strictEqual(message.ircCommand, "USERNOTICE");
       assert.strictEqual(message.ircTags["msg-param-color"], "PRIMARY");
-      assert.strictEqual(message.messageTypeID, "announcement");
+      assert.strictEqual(message.messageTypeId, "announcement");
       assert.strictEqual(message.eventParams.color, "PRIMARY");
     });
 
@@ -280,8 +280,8 @@ describe("./message/twitch-types/usernotice", () => {
         message.systemMessage,
         "ManuK10 watched 15 consecutive streams this month and sparked a watch streak!",
       );
-      assert.strictEqual(message.messageTypeID, "viewermilestone");
-      assert.strictEqual(message.messageText, undefined);
+      assert.strictEqual(message.messageTypeId, "viewermilestone");
+      assert.strictEqual(message.content, undefined);
       assert.isTrue(message.isViewerMilestone());
 
       assert.deepStrictEqual(message.eventParams, {
@@ -300,7 +300,7 @@ describe("./message/twitch-types/usernotice", () => {
         String.raw`@id=43449cea-71b5-4a73-9b3a-dd57cbad63df;user-type=;system-msg=ManuK10\swatched\s15\sconsecutive\sstreams\sthis\smonth\sand\ssparked\sa\swatch\sstreak!;mod=0;msg-id=viewermilestone;room-id=681333017;badges=;subscriber=0;user-id=422713015;flags=;tmi-sent-ts=1708221929531;emotes=555555584:0-1;login=manuk10;msg-param-copoReward=450;msg-param-value=15;badge-info=;display-name=ManuK10;msg-param-id=1372187b-d93a-4d25-9ef6-c7bbcf68586d;msg-param-category=watch-streak;vip=0;color= :tmi.twitch.tv USERNOTICE #broadcaster <3`,
       ) as UsernoticeMessage;
 
-      assert.strictEqual(message.messageText, "<3");
+      assert.strictEqual(message.content, "<3");
 
       assert.strictEqual(message.ircCommand, "USERNOTICE");
       assert.strictEqual(message.ircParameters[0], "#broadcaster");
@@ -309,7 +309,7 @@ describe("./message/twitch-types/usernotice", () => {
         message.systemMessage,
         "ManuK10 watched 15 consecutive streams this month and sparked a watch streak!",
       );
-      assert.strictEqual(message.messageTypeID, "viewermilestone");
+      assert.strictEqual(message.messageTypeId, "viewermilestone");
       assert.isTrue(message.isViewerMilestone());
 
       assert.deepStrictEqual(message.eventParams, {

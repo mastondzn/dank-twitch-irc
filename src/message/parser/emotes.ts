@@ -17,7 +17,7 @@ export function parseEmotes(
   const messageCharacters = [...messageText];
 
   for (const emoteInstancesSource of emotesSource.split("/")) {
-    const [emoteID, instancesSource] = emoteInstancesSource.split(":", 2) as [
+    const [emoteId, instancesSource] = emoteInstancesSource.split(":", 2) as [
       string,
       string,
     ];
@@ -48,7 +48,7 @@ export function parseEmotes(
 
       const emoteText = messageCharacters.slice(startIndex, endIndex).join("");
 
-      emotes.push(new TwitchEmote(emoteID, startIndex, endIndex, emoteText));
+      emotes.push(new TwitchEmote(emoteId, startIndex, endIndex, emoteText));
     }
   }
 

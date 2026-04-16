@@ -24,7 +24,7 @@ export async function awaitPartResponse(
     // :justinfan12345!justinfan12345@justinfan12345.tmi.twitch.tv PART #pajlada
     success: (message): message is PartMessage =>
       message instanceof PartMessage &&
-      message.channelName === channelName &&
+      message.channel.login === channelName &&
       message.partedUsername === conn.configuration.username,
     errorType: (message, cause) => new PartError(channelName, message, cause),
     errorMessage: `Failed to part channel ${channelName}`,

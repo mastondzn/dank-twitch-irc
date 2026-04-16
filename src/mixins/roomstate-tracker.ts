@@ -29,13 +29,12 @@ export class RoomStateTracker
   }
 
   public applyToClient(client: ChatClient): void {
-    client.roomStateTracker = this;
     client.on("ROOMSTATE", this.onRoomstateMessage.bind(this));
   }
 
   private onRoomstateMessage(message: RoomstateMessage): void {
     const currentState: RoomState | undefined = this.getChannelState(
-      message.channelName,
+      message.channel.login,
     );
     const extractedState: Partial<RoomState> = message.extractRoomState();
 
@@ -47,12 +46,12 @@ export class RoomStateTracker
         );
         return;
       }
-      this.channelStates[message.channelName] = extractedState;
-      this.emit("newChannelState", message.channelName, extractedState);
+      this.channelStates[message.channel.login] = extractedState;
+      this.emit("newChannelState", message.channel.login, extractedState);
     } else {
       const newState = Object.assign({}, currentState, extractedState);
-      this.channelStates[message.channelName] = newState;
-      this.emit("newChannelState", message.channelName, newState);
+      this.channelStates[message.channel.login] = newState;
+      this.emit("newChannelState", message.channel.login, newState);
     }
   }
 }

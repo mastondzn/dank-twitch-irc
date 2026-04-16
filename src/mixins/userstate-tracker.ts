@@ -42,7 +42,6 @@ export class UserStateTracker
   }
 
   public applyToClient(client: ChatClient): void {
-    client.userStateTracker = this;
     client.on("USERSTATE", this.onUserstateMessage.bind(this));
     client.on("GLOBALUSERSTATE", this.onGlobaluserstateMessage.bind(this));
     client.on("PRIVMSG", this.onPrivmsgMessage.bind(this));
@@ -50,8 +49,8 @@ export class UserStateTracker
 
   private onUserstateMessage(message: UserstateMessage): void {
     const newState = message.extractUserState();
-    this.channelStates[message.channelName] = newState;
-    this.emit("newChannelState", message.channelName, newState);
+    this.channelStates[message.channel.login] = newState;
+    this.emit("newChannelState", message.channel.login, newState);
   }
 
   private onGlobaluserstateMessage(message: GlobaluserstateMessage): void {
@@ -60,19 +59,20 @@ export class UserStateTracker
   }
 
   private onPrivmsgMessage(message: PrivmsgMessage): void {
-    if (message.senderUsername !== this.client.configuration.username) {
+    if (message.sender.login !== this.client.configuration.username) {
       return;
     }
 
-    const channelState = this.channelStates[message.channelName];
+    const channelState = this.channelStates[message.channel.login];
     if (channelState != null) {
       const newState = Object.assign(
         {},
         channelState,
+        // eslint-disable-next-line ts/no-deprecated
         message.extractUserState(),
       );
-      this.channelStates[message.channelName] = newState;
-      this.emit("newChannelState", message.channelName, newState);
+      this.channelStates[message.channel.login] = newState;
+      this.emit("newChannelState", message.channel.login, newState);
     }
   }
 }

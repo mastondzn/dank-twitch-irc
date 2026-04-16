@@ -73,8 +73,8 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
       // now nickAndUser is either "nick" or "nick!user"
       // => split on !
       const exclamationIndex = nickAndUser.indexOf("!");
-      let nick;
-      let user;
+      let nick: string;
+      let user: string | undefined;
       if (exclamationIndex === -1) {
         // no ! found
         nick = nickAndUser;
@@ -84,11 +84,7 @@ export function parseIRCMessage(messageSource: string): IRCMessage {
         user = nickAndUser.slice(exclamationIndex + 1);
       }
 
-      if (
-        host.length === 0 ||
-        nick.length === 0 ||
-        (user != null && user.length === 0)
-      ) {
+      if (host.length === 0 || nick.length === 0 || user?.length === 0) {
         throw new ParseError(
           `Host, nick or user is empty in prefix (given src: "${messageSource}")`,
         );

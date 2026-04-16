@@ -82,7 +82,7 @@ describe("./message/irc/channel-irc-message", () => {
       const message = new ChannelIRCMessage(
         parseIRCMessage("PRIVMSG #pajlada"),
       );
-      assert.strictEqual(message.channelName, "pajlada");
+      assert.strictEqual(message.channel.login, "pajlada");
     });
 
     it("should throw ParseError on error parsing the channel name", () => {

@@ -59,7 +59,6 @@ const defaults: Omit<
   },
 
   installDefaultMixins: true,
-  ignoreUnhandledPromiseRejections: false,
 };
 
 export function expandTransportConfig(
@@ -98,10 +97,7 @@ export function expandTransportConfig(
     }
 
     case "websocket": {
-      const url =
-        "url" in config
-          ? config.url
-          : `${config.secure ? "wss" : "ws"}://irc-ws.chat.twitch.tv`;
+      const url = "url" in config ? config.url : "wss://irc-ws.chat.twitch.tv";
 
       return {
         type: "websocket",
