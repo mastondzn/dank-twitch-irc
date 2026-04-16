@@ -17,10 +17,10 @@ import { anyCauseInstanceof } from "~/utils/any-cause-instanceof";
 import { debugLogger } from "~/utils/debug-logger";
 import { validateIRCCommand } from "~/validation/irc-command";
 
-let connectionIDCounter = 0;
+let connectionIdCounter = 0;
 
 export class SingleConnection extends BaseClient {
-  public readonly connectionID = connectionIDCounter++;
+  public readonly connectionId = connectionIdCounter++;
 
   public readonly wantedChannels: Set<string> = new Set<string>();
   public readonly joinedChannels: Set<string> = new Set<string>();
@@ -29,7 +29,7 @@ export class SingleConnection extends BaseClient {
   public readonly transport: Transport;
 
   protected readonly log = debugLogger(
-    `dank-twitch-irc:connection:${this.connectionID}`,
+    `dank-twitch-irc:connection:${this.connectionId}`,
   );
 
   public constructor(configuration?: ClientConfiguration) {

@@ -30,7 +30,7 @@ export class SayError extends MessageError {
   }
 }
 
-const badNoticeIDs = new Set([
+const badNoticeIds = new Set([
   "msg_banned", // You are permanently banned from talking in <channel>.
   "msg_bad_characters", // Your message was not sent because it contained too many unprocessable characters.
   // If you believe this is an error, please rephrase and try again.
@@ -65,7 +65,7 @@ export async function say(
   conn: SingleConnection,
   channelName: string,
   messageText: string,
-  replyToID?: string,
+  replyToId?: string,
   action = false,
 ): Promise<UserstateMessage> {
   let command;
@@ -82,7 +82,7 @@ export async function say(
     errorType = (message, cause) =>
       new SayError(channelName, messageText, false, message, cause);
   }
-  void sendPrivmsg(conn, channelName, command, replyToID);
+  void sendPrivmsg(conn, channelName, command, replyToId);
 
   return awaitResponse(conn, {
     success: (message): message is UserstateMessage =>
@@ -91,7 +91,7 @@ export async function say(
     failure: (message) =>
       message instanceof NoticeMessage &&
       message.channel?.login === channelName &&
-      badNoticeIDs.has(message.id!),
+      badNoticeIds.has(message.id!),
     errorType,
     errorMessage,
   });

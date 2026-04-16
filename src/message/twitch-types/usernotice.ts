@@ -666,7 +666,7 @@ export class UsernoticeMessage
   /**
    * Whether or not this message is during a shared chat session.
    * This does NOT necessarily mean that the message is originating from another channel.
-   * Check if `message.source.channelID !== message.channel.id` for that
+   * Check if `message.source.channelId !== message.channel.id` for that
    * @see https://dev.twitch.tv/docs/chat/irc/#shared-chat
    */
   public isSharedChat(): this is this &

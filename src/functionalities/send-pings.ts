@@ -25,9 +25,9 @@ export function sendClientPings(
 ): void {
   const { interval, timeout } = setDefaults(config, configDefaults);
 
-  let pingIDCounter = 0;
+  let pingIdCounter = 0;
   const runAutomaticPing = async (): Promise<void> => {
-    const pingIdentifier = `dank-twitch-irc:automatic:${pingIDCounter++}`;
+    const pingIdentifier = `dank-twitch-irc:automatic:${pingIdCounter++}`;
     try {
       await sendPing(conn, pingIdentifier, timeout);
     } catch {

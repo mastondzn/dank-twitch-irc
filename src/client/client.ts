@@ -22,7 +22,7 @@ import { removeInPlace } from "~/utils/remove-in-place";
 import { toChunked } from "~/utils/to-chunked";
 import { unionSets } from "~/utils/union-sets";
 import { correctChannelName, validateChannelName } from "~/validation/channel";
-import { validateMessageID } from "~/validation/reply";
+import { validateMessageId } from "~/validation/reply";
 
 const log = debugLogger("dank-twitch-irc:client");
 
@@ -237,21 +237,21 @@ export class ChatClient extends BaseClient {
 
   /**
    * @param channelName The channel name you want to reply in.
-   * @param messageID The message ID you want to reply to.
+   * @param messageId The message ID you want to reply to.
    * @param message The message you want to send.
    */
   public async reply(
     channelName: string,
-    messageID: string,
+    messageId: string,
     message: string,
   ): Promise<void> {
     channelName = correctChannelName(channelName);
     validateChannelName(channelName);
-    validateMessageID(messageID);
+    validateMessageId(messageId);
     await reply(
       this.requireConnection(mustNotBeJoined(channelName)),
       channelName,
-      messageID,
+      messageId,
       message,
     );
   }
@@ -263,7 +263,7 @@ export class ChatClient extends BaseClient {
   public newConnection(): SingleConnection {
     const conn = new SingleConnection(this.configuration);
 
-    log.debug(`Creating new connection (ID ${conn.connectionID})`);
+    log.debug(`Creating new connection (ID ${conn.connectionId})`);
 
     for (const mixin of this.connectionMixins) {
       conn.use(mixin);
@@ -275,9 +275,9 @@ export class ChatClient extends BaseClient {
     conn.on("error", (error) => this.emitError(error));
     conn.on("close", (hadError) => {
       if (hadError) {
-        log.warn(`Connection ${conn.connectionID} was closed due to error`);
+        log.warn(`Connection ${conn.connectionId} was closed due to error`);
       } else {
-        log.debug(`Connection ${conn.connectionID} closed normally`);
+        log.debug(`Connection ${conn.connectionId} closed normally`);
       }
 
       removeInPlace(this.connections, conn);
