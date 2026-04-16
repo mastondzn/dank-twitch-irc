@@ -22,7 +22,7 @@ pnpm format:check     # prettier --check
 
 CI order: `format:check -> lint -> typecheck -> build -> test --coverage`
 
-Single test: `pnpm test -- tests/client/client.test.ts`
+Single test: `pnpm test tests/client/client.test.ts`
 
 ## Path aliases
 
@@ -52,8 +52,7 @@ Single test: `pnpm test -- tests/client/client.test.ts`
 
 - ESLint uses `@mastondzn/eslint` (flat config). A lot of rules are auto-fixable. Run `pnpm lint --fix $FILE` to apply.
 - Prettier uses defaults (empty config).
-- No comments in code unless necessary (eslint may flag unused comments).
 
 ## Docs
 
-Docs are VitePress with typedoc. Generated via `pnpm docs:md` then `pnpm docs:serve`. Don't modify `.vitepress/typedoc/` manually.
+Docs are VitePress with typedoc. Generated via `pnpm docs:build`. Don't modify `.vitepress/typedoc/` manually.
