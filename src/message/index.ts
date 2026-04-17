@@ -1,3 +1,4 @@
+// @barrel-file
 export * from "./badge";
 export * from "./badges";
 export * from "./color";

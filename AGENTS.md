@@ -22,7 +22,7 @@ pnpm format:check     # prettier --check
 
 CI order: `format:check -> lint -> typecheck -> build -> test --coverage`
 
-Single test: `pnpm test tests/client/client.test.ts`
+Single test: `pnpm test --run $FILE` (e.g. `pnpm test --run tests/client.test.ts`)
 
 ## Path aliases
 

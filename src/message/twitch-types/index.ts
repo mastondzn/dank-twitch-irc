@@ -1,3 +1,4 @@
+// @barrel-file
 export * from "./cap";
 export * from "./clearchat";
 export * from "./clearmsg";

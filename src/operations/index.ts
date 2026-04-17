@@ -1,3 +1,4 @@
+// @barrel-file
 export * from "./join";
 export * from "./join-all";
 export * from "./login";

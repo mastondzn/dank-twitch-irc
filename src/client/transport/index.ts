@@ -1,3 +1,4 @@
+// @barrel-file
 export * from "./duplex-transport";
 export * from "./make-transport";
 export * from "./tcp-transport";

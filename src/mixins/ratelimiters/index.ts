@@ -1,3 +1,4 @@
+// @barrel-file
 export * from "./connection";
 export * from "./join";
 export * from "./privmsg";

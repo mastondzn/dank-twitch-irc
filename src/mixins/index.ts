@@ -1,3 +1,4 @@
+// @barrel-file
 export * from "./alternate-message-modifier";
 export * from "./base-mixin";
 export * from "./connection-pool";

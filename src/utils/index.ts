@@ -1,3 +1,5 @@
+// @barrel-file
+export * from "./debug-logger";
 export * from "./any-cause-instanceof";
 export * from "./apply-function-replacements";
 export * from "./base-error";
