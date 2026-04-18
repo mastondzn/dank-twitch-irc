@@ -38,7 +38,7 @@ jobs:
 
         # We make sure ci is passing before releasing
       - name: Wait for CI to finish
-        uses: lewagon/wait-on-check-action@v1.6.0
+        uses: lewagon/wait-on-check-action@v1.7.0
         if: github.event_name == 'push'
         with:
           ref: ${{ github.ref }}
