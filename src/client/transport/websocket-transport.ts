@@ -26,6 +26,10 @@ export class WebSocketTransport implements Transport {
         }
         callback();
       },
+      destroy: (error, callback) => {
+        this.ws?.close();
+        callback(error);
+      },
     });
   }
 
@@ -37,7 +41,7 @@ export class WebSocketTransport implements Transport {
 
     this.ws.addEventListener("error", (event: Event) => {
       const error =
-        event instanceof ErrorEvent
+        typeof ErrorEvent !== "undefined" && event instanceof ErrorEvent
           ? event.error
           : new Error("WebSocket error");
       this.stream.destroy(error);
