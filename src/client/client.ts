@@ -429,16 +429,12 @@ export class ChatClient extends BaseClient {
     limit?: number;
     timeout?: number;
   }): AsyncGenerator<PrivmsgMessage, void, void> {
-    const { filter, stopOn } = options ?? {};
+    const { filter } = options ?? {};
 
     return this.collectMessages({
       ...options,
       filter: (message): message is PrivmsgMessage =>
         message instanceof PrivmsgMessage && (filter?.(message) ?? true),
-      stopOn: stopOn
-        ? (message: IRCMessage) =>
-            message instanceof PrivmsgMessage && stopOn(message)
-        : undefined,
     });
   }
 
