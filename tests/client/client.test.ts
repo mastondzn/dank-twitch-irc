@@ -1,7 +1,9 @@
 import { assert, describe, it, vi } from "vitest";
 
+import type { SingleConnection } from "~/client/connection";
 import type { IRCMessage } from "~/message/irc/irc-message";
 import { fakeClient } from "../helpers";
+import { ReconnectError } from "~/functionalities/handle-reconnect-message";
 import { parseTwitchMessage } from "~/message/parser/twitch-message";
 import { PongMessage } from "~/message/twitch-types/connection/pong";
 
@@ -272,5 +274,57 @@ describe("chatClient", () => {
 
       assert.deepStrictEqual(messages, ["PONG :FIRST", "PONG :STOP"]);
     });
+  });
+
+  it("should emit a reconnect event and replace the connection when a RECONNECT message is received", async () => {
+    const { client, emit, clientError } = fakeClient();
+
+    // suppress the expected ReconnectError from becoming an unhandled rejection
+    clientError.catch((error: unknown) => error);
+
+    const reconnectPromise = new Promise<SingleConnection>((resolve) => {
+      client.once("reconnect", (conn) => resolve(conn));
+    });
+
+    emit(":tmi.twitch.tv RECONNECT");
+
+    const oldConn = await reconnectPromise;
+    assert.notStrictEqual(oldConn, undefined);
+
+    // The old connection should be removed and a new one created
+    assert.strictEqual(
+      client.connections.includes(oldConn),
+      false,
+      "old connection should be removed",
+    );
+    assert.strictEqual(
+      client.connections.length >= 1,
+      true,
+      "a new connection should exist",
+    );
+
+    client.destroy();
+  });
+
+  it("should emit a ReconnectError on the connection when a RECONNECT message is received", async () => {
+    const { client, emit, clientError } = fakeClient();
+
+    // suppress the duplicate rejection from fakeClient's clientError promise
+    clientError.catch((error: unknown) => error);
+
+    const errorPromise = new Promise<Error>((resolve) => {
+      client.once("error", (error) => resolve(error));
+    });
+
+    emit(":tmi.twitch.tv RECONNECT");
+
+    const error = await errorPromise;
+    assert.instanceOf(error, ReconnectError);
+    assert.strictEqual(
+      error.message,
+      "RECONNECT command received by server: :tmi.twitch.tv RECONNECT",
+    );
+
+    client.destroy();
   });
 });
