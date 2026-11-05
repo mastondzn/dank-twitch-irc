@@ -13,10 +13,9 @@ const decodeLookupRegex = /\\\\|\\:|\\s|\\n|\\r|\\/g;
 
 // if value is undefined (no = in tagSrc) then value becomes null
 export function decodeValue(value: string | undefined): string | null {
-  if (value == null) {
-    return null;
-  }
-  return value.replaceAll(decodeLookupRegex, (m) => decodeMap[m] ?? "");
+  return value == null
+    ? null
+    : value.replaceAll(decodeLookupRegex, (m) => decodeMap[m] ?? "");
 }
 
 export function parseTags(tagsSource: string | undefined): IRCMessageTags {
@@ -32,10 +31,10 @@ export function parseTags(tagsSource: string | undefined): IRCMessageTags {
     // ">>>" turns any negative `keyValueDelimiter` into the max uint32, so we get the entire tagSrc for the key.
     const key = tagSource.slice(0, keyValueDelimiter >>> 0);
 
-    let valueSource: string | null = null;
-    if (keyValueDelimiter !== -1) {
-      valueSource = decodeValue(tagSource.slice(keyValueDelimiter + 1));
-    }
+    const valueSource: string | null =
+      keyValueDelimiter === -1
+        ? null
+        : decodeValue(tagSource.slice(keyValueDelimiter + 1));
 
     tags[key] = valueSource;
   }

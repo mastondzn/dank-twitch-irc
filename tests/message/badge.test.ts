@@ -44,12 +44,12 @@ describe("./message/badge", () => {
 
     it("should return badgeName/badgeVersion from implcit toString() conversion", () => {
       assert.strictEqual(
-        // eslint-disable-next-line ts/restrict-template-expressions
+        // eslint-disable-next-line ts/restrict-template-expressions, unicorn/no-useless-template-literals -- testing implicit toString() conversion
         `${new TwitchBadge("subscriber", "10")}`,
         "subscriber/10",
       );
       assert.strictEqual(
-        // eslint-disable-next-line ts/restrict-template-expressions
+        // eslint-disable-next-line ts/restrict-template-expressions, unicorn/no-useless-template-literals -- testing implicit toString() conversion
         `${new TwitchBadge("subscriber", "10")}`,
         "subscriber/10",
       );

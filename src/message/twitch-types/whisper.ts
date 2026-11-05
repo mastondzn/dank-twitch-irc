@@ -55,6 +55,7 @@ export class WhisperMessage extends IRCMessage {
     const emptyBadgeInfo = parseBadges("");
     return {
       login: this._senderLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._senderLogin,
       id: this._senderId,
       displayName: this._displayName,

@@ -5,8 +5,7 @@ export interface Color {
 }
 
 function toPaddedHex(index: number, shouldBeLength: number): string {
-  const s = index.toString(16);
-  return "0".repeat(shouldBeLength - s.length) + s;
+  return index.toString(16).padStart(shouldBeLength, "0");
 }
 
 /**

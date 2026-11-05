@@ -50,7 +50,7 @@ export class JoinRateLimiter implements ClientMixin {
           index + this.client.configuration.rateLimits.joinLimits,
         );
 
-        const acquireFunctions = Array.from({ length: chunk.length }).fill(
+        const acquireFunctions = Array.from({ length: chunk.length }, () =>
           this.acquire.bind(this),
         ) as (() => Promise<() => void>)[];
 

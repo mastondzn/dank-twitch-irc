@@ -36,10 +36,9 @@ export function getData<V, A extends unknown[]>(
   ...converterArguments: A
 ): V | undefined {
   const stringValue = ircTags[key];
-  if (stringValue == null) {
-    return undefined;
-  }
-  return converter(stringValue, ...converterArguments);
+  return stringValue == null
+    ? undefined
+    : converter(stringValue, ...converterArguments);
 }
 
 export function convertToString(value: string): string {
@@ -47,10 +46,7 @@ export function convertToString(value: string): string {
 }
 
 export function convertToTrimmedString(value: string): string {
-  if (typeof value === "string") {
-    return value.trim();
-  }
-  return value;
+  return typeof value === "string" ? value.trim() : value;
 }
 
 export function convertToInt(value: string): number {
@@ -66,10 +62,7 @@ export function convertToBoolean(value: string): boolean {
 }
 
 export function convertToColor(value: string): Color | undefined {
-  if (value.length <= 0) {
-    return undefined;
-  }
-  return parseColor(value);
+  return value.length <= 0 ? undefined : parseColor(value);
 }
 
 export function convertToTimestamp(value: string): Date {

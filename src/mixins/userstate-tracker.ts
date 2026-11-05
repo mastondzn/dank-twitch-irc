@@ -64,15 +64,17 @@ export class UserStateTracker
     }
 
     const channelState = this.channelStates[message.channel.login];
-    if (channelState != null) {
-      const newState = Object.assign(
-        {},
-        channelState,
-        // eslint-disable-next-line ts/no-deprecated
-        message.extractUserState(),
-      );
-      this.channelStates[message.channel.login] = newState;
-      this.emit("newChannelState", message.channel.login, newState);
+    if (channelState == null) {
+      return;
     }
+
+    const newState = Object.assign(
+      {},
+      channelState,
+      // eslint-disable-next-line ts/no-deprecated
+      message.extractUserState(),
+    );
+    this.channelStates[message.channel.login] = newState;
+    this.emit("newChannelState", message.channel.login, newState);
   }
 }

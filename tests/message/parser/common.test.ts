@@ -8,7 +8,6 @@ describe("./message/parser/common", () => {
   describe("#parseIntThrowing()", () => {
     it("should fail on undefined", () => {
       assertThrowsChain(
-        // eslint-disable-next-line unicorn/no-useless-undefined
         () => parseIntThrowing(undefined),
         ParseError,
         "String source for integer is null/undefined",

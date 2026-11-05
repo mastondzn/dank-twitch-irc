@@ -37,7 +37,7 @@ export class SingleConnection extends BaseClient {
 
     this.on("error", (error) => {
       if (anyCauseInstanceof(error, ConnectionError)) {
-        process.nextTick(() => {
+        queueMicrotask(() => {
           this.emitClosed(error);
           this.transport.stream.destroy(error);
         });
@@ -90,7 +90,7 @@ export class SingleConnection extends BaseClient {
 
     if (this.configuration.connection.preSetup) {
       this.once("connect", () => {
-        process.nextTick(() => this.emitReady());
+        queueMicrotask(() => this.emitReady());
       });
     } else {
       const promises = [
@@ -105,11 +105,14 @@ export class SingleConnection extends BaseClient {
         ),
       ];
 
-      Promise.all(promises).then(
-        () => this.emitReady(),
-        // eslint-disable-next-line ts/no-empty-function
-        () => {},
-      );
+      void (async () => {
+        try {
+          await Promise.all(promises);
+          this.emitReady();
+        } catch {
+          // errors during capability/login setup are ignored here
+        }
+      })();
     }
 
     this.transport.connect(() => this.emitConnected());

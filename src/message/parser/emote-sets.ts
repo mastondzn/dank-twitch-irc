@@ -6,9 +6,7 @@ export function parseEmoteSets(emoteSetsSource: string): TwitchEmoteSets {
   // 0 should never be absent, but we play extra safe and make "no emote sets"
   // a handled case that returns an empty array.
 
-  if (emoteSetsSource.length <= 0) {
-    return [];
-  }
-
-  return emoteSetsSource.split(",").filter((string_) => string_.length > 0);
+  return emoteSetsSource.length <= 0
+    ? []
+    : emoteSetsSource.split(",").filter((string_) => string_.length > 0);
 }

@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-string-raw */
 import { assert, describe, it } from "vitest";
 
 import { TwitchBadge } from "~/message/badge";
@@ -17,29 +16,26 @@ describe("./message/twitch-types/privmsg", () => {
         message: "HeyGuys",
       });
 
-      assert.deepStrictEqual(parseActionAndMessage("\u0001ACTION HeyGuys"), {
+      assert.deepStrictEqual(parseActionAndMessage("\u{1}ACTION HeyGuys"), {
         isAction: false,
-        message: "\u0001ACTION HeyGuys",
+        message: "\u{1}ACTION HeyGuys",
       });
 
-      assert.deepStrictEqual(parseActionAndMessage("HeyGuys\u0001"), {
+      assert.deepStrictEqual(parseActionAndMessage("HeyGuys\u{1}"), {
         isAction: false,
-        message: "HeyGuys\u0001",
+        message: "HeyGuys\u{1}",
       });
 
       // missing space
-      assert.deepStrictEqual(
-        parseActionAndMessage("\u0001ACTIONHeyGuys\u0001"),
-        {
-          isAction: false,
-          message: "\u0001ACTIONHeyGuys\u0001",
-        },
-      );
+      assert.deepStrictEqual(parseActionAndMessage("\u{1}ACTIONHeyGuys\u{1}"), {
+        isAction: false,
+        message: "\u{1}ACTIONHeyGuys\u{1}",
+      });
     });
 
     it("should remove action prefix and suffix on valid actions", () => {
       assert.deepStrictEqual(
-        parseActionAndMessage("\u0001ACTION HeyGuys\u0001"),
+        parseActionAndMessage("\u{1}ACTION HeyGuys\u{1}"),
         {
           isAction: true,
           message: "HeyGuys",
@@ -48,10 +44,10 @@ describe("./message/twitch-types/privmsg", () => {
 
       // nested
       assert.deepStrictEqual(
-        parseActionAndMessage("\u0001ACTION \u0001ACTION HeyGuys\u0001\u0001"),
+        parseActionAndMessage("\u{1}ACTION \u{1}ACTION HeyGuys\u{1}\u{1}"),
         {
           isAction: true,
-          message: "\u0001ACTION HeyGuys\u0001",
+          message: "\u{1}ACTION HeyGuys\u{1}",
         },
       );
     });
@@ -131,6 +127,7 @@ describe("./message/twitch-types/privmsg", () => {
 
       assert.deepStrictEqual(message.sender, {
         login: "randers",
+        // eslint-disable-next-line ts/no-deprecated -- asserting the backwards-compatible alias
         username: "randers",
         displayName: "randers",
         id: "40286300",

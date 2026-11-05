@@ -5,7 +5,6 @@ import { reasonForValue } from "~/utils/reason-for-value";
 describe("./utils/reason-for-value", () => {
   describe("#reasonForValue()", () => {
     it('should return "undefined" for undefined', () => {
-      // eslint-disable-next-line unicorn/no-useless-undefined
       assert.strictEqual(reasonForValue(undefined), "undefined");
     });
     it('should return "null" for null', () => {

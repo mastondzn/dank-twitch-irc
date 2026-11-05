@@ -23,25 +23,17 @@ export async function joinAll(
   for (const chunk of channelChunks) {
     conn.sendRaw(`JOIN ${chunk.join(",")}`);
 
-    const chunkNames = chunk.map((s) => s.slice(1));
-    const chunkPromises: Promise<unknown>[] = [];
-
     // we await the joining of all channels of this chunk in parallel
-    for (const channelName of chunkNames) {
-      chunkPromises.push(
-        awaitJoinResponse(conn, channelName).then(
-          () => {
-            // on success
-            conn.joinedChannels.add(channelName);
-            resultsMap[channelName] = undefined;
-          },
-          (error: unknown) => {
-            // on failure
-            resultsMap[channelName] = error as Error;
-          },
-        ),
-      );
-    }
+    const chunkPromises = chunk.map(async (channel) => {
+      const channelName = channel.slice(1);
+      try {
+        await awaitJoinResponse(conn, channelName);
+        conn.joinedChannels.add(channelName);
+        resultsMap[channelName] = undefined;
+      } catch (error) {
+        resultsMap[channelName] = error as Error;
+      }
+    });
 
     await Promise.all(chunkPromises);
   }

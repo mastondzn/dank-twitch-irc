@@ -130,7 +130,7 @@ export class ResponseAwaiter {
       this.config.errorMessage,
       cause,
     );
-    process.nextTick(() => this.conn.emitError(errorWithCause, true));
+    queueMicrotask(() => this.conn.emitError(errorWithCause, true));
     this.rejectPromise(errorWithCause);
   }
 
@@ -191,11 +191,11 @@ export class ResponseAwaiter {
   }
 
   private onConnectionClosed(cause?: Error): void {
-    if (cause == null) {
-      this.reject(new ConnectionError("Connection closed with no error"));
-    } else {
-      this.reject(new ConnectionError("Connection closed due to error", cause));
-    }
+    this.reject(
+      cause == null
+        ? new ConnectionError("Connection closed with no error")
+        : new ConnectionError("Connection closed due to error", cause),
+    );
   }
 
   // returns true if something matched, preventing "later" matchers from

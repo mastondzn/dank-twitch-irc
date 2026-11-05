@@ -280,6 +280,7 @@ describe("chatClient", () => {
     const { client, emit, clientError } = fakeClient();
 
     // suppress the expected ReconnectError from becoming an unhandled rejection
+    // eslint-disable-next-line unicorn/prefer-await -- rejection is asserted later in the test
     clientError.catch((error: unknown) => error);
 
     const reconnectPromise = new Promise<SingleConnection>((resolve) => {
@@ -310,6 +311,7 @@ describe("chatClient", () => {
     const { client, emit, clientError } = fakeClient();
 
     // suppress the duplicate rejection from fakeClient's clientError promise
+    // eslint-disable-next-line unicorn/prefer-await -- rejection is asserted later in the test
     clientError.catch((error: unknown) => error);
 
     const errorPromise = new Promise<Error>((resolve) => {

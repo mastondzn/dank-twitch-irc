@@ -56,6 +56,7 @@ export class RoomstateMessage extends ChannelIRCMessage {
   public override get channel(): Channel & { readonly id: string } {
     return {
       login: this._channelLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._channelLogin,
       id: this._channelRoomId,
     };

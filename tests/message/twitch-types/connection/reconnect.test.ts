@@ -6,9 +6,7 @@ import { ReconnectMessage } from "~/message/twitch-types/connection/reconnect";
 describe("./message/twitch-types/connection/reconnect", () => {
   describe("reconnectMessage", () => {
     it("should be able to parse a real RECONNECT message", () => {
-      const message = parseTwitchMessage(
-        ":tmi.twitch.tv RECONNECT",
-      ) as ReconnectMessage;
+      const message = parseTwitchMessage(":tmi.twitch.tv RECONNECT");
 
       assert.instanceOf(message, ReconnectMessage);
     });

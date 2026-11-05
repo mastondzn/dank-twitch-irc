@@ -158,13 +158,11 @@ export class SlowModeRateLimiter implements ClientMixin {
 
   private getSlowModeDuration(channelName: string): number {
     const roomState = this.client.roomStateTracker.getChannelState(channelName);
-    if (roomState != null) {
-      return Math.max(
-        roomState.slowModeDuration,
-        SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN,
-      );
-    }
-
-    return SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN;
+    return roomState == null
+      ? SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN
+      : Math.max(
+          roomState.slowModeDuration,
+          SlowModeRateLimiter.GLOBAL_SLOW_MODE_COOLDOWN,
+        );
   }
 }

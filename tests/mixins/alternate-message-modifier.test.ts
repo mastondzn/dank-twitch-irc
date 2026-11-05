@@ -331,7 +331,7 @@ describe("./modules/alternate-message-modifier", () => {
           "8-2226-4e2a-8b18-90b05edfb01e;mod=0;room-id=22484632;subs" +
           "criber=1;tmi-sent-ts=1566133801254;turbo=0;user-id=40286" +
           "300;user-type= :randers!randers@randers.tmi.twitch.tv PR" +
-          "IVMSG #forsen :\u0001ACTION Kappa Keepo PogChamp\u0001",
+          "IVMSG #forsen :\u{1}ACTION Kappa Keepo PogChamp\u{1}",
       );
       end();
 

@@ -379,6 +379,7 @@ export class UsernoticeMessage
   public override get channel(): Channel & { readonly id: string } {
     return {
       login: this._channelLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._channelLogin,
       id: this._channelRoomId,
     };
@@ -387,6 +388,7 @@ export class UsernoticeMessage
   public get sender(): MessageSender {
     return {
       login: this._senderLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._senderLogin,
       id: this._senderId,
       displayName: this._displayName,

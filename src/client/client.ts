@@ -63,7 +63,7 @@ export class ChatClient extends BaseClient {
 
     this.on("error", (error) => {
       if (anyCauseInstanceof(error, ClientError)) {
-        process.nextTick(() => {
+        queueMicrotask(() => {
           this.emitClosed(error);
           for (const conn of this.connections) conn.destroy(error);
         });
@@ -155,9 +155,8 @@ export class ChatClient extends BaseClient {
     });
 
     const needToJoin = new Set(
-      channelNames.filter(
-        (channelName) =>
-          !this.connections.some((c) => joinNothingToDo(c, channelName)),
+      channelNames.filter((channelName) =>
+        this.connections.every((c) => !joinNothingToDo(c, channelName)),
       ),
     );
 
@@ -370,10 +369,12 @@ export class ChatClient extends BaseClient {
 
     function onClose(): void {
       closed = true;
-      if (resolveNext) {
-        resolveNext(null);
-        resolveNext = null;
+      if (!resolveNext) {
+        return;
       }
+
+      resolveNext(null);
+      resolveNext = null;
     }
 
     this.on("message", onMessage);
@@ -393,9 +394,10 @@ export class ChatClient extends BaseClient {
             return;
           }
         } else {
-          const message = await new Promise<IRCMessage | null>((resolve) => {
-            resolveNext = resolve;
-          });
+          const { promise, resolve } =
+            Promise.withResolvers<IRCMessage | null>();
+          resolveNext = resolve;
+          const message = await promise;
           if (message === null) {
             return;
           }

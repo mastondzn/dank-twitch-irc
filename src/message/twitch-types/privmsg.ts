@@ -13,7 +13,7 @@ import {
 import { tagParserFor } from "../parser/tag-values";
 
 // eslint-disable-next-line no-control-regex
-const actionRegex = /^\u0001ACTION (.*)\u0001$/;
+const actionRegex = /^\u{1}ACTION (.*)\u{1}$/u;
 
 export function parseActionAndMessage(trailingParameter: string): {
   isAction: boolean;
@@ -186,6 +186,7 @@ export class PrivmsgMessage
   public override get channel(): Channel & { readonly id: string } {
     return {
       login: this._channelLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._channelLogin,
       id: this._channelRoomId,
     };
@@ -194,6 +195,7 @@ export class PrivmsgMessage
   public get sender(): MessageSender {
     return {
       login: this._senderLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._senderLogin,
       id: this._senderId,
       displayName: this._displayName,

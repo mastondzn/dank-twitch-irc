@@ -16,14 +16,14 @@ describe("./await/await-response", () => {
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter 1 failure",
       });
-      // eslint-disable-next-line ts/no-empty-function
+      // eslint-disable-next-line ts/no-empty-function, unicorn/prefer-await -- only attaching a rejection handler
       awaiter1.promise.catch(() => {});
 
       const awaiter2 = new ResponseAwaiter(client, {
         errorType: (message, cause) => new BaseError(message, cause),
         errorMessage: "test awaiter 2 failure",
       });
-      // eslint-disable-next-line ts/no-empty-function
+      // eslint-disable-next-line ts/no-empty-function, unicorn/prefer-await -- only attaching a rejection handler
       awaiter2.promise.catch(() => {});
 
       assert.deepStrictEqual(client.pendingResponses, [awaiter1, awaiter2]);

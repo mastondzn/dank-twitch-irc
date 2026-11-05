@@ -89,7 +89,7 @@ export class AlternateMessageModifier implements ClientMixin {
 
   private onPrivmsgMessage(message: PrivmsgMessage): void {
     // msg must be from us (the logged in user)
-    if (!(message.sender.login === this.client.configuration.username)) {
+    if (message.sender.login !== this.client.configuration.username) {
       return;
     }
 

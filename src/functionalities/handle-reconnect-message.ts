@@ -9,7 +9,7 @@ export class ReconnectError extends ConnectionError {
 
 export function handleReconnectMessage(conn: SingleConnection): void {
   conn.on("RECONNECT", (message) => {
-    process.nextTick(() => {
+    queueMicrotask(() => {
       conn.emitError(
         new ReconnectError(
           `RECONNECT command received by server: ${message.rawSource}`,

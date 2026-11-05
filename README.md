@@ -195,26 +195,23 @@ chat.on("USERNOTICE", (msg) => {
       `${msg.sender.displayName} just subscribed to ${msg.channel.login} with a tier ${msg.eventParams.subPlan} (${msg.eventParams.subPlanName}) sub for the first time!`,
     );
   } else if (msg.isResub()) {
-    let streakMessage = "";
-    if (msg.eventParams.shouldShareStreak) {
-      streakMessage = `, currently ${msg.eventParams.streakMonths} months in a row`;
-    }
+    const streakMessage = msg.eventParams.shouldShareStreak
+      ? `, currently ${msg.eventParams.streakMonths} months in a row`
+      : "";
     // Leppunen just resubscribed to ninja with a tier 1000 (The Ninjas) sub!
     // They are resubscribing for 10 months, currently 7 months in a row!
     console.log(
       `${msg.sender.displayName} just resubscribed to ${msg.channel.login} with a tier ${msg.eventParams.subPlan} (${msg.eventParams.subPlanName}) sub! They are resubscribing for ${msg.eventParams.cumulativeMonths} months${streakMessage}!`,
     );
   }
-  if (msg.content == null) {
-    console.log("They did not share a message with the streamer.");
-  } else {
-    // you also have access to lots of other properties also present on PRIVMSG messages,
-    // such as msg.sender.badges, msg.sender.login, msg.sender.badgeInfo, msg.bits/msg.isCheer(),
-    // msg.sender.color, msg.emotes, msg.id, msg.timestamp, etc...
-    console.log(
-      `${msg.sender.displayName} shared the following message with the streamer: ${msg.content}`,
-    );
-  }
+  // you also have access to lots of other properties also present on PRIVMSG messages,
+  // such as msg.sender.badges, msg.sender.login, msg.sender.badgeInfo, msg.bits/msg.isCheer(),
+  // msg.sender.color, msg.emotes, msg.id, msg.timestamp, etc...
+  console.log(
+    msg.content == null
+      ? "They did not share a message with the streamer."
+      : `${msg.sender.displayName} shared the following message with the streamer: ${msg.content}`,
+  );
 });
 ```
 
@@ -279,17 +276,13 @@ chat.on("USERNOTICE", (msg) => {
    * }
    * Sender user of the USERNOTICE message is the user gifting the subscription.
    */
-  if (msg.eventParams.months === 1) {
-    // Leppunen just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
-    console.log(
-      `${msg.sender.displayName} just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channel.login}!`,
-    );
-  } else {
-    // Leppunen just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
-    console.log(
-      `${msg.sender.displayName} just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channel.login}, that's ${msg.eventParams.months} in a row!`,
-    );
-  }
+  // Leppunen just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja,
+  // or a tier 1000 (The Ninjas) resub that's 7 months in a row!
+  console.log(
+    msg.eventParams.months === 1
+      ? `${msg.sender.displayName} just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channel.login}!`
+      : `${msg.sender.displayName} just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channel.login}, that's ${msg.eventParams.months} in a row!`,
+  );
   // note: if the subgift was from an anonymous user, the sender user for the USERNOTICE message will be
   // AnAnonymousGifter (user ID 274598607)
   if (msg.sender.id === "274598607") {
@@ -322,17 +315,13 @@ chat.on("USERNOTICE", (msg) => {
    * WARNING! Sender user of the USERNOTICE message is the broadcaster (e.g. Ninja
    * in the example below)
    */
-  if (msg.eventParams.months === 1) {
-    // An anonymous gifter just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja!
-    console.log(
-      `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channel.login}!`,
-    );
-  } else {
-    // An anonymous gifter just gifted NymN a tier 1000 (The Ninjas) resub to ninja, that's 7 months in a row!
-    console.log(
-      `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channel.login}, that's ${msg.eventParams.months} in a row!`,
-    );
-  }
+  // An anonymous gifter just gifted NymN a fresh tier 1000 (The Ninjas) sub to ninja,
+  // or a tier 1000 (The Ninjas) resub that's 7 months in a row!
+  console.log(
+    msg.eventParams.months === 1
+      ? `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a fresh tier ${msg.eventParams.subPlan} (${msg.eventParams}) sub to ${msg.channel.login}!`
+      : `An anonymous gifter just gifted ${msg.eventParams.recipientDisplayName} a tier ${msg.eventParams.subPlan} (${msg.eventParams}) resub to ${msg.channel.login}, that's ${msg.eventParams.months} in a row!`,
+  );
 });
 ```
 

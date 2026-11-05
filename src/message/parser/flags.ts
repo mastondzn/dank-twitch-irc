@@ -44,7 +44,7 @@ export function parseFlags(
     const categories: TwitchFlag["categories"] = [];
     for (const instanceSource of instancesSource.split("/")) {
       if (instanceSource.length > 0) {
-        const [category, score] = instanceSource.split(".");
+        const [category, score] = instanceSource.split(".", 2);
         categories.push({
           category: category!,
           score: Number(score),

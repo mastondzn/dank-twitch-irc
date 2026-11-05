@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-string-raw */
 import { assert, describe, expectTypeOf, it } from "vitest";
 
 import { TwitchBadge } from "~/message";
@@ -140,15 +139,15 @@ describe("./message/twitch-types/usernotice", () => {
       assert.isFalse(message.isCheer());
 
       // typescript test:
-      if (message.isResub()) {
-        expectTypeOf(message).toExtend<ResubUsernoticeMessage>();
-
-        expectTypeOf(message.eventParams).toExtend<SubEventParameters>();
-        expectTypeOf(message.eventParams.cumulativeMonths).toExtend<number>();
-        expectTypeOf(
-          message.eventParams.cumulativeMonthsRaw,
-        ).toExtend<string>();
+      if (!message.isResub()) {
+        return;
       }
+
+      expectTypeOf(message).toExtend<ResubUsernoticeMessage>();
+
+      expectTypeOf(message.eventParams).toExtend<SubEventParameters>();
+      expectTypeOf(message.eventParams.cumulativeMonths).toExtend<number>();
+      expectTypeOf(message.eventParams.cumulativeMonthsRaw).toExtend<string>();
     });
 
     it("should be able to parse a resub with message", () => {

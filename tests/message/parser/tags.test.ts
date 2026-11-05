@@ -5,7 +5,6 @@ import { decodeValue, parseTags } from "~/message/parser/tags";
 describe("./message/parser/tags", () => {
   describe("#decodeValue()", () => {
     it("should decode undefined as null", () => {
-      // eslint-disable-next-line unicorn/no-useless-undefined
       assert.isNull(decodeValue(undefined));
     });
     it("should decode empty string as empty string", () => {

@@ -1,8 +1,7 @@
 export function causeOf(error: Error): Error | undefined {
-  if (error instanceof Error) {
-    return error.cause as Error | undefined;
-  }
-  return undefined;
+  return error instanceof Error
+    ? (error.cause as Error | undefined)
+    : undefined;
 }
 
 export function anyCauseInstanceof(

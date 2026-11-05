@@ -43,6 +43,7 @@ export class ChannelIRCMessage extends IRCMessage {
   public get channel(): Channel {
     return {
       login: this._channelLogin,
+      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
       username: this._channelLogin,
     };
   }

@@ -8,7 +8,11 @@ import { ChatClient } from "~/client/client";
 import { SingleConnection } from "~/client/connection";
 
 export async function errorOf(p: Promise<any>): Promise<any> {
-  return p.catch((error: unknown) => error);
+  try {
+    return await p;
+  } catch (error) {
+    return error;
+  }
 }
 
 export async function causeOf(p: Promise<any>): Promise<any> {

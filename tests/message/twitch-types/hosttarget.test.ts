@@ -15,7 +15,6 @@ describe("./message/twitch-types/hosttarget", () => {
   describe("#parseHostedChannelName()", () => {
     it("should throw a ParseError if passed undefined", () => {
       assertThrowsChain(
-        // eslint-disable-next-line unicorn/no-useless-undefined
         () => parseHostedChannelName(undefined),
         ParseError,
         "Malformed channel part in HOSTTARGET message: undefined",
@@ -44,7 +43,6 @@ describe("./message/twitch-types/hosttarget", () => {
   describe("#parseViewerCount()", () => {
     it("should throw a ParseError if passed undefined", () => {
       assertThrowsChain(
-        // eslint-disable-next-line unicorn/no-useless-undefined
         () => parseViewerCount(undefined),
         ParseError,
         "Malformed viewer count part in HOSTTARGET message: undefined",
