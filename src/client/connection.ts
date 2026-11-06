@@ -1,5 +1,3 @@
-import { createInterface } from "node:readline";
-
 import type { Transport } from "./transport/transport";
 import type { ResponseAwaiter } from "~/await/await-response";
 import type { ClientConfiguration } from "~/config/config";
@@ -15,6 +13,7 @@ import { sendLogin } from "~/operations/login";
 import { requestCapabilities } from "~/operations/request-capabilities";
 import { anyCauseInstanceof } from "~/utils/any-cause-instanceof";
 import { debugLogger } from "~/utils/debug-logger";
+import { LineSplitter } from "~/utils/line-splitter";
 import { validateIRCCommand } from "~/validation/irc-command";
 
 let connectionIdCounter = 0;
@@ -39,7 +38,7 @@ export class SingleConnection extends BaseClient {
       if (anyCauseInstanceof(error, ConnectionError)) {
         queueMicrotask(() => {
           this.emitClosed(error);
-          this.transport.stream.destroy(error);
+          this.transport.destroy(error);
         });
       }
     });
@@ -47,24 +46,7 @@ export class SingleConnection extends BaseClient {
 
     this.transport = makeTransport(this.configuration.connection);
 
-    this.transport.stream.on("close", () => {
-      this.emitClosed();
-    });
-    this.transport.stream.on("error", (error) => {
-      const emittedError = new ConnectionError(
-        "Error occurred in transport layer",
-        error,
-      );
-      this.emitError(emittedError);
-      this.emitClosed(emittedError);
-      this.transport.stream.destroy(emittedError);
-    });
-
-    createInterface({ input: this.transport.stream, crlfDelay: Infinity })
-      .on("line", this.handleLine.bind(this))
-      // we need to have an error handler to prevent unhandled "error" events on the readline interface, which would cause the process to crash
-      // eslint-disable-next-line ts/no-empty-function
-      .on("error", () => {});
+    void this.readIncoming();
 
     replyToServerPing(this);
     handleReconnectMessage(this);
@@ -120,18 +102,18 @@ export class SingleConnection extends BaseClient {
 
   public close(): void {
     // -> close is emitted
-    this.transport.stream.destroy();
+    this.transport.destroy();
   }
 
   public destroy(error?: Error): void {
-    this.transport.stream.destroy(error);
+    this.transport.destroy(error);
   }
 
   public sendRaw(command: string): void {
     validateIRCCommand(command);
     this.emit("rawCommmand", command);
     this.log.debug(">", command);
-    this.transport.stream.write(`${command}\r\n`);
+    this.transport.write(`${command}\r\n`);
   }
 
   public onConnect(): void {
@@ -140,6 +122,51 @@ export class SingleConnection extends BaseClient {
 
   public use(mixin: ConnectionMixin): void {
     mixin.applyToConnection(this);
+  }
+
+  private async readIncoming(): Promise<void> {
+    const reader = this.transport.readable.getReader();
+    const splitter = new LineSplitter();
+    const decoder = new TextDecoder();
+
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        const chunk =
+          typeof value === "string"
+            ? value
+            : decoder.decode(value, { stream: true });
+
+        for (const line of splitter.push(chunk)) {
+          this.handleLine(line);
+        }
+      }
+
+      const remaining = decoder.decode();
+      if (remaining.length > 0) {
+        for (const line of splitter.push(remaining)) {
+          this.handleLine(line);
+        }
+      }
+
+      for (const line of splitter.flush()) {
+        this.handleLine(line);
+      }
+    } catch (error) {
+      const emittedError = new ConnectionError(
+        "Error occurred in transport layer",
+        error instanceof Error ? error : new Error(String(error)),
+      );
+      this.emitError(emittedError);
+      this.emitClosed(emittedError);
+    } finally {
+      reader.releaseLock();
+      this.emitClosed();
+    }
   }
 
   private handleLine(line: string): void {

@@ -1,18 +1,14 @@
 import type { Transport } from "./transport";
 import type { ExpandedTransportConfiguration } from "~/config/expanded";
-import { DuplexTransport } from "./duplex-transport";
-import { TcpTransport } from "./tcp-transport";
+import { CustomTransport } from "./custom-transport";
 import { WebSocketTransport } from "./websocket-transport";
 
 export function makeTransport(
   config: ExpandedTransportConfiguration,
 ): Transport {
   switch (config.type) {
-    case "tcp": {
-      return new TcpTransport(config);
-    }
-    case "duplex": {
-      return new DuplexTransport(config);
+    case "custom": {
+      return new CustomTransport(config);
     }
     case "websocket": {
       return new WebSocketTransport(config);

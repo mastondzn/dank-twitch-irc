@@ -1,31 +1,26 @@
 import type {
-  BasicTcpTransportConfiguration,
   ClientConfiguration,
-  DuplexTransportConfiguration,
+  CustomTransportConfiguration,
   RateLimitsConfig,
-  TcpTransportConfiguration,
   TransportConfiguration,
   WebSocketTransportConfiguration,
 } from "./config";
 import { type RateLimits, rateLimitPresets } from "./rate-limits";
 import { setDefaults } from "~/utils/set-defaults";
 
-export type ExpandedDuplexTransportConfiguration =
-  Required<DuplexTransportConfiguration>;
-
-export type ExpandedTcpTransportConfiguration =
-  Required<TcpTransportConfiguration> & {
-    preSetup: false;
+export type ExpandedCustomTransportConfiguration =
+  CustomTransportConfiguration & {
+    preSetup: boolean;
   };
 
 export type ExpandedWebSocketTransportConfiguration =
   WebSocketTransportConfiguration & {
+    url: string;
     preSetup: false;
   };
 
 export type ExpandedTransportConfiguration =
-  | ExpandedDuplexTransportConfiguration
-  | ExpandedTcpTransportConfiguration
+  | ExpandedCustomTransportConfiguration
   | ExpandedWebSocketTransportConfiguration;
 
 export type ExpandedClientConfiguration = Required<
@@ -36,11 +31,13 @@ export type ExpandedClientConfiguration = Required<
   rateLimits: RateLimits;
 };
 
+const DEFAULT_WEBSOCKET_URL = "wss://irc-ws.chat.twitch.tv";
+
 const defaults: Omit<
   ExpandedClientConfiguration,
   "connection" | "rateLimits"
 > & {
-  connection: BasicTcpTransportConfiguration;
+  connection: WebSocketTransportConfiguration;
 } = {
   username: "justinfan12345",
   password: undefined,
@@ -49,8 +46,7 @@ const defaults: Omit<
   maxChannelCountPerConnection: 90,
 
   connection: {
-    type: "tcp",
-    secure: true,
+    type: "websocket",
   },
 
   connectionRateLimits: {
@@ -66,45 +62,26 @@ export function expandTransportConfig(
 ): ExpandedTransportConfiguration {
   if (config == null) {
     return expandTransportConfig({
-      secure: true,
+      type: "websocket",
     });
   }
 
   switch (config.type) {
-    case "tcp":
-    case undefined: {
-      let host;
-      let port;
-
-      if ("host" in config && "port" in config) {
-        host = config.host;
-        port = config.port;
-      } else {
-        host = "irc.chat.twitch.tv";
-        port = config.secure ? 6697 : 6667;
-      }
-
+    case "custom": {
       return {
-        type: "tcp",
-        secure: config.secure,
-        host,
-        port,
-        preSetup: false,
+        ...config,
+        preSetup: config.preSetup ?? false,
       };
-    }
-    case "duplex": {
-      return setDefaults(config, { preSetup: false });
     }
 
     case "websocket": {
-      const url = "url" in config ? config.url : "wss://irc-ws.chat.twitch.tv";
-
       return {
         type: "websocket",
-        url,
+        url: config.url ?? DEFAULT_WEBSOCKET_URL,
         preSetup: false,
       };
     }
+
     default: {
       throw new Error("Unknown transport type");
     }

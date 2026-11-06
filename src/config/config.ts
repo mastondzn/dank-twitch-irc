@@ -1,46 +1,35 @@
-import type { Duplex } from "node:stream";
-
 import type { PresetKeys, RateLimits } from "./rate-limits";
+import type { Transport } from "~/client/transport/transport";
 import type { ConnectionRateLimits } from "~/mixins/ratelimiters/connection";
 
-export interface DuplexTransportConfiguration {
-  type: "duplex";
-  stream: () => Duplex;
+export interface CustomTransportConfiguration {
+  type: "custom";
 
   /**
-   * Whether this stream is already set up (user logged in and
+   * Creates the transport for a single connection. This is called once per
+   * pooled connection, so it should return a new transport instance.
+   */
+  createTransport: () => Transport;
+
+  /**
+   * Whether this transport is already set up (user logged in and
    * capabilities enabled). Defaults to false.
    */
   preSetup?: boolean;
 }
 
-export interface TcpTransportConfiguration {
-  type?: "tcp";
-  secure: boolean;
-  host: string;
-  port: number;
-}
-
-export type BasicTcpTransportConfiguration = Omit<
-  TcpTransportConfiguration,
-  "host" | "port"
->;
-
 export interface WebSocketTransportConfiguration {
   type: "websocket";
-  url: string;
-}
 
-export interface PresetWebSocketTransportConfiguration {
-  type: "websocket";
+  /**
+   * WebSocket URL. Defaults to wss://irc-ws.chat.twitch.tv
+   */
+  url?: string;
 }
 
 export type TransportConfiguration =
-  | DuplexTransportConfiguration
-  | TcpTransportConfiguration
-  | BasicTcpTransportConfiguration
-  | WebSocketTransportConfiguration
-  | PresetWebSocketTransportConfiguration;
+  | CustomTransportConfiguration
+  | WebSocketTransportConfiguration;
 
 export type CustomRateLimitsConfig = RateLimits;
 

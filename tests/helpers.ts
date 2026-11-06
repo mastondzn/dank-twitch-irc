@@ -1,9 +1,9 @@
 /* eslint-disable ts/no-explicit-any, ts/no-empty-function */
-import { Duplex } from "node:stream";
 import { inspect } from "node:util";
 
 import { assert, expect, vi } from "vitest";
 
+import type { Transport } from "~/client/transport/transport";
 import { ChatClient } from "~/client/client";
 import { SingleConnection } from "~/client/connection";
 
@@ -100,7 +100,7 @@ export function assertThrowsChain(f: () => void, ...chain: any[]): void {
 }
 
 export interface MockTransportData {
-  transport: Duplex;
+  transport: Transport;
 
   data: any[];
   emit: (...lines: string[]) => void;
@@ -111,26 +111,46 @@ export interface MockTransportData {
 export function createMockTransport(): MockTransportData {
   const data: any[] = [];
 
-  const transport = new Duplex({
-    autoDestroy: true,
-    emitClose: true,
-    decodeStrings: false, // for write operations
-    defaultEncoding: "utf8", // for write operations
-    encoding: "utf8", // for read operations
-    write(
-      chunk: any,
-      encoding: string,
-      callback: (error?: Error | null) => void,
-    ): void {
-      // eslint-disable-next-line ts/no-unsafe-call, ts/no-unsafe-member-access
-      data.push(chunk.toString());
-      callback();
+  let controller:
+    | ReadableStreamDefaultController<Uint8Array | string>
+    | undefined;
+  let closed = false;
+
+  const transport: Transport = {
+    readable: new ReadableStream<Uint8Array | string>({
+      start(streamController) {
+        controller = streamController;
+      },
+      cancel() {
+        closed = true;
+      },
+    }),
+    connect(connectionListener) {
+      setImmediate(() => connectionListener?.());
     },
-    read(): void {},
-  });
+    write(chunk: string) {
+      data.push(chunk);
+    },
+    destroy(error?: Error) {
+      if (closed) {
+        return;
+      }
+
+      closed = true;
+      if (error == null) {
+        controller?.close();
+      } else {
+        controller?.error(error);
+      }
+    },
+  };
 
   const emit = (...lines: string[]): void => {
-    transport.push(lines.map((line) => `${line}\r\n`).join(""));
+    if (closed || controller == null) {
+      return;
+    }
+
+    controller.enqueue(lines.map((line) => `${line}\r\n`).join(""));
   };
 
   const end = (error?: Error): void => {
@@ -165,8 +185,8 @@ export function fakeConnection(): FakeConnectionData {
 
   const fakeConn = new SingleConnection({
     connection: {
-      type: "duplex",
-      stream: () => transport.transport,
+      type: "custom",
+      createTransport: () => transport.transport,
       preSetup: true,
     },
   });
@@ -195,7 +215,7 @@ export interface FakeClientData {
 export function fakeClient(connect = true): FakeClientData {
   const transports: MockTransportData[] = [];
 
-  const getStream = (): Duplex => {
+  const getTransport = (): Transport => {
     const newTransport = createMockTransport();
     transports.push(newTransport);
     return newTransport.transport;
@@ -203,8 +223,8 @@ export function fakeClient(connect = true): FakeClientData {
 
   const client = new ChatClient({
     connection: {
-      type: "duplex",
-      stream: getStream,
+      type: "custom",
+      createTransport: getTransport,
       preSetup: true,
     },
     installDefaultMixins: false,

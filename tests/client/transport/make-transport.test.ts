@@ -1,43 +1,35 @@
-import { Duplex } from "node:stream";
+import { assert, describe, it, vi } from "vitest";
 
-import { assert, describe, it } from "vitest";
-
+import type { Transport } from "~/client/transport/transport";
 import type {
-  ExpandedDuplexTransportConfiguration,
-  ExpandedTcpTransportConfiguration,
+  ExpandedCustomTransportConfiguration,
   ExpandedWebSocketTransportConfiguration,
 } from "~/config/expanded";
-import { DuplexTransport } from "~/client/transport/duplex-transport";
+import { CustomTransport } from "~/client/transport/custom-transport";
 import { makeTransport } from "~/client/transport/make-transport";
-import { TcpTransport } from "~/client/transport/tcp-transport";
 import { WebSocketTransport } from "~/client/transport/websocket-transport";
+
+function fakeTransport(): Transport {
+  return {
+    readable: new ReadableStream<Uint8Array | string>(),
+    connect: vi.fn(),
+    write: vi.fn(),
+    destroy: vi.fn(),
+  };
+}
 
 describe("./client/transport/make-transport", () => {
   describe("#makeTransport()", () => {
-    it("should make a TcpTransport for tcp configurations", () => {
-      const config: ExpandedTcpTransportConfiguration = {
-        type: "tcp",
-        secure: true,
-        host: "irc.chat.twitch.tv",
-        port: 6697,
+    it("should make a CustomTransport for custom configurations", () => {
+      const config: ExpandedCustomTransportConfiguration = {
+        type: "custom",
+        createTransport: fakeTransport,
         preSetup: false,
       };
 
       const transport = makeTransport(config);
 
-      assert.instanceOf(transport, TcpTransport);
-    });
-
-    it("should make a DuplexTransport for duplex configurations", () => {
-      const config: ExpandedDuplexTransportConfiguration = {
-        type: "duplex",
-        stream: () => new Duplex(),
-        preSetup: false,
-      };
-
-      const transport = makeTransport(config);
-
-      assert.instanceOf(transport, DuplexTransport);
+      assert.instanceOf(transport, CustomTransport);
     });
 
     it("should make a WebSocketTransport for websocket configurations", () => {

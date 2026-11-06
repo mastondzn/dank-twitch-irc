@@ -3,7 +3,7 @@
   "type": "module",
   "version": "8.0.0",
   "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
-  "description": "Twitch IRC library for Node.js",
+  "description": "Platform-agnostic Twitch IRC library for Node.js, browsers, and other Web Streams runtimes",
   "author": "Ruben Anders (https://github.com/RAnders00)",
   "maintainers": [
     "Maston (https://github.com/mastondzn)"
@@ -18,7 +18,9 @@
     "twitch",
     "irc",
     "chat",
-    "tmi"
+    "tmi",
+    "browser",
+    "webstreams"
   ],
   "publishConfig": {
     "access": "public",
@@ -29,18 +31,21 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
-    }
+    },
+    "./transports/node-tcp": {
+      "types": "./dist/transports/node-tcp.d.mts",
+      "import": "./dist/transports/node-tcp.mjs",
+      "default": "./dist/transports/node-tcp.mjs"
+    },
+    "./package.json": "./package.json"
   },
   "main": "dist/index.mjs",
   "types": "dist/index.d.mts",
   "files": [
     "dist"
   ],
-  "engines": {
-    "node": ">=24"
-  },
   "scripts": {
-    "build": "tsdown --entry ./src/index.ts --out ./dist --unbundle --sourcemap",
+    "build": "tsdown",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier . --write !pnpm-lock.yaml",
@@ -53,7 +58,6 @@
     "docs:build": "pnpm run clean && pnpm run docs:md && vitepress build"
   },
   "dependencies": {
-    "async-sema": "^3.1.1",
     "eventemitter3": "^5.0.4"
   },
   "devDependencies": {

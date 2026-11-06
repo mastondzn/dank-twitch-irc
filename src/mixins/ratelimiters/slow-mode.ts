@@ -1,5 +1,3 @@
-import { Sema } from "async-sema";
-
 import type { ClientMixin } from "../base-mixin";
 import type { ChatClient } from "~/client/client";
 import type { RoomState } from "~/message/twitch-types/roomstate";
@@ -7,13 +5,14 @@ import type { UserState } from "~/message/twitch-types/userstate";
 import { canSpamFast } from "./utils";
 import { applyReplacements } from "~/utils/apply-function-replacements";
 import { EditableTimeout } from "~/utils/editable-timeout";
+import { Semaphore } from "~/utils/semaphore";
 
 export class SlowModeRateLimiter implements ClientMixin {
   public static GLOBAL_SLOW_MODE_COOLDOWN = 1.5;
 
   private readonly client: ChatClient;
   private readonly maxQueueLength: number;
-  private readonly semaphores: Record<string, Sema> = {};
+  private readonly semaphores: Record<string, Semaphore> = {};
   private readonly runningTimers: Record<string, EditableTimeout> = {};
 
   public constructor(client: ChatClient, maxQueueLength = 10) {
@@ -58,10 +57,10 @@ export class SlowModeRateLimiter implements ClientMixin {
     );
   }
 
-  private getSemaphore(channelName: string): Sema {
+  private getSemaphore(channelName: string): Semaphore {
     let semaphore = this.semaphores[channelName];
     if (semaphore == null) {
-      semaphore = new Sema(1);
+      semaphore = new Semaphore(1);
       this.semaphores[channelName] = semaphore;
     }
 

@@ -2,9 +2,9 @@
 
 This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/dank-twitch-irc), with additional code from [fmalk/dank-twitch-irc](https://github.com/fmalk/dank-twitch-irc), [amazeful/amazeful-twitch-irc](https://github.com/amazeful/amazeful-twitch-irc) and [kararty/dank-twitch-irc](https://github.com/kararty/dank-twitch-irc).
 
-Node.js-only Twitch IRC lib, written in TypeScript.
+Platform-agnostic Twitch IRC lib, written in TypeScript.
 
-Requires Node.js 24 or above.
+The core entrypoint uses Web Streams and the global `WebSocket` API, so it runs in Node.js, browsers, Deno, Bun, and other runtimes that provide those APIs. A Node.js TCP/TLS transport is available from the `@mastondzn/dank-twitch-irc/transports/node-tcp` subpath.
 
 - [View on GitHub](https://github.com/mastondzn/dank-twitch-irc)
 - [View on npm](https://www.npmjs.com/package/@mastondzn/dank-twitch-irc)
@@ -643,33 +643,20 @@ const chat = new ChatClient({
     lowPrivmsgLimits: 20,
   },
   // Configuration options for the backing connections:
-  // Plain TCP or TLS
-  connection: {
-    type: "tcp", // tcp by default
-    secure: false, // true by default
-    // host and port must both be specified at once
-    host: "custom-chat-server.com", // irc.chat.twitch.tv by default
-    port: 1234, // 6697/6667 by default, depending on the "secure" setting
-  },
-  // or:
+  // WebSocket (default)
   connection: {
     type: "websocket",
-    secure: true, // use preset URL of irc-ws.chat.twitch.tv
+    url: "wss://irc-ws.chat.twitch.tv", // optional custom URL
   },
-  // or:
+  // or a custom Web Streams transport:
   connection: {
-    type: "websocket",
-    url: "wss://custom-url.com/abc/def", // custom URL
+    type: "custom",
+    // called once per pooled connection, must return a new transport
+    createTransport: () => myTransport,
+    preSetup: false, // true if already logged in and capabilities are negotiated
   },
-  // or:
-  connection: {
-    type: "duplex",
-    stream: () => aNodeJsDuplexInstance, // read and write to a custom object
-    // implementing the Duplex interface from Node.js
-    // the function you specify is called for each new connection
-    preSetup: true, // false by default, makes the lib skip login
-    // and capabilities negotiation on connection startup
-  },
+  // or, in Node.js, the TCP/TLS transport from the extra subpath:
+  // connection: nodeTcpTransport({ secure: true }),
   // how many channels each individual connection should join at max
   maxChannelCountPerConnection: 100, // 90 by default
   // custom parameters for connection rate limiting
@@ -688,6 +675,99 @@ const chat = new ChatClient({
   installDefaultMixins: false, // true by default
 });
 ```
+
+## Transports
+
+### WebSocket (default)
+
+`new ChatClient()` connects to `wss://irc-ws.chat.twitch.tv` using the global
+`WebSocket` implementation. You can override the URL:
+
+```ts
+const chat = new ChatClient({
+  connection: {
+    type: "websocket",
+    url: "wss://custom-url.com/abc/def",
+  },
+});
+```
+
+### Custom transports
+
+A transport reads from a Web `ReadableStream` and provides a synchronous
+`write()` method:
+
+```ts
+import type { Transport } from "@mastondzn/dank-twitch-irc";
+
+function createTransport(): Transport {
+  return {
+    // Chunks may be strings or UTF-8 encoded Uint8Arrays.
+    readable: new ReadableStream({
+      start(controller) {
+        controller.enqueue(
+          ":tmi.twitch.tv 001 justinfan12345 :Welcome, GLHF!\r\n",
+        );
+        controller.close();
+      },
+    }),
+    connect(connectionListener) {
+      connectionListener?.();
+    },
+    write(data) {
+      // send data to the server
+    },
+    destroy() {
+      // close the connection
+    },
+  };
+}
+
+const chat = new ChatClient({
+  connection: {
+    type: "custom",
+    createTransport,
+  },
+});
+```
+
+`createTransport` is called once for each pooled connection, so it should return
+a fresh transport instance.
+
+Set `preSetup: true` if the transport is already logged in and capabilities have
+already been negotiated; the client will skip the login and capability
+handshake.
+
+### Node.js TCP/TLS
+
+The TCP/TLS transport is a separate Node.js-only subpath:
+
+```ts
+import { ChatClient } from "@mastondzn/dank-twitch-irc";
+import { nodeTcpTransport } from "@mastondzn/dank-twitch-irc/transports/node-tcp";
+
+const chat = new ChatClient({
+  connection: nodeTcpTransport({
+    secure: true, // true by default
+    host: "irc.chat.twitch.tv", // the default
+    port: 6697, // defaults to 6697 for TLS, 6667 for plain TCP
+  }),
+});
+```
+
+`nodeTcpTransport()` accepts a `secure`, `host`, and `port` option. The
+`TcpTransport` class is exported from the same subpath if you want to construct
+it directly.
+
+### Migrating from 8.x
+
+- `new ChatClient()` now uses WebSocket instead of TCP.
+- `connection: { type: "tcp", ... }` is replaced by
+  `connection: nodeTcpTransport({ ... })` from the `transports/node-tcp` subpath.
+- `connection: { type: "duplex", stream: () => duplex }` is replaced by
+  `connection: { type: "custom", createTransport: () => transport }`.
+- `connection.transport.stream` is replaced by `transport.readable`,
+  `transport.write()`, and `transport.destroy()`.
 
 ## Features
 
@@ -710,7 +790,7 @@ This client currently supports the following features:
   subscribing to the error event
 - Slow-mode rate limiter for non-VIP/moderator bots (waits either the global
   ~1.3 sec/channel-specific slow mode)
-- Support for different types of transport (in-memory, TCP, WebSocket)
+- Support for different types of transport (WebSocket by default, custom Web Streams transports, and Node.js TCP/TLS)
 
 ## Extra Mixins
 

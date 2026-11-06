@@ -1,9 +1,8 @@
-import { Sema } from "async-sema";
-
 import type { ClientMixin, ConnectionMixin } from "../base-mixin";
 import type { ChatClient } from "~/client/client";
 import type { SingleConnection } from "~/client/connection";
 import { applyReplacements } from "~/utils/apply-function-replacements";
+import { Semaphore } from "~/utils/semaphore";
 
 export interface ConnectionRateLimits {
   parallelConnections: number;
@@ -12,12 +11,12 @@ export interface ConnectionRateLimits {
 
 export class ConnectionRateLimiter implements ClientMixin, ConnectionMixin {
   private readonly client: ChatClient;
-  private readonly semaphore: Sema;
+  private readonly semaphore: Semaphore;
 
   public constructor(client: ChatClient) {
     this.client = client;
 
-    this.semaphore = new Sema(
+    this.semaphore = new Semaphore(
       this.client.configuration.connectionRateLimits.parallelConnections,
     );
   }

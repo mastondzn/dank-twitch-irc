@@ -1,6 +1,14 @@
+function defaultDebugScopes(): string | undefined {
+  const globalProcess = globalThis as {
+    process?: { env?: Record<string, string | undefined> };
+  };
+
+  return globalProcess.process?.env?.DEBUG;
+}
+
 export function isFlagEnabled(
   flag: string,
-  scopes = process.env.DEBUG,
+  scopes = defaultDebugScopes(),
 ): boolean {
   for (const variable of scopes?.split(/[\s,]+/) ?? []) {
     const pattern = variable.replace("*", ".*?");

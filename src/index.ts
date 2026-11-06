@@ -7,5 +7,6 @@ export * from "./functionalities";
 export * from "./message";
 export * from "./mixins";
 export * from "./operations";
+export * from "./transports";
 export * from "./utils";
 export * from "./validation";

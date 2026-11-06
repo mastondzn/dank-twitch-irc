@@ -11,6 +11,24 @@ import { ReconnectError } from "~/functionalities/handle-reconnect-message";
 const WS_URL = "wss://irc-ws.chat.twitch.tv";
 const api = ws.link(WS_URL);
 
+async function readAll(transport: WebSocketTransport): Promise<string> {
+  const reader = transport.readable.getReader();
+  const decoder = new TextDecoder();
+  let result = "";
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) {
+      return result;
+    }
+
+    result +=
+      typeof value === "string"
+        ? value
+        : decoder.decode(value, { stream: true });
+  }
+}
+
 describe.sequential("./client/transport/websocket-transport", () => {
   describe("connect", () => {
     it("should call the connectionListener when the WebSocket opens", async () => {
@@ -34,13 +52,13 @@ describe.sequential("./client/transport/websocket-transport", () => {
       });
 
       await opened;
-      transport.stream.destroy();
+      transport.destroy();
       server.close();
     });
   });
 
   describe("receiving", () => {
-    it("should push WebSocket messages to the stream", async () => {
+    it("should push WebSocket messages to the readable stream", async () => {
       const server = setupServer(
         api.addEventListener("connection", ({ client }) => {
           setTimeout(() => {
@@ -60,17 +78,10 @@ describe.sequential("./client/transport/websocket-transport", () => {
       const transport = new WebSocketTransport(config);
       transport.connect();
 
-      const chunks: string[] = [];
-      transport.stream.on("data", (chunk: string) => {
-        chunks.push(chunk);
-      });
+      const received = await readAll(transport);
 
-      await new Promise<void>((resolve) => {
-        transport.stream.on("end", () => resolve());
-      });
-
-      assert.deepStrictEqual(chunks, ["hello world"]);
-      transport.stream.destroy();
+      assert.strictEqual(received, "hello world");
+      transport.destroy();
       server.close();
     });
   });
@@ -104,15 +115,13 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       await opened;
 
-      transport.stream.write("PING\r\n");
-      transport.stream.resume();
+      const ended = readAll(transport);
+      transport.write("PING\r\n");
 
-      await new Promise<void>((resolve) => {
-        transport.stream.on("end", () => resolve());
-      });
+      await ended;
 
       assert.strictEqual(received, "PING\r\n");
-      transport.stream.destroy();
+      transport.destroy();
       server.close();
     });
 
@@ -139,27 +148,25 @@ describe.sequential("./client/transport/websocket-transport", () => {
       const transport = new WebSocketTransport(config);
 
       // write before connect
-      transport.stream.write("NICK justinfan12345\r\n");
-      transport.stream.write("PASS oauth:test\r\n");
+      transport.write("NICK justinfan12345\r\n");
+      transport.write("PASS oauth:test\r\n");
 
+      const ended = readAll(transport);
       transport.connect();
-      transport.stream.resume();
 
-      await new Promise<void>((resolve) => {
-        transport.stream.on("end", () => resolve());
-      });
+      await ended;
 
       assert.deepStrictEqual(received, [
         "NICK justinfan12345\r\n",
         "PASS oauth:test\r\n",
       ]);
-      transport.stream.destroy();
+      transport.destroy();
       server.close();
     });
   });
 
   describe("close", () => {
-    it("should push null to the stream when the WebSocket closes", async () => {
+    it("should close the readable stream when the WebSocket closes", async () => {
       const server = setupServer(
         api.addEventListener("connection", ({ client }) => {
           setTimeout(() => client.close(), 10);
@@ -175,18 +182,14 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       const transport = new WebSocketTransport(config);
       transport.connect();
-      transport.stream.resume();
 
-      const ended = new Promise<void>((resolve) => {
-        transport.stream.on("end", () => resolve());
-      });
+      await readAll(transport);
 
-      await ended;
-      transport.stream.destroy();
+      transport.destroy();
       server.close();
     });
 
-    it("should close the WebSocket when the stream is destroyed", async () => {
+    it("should close the WebSocket when the transport is destroyed", async () => {
       let clientClosed = false;
 
       const server = setupServer(
@@ -212,7 +215,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       await opened;
 
-      transport.stream.destroy();
+      transport.destroy();
 
       // allow close event to propagate through msw
       await new Promise<void>((resolve) => {
@@ -223,7 +226,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
       server.close();
     });
 
-    it("should not throw if the stream is destroyed before connect", () => {
+    it("should not throw if the transport is destroyed before connect", () => {
       const config: ExpandedWebSocketTransportConfiguration = {
         type: "websocket",
         url: WS_URL,
@@ -232,12 +235,12 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       const transport = new WebSocketTransport(config);
       assert.doesNotThrow(() => {
-        transport.stream.destroy();
+        transport.destroy();
       });
     });
   });
 
-  it("should destroy the stream with an error when the WebSocket errors", async () => {
+  it("should error the readable stream when the WebSocket errors", async () => {
     const server = setupServer(
       api.addEventListener("connection", ({ client }) => {
         setTimeout(() => {
@@ -259,11 +262,16 @@ describe.sequential("./client/transport/websocket-transport", () => {
     const transport = new WebSocketTransport(config);
     transport.connect();
 
-    const error = await new Promise<Error>((resolve) => {
-      transport.stream.on("error", (err) => resolve(err));
-    });
+    const reader = transport.readable.getReader();
+    let result: unknown;
+    try {
+      result = await reader.read();
+    } catch (error) {
+      result = error;
+    }
 
-    expect(error.message).toBe("WebSocket error");
+    assert.instanceOf(result, Error);
+    expect(result.message).toBe("WebSocket error");
     server.close();
   });
 
