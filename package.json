@@ -57,7 +57,7 @@
     "eventemitter3": "^5.0.4"
   },
   "devDependencies": {
-    "@mastondzn/eslint": "link:/home/maston/my-eslint",
+    "@mastondzn/eslint": "^2.0.0",
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^4.1.4",
     "bumpp": "^11.0.1",
