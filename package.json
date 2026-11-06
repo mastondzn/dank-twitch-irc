@@ -37,6 +37,11 @@
       "import": "./dist/transports/node-tcp.mjs",
       "default": "./dist/transports/node-tcp.mjs"
     },
+    "./transports/bun-tcp": {
+      "types": "./dist/transports/bun-tcp.d.mts",
+      "import": "./dist/transports/bun-tcp.mjs",
+      "default": "./dist/transports/bun-tcp.mjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "dist/index.mjs",

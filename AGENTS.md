@@ -2,13 +2,13 @@
 
 ## Overview
 
-`@mastondzn/dank-twitch-irc` — a platform-agnostic TypeScript Twitch IRC client library. Single package, no monorepo. The core entrypoint uses Web Streams and the global `WebSocket` API; Node.js TCP/TLS lives in the `transports/node-tcp` subpath and is the only place allowed to import `node:*` modules.
+`@mastondzn/dank-twitch-irc` — a platform-agnostic TypeScript Twitch IRC client library. Single package, no monorepo. The core entrypoint uses Web Streams and the global `WebSocket` API; Node.js TCP/TLS lives in the `transports/node-tcp` subpath and is the only place allowed to import `node:*` modules. Bun's native TCP/TLS transport lives in the `transports/bun-tcp` subpath and uses `Bun.connect`.
 
 ## Commands
 
 ```bash
 pnpm install          # install deps
-pnpm build            # tsdown build (src/index.ts + transports/node-tcp.ts -> dist/)
+pnpm build            # tsdown build (src/index.ts + transports -> dist/)
 pnpm test             # vitest (interactive watch mode)
 pnpm test --run       # vitest single run (CI mode)
 pnpm test --coverage  # with v8 coverage
@@ -30,8 +30,9 @@ Single test: `pnpm test --run $FILE` (e.g. `pnpm test --run tests/client.test.ts
 
 ## Key files
 
-- Entrypoint: `src/index.ts` — re-exports everything except Node.js-specific transports
+- Entrypoint: `src/index.ts` — re-exports everything except runtime-specific transports
 - Node.js TCP/TLS transport: `src/transports/node-tcp.ts` — the only `src` file allowed to import `node:*`
+- Bun TCP/TLS transport: `src/transports/bun-tcp.ts` — uses the global `Bun.connect` API, exported from the `transports/bun-tcp` subpath
 - Transport interface: `src/client/transport/transport.ts` — Web Streams readable + synchronous write
 - Tests root: `tests/` — mirrors `src/` structure
 - Test setup: `tests/setup.ts` — auto-restores fake timers after each test

@@ -1,7 +1,11 @@
 import { defineConfig } from "tsdown";
 
 export default defineConfig({
-  entry: ["./src/index.ts", "./src/transports/node-tcp.ts"],
+  entry: [
+    "./src/index.ts",
+    "./src/transports/node-tcp.ts",
+    "./src/transports/bun-tcp.ts",
+  ],
   root: "./src",
   outDir: "./dist",
   format: ["esm"],

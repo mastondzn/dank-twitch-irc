@@ -4,7 +4,7 @@ This package is a fork of [robotty/dank-twitch-irc](https://github.com/robotty/d
 
 Platform-agnostic Twitch IRC lib, written in TypeScript.
 
-The core entrypoint uses Web Streams and the global `WebSocket` API, so it runs in Node.js, browsers, Deno, Bun, and other runtimes that provide those APIs. A Node.js TCP/TLS transport is available from the `@mastondzn/dank-twitch-irc/transports/node-tcp` subpath.
+The core entrypoint uses Web Streams and the global `WebSocket` API, so it runs in Node.js, browsers, Deno, Bun, and other runtimes that provide those APIs. Node.js and Bun native TCP/TLS transports are available from the `@mastondzn/dank-twitch-irc/transports/node-tcp` and `@mastondzn/dank-twitch-irc/transports/bun-tcp` subpaths.
 
 - [View on GitHub](https://github.com/mastondzn/dank-twitch-irc)
 - [View on npm](https://www.npmjs.com/package/@mastondzn/dank-twitch-irc)
@@ -656,7 +656,7 @@ const chat = new ChatClient({
     preSetup: false, // true if already logged in and capabilities are negotiated
   },
   // or, in Node.js, the TCP/TLS transport from the extra subpath:
-  // connection: nodeTcpTransport({ secure: true }),
+  // connection: createNodeTcpTransport({ secure: true }),
   // how many channels each individual connection should join at max
   maxChannelCountPerConnection: 100, // 90 by default
   // custom parameters for connection rate limiting
@@ -745,10 +745,10 @@ The TCP/TLS transport is a separate Node.js-only subpath:
 
 ```ts
 import { ChatClient } from "@mastondzn/dank-twitch-irc";
-import { nodeTcpTransport } from "@mastondzn/dank-twitch-irc/transports/node-tcp";
+import { createNodeTcpTransport } from "@mastondzn/dank-twitch-irc/transports/node-tcp";
 
 const chat = new ChatClient({
-  connection: nodeTcpTransport({
+  connection: createNodeTcpTransport({
     secure: true, // true by default
     host: "irc.chat.twitch.tv", // the default
     port: 6697, // defaults to 6697 for TLS, 6667 for plain TCP
@@ -756,15 +756,37 @@ const chat = new ChatClient({
 });
 ```
 
-`nodeTcpTransport()` accepts a `secure`, `host`, and `port` option. The
+`createNodeTcpTransport()` accepts a `secure`, `host`, and `port` option. The
 `TcpTransport` class is exported from the same subpath if you want to construct
 it directly.
+
+### Bun TCP/TLS
+
+Bun exposes its own TCP/TLS socket API. Use the Bun-only subpath to connect
+through `Bun.connect` instead of Node's `node:net`:
+
+```ts
+import { ChatClient } from "@mastondzn/dank-twitch-irc";
+import { createBunTcpTransport } from "@mastondzn/dank-twitch-irc/transports/bun-tcp";
+
+const chat = new ChatClient({
+  connection: createBunTcpTransport({
+    secure: true, // true by default
+    host: "irc.chat.twitch.tv", // the default
+    port: 6697, // defaults to 6697 for TLS, 6667 for plain TCP
+  }),
+});
+```
+
+`createBunTcpTransport()` accepts the same `secure`, `host`, and `port` options as
+`createNodeTcpTransport()`. It requires the Bun runtime; the `BunTcpTransport` class
+is exported from the same subpath if you want to construct it directly.
 
 ### Migrating from 8.x
 
 - `new ChatClient()` now uses WebSocket instead of TCP.
 - `connection: { type: "tcp", ... }` is replaced by
-  `connection: nodeTcpTransport({ ... })` from the `transports/node-tcp` subpath.
+  `connection: createNodeTcpTransport({ ... })` from the `transports/node-tcp` subpath.
 - `connection: { type: "duplex", stream: () => duplex }` is replaced by
   `connection: { type: "custom", createTransport: () => transport }`.
 - `connection.transport.stream` is replaced by `transport.readable`,

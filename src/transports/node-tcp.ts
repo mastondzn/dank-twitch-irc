@@ -178,7 +178,7 @@ export class TcpTransport implements Transport {
  * Creates a custom transport configuration that connects using Node's
  * TCP/TLS sockets.
  */
-export function nodeTcpTransport(
+export function createNodeTcpTransport(
   options: NodeTcpTransportOptions = {},
 ): CustomTransportConfiguration {
   return {

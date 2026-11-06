@@ -2,12 +2,12 @@ import { createServer, type AddressInfo } from "node:net";
 
 import { describe, expect, it } from "vitest";
 
-import { nodeTcpTransport, TcpTransport } from "~/transports/node-tcp";
+import { createNodeTcpTransport, TcpTransport } from "~/transports/node-tcp";
 
 describe("./transports/node-tcp", () => {
-  describe("#nodeTcpTransport()", () => {
+  describe("#createNodeTcpTransport()", () => {
     it("should create a custom transport configuration", () => {
-      const config = nodeTcpTransport({
+      const config = createNodeTcpTransport({
         secure: false,
         host: "127.0.0.1",
         port: 1234,
