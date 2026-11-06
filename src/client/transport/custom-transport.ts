@@ -11,8 +11,8 @@ export class CustomTransport implements Transport {
     this.readable = this.inner.readable;
   }
 
-  public connect(connectionListener?: () => void): void {
-    this.inner.connect(connectionListener);
+  public async connect(): Promise<void> {
+    return this.inner.connect();
   }
 
   public write(data: string): void {

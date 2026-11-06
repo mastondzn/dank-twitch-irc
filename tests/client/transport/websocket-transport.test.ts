@@ -1,6 +1,6 @@
 import { ws } from "msw";
 import { setupServer } from "msw/node";
-import { assert, describe, expect, it } from "vitest";
+import { assert, describe, expect, it, vi } from "vitest";
 
 import type { SingleConnection } from "~/client/connection";
 import type { ExpandedWebSocketTransportConfiguration } from "~/config/expanded";
@@ -31,7 +31,7 @@ async function readAll(transport: WebSocketTransport): Promise<string> {
 
 describe.sequential("./client/transport/websocket-transport", () => {
   describe("connect", () => {
-    it("should call the connectionListener when the WebSocket opens", async () => {
+    it("should resolve when the WebSocket opens", async () => {
       const server = setupServer(
         api.addEventListener("connection", ({ client }) => {
           setTimeout(() => client.close(), 10);
@@ -47,11 +47,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       const transport = new WebSocketTransport(config);
 
-      const opened = new Promise<void>((resolve) => {
-        transport.connect(() => resolve());
-      });
-
-      await opened;
+      await transport.connect();
       transport.destroy();
       server.close();
     });
@@ -76,7 +72,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
       };
 
       const transport = new WebSocketTransport(config);
-      transport.connect();
+      await transport.connect();
 
       const received = await readAll(transport);
 
@@ -109,11 +105,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       const transport = new WebSocketTransport(config);
 
-      const opened = new Promise<void>((resolve) => {
-        transport.connect(() => resolve());
-      });
-
-      await opened;
+      await transport.connect();
 
       const ended = readAll(transport);
       transport.write("PING\r\n");
@@ -152,7 +144,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
       transport.write("PASS oauth:test\r\n");
 
       const ended = readAll(transport);
-      transport.connect();
+      await transport.connect();
 
       await ended;
 
@@ -181,7 +173,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
       };
 
       const transport = new WebSocketTransport(config);
-      transport.connect();
+      await transport.connect();
 
       await readAll(transport);
 
@@ -209,11 +201,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
 
       const transport = new WebSocketTransport(config);
 
-      const opened = new Promise<void>((resolve) => {
-        transport.connect(() => resolve());
-      });
-
-      await opened;
+      await transport.connect();
 
       transport.destroy();
 
@@ -238,6 +226,59 @@ describe.sequential("./client/transport/websocket-transport", () => {
         transport.destroy();
       });
     });
+
+    it("should reject connect if the transport is already closed", async () => {
+      const config: ExpandedWebSocketTransportConfiguration = {
+        type: "websocket",
+        url: WS_URL,
+        preSetup: false,
+      };
+
+      const transport = new WebSocketTransport(config);
+      transport.destroy();
+
+      await expect(transport.connect()).rejects.toThrow("Transport is closed");
+    });
+  });
+
+  it("should reject connect when the WebSocket errors before opening", async () => {
+    class FailingWebSocket extends EventTarget {
+      public static instance: FailingWebSocket;
+
+      public binaryType = "blob";
+      public readyState = 0;
+
+      public constructor() {
+        super();
+        FailingWebSocket.instance = this;
+      }
+
+      public send(): void {
+        // no-op
+      }
+
+      public close(): void {
+        // no-op
+      }
+    }
+
+    vi.stubGlobal("WebSocket", FailingWebSocket);
+
+    const config: ExpandedWebSocketTransportConfiguration = {
+      type: "websocket",
+      url: WS_URL,
+      preSetup: false,
+    };
+
+    const transport = new WebSocketTransport(config);
+    const connected = transport.connect();
+
+    FailingWebSocket.instance.dispatchEvent(new Event("error"));
+
+    await expect(connected).rejects.toThrow("WebSocket error");
+
+    transport.destroy();
+    vi.unstubAllGlobals();
   });
 
   it("should error the readable stream when the WebSocket errors", async () => {
@@ -260,7 +301,7 @@ describe.sequential("./client/transport/websocket-transport", () => {
     };
 
     const transport = new WebSocketTransport(config);
-    transport.connect();
+    await transport.connect();
 
     const reader = transport.readable.getReader();
     let result: unknown;

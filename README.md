@@ -694,8 +694,9 @@ const chat = new ChatClient({
 
 ### Custom transports
 
-A transport reads from a Web `ReadableStream` and provides a synchronous
-`write()` method:
+A transport reads from a Web `ReadableStream`, provides a synchronous
+`write()` method, and exposes an async `connect()` that resolves once the
+transport is ready to send data:
 
 ```ts
 import type { Transport } from "@mastondzn/dank-twitch-irc";
@@ -711,8 +712,8 @@ function createTransport(): Transport {
         controller.close();
       },
     }),
-    connect(connectionListener) {
-      connectionListener?.();
+    async connect() {
+      // resolve once the transport is connected
     },
     write(data) {
       // send data to the server

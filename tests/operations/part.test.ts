@@ -85,6 +85,7 @@ describe("./operations/part", () => {
       vi.useFakeTimers();
 
       const { client, clientError } = fakeConnection();
+      await vi.advanceTimersByTimeAsync(0);
       client.joinedChannels.add("pajlada");
       client.wantedChannels.add("pajlada");
 

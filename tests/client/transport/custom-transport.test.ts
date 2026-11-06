@@ -7,7 +7,7 @@ import { CustomTransport } from "~/client/transport/custom-transport";
 function fakeTransport(): Transport {
   return {
     readable: new ReadableStream<Uint8Array | string>(),
-    connect: vi.fn(),
+    connect: vi.fn().mockResolvedValue(undefined),
     write: vi.fn(),
     destroy: vi.fn(),
   };
@@ -31,7 +31,7 @@ describe("./client/transport/custom-transport", () => {
       assert.strictEqual(transport.readable, inner.readable);
     });
 
-    it("should delegate connect, write and destroy to the inner transport", () => {
+    it("should delegate connect, write and destroy to the inner transport", async () => {
       const inner = fakeTransport();
       const config: ExpandedCustomTransportConfiguration = {
         type: "custom",
@@ -40,14 +40,13 @@ describe("./client/transport/custom-transport", () => {
       };
 
       const transport = new CustomTransport(config);
-      const connectionListener = vi.fn();
 
-      transport.connect(connectionListener);
+      await transport.connect();
       transport.write("PING\r\n");
       const error = new Error("test error");
       transport.destroy(error);
 
-      expect(inner.connect).toHaveBeenCalledWith(connectionListener);
+      expect(inner.connect).toHaveBeenCalledWith();
       expect(inner.write).toHaveBeenCalledWith("PING\r\n");
       expect(inner.destroy).toHaveBeenCalledWith(error);
     });

@@ -97,7 +97,16 @@ export class SingleConnection extends BaseClient {
       })();
     }
 
-    this.transport.connect(() => this.emitConnected());
+    void this.transport.connect().then(
+      () => this.emitConnected(),
+      (error: unknown) => {
+        // Surface connection failures through the readable stream so they are
+        // handled by readIncoming().
+        this.transport.destroy(
+          error instanceof Error ? error : new Error(String(error)),
+        );
+      },
+    );
   }
 
   public close(): void {

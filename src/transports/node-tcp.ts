@@ -41,6 +41,7 @@ export class TcpTransport implements Transport {
     | ReadableStreamDefaultController<Uint8Array | string>
     | undefined;
   private socket: Socket | TLSSocket | undefined;
+  private connectDeferred: PromiseWithResolvers<undefined> | undefined;
   private opened = false;
   private closed = false;
 
@@ -59,10 +60,21 @@ export class TcpTransport implements Transport {
     });
   }
 
-  public connect(connectionListener?: () => void): void {
-    if (this.closed || this.socket != null) {
+  public async connect(): Promise<void> {
+    if (this.connectDeferred != null) {
+      return this.connectDeferred.promise;
+    }
+
+    if (this.closed) {
+      throw new Error("Transport is closed");
+    }
+
+    if (this.socket != null) {
       return;
     }
+
+    const deferred = Promise.withResolvers<undefined>();
+    this.connectDeferred = deferred;
 
     const onConnect = (): void => {
       if (this.closed) {
@@ -76,30 +88,37 @@ export class TcpTransport implements Transport {
         this.socket?.write(data);
       }
 
-      connectionListener?.();
+      deferred.resolve(undefined);
+      this.connectDeferred = undefined;
     };
 
-    const socket = this.secure
-      ? tlsConnect({ host: this.host, port: this.port }, onConnect)
-      : netConnect({ host: this.host, port: this.port }, onConnect);
+    try {
+      const socket = this.secure
+        ? tlsConnect({ host: this.host, port: this.port }, onConnect)
+        : netConnect({ host: this.host, port: this.port }, onConnect);
 
-    socket.setNoDelay(true);
+      socket.setNoDelay(true);
 
-    socket.on("data", (chunk: Uint8Array) => {
-      if (!this.closed) {
-        this.controller?.enqueue(chunk);
-      }
-    });
+      socket.on("data", (chunk: Uint8Array) => {
+        if (!this.closed) {
+          this.controller?.enqueue(chunk);
+        }
+      });
 
-    socket.on("error", (error: Error) => {
-      this.fail(error);
-    });
+      socket.on("error", (error: Error) => {
+        this.fail(error);
+      });
 
-    socket.on("close", () => {
-      this.finish();
-    });
+      socket.on("close", () => {
+        this.finish();
+      });
 
-    this.socket = socket;
+      this.socket = socket;
+    } catch (error) {
+      this.fail(error instanceof Error ? error : new Error(String(error)));
+    }
+
+    return deferred.promise;
   }
 
   public write(data: string): void {
@@ -134,6 +153,7 @@ export class TcpTransport implements Transport {
     this.closed = true;
     this.controller?.error(error);
     this.sendBuffer.length = 0;
+    this.rejectConnect(error);
   }
 
   private finish(): void {
@@ -144,6 +164,13 @@ export class TcpTransport implements Transport {
     this.closed = true;
     this.controller?.close();
     this.sendBuffer.length = 0;
+    this.rejectConnect(new Error("Transport closed before connecting"));
+  }
+
+  private rejectConnect(error: Error): void {
+    const deferred = this.connectDeferred;
+    this.connectDeferred = undefined;
+    deferred?.reject(error);
   }
 }
 

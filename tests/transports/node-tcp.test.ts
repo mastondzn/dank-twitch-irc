@@ -42,9 +42,7 @@ describe("./transports/node-tcp", () => {
       try {
         transport.write("NICK justinfan12345\r\n");
 
-        await new Promise<void>((resolve) => {
-          transport.connect(resolve);
-        });
+        await transport.connect();
 
         const reader = transport.readable.getReader();
         const decoder = new TextDecoder();

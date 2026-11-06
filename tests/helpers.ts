@@ -125,8 +125,8 @@ export function createMockTransport(): MockTransportData {
         closed = true;
       },
     }),
-    connect(connectionListener) {
-      setImmediate(() => connectionListener?.());
+    async connect() {
+      await new Promise<void>((resolve) => setImmediate(resolve));
     },
     write(chunk: string) {
       data.push(chunk);

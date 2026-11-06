@@ -6,10 +6,10 @@ export interface Transport {
   readonly readable: ReadableStream<Uint8Array | string>;
 
   /**
-   * Starts connecting. The listener is invoked once the transport is ready to
-   * send data.
+   * Starts connecting. Resolves once the transport is ready to send data, and
+   * rejects if the connection could not be established.
    */
-  connect: (connectionListener?: () => void) => void;
+  connect: () => Promise<void>;
 
   /**
    * Queues text for sending. This may be called before {@link connect}.

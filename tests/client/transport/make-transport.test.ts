@@ -12,7 +12,7 @@ import { WebSocketTransport } from "~/client/transport/websocket-transport";
 function fakeTransport(): Transport {
   return {
     readable: new ReadableStream<Uint8Array | string>(),
-    connect: vi.fn(),
+    connect: vi.fn().mockResolvedValue(undefined),
     write: vi.fn(),
     destroy: vi.fn(),
   };

@@ -166,6 +166,7 @@ describe("./await/await-response", () => {
     it("should timeout after specified timeout (noResponseAction = failure)", async () => {
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
+      await vi.advanceTimersByTimeAsync(0);
 
       // awaiter is going to be the only awaiter in the queue so
       // it starts the timeout
@@ -191,6 +192,7 @@ describe("./await/await-response", () => {
     it("should timeout after specified timeout (noResponseAction = success)", async () => {
       vi.useFakeTimers();
       const { client, clientError, end } = fakeConnection();
+      await vi.advanceTimersByTimeAsync(0);
 
       // awaiter is going to be the only awaiter in the queue so
       // it starts the timeout
@@ -212,6 +214,7 @@ describe("./await/await-response", () => {
     it("should begin timeout only once awaiter is moved to head of queue", async () => {
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
+      await vi.advanceTimersByTimeAsync(0);
 
       const promise1 = awaitResponse(client, {
         errorType: (message, cause) => new BaseError(message, cause),

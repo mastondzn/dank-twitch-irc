@@ -10,6 +10,7 @@ export class WebSocketTransport implements Transport {
     | undefined;
   private ws: WebSocket | undefined;
   private sendBuffer: string[] = [];
+  private connectDeferred: PromiseWithResolvers<undefined> | undefined;
   private opened = false;
   private closed = false;
 
@@ -26,8 +27,16 @@ export class WebSocketTransport implements Transport {
     });
   }
 
-  public connect(connectionListener?: () => void): void {
-    if (this.closed || this.ws != null) {
+  public async connect(): Promise<void> {
+    if (this.connectDeferred != null) {
+      return this.connectDeferred.promise;
+    }
+
+    if (this.closed) {
+      throw new Error("Transport is closed");
+    }
+
+    if (this.ws != null) {
       return;
     }
 
@@ -35,14 +44,24 @@ export class WebSocketTransport implements Transport {
       WebSocket?: typeof WebSocket;
     };
 
+    const deferred = Promise.withResolvers<undefined>();
+    this.connectDeferred = deferred;
+
     if (WebSocketImpl == null) {
       this.fail(
         new Error("WebSocket is not available in the current environment"),
       );
-      return;
+      return deferred.promise;
     }
 
-    const ws = new WebSocketImpl(this.config.url);
+    let ws: WebSocket;
+    try {
+      ws = new WebSocketImpl(this.config.url);
+    } catch (error) {
+      this.fail(error instanceof Error ? error : new Error(String(error)));
+      return deferred.promise;
+    }
+
     this.ws = ws;
     ws.binaryType = "arraybuffer";
 
@@ -82,8 +101,11 @@ export class WebSocketTransport implements Transport {
         }
       }
 
-      connectionListener?.();
+      deferred.resolve(undefined);
+      this.connectDeferred = undefined;
     });
+
+    return deferred.promise;
   }
 
   public write(data: string): void {
@@ -139,6 +161,7 @@ export class WebSocketTransport implements Transport {
     this.closed = true;
     this.controller?.error(error);
     this.sendBuffer = [];
+    this.rejectConnect(error);
   }
 
   private finish(): void {
@@ -149,6 +172,13 @@ export class WebSocketTransport implements Transport {
     this.closed = true;
     this.controller?.close();
     this.sendBuffer = [];
+    this.rejectConnect(new Error("Transport closed before connecting"));
+  }
+
+  private rejectConnect(error: Error): void {
+    const deferred = this.connectDeferred;
+    this.connectDeferred = undefined;
+    deferred?.reject(error);
   }
 
   private closeSocket(): void {

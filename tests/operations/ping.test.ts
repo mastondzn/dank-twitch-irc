@@ -45,6 +45,7 @@ describe("./operations/ping", () => {
     it("should reject on timeout of 2000 milliseconds by default", async () => {
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
+      await vi.advanceTimersByTimeAsync(0);
 
       const promise = sendPing(client, "some identifier");
 

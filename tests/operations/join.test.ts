@@ -223,6 +223,7 @@ describe("./operations/join", () => {
       // given
       vi.useFakeTimers();
       const { client, clientError } = fakeConnection();
+      await vi.advanceTimersByTimeAsync(0);
 
       // when
       const promise = joinChannel(client, "test");
