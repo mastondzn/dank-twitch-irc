@@ -37,7 +37,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "scripts": {
     "build": "tsdown --entry ./src/index.ts --out ./dist --unbundle --sourcemap",
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@mastondzn/eslint": "link:/home/maston/my-eslint",
-    "@types/node": "^25.6.0",
+    "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^4.1.4",
     "bumpp": "^11.0.1",
     "eslint": "^10.14.0",

@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 26
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
@@ -42,7 +42,7 @@ jobs:
         if: github.event_name == 'push'
         with:
           ref: ${{ github.ref }}
-          check-name: ci (24)
+          check-name: ci (26)
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           verbose: true
           wait-interval: 8
