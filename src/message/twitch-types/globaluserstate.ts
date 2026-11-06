@@ -35,11 +35,6 @@ export class GlobaluserstateMessage
   public readonly emoteSetsRaw: string;
   public readonly userID: string;
 
-  /** @deprecated Use {@link userID} instead. */
-  public get userId(): string {
-    return this.userID;
-  }
-
   public constructor(message: IRCMessageData) {
     super(message);
 

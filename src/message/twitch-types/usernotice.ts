@@ -3,7 +3,7 @@ import type { Color } from "../color";
 import type { TwitchEmoteList } from "../emotes";
 import type { TwitchFlagList } from "../flags";
 import type { IRCMessageTags } from "../irc/tags";
-import type { SharedChatFields, SharedChatSource } from "../shared-chat";
+import type { SharedChatSource } from "../shared-chat";
 import type { MessageSender } from "./privmsg";
 import { ChannelIRCMessage, type Channel } from "../irc/channel-irc-message";
 import { type IRCMessageData, getParameter } from "../irc/irc-message";
@@ -251,11 +251,7 @@ interface CheerUsernoticeMessage extends UsernoticeMessage {
   readonly bitsRaw: string;
 }
 
-export class UsernoticeMessage
-  extends ChannelIRCMessage
-  // eslint-disable-next-line ts/no-deprecated
-  implements Partial<SharedChatFields & { sourceMessageTypeId: string }>
-{
+export class UsernoticeMessage extends ChannelIRCMessage {
   private readonly _channelRoomId: string;
   private readonly _content: string | undefined;
   private readonly _systemMessage: string;
@@ -300,11 +296,6 @@ export class UsernoticeMessage
 
   /** sub, resub, subgift, etc..., or the uuid of the message if its a shared chat */
   public get messageTypeId(): string {
-    return this._messageTypeId;
-  }
-
-  /** @deprecated Use {@link messageTypeId} instead. */
-  public get messageTypeID(): string {
     return this._messageTypeId;
   }
 
@@ -379,8 +370,6 @@ export class UsernoticeMessage
   public override get channel(): Channel & { readonly id: string } {
     return {
       login: this._channelLogin,
-      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
-      username: this._channelLogin,
       id: this._channelRoomId,
     };
   }
@@ -388,8 +377,6 @@ export class UsernoticeMessage
   public get sender(): MessageSender {
     return {
       login: this._senderLogin,
-      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
-      username: this._senderLogin,
       id: this._senderId,
       displayName: this._displayName,
       color: this._color,
@@ -416,133 +403,6 @@ export class UsernoticeMessage
   }
 
   public get sourceMessageTypeId(): string | undefined {
-    return this._sourceMessageTypeId;
-  }
-
-  // ---- Deprecated aliases ----
-
-  /** @deprecated Use {@link channel.id} instead. */
-  public get channelID(): string {
-    return this._channelRoomId;
-  }
-
-  /** @deprecated Use {@link content} instead. */
-  public get messageText(): string | undefined {
-    return this._content;
-  }
-
-  /** @deprecated Use {@link sender.login} instead. */
-  public get senderUsername(): string {
-    return this._senderLogin;
-  }
-
-  /** @deprecated Use {@link sender.id} instead. */
-  public get senderUserID(): string {
-    return this._senderId;
-  }
-
-  /** @deprecated Use {@link sender.id} instead. */
-  public get senderUserId(): string {
-    return this._senderId;
-  }
-
-  /** @deprecated Use {@link sender.badgeInfo} instead. */
-  public get badgeInfo(): TwitchBadgesList {
-    return this._badgeInfo;
-  }
-
-  /** @deprecated Use {@link sender.badgeInfoRaw} instead. */
-  public get badgeInfoRaw(): string {
-    return this._badgeInfoRaw;
-  }
-
-  /** @deprecated Use {@link sender.badges} instead. */
-  public get badges(): TwitchBadgesList {
-    return this._badges;
-  }
-
-  /** @deprecated Use {@link sender.badgesRaw} instead. */
-  public get badgesRaw(): string {
-    return this._badgesRaw;
-  }
-
-  /** @deprecated Use {@link sender.color} instead. */
-  public get color(): Color | undefined {
-    return this._color;
-  }
-
-  /** @deprecated Use {@link sender.colorRaw} instead. */
-  public get colorRaw(): string {
-    return this._colorRaw;
-  }
-
-  /** @deprecated Use {@link sender.displayName} instead. */
-  public get displayName(): string {
-    return this._displayName;
-  }
-
-  /** @deprecated Use {@link id} instead. */
-  public get messageID(): string {
-    return this._id;
-  }
-
-  /** @deprecated Use {@link id} instead. */
-  public get messageId(): string {
-    return this._id;
-  }
-
-  /** @deprecated Use {@link sender.isMod} instead. */
-  public get isMod(): boolean {
-    return this._isMod;
-  }
-
-  /** @deprecated Use {@link sender.isModRaw} instead. */
-  public get isModRaw(): string {
-    return this._isModRaw;
-  }
-
-  /** @deprecated Use {@link timestamp} instead. */
-  public get serverTimestamp(): Date {
-    return this._timestamp;
-  }
-
-  /** @deprecated Use {@link timestampRaw} instead. */
-  public get serverTimestampRaw(): string {
-    return this._timestampRaw;
-  }
-
-  /** @deprecated Use {@link source.id} instead. */
-  public get sourceID(): string | undefined {
-    return this._sourceId;
-  }
-
-  /** @deprecated Use {@link source.channelID} instead. */
-  public get sourceChannelID(): string | undefined {
-    return this._sourceChannelId;
-  }
-
-  /** @deprecated Use {@link source.badges} instead. */
-  public get sourceBadges(): TwitchBadgesList | undefined {
-    return this._sourceBadges;
-  }
-
-  /** @deprecated Use {@link source.badgesRaw} instead. */
-  public get sourceBadgesRaw(): string | undefined {
-    return this._sourceBadgesRaw;
-  }
-
-  /** @deprecated Use {@link source.badgeInfo} instead. */
-  public get sourceBadgesInfo(): TwitchBadgesList | undefined {
-    return this._sourceBadgeInfo;
-  }
-
-  /** @deprecated Use {@link source.badgeInfoRaw} instead. */
-  public get sourceBadgesInfoRaw(): string | undefined {
-    return this._sourceBadgeInfoRaw;
-  }
-
-  /** @deprecated Use {@link sourceMessageTypeId} instead. */
-  public get sourceMessageTypeID(): string | undefined {
     return this._sourceMessageTypeId;
   }
 
@@ -671,9 +531,10 @@ export class UsernoticeMessage
    * Check if `message.source.channelId !== message.channel.id` for that
    * @see https://dev.twitch.tv/docs/chat/irc/#shared-chat
    */
-  public isSharedChat(): this is this &
-    // eslint-disable-next-line ts/no-deprecated
-    SharedChatFields & { sourceMessageTypeId: string } {
+  public isSharedChat(): this is this & {
+    source: SharedChatSource;
+    sourceMessageTypeId: string;
+  } {
     return this._sourceId != null;
   }
 }

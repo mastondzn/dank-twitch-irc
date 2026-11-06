@@ -55,8 +55,6 @@ export class WhisperMessage extends IRCMessage {
     const emptyBadgeInfo = parseBadges("");
     return {
       login: this._senderLogin,
-      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
-      username: this._senderLogin,
       id: this._senderId,
       displayName: this._displayName,
       color: this._color,
@@ -68,68 +66,6 @@ export class WhisperMessage extends IRCMessage {
       isMod: false,
       isModRaw: "0",
     };
-  }
-
-  // ---- Deprecated aliases ----
-
-  /** @deprecated Use {@link content} instead. */
-  public get messageText(): string {
-    return this._content;
-  }
-
-  /** @deprecated Use {@link sender.login} instead. */
-  public get senderUsername(): string {
-    return this._senderLogin;
-  }
-
-  /** @deprecated Use {@link sender.id} instead. */
-  public get senderUserID(): string {
-    return this._senderId;
-  }
-
-  /** @deprecated Use {@link sender.id} instead. */
-  public get senderUserId(): string {
-    return this._senderId;
-  }
-
-  /** @deprecated Use {@link sender.badges} instead. */
-  public get badges(): TwitchBadgesList {
-    return this._badges;
-  }
-
-  /** @deprecated Use {@link sender.badgesRaw} instead. */
-  public get badgesRaw(): string {
-    return this._badgesRaw;
-  }
-
-  /** @deprecated Use {@link sender.color} instead. */
-  public get color(): Color | undefined {
-    return this._color;
-  }
-
-  /** @deprecated Use {@link sender.colorRaw} instead. */
-  public get colorRaw(): string {
-    return this._colorRaw;
-  }
-
-  /** @deprecated Use {@link sender.displayName} instead. */
-  public get displayName(): string {
-    return this._displayName;
-  }
-
-  /** @deprecated Use {@link id} instead. */
-  public get messageID(): string {
-    return this._id;
-  }
-
-  /** @deprecated Use {@link id} instead. */
-  public get messageId(): string {
-    return this._id;
-  }
-
-  /** @deprecated Use {@link threadId} instead. */
-  public get threadID(): string {
-    return this._threadId;
   }
 
   public constructor(ircMessage: IRCMessage) {

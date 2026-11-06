@@ -501,7 +501,7 @@ chat.on("USERNOTICE", (msg) => {
     }
   }
 
-  if (msg.isSharedChat() && msg.channel.id !== msg.source.channelID) {
+  if (msg.isSharedChat() && msg.channel.id !== msg.source.channelId) {
     // handle messages that originate from a different chat
   }
 });
@@ -512,7 +512,7 @@ chat.on("PRIVMSG", (msg) => {
     // NOTE: this does not necessarily mean that the message originates from a different chat
   }
 
-  if (msg.isSharedChat() && msg.channel.id !== msg.source.channelID) {
+  if (msg.isSharedChat() && msg.channel.id !== msg.source.channelId) {
     // handle messages that originate from a different chat
   }
 });

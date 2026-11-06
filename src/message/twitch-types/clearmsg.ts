@@ -21,28 +21,6 @@ export class ClearmsgMessage extends ChannelIRCMessage {
     };
   }
 
-  // ---- Deprecated aliases ----
-
-  /** @deprecated Use {@link target.login} instead. */
-  public get targetUsername(): string {
-    return this._targetLogin;
-  }
-
-  /** @deprecated Use {@link target.messageId} instead. */
-  public get targetMessageID(): string {
-    return this._targetMessageId;
-  }
-
-  /** @deprecated Use {@link target.messageId} instead. */
-  public get targetMessageId(): string {
-    return this._targetMessageId;
-  }
-
-  /** @deprecated Use {@link target.content} instead. */
-  public get targetMessageContent(): string {
-    return this._targetMessageContent;
-  }
-
   public constructor(message: IRCMessageData) {
     super(message);
 

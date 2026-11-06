@@ -33,8 +33,6 @@ export function getIRCChannelName(
 
 export interface Channel {
   readonly login: string;
-  /** @deprecated Same as {@link Channel.login}. */
-  readonly username: string;
 }
 
 export class ChannelIRCMessage extends IRCMessage {
@@ -43,14 +41,7 @@ export class ChannelIRCMessage extends IRCMessage {
   public get channel(): Channel {
     return {
       login: this._channelLogin,
-      // eslint-disable-next-line ts/no-deprecated -- kept as a backwards-compatible alias
-      username: this._channelLogin,
     };
-  }
-
-  /** @deprecated Use {@link channel.login} instead. */
-  public get channelName(): string {
-    return this._channelLogin;
   }
 
   public constructor(message: IRCMessageData) {

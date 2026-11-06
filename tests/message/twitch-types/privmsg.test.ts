@@ -127,8 +127,6 @@ describe("./message/twitch-types/privmsg", () => {
 
       assert.deepStrictEqual(message.sender, {
         login: "randers",
-        // eslint-disable-next-line ts/no-deprecated -- asserting the backwards-compatible alias
-        username: "randers",
         displayName: "randers",
         id: "40286300",
         badgeInfo: new TwitchBadgesList(new TwitchBadge("subscriber", "5")),

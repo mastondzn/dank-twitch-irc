@@ -23,13 +23,6 @@ export class ClearchatMessage extends ChannelIRCMessage {
     return this._banDuration;
   }
 
-  // ---- Deprecated aliases ----
-
-  /** @deprecated Use {@link target.login} instead. */
-  public get targetUsername(): string | undefined {
-    return this._targetLogin;
-  }
-
   public constructor(message: IRCMessageData) {
     super(message);
 

@@ -68,12 +68,17 @@ export class UserStateTracker
       return;
     }
 
-    const newState = Object.assign(
-      {},
-      channelState,
-      // eslint-disable-next-line ts/no-deprecated
-      message.extractUserState(),
-    );
+    const newState = Object.assign({}, channelState, {
+      badgeInfo: message.sender.badgeInfo,
+      badgeInfoRaw: message.sender.badgeInfoRaw,
+      badges: message.sender.badges,
+      badgesRaw: message.sender.badgesRaw,
+      color: message.sender.color,
+      colorRaw: message.sender.colorRaw,
+      displayName: message.sender.displayName,
+      isMod: message.sender.isMod,
+      isModRaw: message.sender.isModRaw,
+    });
     this.channelStates[message.channel.login] = newState;
     this.emit("newChannelState", message.channel.login, newState);
   }
